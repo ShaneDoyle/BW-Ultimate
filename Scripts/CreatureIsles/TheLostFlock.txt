@@ -1,4 +1,4 @@
-challenge LOST_FLOCK
+//challenge LOST_FLOCK
 
 //------------------------------------------------------------------------------------------------------------------------
 begin script TheLostFlockKilledShepherd(Shepherd, SoapBox)
@@ -9,8 +9,8 @@ start
 		if Shepherd exists
 			make evil spirit point to Shepherd
 		end if
-//		snapshot challenge success 1.0 alignment -1 HELP_TEXT_TITLE_34 StandardReminder(variable HELP_TEXT_REMINDER_33)
-		update snapshot success 1.0 alignment -1 HELP_TEXT_TITLE_34 StandardReminder(variable HELP_TEXT_REMINDER_33)
+		snapshot CHALLENGE_LOST_FLOCK challenge success 1.0 alignment -1 HELP_TEXT_TITLE_34 StandardReminder(variable HELP_TEXT_REMINDER_33)
+		update snapshot CHALLENGE_LOST_FLOCK success 1.0 alignment -1 HELP_TEXT_TITLE_34 StandardReminder(variable HELP_TEXT_REMINDER_33)
 		say HELP_TEXT_LOST_FLOCK_18
 		wait until read
 		stop evil spirit pointing
@@ -53,7 +53,7 @@ start
 
 		Shepherd play ANM_P_FARMER_SOWING_SEEDS // shepherd shifts position
 		wait 3 seconds
-		snapshot challenge success 0.99 alignment 0.4 HELP_TEXT_TITLE_34 StandardReminder(variable HELP_TEXT_REMINDER_32)
+		snapshot CHALLENGE_LOST_FLOCK challenge success 0.99 alignment 0.4 HELP_TEXT_TITLE_34 StandardReminder(variable HELP_TEXT_REMINDER_32)
 		// "Thanks a lot. I've got 5 sheep in my flock."
 		say single line HELP_TEXT_LOST_FLOCK_26
 	   	
@@ -132,7 +132,7 @@ start
 
 		wait until camera ready
 
-		snapshot challenge success 1 alignment 0.6 HELP_TEXT_TITLE_34 StandardReminder(variable HELP_TEXT_REMINDER_33)
+		snapshot CHALLENGE_LOST_FLOCK challenge success 1 alignment 0.6 HELP_TEXT_TITLE_34 StandardReminder(variable HELP_TEXT_REMINDER_33)
 
 		move camera position to [1837.476, 56.434, 2745.928] time 3
 		move camera focus to [1855.260, 39.272, 2779.440] time 3
@@ -206,7 +206,7 @@ start
         wait until [Shepherd] at [SoapBox]
 		move camera focus to  [1857.127, 40.287, 2779.848] time 3	//soapbox focus
 		
-		snapshot challenge success 0.0 alignment 0.0 HELP_TEXT_TITLE_34 StandardReminder(variable HELP_TEXT_REMINDER_33)
+		snapshot CHALLENGE_LOST_FLOCK challenge success 0.0 alignment 0.0 HELP_TEXT_TITLE_34 StandardReminder(variable HELP_TEXT_REMINDER_33)
 								   		 
 		set Shepherd focus to camera position  // shepherd looks at camera
 		
@@ -359,7 +359,7 @@ start
 	TheLostFlockFinished = 0
 	wait until LostFlockWanted == 1
 
-	Highlight = create highlight HIGHLIGHT_CHALLENGE at [House]
+	Highlight = create highlight CHALLENGE_LOST_FLOCK HIGHLIGHT_CHALLENGE at [House]
 	run script ChallengeHighlightNotify(Highlight, House, variable GOOD_ADVISOR, variable HELP_TEXT_GENERAL_CHALLENGE_START_06)
 
 	run script TheLostFlockIntro(ShepherdFlock, ShepherdPos, SoapBox, Sheep10, Field)
@@ -403,7 +403,7 @@ start
 							// "As a shephard you royally suck god."
 							say single line HELP_TEXT_LOST_FLOCK_31
 							wait until read
-							update snapshot success 1.0 alignment -0.6 HELP_TEXT_TITLE_34 StandardReminder(variable HELP_TEXT_REMINDER_33)
+							update snapshot CHALLENGE_LOST_FLOCK success 1.0 alignment -0.6 HELP_TEXT_TITLE_34 StandardReminder(variable HELP_TEXT_REMINDER_33)
 							TheLostFlockFinished = 3
 						end dialogue
 					else

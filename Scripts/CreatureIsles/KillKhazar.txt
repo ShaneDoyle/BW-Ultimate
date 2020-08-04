@@ -1,4 +1,4 @@
-challenge KILL_KHAZAR
+//challenge CHALLENGE_KILL_KHAZAR
 
 global KillKhazarActorsLeft
 
@@ -8,12 +8,13 @@ begin script KillKhazarImmortality (KCreature, LCreature)
 
 start
 
-	while KillKhazarActorsLeft < 2
+	//Changed from while to if.
+	if KillKhazarActorsLeft < 2
 
 		if KillKhazarActorsLeft == 0
 			if KCreature exists
 				disable KCreature on fire 0
-				HEALTH of KCreature = 1
+				//HEALTH of KCreature = 1
 			end if
 		end if
 		
@@ -24,7 +25,7 @@ start
 		
 		wait 2 seconds
 
-	end while
+	end if
 
 end script KillKhazarImmortality
 
@@ -365,7 +366,7 @@ start
 		wait 0.1 seconds
 
 		// Snapshot here because it's a big story bit. No reminder though.
-		snapshot quest success 1.0 alignment 0.0 HELP_TEXT_KHAZAR_DIES_05 StandardReminder(variable HELP_TEXT_NONE)
+		snapshot CHALLENGE_KILL_KHAZAR quest success 1.0 alignment 0.0 HELP_TEXT_KHAZAR_DIES_05 StandardReminder(variable HELP_TEXT_NONE)
 
 		// Did you think you could hide the creed from me.
 		//say HELP_TEXT_KHAZAR_DIES_14
@@ -414,10 +415,10 @@ start
 	//	move camera focus to [2613.469, 31.393, 1935.075]  time 4
 		move camera focus to [KCreature] + [0,10,0]   time 14
 
-		// "Creature, you have something for me."
-/*		say HELP_TEXT_KHAZAR_DIES_08
+		// "Creature, you have something for me." //COMMENT BACK OUT HERE
+		//say HELP_TEXT_KHAZAR_DIES_08
 		wait until read
-*/
+
 		force KCreature CREATURE_BE_FRIGHTENED_ON_THE_SPOT KCreature
 		wait 0.5 seconds
 
@@ -449,14 +450,24 @@ start
 
 		DeathRay = cast SPELL_EXPLOSION_LEVEL_2 spell at [KCreature] from [BlackCloud] radius 50.0 time 7 curl 0
 
-		force KCreature CREATURE_DIE_PERMANENTLY KCreature
+		//force KCreature CREATURE_DIE_PERMANENTLY KCreature
+		//force KCreature CREATURE_DEAD_FOREVER KCreature
+		
+		//(Custom) Script to keep KCreature dead forever.
+		run background script KillCreatureForever(KCreature)
+		//force KCreature CREATURE_DEAD_FOREVER KCreature
 		wait 1.5 seconds	// waiting for KCreature to fall......
 
 
 		// drop CreedPart
 		//KCreatureBellyPos = marker at belly position of KCreature
 		//CreedPart = create OBJECT CREED at [KCreatureBellyPos]
-		set KCreature creed properties hand HAND_GLOW_ABOVE scale 5.0 power 1.0 time 0.0
+		
+		//set KCreature creed properties hand HAND_GLOW_ABOVE scale 5.0 power 1.0 time 0.0
+		//set KCreature creed properties hand 1 scale 5.0 power 1.0 time 0.0
+		set KCreature creed properties hand CREATURE_CREED_HEAD scale 1 power 5 time 12
+		
+		//set BlackCloud properties sheetmin 5 sheetmax 10 forkmin 0 forkmax 0
 
 
 		move BlackCloud position to [VortexPos]																   
@@ -509,11 +520,11 @@ start
 		// make LCreature pick up creed
 
 		//force LCreature CREATURE_HOLD_OBJECT CreedPart
-		set KCreature creed properties hand HAND_GLOW_ABOVE scale 5.0 power 0.1 time 0.0
-		set LCreature creed properties hand HAND_GLOW_ABOVE scale 5.0 power 0.1 time 0.0
+		set KCreature creed properties hand CREATURE_CREED_HEAD scale 5.0 power 0.1 time 0.0
+		set LCreature creed properties hand CREATURE_CREED_HEAD scale 5.0 power 0.1 time 0.0
 		wait 2 seconds
-		set LCreature creed properties hand HAND_GLOW_ABOVE scale 5.0 power 1.0 time 0.0
-		set KCreature creed properties hand HAND_GLOW_ABOVE scale 0.0 power 0.0 time 0.0
+		set LCreature creed properties hand CREATURE_CREED_HEAD scale 5.0 power 1.0 time 0.0
+		set KCreature creed properties hand CREATURE_CREED_HEAD scale 0.0 power 0.0 time 0.0
 
 		//wait until CreedPart in LCreature hand
 		wait 0.3 seconds
@@ -537,7 +548,7 @@ start
 		
 		wait until camera ready
 
-		delete KCreature // Khazar's creature should be out of view now
+		//delete KCreature // Khazar's creature should be out of view now
 
 		wait until [LCreature] near [VortexPos] radius 1 or LCreature not exists or 60 seconds
 
@@ -621,8 +632,7 @@ start
 
 	release MyCreature
 	MyCreature = get player 1 creature
-
-
+	
 end script KillKhazarMain
 
 //	 camera position to [2728.510, 44.583, 2056.136] 

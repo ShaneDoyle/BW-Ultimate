@@ -1,4 +1,4 @@
-challenge JAPANESE_TRAITOR
+//challenge CHALLENGE_JAPANESE_TRAITOR
 
 global MetTraitor
 
@@ -105,7 +105,7 @@ start
 		end if
 
 		if TraitorSpoken < 3
-			Highlight = create highlight HIGHLIGHT_CHALLENGE at [TraitorPos]
+			Highlight = create highlight CHALLENGE_JAPANESE_TRAITOR HIGHLIGHT_CHALLENGE at [TraitorPos]
 			while HighlightClickedOn == 0 and (get game time > 16 or get game time < 8)
 				if Highlight clicked 
 					HighlightClickedOn = 1

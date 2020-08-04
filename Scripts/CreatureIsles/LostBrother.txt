@@ -1,5 +1,3 @@
-challenge LOST_BROTHER
-
 global LostBrotherFinished
 global LostBrotherMet
 global LostBrotherGoingHome
@@ -103,7 +101,7 @@ start
 
 		// Getting Reward (Gatestone) - New - LBsuccess% complete - DONE"
 		//This snapshot needs to be sucesess
-		snapshot quest success LBsuccess alignment LBalignment HELP_TEXT_TITLE_15 StandardReminder(variable HELP_TEXT_NEW_REMINDER_05)
+		snapshot CHALLENGE_LOST_BROTHER quest success LBsuccess alignment LBalignment HELP_TEXT_TITLE_15 StandardReminder(variable HELP_TEXT_NEW_REMINDER_05)
 
 
 		LostBrotherFinished=1
@@ -154,8 +152,7 @@ start
 
 	LostBrotherKeyTaken = 1
 
-	state Sister WANDER_AROUND
-		position [SoapBox]
+	state Sister WANDER_AROUND position [SoapBox]
 		float 6
 		ulong 4, 20
 
@@ -262,7 +259,7 @@ begin script LostBrotherHealed(Sister, Brother) start
 		LostBrotherGoingHome=1
 		begin cinema
 			// "Brother healed - New - 70% complete - Changed to Update - DONE"
-			update snapshot success 0.7 alignment 0.5 HELP_TEXT_TITLE_15 StandardReminder(variable HELP_TEXT_NEW_REMINDER_05)
+			update snapshot CHALLENGE_LOST_BROTHER success 0.7 alignment 0.5 HELP_TEXT_TITLE_15 StandardReminder(variable HELP_TEXT_NEW_REMINDER_05)
 			eject good spirit
 			eject evil spirit
 			wait until 2 seconds
@@ -363,7 +360,7 @@ start
 				run script GiveReward(1, 0.9)
 			else
 				// "Take Sister to Brother - New - 100% complete - DONE"
-				snapshot quest success 1 alignment -0.3 HELP_TEXT_TITLE_15 StandardReminder(variable HELP_TEXT_NEW_REMINDER_05)
+				snapshot CHALLENGE_LOST_BROTHER quest success 1 alignment -0.3 HELP_TEXT_TITLE_15 StandardReminder(variable HELP_TEXT_NEW_REMINDER_05)
 
 			end if
 
@@ -397,7 +394,7 @@ end script LostBrotherReunitedAwayFromHouse
 begin script LostBrotherNearHouseButSisterDead(VisitedHome) start
 	begin dialogue
 		// "Brother is at home, but Sister is missing - New - 50% complete - Changed to update - DONE"
-		update snapshot success 0.5 alignment -0.3 HELP_TEXT_TITLE_15 StandardReminder(variable HELP_TEXT_LOST_BROTHER_09)
+		update snapshot CHALLENGE_LOST_BROTHER success 0.5 alignment -0.3 HELP_TEXT_TITLE_15 StandardReminder(variable HELP_TEXT_LOST_BROTHER_09)
 		eject good spirit
 		say single line HELP_TEXT_LOST_BROTHER_22
 		wait until read
@@ -479,7 +476,7 @@ begin cinema
 	
 	if LostBrotherKeyTaken == 0					// Need to get gatestone
 		// "Killed Sister and dropped next to Brother - New - 50% complete - Need to get gatestone - DONE"
-		snapshot quest success 0.5 alignment -1 HELP_TEXT_TITLE_15 StandardReminder(variable HELP_TEXT_LOST_BROTHER_09)
+		snapshot CHALLENGE_LOST_BROTHER quest success 0.5 alignment -1 HELP_TEXT_TITLE_15 StandardReminder(variable HELP_TEXT_LOST_BROTHER_09)
 		eject evil spirit
 		make evil spirit point at [LostBrotherHousePos]
 		// "We have tosted the both now lets smash the house up"
@@ -488,7 +485,7 @@ begin cinema
 		stop evil spirit pointing
 	else										// Already got the gatestone
 		// "Killed Sister and dropped next to Brother - New - 100% complete - Already got Gatestone - DONE"
-		snapshot quest success 1 alignment -1 HELP_TEXT_TITLE_15 StandardReminder(variable HELP_TEXT_LOST_BROTHER_09)
+		snapshot CHALLENGE_LOST_BROTHER quest success 1 alignment -1 HELP_TEXT_TITLE_15 StandardReminder(variable HELP_TEXT_LOST_BROTHER_09)
 	end if
 end cinema
 end script LostBrotherFoundDeadSister
@@ -511,11 +508,11 @@ start
 				wait until camera ready
 			end if
 			// "Killed Sister - Sister exists - New - 50% complete - Haven't got Gatestone - Changed to update - DONE"
-			update snapshot success 0.5 alignment -0.4 HELP_TEXT_TITLE_15 StandardReminder(variable HELP_TEXT_LOST_BROTHER_09)
+			update snapshot CHALLENGE_LOST_BROTHER success 0.5 alignment -0.4 HELP_TEXT_TITLE_15 StandardReminder(variable HELP_TEXT_LOST_BROTHER_09)
 		end cinema
 	else
 		// "Killed Sister - Sister NOT exists - New - 50% complete - Haven't got Gatestone - Changed to update - DONE"
-		update snapshot success 0.5 alignment -0.4 HELP_TEXT_TITLE_15 StandardReminder(variable HELP_TEXT_LOST_BROTHER_09)
+		update snapshot CHALLENGE_LOST_BROTHER success 0.5 alignment -0.4 HELP_TEXT_TITLE_15 StandardReminder(variable HELP_TEXT_LOST_BROTHER_09)
 	end if
 
 	begin dialogue
@@ -532,7 +529,7 @@ start
 			stop evil spirit pointing
 		else
 			// "Killed Sister - Sister exists - New - 100% complete - Got Gatestone - Changed to update - DONE"
-			update snapshot success 1 alignment -0.4 HELP_TEXT_TITLE_15 StandardReminder(variable HELP_TEXT_LOST_BROTHER_09)
+			update snapshot CHALLENGE_LOST_BROTHER success 1 alignment -0.4 HELP_TEXT_TITLE_15 StandardReminder(variable HELP_TEXT_LOST_BROTHER_09)
 		end if
 
 		eject good spirit
@@ -572,10 +569,10 @@ start
 
 		if HEALTH of Sister > 0
 			// "Killed Brother - Sister alive - New - 50% complete - Changed to update - DONE"
-			update snapshot success 0.5 alignment -0.4 HELP_TEXT_TITLE_15 StandardReminder(variable HELP_TEXT_NEW_REMINDER_04)
+			update snapshot CHALLENGE_LOST_BROTHER success 0.5 alignment -0.4 HELP_TEXT_TITLE_15 StandardReminder(variable HELP_TEXT_NEW_REMINDER_04)
 		else
 			// "Killed Brother - Sister dead - New - 50% complete - Changed to update - DONE"
-			update snapshot success 0.5 alignment -0.4 HELP_TEXT_TITLE_15 StandardReminder(variable HELP_TEXT_LOST_BROTHER_09)
+			update snapshot CHALLENGE_LOST_BROTHER success 0.5 alignment -0.4 HELP_TEXT_TITLE_15 StandardReminder(variable HELP_TEXT_LOST_BROTHER_09)
 		end if
 
 		// "*You killed the Brother*"
@@ -592,7 +589,7 @@ start
 			else 
 				make evil spirit point at [Brother]
 				// "Killed Brother - Sister dead - New - 100% complete - Got Gatestone - Changed to update - DONE"
-				update snapshot success 1 alignment -0.4 HELP_TEXT_TITLE_15 StandardReminder(variable HELP_TEXT_LOST_BROTHER_09)
+				update snapshot CHALLENGE_LOST_BROTHER success 1 alignment -0.4 HELP_TEXT_TITLE_15 StandardReminder(variable HELP_TEXT_LOST_BROTHER_09)
 			end if
 		end if
 
@@ -615,7 +612,7 @@ begin script LostBrotherLeftForDead start
 		eject good spirit
 		eject evil spirit
 		wait until 2 seconds
-		update snapshot success 0.5 alignment -0.2 HELP_TEXT_TITLE_15 StandardReminder(variable HELP_TEXT_LOST_BROTHER_09)
+		update snapshot CHALLENGE_LOST_BROTHER success 0.5 alignment -0.2 HELP_TEXT_TITLE_15 StandardReminder(variable HELP_TEXT_LOST_BROTHER_09)
 		say HELP_TEXT_LOST_BROTHER_16
 		wait until read
 		say HELP_TEXT_LOST_BROTHER_17
@@ -694,7 +691,7 @@ start
 	LostBrotherMet=0
 	LostBrotherStartHealth=0.4
 
-	LB_Highlight = create highlight HIGHLIGHT_QUEST at [LostBrotherHouse]
+	LB_Highlight = create highlight CHALLENGE_LOST_BROTHER HIGHLIGHT_QUEST at [LostBrotherHouse]
 	ALTITUDE of LB_Highlight = 6
 
 	disable GateKey1 pickup
@@ -752,7 +749,7 @@ start
 			wait until camera ready
 			
 			// First set off the script
-			snapshot quest success 0 alignment 0 HELP_TEXT_TITLE_15 StandardReminder(variable HELP_TEXT_NEW_REMINDER_05)
+			snapshot CHALLENGE_LOST_BROTHER quest success 0 alignment 0 HELP_TEXT_TITLE_15 StandardReminder(variable HELP_TEXT_NEW_REMINDER_05)
 
 			move camera position to [Sister] + [-2,1,-2] time 8						// Cam look zoom on Sister
 			move camera focus to [Sister] + [0,0.7,0]  time  8
@@ -779,13 +776,13 @@ start
 
 			close dialogue
 
-			move camera to T00_000 time 3											// Cam look at dying brother
+			move camera position to [1366.783569, 35.270481, 2569.995850] time 3							//T00_000		// Cam look at dying brother
 			CurrentTime = get game time
 			
 //			set game time 15.99
 		    set fade in time 2
 			
-			camera path TRACK00
+			//camera path TRACK00 //(TOFIXPATH)
 			
 			set Brother focus to [BrotherCamPos]
 			set Sister position to [SoapBox]
@@ -834,8 +831,7 @@ start
 
 			clear dialogue
 
-			state Sister WANDER_AROUND
-				position [SoapBox]
+			state Sister WANDER_AROUND position [SoapBox]
 				float 6
 				ulong 4, 20
 
@@ -866,6 +862,7 @@ start
 			
 			// Remind player to zoom if they haven't used it enough	
 			//if zoom not used enough
+			StopTracking = 2
 			if StopTracking == 0
 				// Leader.  You haven't used the zoom function very much
 				say HELP_TEXT_LOST_BROTHER_55
@@ -942,7 +939,7 @@ start
 				if LostBrotherKeyTaken == 0	 
 					begin dialogue
 						make evil spirit point at [LostBrotherHousePos]
-						update snapshot success 0.5 alignment -0.3 HELP_TEXT_TITLE_15 StandardReminder(variable HELP_TEXT_LOST_BROTHER_09)
+						update snapshot CHALLENGE_LOST_BROTHER success 0.5 alignment -0.3 HELP_TEXT_TITLE_15 StandardReminder(variable HELP_TEXT_LOST_BROTHER_09)
 						// "Now we need to smash the house with a rock to get the gate stone"
 						say HELP_TEXT_LOST_BROTHER_45 with interaction
 						wait until read
@@ -955,7 +952,7 @@ start
 
 			if LBDWTimerSet == 1 and get LostBrotherDeadWaitTimer time remaining <= 0 and LostBrotherKeyTaken == 1
 				// Timed out - 5 minutes
-				update snapshot success 1.0 alignment -0.4 HELP_TEXT_TITLE_15 StandardReminder (variable HELP_TEXT_NEW_REMINDER_05)
+				update snapshot CHALLENGE_LOST_BROTHER success 1.0 alignment -0.4 HELP_TEXT_TITLE_15 StandardReminder (variable HELP_TEXT_NEW_REMINDER_05)
 				LostBrotherFinished = 88
 			end if
 
@@ -996,7 +993,7 @@ start
 			end if
 			if SITHTimerSet == 1 and get SeeIfTheyHealTimer time remaining <= 0
 				// Timed out - 90 seconds after healing the brother
-				update snapshot success 1 alignment -0.8 HELP_TEXT_TITLE_15 StandardReminder(variable HELP_TEXT_NEW_REMINDER_05)
+				update snapshot CHALLENGE_LOST_BROTHER success 1 alignment -0.8 HELP_TEXT_TITLE_15 StandardReminder(variable HELP_TEXT_NEW_REMINDER_05)
 				LostBrotherFinished = 77
 			end if
 
@@ -1059,11 +1056,11 @@ start
 
 				if LostBrotherKeyTaken == 0
 					// Time out - After damaging (not killing) the brother - Still got to get the Gatestone
-					update snapshot success 0.75 alignment -0.5 HELP_TEXT_TITLE_15 StandardReminder(variable HELP_TEXT_LOST_BROTHER_09)
+					update snapshot CHALLENGE_LOST_BROTHER success 0.75 alignment -0.5 HELP_TEXT_TITLE_15 StandardReminder(variable HELP_TEXT_LOST_BROTHER_09)
 
 				else
 					// Time out - After damaging (not killing) the brother - Got the Gatestone
-					update snapshot success 1 alignment -0.5 HELP_TEXT_TITLE_15 StandardReminder(variable HELP_TEXT_NEW_REMINDER_05)
+					update snapshot CHALLENGE_LOST_BROTHER success 1 alignment -0.5 HELP_TEXT_TITLE_15 StandardReminder(variable HELP_TEXT_NEW_REMINDER_05)
 				
 				end if
 
@@ -1111,7 +1108,7 @@ start
 
 	if LostBrotherFinished==69
 		// Making sure the total is 100% if you have hurt the brother and the time out times out
-		update snapshot success 1 alignment -0.5 HELP_TEXT_TITLE_15 StandardReminder(variable HELP_TEXT_LOST_BROTHER_09)
+		update snapshot CHALLENGE_LOST_BROTHER success 1 alignment -0.5 HELP_TEXT_TITLE_15 StandardReminder(variable HELP_TEXT_LOST_BROTHER_09)
 	end if
 
 	// Clean up - Just in case

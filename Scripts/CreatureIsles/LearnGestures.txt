@@ -1,4 +1,4 @@
-challenge LEARN_GESTURES
+//challenge CHALLENGE_LEARN_GESTURES
 
 //------------------------------------------------------------------------------------------------------------------------
 global SelectGesture=0
@@ -45,16 +45,16 @@ start
 
 		close dialogue
 		wait 0.1 seconds
-		snapshot quest success 0.0 alignment 0.0 HELP_TEXT_TITLE_115 PlayMiracleHandDemo(WorshipSite)
+		snapshot CHALLENGE_LEARN_GESTURES quest success 0.0 alignment 0.0 HELP_TEXT_TITLE_115 PlayMiracleHandDemo(WorshipSite)
 
 		wait until hand demo played
 		say single line HELP_TEXT_KHAZAR_EXTRA_LINES_02 with interaction
 		wait until read
 
 		stop music
-	end cinema with dialogue
-		SelectGesture = get HELP_EVENT_TYPE_GESTURE_START_SPELL_SELECT total events
-		GetSpellGesture = get HELP_EVENT_TYPE_GESTURE_ACTUAL_SPELL_SELECT total events
+		end cinema with dialogue
+		//SelectGesture = get HELP_EVENT_TYPE_GESTURE_START_SPELL_SELECT total events 		(TOFIX)
+		//GetSpellGesture = get HELP_EVENT_TYPE_GESTURE_ACTUAL_SPELL_SELECT total events   	(TOFIX)
 		
 		//TODO - Clear repeat and remove leash for confusion.
 
@@ -83,6 +83,9 @@ begin script LearnGestures(Town)
 	AmountOfFood = 0
 	SpellIcon=0
 	Citadel=0
+	
+	//Custom Added by Shane
+	TutorialTimer = 0
 
 start
 	Citadel=get CITADEL at player 2 temple position radius 10
@@ -95,7 +98,7 @@ start
 	move computer player 2 to [HighlightPos] speed 200 with fixed height
 	wait until computer player 2 ready
 
-	Highlight = create highlight HIGHLIGHT_QUEST at [HighlightPos]
+	Highlight = create highlight CHALLENGE_LEARN_GESTURES HIGHLIGHT_QUEST at [HighlightPos]
 	ALTITUDE of Highlight = 0
 
 	wait 2 seconds
@@ -154,13 +157,17 @@ start
 		run background script DidYouKnow(DYKMarker, variable HELP_TEXT_DYK_107, variable DYK_MIRACLES)
 
 		set GestureTimer time to 5*60 seconds
+		TutorialTimer = 10
 		GestureSuccess=1
 
-		while	SelectGesture == get HELP_EVENT_TYPE_GESTURE_START_SPELL_SELECT total events or
-				GetSpellGesture == get HELP_EVENT_TYPE_GESTURE_ACTUAL_SPELL_SELECT total events
+		//TOFIXTUTORIAL
+		//while	SelectGesture == get HELP_EVENT_TYPE_GESTURE_START_SPELL_SELECT total events or 
+		//		GetSpellGesture == get HELP_EVENT_TYPE_GESTURE_ACTUAL_SPELL_SELECT total events
+		while TutorialTimer > 0
 
 				clear player 1 spell charging
 				wait 1 seconds
+				TutorialTimer--
 
 				//Make sure you can afford the spell always
 				if get WorshipSite mana total < RequiredMana
@@ -207,7 +214,7 @@ start
 
 				wait until camera ready
 
-				snapshot quest success 0.5 alignment 0 HELP_TEXT_TITLE_115 StandardReminder(variable HELP_TEXT_EXTRA_KHAZAR_28)
+				snapshot CHALLENGE_LEARN_GESTURES quest success 0.5 alignment 0 HELP_TEXT_TITLE_115 StandardReminder(variable HELP_TEXT_EXTRA_KHAZAR_28)
 				move camera position to [2980.9182, 65.2912, 3406.8567] time 12
 				move camera focus to [2977.8545, 48.4295, 3432.7754] time 12
 
@@ -254,7 +261,7 @@ start
 			while Exit == 0
 				wait 3 seconds
 				AmountOfFood=get resource RESOURCE_TYPE_FOOD in StoragePit
-				update snapshot success 0.5 + ((AmountOfFood/2800)/2) alignment 0 HELP_TEXT_TITLE_115 StandardReminder(variable HELP_TEXT_EXTRA_KHAZAR_28)
+				update snapshot CHALLENGE_LEARN_GESTURES success 0.5 + ((AmountOfFood/2800)/2) alignment 0 HELP_TEXT_TITLE_115 StandardReminder(variable HELP_TEXT_EXTRA_KHAZAR_28)
 				if  AmountOfFood > 2800	
 					//	and	get resource RESOURCE_TYPE_WOOD in StoragePit > 2800
 					release computer player 2
@@ -305,7 +312,7 @@ start
 		end if
 
 
-		snapshot quest success 1 alignment 0 HELP_TEXT_TITLE_115 StandardReminder(variable HELP_TEXT_EXTRA_KHAZAR_29)
+		snapshot CHALLENGE_LEARN_GESTURES quest success 1 alignment 0 HELP_TEXT_TITLE_115 StandardReminder(variable HELP_TEXT_EXTRA_KHAZAR_29)
 		wait until PLAYER of Town == 1 or not Town exists
 	end if
 

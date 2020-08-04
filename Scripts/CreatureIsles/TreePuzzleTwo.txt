@@ -1,4 +1,4 @@
-challenge TREE_PUZZLE_TWO
+//challenge CHALLENGE_TREE_PUZZLE_TWO
 
 begin script TreePuzzleTwo
 

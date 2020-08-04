@@ -1,8 +1,7 @@
-/*
- *		This classic "Hello, world!" script re-defines the gaming experience.
- */
-run script HelloWorld
 begin script HelloWorld
 start
-	say "Hello, world!"
+	begin dialogue
+		say "Hello World"
+		wait until read
+	end dialogue
 end script HelloWorld

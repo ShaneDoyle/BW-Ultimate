@@ -1,4 +1,4 @@
-challenge LAND2_SHIELD_CHALLENGE
+//challenge CHALLENGE_LAND2_SHIELD_CHALLENGE
 
 
 //------------------------------------------------------------------------------------------------------------------------
@@ -49,7 +49,7 @@ begin script PhysicalShieldChallenge
 
 start
 
-	Highlight = create highlight HIGHLIGHT_QUEST at [HutPos]
+	Highlight = create highlight CHALLENGE_LAND2_SHIELD_CHALLENGE HIGHLIGHT_QUEST at [HutPos]
 	run script CheckForKhazarChallengeHighlightNotify(Highlight, HutPos, variable GOOD_ADVISOR, variable HELP_TEXT_NEW_LAND_2_NOTIFIER_01)
 	
 	if KhazarGone == 0
@@ -67,7 +67,7 @@ start
 
 			wait until camera ready
 
-			snapshot quest success 0.0 alignment 0.0 HELP_TEXT_TITLE_102 StandardReminder(variable HELP_TEXT_REMINDER_42)
+			snapshot CHALLENGE_LAND2_SHIELD_CHALLENGE quest success 0.0 alignment 0.0 HELP_TEXT_TITLE_102 StandardReminder(variable HELP_TEXT_REMINDER_42)
 
 			// "There will be a time when you need to protect your townsfolk and their buildings."
 			say HELP_TEXT_NEW_LAND_2_SHIELD_17
@@ -161,7 +161,7 @@ start
 
 		set interaction SCRIPT_INTERFACE_LEVEL_JUST_HAND_INTERACTION
 
-		snapshot quest success 0.3 alignment 0.0 HELP_TEXT_TITLE_102 StandardReminder(variable HELP_TEXT_REMINDER_57)
+		snapshot CHALLENGE_LAND2_SHIELD_CHALLENGE quest success 0.3 alignment 0.0 HELP_TEXT_TITLE_102 StandardReminder(variable HELP_TEXT_REMINDER_57)
 		
 		while SpellNotInHand == 0
 			if get SeedTimer time remaining <= 0
@@ -328,7 +328,7 @@ start
 				move camera focus to [3615.512, 9.010, 3452.059] time 3
 				wait until camera ready
 
-				snapshot quest success 1.0 alignment 0.0 HELP_TEXT_TITLE_102 StandardReminder(variable HELP_TEXT_REMINDER_57)
+				snapshot CHALLENGE_LAND2_SHIELD_CHALLENGE quest success 1.0 alignment 0.0 HELP_TEXT_TITLE_102 StandardReminder(variable HELP_TEXT_REMINDER_57)
 
 				// "The hut survived the pounding. That's a handy spell."
 				say HELP_TEXT_NEW_LAND_2_SHIELD_08
@@ -346,7 +346,7 @@ start
 				move camera focus to [3615.512, 9.010, 3452.059] time 3
 				wait until camera ready
 
-				snapshot quest success 1.0 alignment 0.0 HELP_TEXT_TITLE_102 StandardReminder(variable HELP_TEXT_REMINDER_57)
+				snapshot CHALLENGE_LAND2_SHIELD_CHALLENGE quest success 1.0 alignment 0.0 HELP_TEXT_TITLE_102 StandardReminder(variable HELP_TEXT_REMINDER_57)
 
 				// "ah. You didn't shield the hut and it got pounded."
 				say HELP_TEXT_NEW_LAND_2_SHIELD_10

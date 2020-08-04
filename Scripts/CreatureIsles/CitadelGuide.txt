@@ -1,5 +1,3 @@
-challenge CITADEL_GUIDE
-
 //run script CitadelGuide
 
 //------------------------------------------------------------------------------------------------------------------------
@@ -149,7 +147,8 @@ start
 
 		enable highlight draw
 
-		BodgeHighlight = create highlight HIGHLIGHT_QUEST at [BodgeHighlightPos]
+		//BodgeHighlight = create highlight HIGHLIGHT_QUEST at [BodgeHighlightPos]
+		BodgeHighlight = create HIGHLIGHT_QUEST at [BodgeHighlightPos]
 		ALTITUDE of BodgeHighlight = 14
 
 		move camera position to [1768.8414, 44.6093, 2668.0195] time 8				// Cam in town

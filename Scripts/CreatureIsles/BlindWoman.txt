@@ -1,4 +1,4 @@
-challenge BLIND_WOMAN
+//challenge CHALLENGE_BLIND_WOMAN
 
 global TotalLives
 global BlindWoman
@@ -278,10 +278,11 @@ start
 
 	// Create OldWomanGremlin Throwing Boulder Hazard & call it Morg
 	MyCreature = get player 1 creature
-	OldWomanGremlin = create_creature_from_creature MyCreature 0.9 at [GremlinPos] CREATURE_TYPE_OGRE
+	//OldWomanGremlin = create_creature_from_creature MyCreature 0.9 at [GremlinPos] CREATURE_TYPE_OGRE
+	OldWomanGremlin = create CREATURE CREATURE_TYPE_OGRE at [GremlinPos]
 	SCALE of OldWomanGremlin = 0.5
 	set OldWomanGremlin name HELP_TEXT_OGRE_NAME_03
-	ALIGNMENT of OldWomanGremlin = -1
+	ALIGNMENT of OldWomanGremlin = 0
 	run background script GremlinSniper (GremlinPos)
 
 	while Owner != 1
@@ -289,7 +290,7 @@ start
 	end while
 
 	/// Challenge Notify
-	Highlight = create highlight HIGHLIGHT_CHALLENGE at [HighlightPos]
+	Highlight = create highlight CHALLENGE_BLIND_WOMAN HIGHLIGHT_CHALLENGE at [HighlightPos]
 	ALTITUDE of Highlight = 10
 	run script ChallengeHighlightNotify(Highlight,HighlightPos, variable GOOD_ADVISOR, variable HELP_TEXT_GENERAL_CHALLENGE_START_04)
 
@@ -324,7 +325,7 @@ start
 		set BlindWoman focus to camera position
 
 		// Blind Woman started
-		snapshot challenge success 0 alignment 0 HELP_TEXT_TITLE_111 StandardReminder(variable HELP_TEXT_REMINDER_104)
+		snapshot CHALLENGE_BLIND_WOMAN challenge success 0 alignment 0 HELP_TEXT_TITLE_111 StandardReminder(variable HELP_TEXT_REMINDER_104)
 
 		BlindWoman play ANM_P_GOSSIP_WOMAN_1 loop -1
 		wait 1 second
@@ -335,9 +336,9 @@ start
 		wait until read
 
 		// Start camera pan along path here
-		move camera to T04_000 time 3
+		move camera position to [3642.374756, 19.889555, 3138.330322] time 3 //T04_000 time 3
 		wait until camera ready
-		camera path TRACK04
+		//camera path TRACK04
 
 //		"But the journey takes me along this treacherous path."
 //		W/MAN:	But I've got to travel along this treacherous path.
@@ -424,7 +425,7 @@ start
 				wait 2 seconds
 
 				// Blind Woman saved Brother
-				snapshot challenge success 1 alignment 0 HELP_TEXT_TITLE_111 StandardReminder(variable HELP_TEXT_REMINDER_104)
+				snapshot CHALLENGE_BLIND_WOMAN challenge success 1 alignment 0 HELP_TEXT_TITLE_111 StandardReminder(variable HELP_TEXT_REMINDER_104)
 	
 				wait until read
 
@@ -501,7 +502,7 @@ start
 				BlindWoman play ANM_P_MOURNING loop -1
 
 				// Blind Woman watches Brother die
-				snapshot challenge success 1 alignment 0 HELP_TEXT_TITLE_111 StandardReminder(variable HELP_TEXT_REMINDER_104)
+				snapshot CHALLENGE_BLIND_WOMAN challenge success 1 alignment 0 HELP_TEXT_TITLE_111 StandardReminder(variable HELP_TEXT_REMINDER_104)
 				wait 0.1 seconds
 
 //				"Oh-No!  My poor brother, Dead!"
@@ -642,7 +643,7 @@ start
 			state Brother VILLAGER_STATE_DEAD
 
 			// Blind Woman died before reaching the village
-			snapshot challenge success 1 alignment 0 HELP_TEXT_TITLE_111 StandardReminder(variable HELP_TEXT_REMINDER_104)
+			snapshot CHALLENGE_BLIND_WOMAN challenge success 1 alignment 0 HELP_TEXT_TITLE_111 StandardReminder(variable HELP_TEXT_REMINDER_104)
 			wait 0.1 seconds
 
 			eject evil spirit
@@ -668,6 +669,48 @@ start
 	end if
 end script BlindWomanMain
 
+
+//*****************************************************************************
+// (Custom)
+//	Womans Journey is used in the form of a track, which we do not have syntax for.
+//	Let's create a custom path instead. Probably worse/hacky, but whatever.
+//*****************************************************************************
+
+begin script CustomBlindWomanJourney
+
+	BlindWomanPath1 = marker at [3534.99, 3298.83]
+	
+	BlindWomanPath2 = marker at [3428.87, 3235.02]
+	
+	BlindWomanPath3 = marker at [3342.35, 3331.05]
+	
+	BlindWomanPath4 = marker at [3223.16, 3340.32]
+	
+	BlindWomanPath5 = marker at [2989.48,3187.69]
+
+start
+	
+	move BlindWoman position to [BlindWomanPath1]
+	wait until [BlindWoman] near [BlindWomanPath1] radius 2
+	
+	move BlindWoman position to [BlindWomanPath2]
+	wait until [BlindWoman] near [BlindWomanPath2] radius 2
+	
+	move BlindWoman position to [BlindWomanPath3]
+	wait until [BlindWoman] near [BlindWomanPath3] radius 2
+
+	move BlindWoman position to [BlindWomanPath4]
+	wait until [BlindWoman] near [BlindWomanPath4] radius 2
+
+	move BlindWoman position to [BlindWomanPath5]
+	wait until [BlindWoman] near [BlindWomanPath5] radius 2
+
+	move BlindWoman position to [BlindWomanOutroSoapBox]
+	wait until [BlindWoman] near [BlindWomanOutroSoapBox] radius 2
+
+end script CustomBlindWomanJourney
+
+
 //*****************************************************************************
 //	Womans Journey from the start to the end. May be called more than once 
 //	depending on how many potions (LivesLeft) she has.
@@ -677,7 +720,7 @@ begin script BlindWomanJourney
 
 	BlindWomanArrived = 0
 	WalkAroundFence = marker at [3714.1294, 2.6800, 3109.5122]
-	StartPath = marker at camera T00_000
+	StartPath = marker at [3692.706299, 3.533222, 3109.027832] //camera T00_000
 
 	Waypoint1 = marker at [3585.8115, 41.9640, 3255.8276]
 	Waypoint2 = marker at [3468.6880, 40.3099, 3251.8435]
@@ -707,7 +750,10 @@ start
 	wait until [BlindWoman] near [StartPath] radius 1
 
 	// start walking woman along camera track
-	set BlindWoman forward walk path TRACK00 from 0.0 to 1.0
+	// set BlindWoman forward walk path TRACK00 from 0.0 to 1.0 //(TOFIXPATH)
+	
+	run background script CustomBlindWomanJourney
+	
 	disable BlindWoman indestructible
 	BlindWomanStillGoingStrong = 0
 
@@ -722,7 +768,7 @@ start
 				HEALTH of BlindWoman = 0.0
 				run script BlindWomanKilled
 				BlindWomanStillGoingStrong = 2
-			elsif Waypoint1Passed == 0 and [BlindWoman] near [Waypoint1] radius 10
+			elsif Waypoint1Passed == 0 and [BlindWoman] near [Waypoint1] radius 20
 				begin dialogue
 					eject good spirit
 					make good spirit point at [BlindWoman]
@@ -791,7 +837,7 @@ start
 
 				Waypoint2Passed = 1
 
-			elsif Waypoint3Passed == 0 and [BlindWoman] near [Waypoint3] radius 10
+			elsif Waypoint3Passed == 0 and [BlindWoman] near [Waypoint3] radius 20
 				
 				begin dialogue
 					eject good spirit

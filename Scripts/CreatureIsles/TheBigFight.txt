@@ -1,4 +1,4 @@
-challenge THE_BIG_FIGHT
+//challenge CHALLENGE_THE_BIG_FIGHT
 
 //------------------------------------------------------------------------------------------------------------------------
 
@@ -223,7 +223,7 @@ start
 		delete NemsCreature with fade
 		wait 2 seconds
 		NewCreature play C_INDIVIDUAL_SUMMON loop 1
-		snapshot quest success 0.0 alignment 0.0 HELP_TEXT_NEMESIS_SPEAKS2_04 StandardReminder(variable HELP_TEXT_NEMESIS_SPEAKS2_04)
+		snapshot CHALLENGE_THE_BIG_FIGHT quest success 0.0 alignment 0.0 HELP_TEXT_NEMESIS_SPEAKS2_04 StandardReminder(variable HELP_TEXT_NEMESIS_SPEAKS2_04)
 		wait until NewCreature played
 
 		CreatureHeight=SCRIPT_OBJECT_PROPERTY_TYPE_HEIGHT of NewCreature
@@ -307,7 +307,7 @@ start
 		end if 
 	end while 
 	
-	update snapshot success 1.0 alignment 0.0 HELP_TEXT_NEMESIS_SPEAKS2_04 StandardReminder(variable HELP_TEXT_NEMESIS_SPEAKS2_04)
+	update snapshot CHALLENGE_THE_BIG_FIGHT success 1.0 alignment 0.0 HELP_TEXT_NEMESIS_SPEAKS2_04 StandardReminder(variable HELP_TEXT_NEMESIS_SPEAKS2_04)
 
 	//HURRAH!! THE END OF THE GAME!!
 	begin cinema
@@ -404,12 +404,13 @@ start
 	MyCreature = get player 1 creature
 	begin cinema
 	
-		start music MUSIC_TYPE_SCRIPT_NEMESIS
-		set fade red 0 green 0 blue 0 time 1
+		set fade in time 2
+		//start music MUSIC_TYPE_SCRIPT_NEMESIS
+		//(Custom) set fade red 0 green 0 blue 0 time 1
 		set camera position to [3640.021, 93.264, 2577.149]
 		move camera position to [3751.223, 104.318, 2624.146] time 20
 		set camera focus to [3470.896, 76.559, 2509.290] 
-		set fade in time 1
+		//(Custom) set fade in time 1
 		move computer player 2 to [3949.732, 55.610, 2346.740]   speed 50
 
 
@@ -501,8 +502,8 @@ start
 	end cinema
 
 	wait until HEALTH of MyCreature > 0.8
-	set MyCreature creed properties hand HAND_GLOW_LEFT scale 0.0 power 0.0 time 0.0
-	set MyCreature creed properties hand HAND_GLOW_RIGHT scale 0.0 power 0.0 time 0.0
+	set MyCreature creed properties hand CREATURE_CREED_LHAND scale 0.0 power 0.0 time 0.0
+	set MyCreature creed properties hand CREATURE_CREED_RHAND scale 0.0 power 0.0 time 0.0
 
 	wait 5 seconds
 	release MyCreature

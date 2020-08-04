@@ -1,4 +1,4 @@
-challenge SHAOLIN
+//challenge CHALLENGE_SHAOLIN
 
 global MonkWayPointReached
 global MonkHasReachedEnd
@@ -327,7 +327,7 @@ start
 		wait 5 seconds
 	end while
 	
-	Highlight = create highlight HIGHLIGHT_CHALLENGE at [HighlightPos]
+	Highlight = create highlight CHALLENGE_SHAOLIN HIGHLIGHT_CHALLENGE at [HighlightPos]
 	run script ChallengeHighlightNotify(Highlight, HighlightPos, variable GOOD_ADVISOR, variable HELP_TEXT_GENERAL_CHALLENGE_START_06)
 	SPEED of Monk = 0.2
 	
@@ -345,7 +345,7 @@ start
 		
 		Monk play ANM_P_AMBIENT2 loop 3
 
-		snapshot challenge success 0 alignment 0 HELP_TEXT_TITLE_24 StandardReminder(variable HELP_TEXT_REMINDER_106)
+		snapshot CHALLENGE_SHAOLIN challenge success 0 alignment 0 HELP_TEXT_TITLE_24 StandardReminder(variable HELP_TEXT_REMINDER_106)
 		wait 0.5 seconds
 
 		say HELP_TEXT_L3_MONK_01
@@ -533,7 +533,7 @@ start
 		run background script LookAfterMonkRising(Monk)
 		wait 3 seconds	
 
-		snapshot challenge success 1.0 alignment 0 HELP_TEXT_TITLE_24 StandardReminder(variable HELP_TEXT_REMINDER_106)
+		snapshot CHALLENGE_SHAOLIN challenge success 1.0 alignment 0 HELP_TEXT_TITLE_24 StandardReminder(variable HELP_TEXT_REMINDER_106)
 		delete Highlight
 
 		say HELP_TEXT_L3_MONK_08

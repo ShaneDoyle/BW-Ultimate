@@ -1,4 +1,4 @@
-challenge GREEDY_FARMER
+//challenge CHALLENGE_GREEDY_FARMER
 
 //------------------------------------------------------------------------------------------------------------------------
 global GreedyFarmerFinished
@@ -24,7 +24,7 @@ start
 	// snapshot challenge and alignment
 	GreedyFarmerAlignmentTotal -= 0.6
 	
-	update snapshot success 1.0 alignment GreedyFarmerAlignmentTotal HELP_TEXT_TITLE_11 StandardReminder(variable HELP_TEXT_REMINDER_12)
+	update snapshot CHALLENGE_GREEDY_FARMER success 1.0 alignment GreedyFarmerAlignmentTotal HELP_TEXT_TITLE_11 StandardReminder(variable HELP_TEXT_REMINDER_12)
 end script GreedyFarmerDead
 
 //------------------------------------------------------------------------------------------------------------------------
@@ -46,7 +46,7 @@ start
 		move camera position to [SoapCamPos] time 3
 		move camera focus to [SoapBox] time 3
 		wait until camera ready
-		update snapshot success 1.0 alignment GreedyFarmerAlignmentTotal HELP_TEXT_TITLE_11 StandardReminder(variable HELP_TEXT_REMINDER_12)
+		update snapshot CHALLENGE_GREEDY_FARMER success 1.0 alignment GreedyFarmerAlignmentTotal HELP_TEXT_TITLE_11 StandardReminder(variable HELP_TEXT_REMINDER_12)
 		// "Farmer:The cows are all gone, dispute solved!"
 		say single line HELP_TEXT_GREEDYFARMER_13
 		wait until read
@@ -86,7 +86,7 @@ start
 	end cinema
 	// snapshot challenge and alignment
 	GreedyFarmerAlignmentTotal -= 1.0
-	update snapshot success 1.0 alignment GreedyFarmerAlignmentTotal HELP_TEXT_TITLE_11 StandardReminder(variable HELP_TEXT_REMINDER_12)
+	update snapshot CHALLENGE_GREEDY_FARMER success 1.0 alignment GreedyFarmerAlignmentTotal HELP_TEXT_TITLE_11 StandardReminder(variable HELP_TEXT_REMINDER_12)
 end script GreedyFarmerChildrenDead
 
 //------------------------------------------------------------------------------------------------------------------------
@@ -183,13 +183,15 @@ begin script MoveCow(Cow, Cattle, Children)
 	Stolen=0
 start
 	begin loop
-	when Cow is HELD or Cow in MyCreature hand
+	if Cow is HELD or Cow in MyCreature hand
 		wait until Cow is not HELD and not Cow in MyCreature hand
 		attach Cow to Cattle
 		SPEED of Cow = 0.4
-	when Cow in Children and Stolen==0
+	end if
+	if Cow in Children and Stolen==0
 		Stolen=1
-	when Cow in Cattle and Stolen==1/* and [Cow] not near [Children] radius 50*/
+	end if
+	if Cow in Cattle and Stolen==1/* and [Cow] not near [Children] radius 50*/
 		begin dialogue
 			eject good spirit
 			// "You saved a cow!"
@@ -202,6 +204,7 @@ start
 			end if
 		end dialogue
 		Stolen=0
+	end if
 	end loop
 until HEALTH of Cow <= 0
 until GreedyFarmerFinished!=0
@@ -215,11 +218,11 @@ begin script AngryFarmer(Farmer,Position,Children,Cattle)
 	Abuse=0
 start
 	begin loop
-	when [Farmer] near [Children] radius 40 and Abuse==0
+	if [Farmer] near [Children] radius 40 and Abuse==0
 		Abuse=1
 
 		if camera position near [Farmer] radius 100 and [Farmer] viewed
-			if widescreen ready
+			if in widescreen
 				begin dialogue
 					// "Oi!  Stop nicking me cows you little rascals!"
 					say single line constant from HELP_TEXT_GREEDYFARMER_08 to HELP_TEXT_GREEDYFARMER_09
@@ -227,12 +230,13 @@ start
 				end dialogue
 			end if
 		end if
+	end if
 
 		move Farmer position to [Children]
 		wait until [Farmer] not near [Position] radius 20 or [Farmer] near [Children] radius 10
 
 		if camera position near [Farmer] radius 100 and [Farmer] viewed
-			if widescreen ready
+			if in widescreen
 				begin dialogue
 					// "I'm too old for this shit!"
 					say single line HELP_TEXT_GREEDYFARMER_10
@@ -244,8 +248,9 @@ start
 		move Farmer position to [Position]
 		wait until [Farmer] near [Position] radius 10
 
-	when [Farmer] not near [Children] radius 40 and Abuse!=0
+	if [Farmer] not near [Children] radius 40 and Abuse!=0
 		Abuse=0
+	end if
 	until HEALTH of Farmer <= 0
 	until GreedyFarmerFinished!=0
 	until size of Cattle <= 0
@@ -316,7 +321,7 @@ start
 
 		close dialogue
 		wait 0.1 seconds
-		snapshot challenge success 1.0 alignment GreedyFarmerAlignmentTotal HELP_TEXT_TITLE_11 StandardReminder(variable HELP_TEXT_REMINDER_12)
+		snapshot CHALLENGE_GREEDY_FARMER challenge success 1.0 alignment GreedyFarmerAlignmentTotal HELP_TEXT_TITLE_11 StandardReminder(variable HELP_TEXT_REMINDER_12)
 	end cinema
 
 	disband Children
@@ -438,7 +443,7 @@ start
 	 
 	//wait until GreedyFarmerCowKilled>0
 
-	Highlight = create highlight HIGHLIGHT_CHALLENGE at [House]
+	Highlight = create highlight CHALLENGE_GREEDY_FARMER HIGHLIGHT_CHALLENGE at [House]
 	run script ChallengeHighlightNotify(Highlight, House, variable EVIL_ADVISOR, variable HELP_TEXT_GENERAL_CHALLENGE_START_03)
 
 	 //		Once they click on the house, we run a little cinema which introduces the challenge
@@ -462,7 +467,7 @@ start
 		move camera position to [1751.416, 55.781, 3005.992] time 5
 		move camera focus to [1745.711, 54.507, 3013.582] time 5
 
-		snapshot challenge success 0.0 alignment 0.0 HELP_TEXT_TITLE_11 StandardReminder(variable HELP_TEXT_REMINDER_12)
+		snapshot CHALLENGE_GREEDY_FARMER challenge success 0.0 alignment 0.0 HELP_TEXT_TITLE_11 StandardReminder(variable HELP_TEXT_REMINDER_12)
 		// "Oh great one, please hear my cry for help!"
 		say HELP_TEXT_GREEDYFARMER_01
 		wait until read

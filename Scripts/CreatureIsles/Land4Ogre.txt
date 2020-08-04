@@ -1,4 +1,4 @@
-challenge LAND_4_OGRE
+//challenge CHALLENGE_LAND_4_OGRE
 
 global Ogre
 global GremlinsKilled
@@ -24,8 +24,8 @@ define script FightEndCinema(Interrupted)
 
 begin script KeepCreatureAwayFromOgre
 
-OgrePos		= marker at [1705.7167, 10.0500, 2790.1104]
-x = 0
+OgrePos = marker at [1705.7167, 10.0500, 2790.1104]
+NewX = 0
 nearogrepos=0
 isnotleashed=0
 notnearfightpos=0
@@ -36,7 +36,7 @@ start
 	wait until MyCreature exists
 
 	while LighteningMeteorBroken == 0
-		x = 0
+		NewX = 0
 		nearogrepos = 0
 		isnotleashed = 0
 		notnearfightpos = 0
@@ -46,24 +46,24 @@ start
 		end if
 
 		if [MyCreature] near [OgreFightIntroPos] radius 250
-			x = x + 1
+			NewX = NewX + 1
 			nearogrepos=1
 		elsif [MyCreature] near [OgrePos] radius 100
-			x = x + 1
+			NewX = NewX + 1
 			nearogrepos=1
 		end if
 		if not MyCreature leashed
-			x = x + 1
+			NewX = NewX + 1
 			isnotleashed=1
 		end if
 		if [MyCreature] near [OgreFightIntroPos] radius 150
-			x = x + 0
+			NewX = NewX + 0
 		else
-			x = x + 1
+			NewX = NewX + 1
 			notnearfightpos=1
 		end if
 
-		if x == 3
+		if NewX == 3
 			//ay "SENDING HOME!!!!!!!!!!!!!!!!!!!!!!!"
 			//wait until read
 			move MyCreature position to [HomeTownL4] radius 50
@@ -101,7 +101,8 @@ start
 		wait 3 seconds
 	end while
 
-	Ogre = create_creature_from_creature MyCreature OgreScale at [OgrePosition] CREATURE_TYPE_OGRE	
+	//Ogre = create_creature_from_creature MyCreature OgreScale at [OgrePosition] CREATURE_TYPE_OGRE	
+	Ogre = create CREATURE CREATURE_TYPE_OGRE at [OgrePosition]
 	set Ogre name HELP_TEXT_OGRE_NAME_02
 	set Ogre all desires SCRIPT_FALSE
 	set Ogre desire CREATURE_DESIRE_TO_BE_FRIENDS SCRIPT_FALSE
@@ -119,8 +120,8 @@ start
 	STRENGTH of Ogre=Strength
 	HEALTH of Ogre = 1
 
-	ALIGNMENT of Ogre = -1
-	SPEED of Ogre = 0.2
+	ALIGNMENT of Ogre = 0
+	SPEED of Ogre = 10.2
 	//SCALE of Ogre = SCALE of MyCreature
 	OgreHeight = SCRIPT_OBJECT_PROPERTY_TYPE_HEIGHT of Ogre
 	OgreHeight = OgreHeight * OgreScale
@@ -254,7 +255,7 @@ start
 	end while
 	
 	// Ogre finished
-	update snapshot success 1 alignment 0 HELP_TEXT_TITLE_110 StandardReminder(variable HELP_TEXT_REMINDER_103)
+	update snapshot CHALLENGE_LAND_4_OGRE success 1 alignment 0 HELP_TEXT_TITLE_110 StandardReminder(variable HELP_TEXT_REMINDER_103)
 	if OgreHighlight exists
 		delete OgreHighlight
 	end if
@@ -384,9 +385,10 @@ start
 	// Create all the kiddy Gremlins
 	wait until ManHasExplainedAboutNemesis == 1
 	while NumberOfGremlins < 4
-		Gremlin = create_creature_from_creature MyCreature 1.2 at [OgreHomePos]+[number from -15 to 15, number from -15 to 15] CREATURE_TYPE_OGRE
+		//Gremlin = create_creature_from_creature MyCreature 1.2 at [OgreHomePos]+[number from -15 to 15, number from -15 to 15] CREATURE_TYPE_OGRE
+		Gremlin = create CREATURE CREATURE_TYPE_OGRE at [OgreHomePos]+[number from -15 to 15, number from -15 to 15]
 		SCALE of Gremlin = 0.3
-		ALIGNMENT of Gremlin = -1
+		ALIGNMENT of Gremlin = 0
 		enable Gremlin friends with Ogre
 		enable Ogre friends with Gremlin
 		disable Gremlin pickup
@@ -447,7 +449,7 @@ start
 			wait 1 second
 		end while
 
-		wait until widescreen ready
+		wait until in widescreen
 		until OgreDefeated == 1
 
 	end loop

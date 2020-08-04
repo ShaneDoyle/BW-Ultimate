@@ -1,4 +1,4 @@
-challenge LEAVE_THROUGH_VORTEX_LAND4
+//challenge CHALLENGE_LEAVE_THROUGH_VORTEX_LAND4
 
 
 begin script LeaveThroughVortexL4
@@ -241,7 +241,7 @@ start
 		send good spirit home
 	end dialogue
 
-	Highlight = create highlight HIGHLIGHT_QUEST at [ExitVortexPos]
+	Highlight = create highlight CHALLENGE_LEAVE_THROUGH_VORTEX_LAND4 HIGHLIGHT_QUEST at [ExitVortexPos]
 	ALTITUDE of Highlight = 20
 	run script ChallengeHighlightNotify(Highlight, ExitVortexPos, variable EVIL_ADVISOR, variable HELP_TEXT_NEW_L4_VORTEX_NOTIFIER)
 	begin cinema 

@@ -1,4 +1,4 @@
-challenge BEGIN_LAND2
+//challenge CHALLENGE_BEGIN_LAND2
 
 //------------------------------------------------------------------------------------------------------------------------
 // Player 1 is you, Player 2 is Khazar, Player 3 is Lethys
@@ -481,25 +481,25 @@ start
 	//Create some one shots, courtesy of Khazar - what a luvly god he is.
 	while FoodSeedTotal > 0
 		MySeed = create SCRIPT_OBJECT_TYPE_ONE_SHOT_SPELL SPELL_SEED_TYPE_FOOD at [OneShotSpellPos]+[number from - 5 to 5, number from -5 to 5]
-		ALTITUDE of MySeed = 75
+		//ALTITUDE of MySeed = 75
 		FoodSeedTotal--
 	end while
 
 	while WoodSeedTotal > 0
 		MySeed = create SCRIPT_OBJECT_TYPE_ONE_SHOT_SPELL SPELL_SEED_TYPE_WOOD at [OneShotSpellPos]+[number from - 5 to 5, number from -5 to 5]
-		ALTITUDE of MySeed = 75
+		//ALTITUDE of MySeed = 75
 		WoodSeedTotal--
 	end while
 
 	while WaterSeedTotal > 0
 		MySeed = create SCRIPT_OBJECT_TYPE_ONE_SHOT_SPELL SPELL_SEED_TYPE_WATER at [OneShotSpellPos]+[number from - 5 to 5, number from -5 to 5]
-		ALTITUDE of MySeed = 75
+		//ALTITUDE of MySeed = 75
 		WaterSeedTotal--
 	end while
 
 	while HealSeedTotal > 0
 		MySeed = create SCRIPT_OBJECT_TYPE_ONE_SHOT_SPELL SPELL_SEED_TYPE_HEAL at [OneShotSpellPos]+[number from - 5 to 5, number from -5 to 5]
-		ALTITUDE of MySeed = 75
+		//ALTITUDE of MySeed = 75
 		HealSeedTotal--
 	end while
 

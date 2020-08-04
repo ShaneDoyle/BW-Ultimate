@@ -1,4 +1,4 @@
-challenge GAME_OVER
+//------------------------------------------------------------------------------------------------------------------------
 begin script GameOver
 	TemplePos = 0
 	Temple = 0
@@ -20,15 +20,11 @@ start
 		shake camera at [TemplePos] radius 200.0 amplitude 0.1 time 1
 
 		set camera position to [StartPos] //start pos
-		//set camera position to [TemplePos] + [ -90,40,90] //start pos
 		set camera focus to [TemplePos] + [0,10,0]
 		wait until camera ready
 		
   		move camera position to [ZoomPos] time 12 // end of initial camera zoom
 		move camera focus to [TemplePos] + [0,5,0] time 12
-		
-		//delete Temple with temple explode
-
  
 		shake camera at [TemplePos] radius 100.0 amplitude 0.5 time 2
 
@@ -49,8 +45,6 @@ start
 		eject good spirit //good arrives
 		
 		shake camera at [TemplePos] radius 500.0 amplitude 0.25 time 1
-		//wait until read
-		//start say sound HELP_TEXT_NEW_L5_INTRO_12	//laugh
 
 		set camera position to [TemplePos] + [ -20,30,35] //4 pos
 
@@ -68,8 +62,6 @@ start
 
 		set camera position to [TemplePos] + [ 15,50,20] //6 pos
 		wait 0.5 seconds
-
-
 
 		set camera position to [TemplePos] + [ -10,60,25] //7 pos
 		wait 0.5 seconds
@@ -93,17 +85,10 @@ start
  		start sound LH_SAMPLE_G_CITADELEXPLODE_01
 		set camera position to [TemplePos] + [ -13,90,5] //10 pos
 		wait 0.5 seconds
-		//start say sound HELP_TEXT_NEW_L5_INTRO_12	//laugh
 		move camera position to [TemplePos] + [ 14,1000,-24] time 12//out pos
-		//wait until camera ready
-		//wait 
-		//wait until fade ready
-		//set clipping window across 0 down 0 width 0.0001 height 0.0001 time 0.1
 		wait until read
-		//wait until fade ready
 		disable game time
 		wait 2 seconds
-		//wait 0.2 seconds
 		fade all draw text time 5 seconds					
 		wait 2 seconds
 		

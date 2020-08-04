@@ -1,4 +1,4 @@
-challenge SWAP_TO_APE
+//challenge CHALLENGE_SWAP_TO_APE
 
 
 //run script SwapToApe
@@ -95,7 +95,7 @@ start
 		end if
 	end while
 
-	Highlight = create highlight HIGHLIGHT_CHALLENGE at [Hut]
+	Highlight = create highlight CHALLENGE_SWAP_TO_APE HIGHLIGHT_CHALLENGE at [Hut]
 	ALTITUDE of Highlight = 4
 	MyCreature = get player 1 creature
 	run script ChallengeHighlightNotify(Highlight, Hut, variable EVIL_ADVISOR, variable HELP_TEXT_GENERAL_CHALLENGE_START_07)
@@ -127,7 +127,7 @@ start
 
 		wait until camera ready
 
-		snapshot challenge success 0.0 alignment 0.0 HELP_TEXT_TITLE_26 StandardReminder(variable HELP_TEXT_REMINDER_24)
+		snapshot CHALLENGE_SWAP_TO_APE challenge success 0.0 alignment 0.0 HELP_TEXT_TITLE_26 StandardReminder(variable HELP_TEXT_REMINDER_24)
 
 		Woman play ANM_P_GOSSIP_WOMAN_2 loop 1
 
@@ -217,7 +217,7 @@ if HEALTH of Woman > 0
 	begin cinema
 		say single line HELP_TEXT_SWAP_TO_APE_16
 		wait until read
-		update snapshot success 0.5 alignment 0.0 HELP_TEXT_TITLE_26 StandardReminder(variable HELP_TEXT_REMINDER_24)
+		update snapshot CHALLENGE_SWAP_TO_APE success 0.5 alignment 0.0 HELP_TEXT_TITLE_26 StandardReminder(variable HELP_TEXT_REMINDER_24)
 //		eject evil spirit
 //		say HELP_TEXT_SWAP_TO_APE_17			// This gives it all away !! MLW
 //		wait until read
@@ -299,7 +299,7 @@ end if
 			Woman play ANM_P_SCARED_STIFF loop 1
 
 			wait 1 seconds
-			snapshot challenge success 1.0 alignment -0.3 HELP_TEXT_TITLE_26 StandardReminder(variable HELP_TEXT_SWAP_TO_APE_09)
+			snapshot CHALLENGE_SWAP_TO_APE challenge success 1.0 alignment -0.3 HELP_TEXT_TITLE_26 StandardReminder(variable HELP_TEXT_SWAP_TO_APE_09)
 
 			say HELP_TEXT_SWAP_TO_APE_08
 			wait until read
@@ -334,7 +334,7 @@ end if
 			delete Woman
 		end if
 	else
-		update snapshot success 1.0 alignment -1.0 HELP_TEXT_TITLE_26 StandardReminder(variable HELP_TEXT_SWAP_TO_APE_09)
+		update snapshot CHALLENGE_SWAP_TO_APE success 1.0 alignment -1.0 HELP_TEXT_TITLE_26 StandardReminder(variable HELP_TEXT_SWAP_TO_APE_09)
 		begin dialogue
 			eject good spirit
 			eject evil spirit

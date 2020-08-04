@@ -1,4 +1,4 @@
-challenge BAYWATCH
+//challenge CHALLENGE_BAYWATCH
 
 global BaywatchHomeCounter
 global BaywatchSwimmingCounter
@@ -131,7 +131,7 @@ start
 
 	Influence=create anti influence at position [SwimPos] radius 30
 
-	Highlight = create highlight HIGHLIGHT_CHALLENGE at [VillagerHutPos]
+	Highlight = create highlight CHALLENGE_BAYWATCH HIGHLIGHT_CHALLENGE at [VillagerHutPos]
 	run script ChallengeHighlightNotify(Highlight, VillagerHutPos, variable EVIL_ADVISOR, variable HELP_TEXT_GENERAL_CHALLENGE_START_03)
 
 	Mother = create VILLAGER VILLAGER_INFO_INDIAN_HOUSEWIFE_FEMALE at [VillagerHutPos]
@@ -179,7 +179,7 @@ start
 		set camera position to [2960.404, 6.550, 3114.483] 
 		set camera focus to [2958.053, 3.424, 3097.387] 
 
-		snapshot challenge success 0.0 alignment 0 HELP_TEXT_TITLE_01 StandardReminder(variable HELP_TEXT_BAYWATCH_36)
+		snapshot CHALLENGE_BAYWATCH challenge success 0.0 alignment 0 HELP_TEXT_TITLE_01 StandardReminder(variable HELP_TEXT_BAYWATCH_36)
 
 		say single line HELP_TEXT_BAYWATCH_23
 		
@@ -205,8 +205,7 @@ start
 		stop music
 	end cinema
 
-	state Mother WANDER_AROUND
-		position [SoapBox]
+	state Mother WANDER_AROUND position [SoapBox]
 		float 6
 		ulong 4, 20
 
@@ -228,14 +227,14 @@ start
 				move camera position to [RewardCameraPos] time 5
 				move camera focus to [RewardCameraFoc] time 2
 				wait until camera ready
-				snapshot challenge success 1 alignment 1 HELP_TEXT_TITLE_01 StandardReminder(variable HELP_TEXT_BAYWATCH_36)
+				snapshot CHALLENGE_BAYWATCH challenge success 1 alignment 1 HELP_TEXT_TITLE_01 StandardReminder(variable HELP_TEXT_BAYWATCH_36)
 			end cinema 
 
 		elsif BaywatchSwimmingCounter == 0 and BaywatchMurder < 5 and BaywatchHomeCounter == 5 - BaywatchMurder and HEALTH of Mother > 0
 			begin cinema
 				set camera position to [2794.7925, 58.5139, 3067.1104]
 				set camera focus to [2784.4382, 51.3200, 3054.3350]
-				update snapshot success 1 alignment -0.2 HELP_TEXT_TITLE_01 StandardReminder(variable HELP_TEXT_BAYWATCH_36)
+				update snapshot CHALLENGE_BAYWATCH success 1 alignment -0.2 HELP_TEXT_TITLE_01 StandardReminder(variable HELP_TEXT_BAYWATCH_36)
 				say single line HELP_TEXT_BAYWATCH_28
 				wait until read
 
@@ -248,7 +247,7 @@ start
 				set camera position to [2794.7925, 58.5139, 3067.1104]
 				set camera focus to [2784.4382, 51.3200, 3054.3350]
 
-				update snapshot success 1 alignment -0.6 HELP_TEXT_TITLE_01 StandardReminder(variable HELP_TEXT_BAYWATCH_36)
+				update snapshot CHALLENGE_BAYWATCH success 1 alignment -0.6 HELP_TEXT_TITLE_01 StandardReminder(variable HELP_TEXT_BAYWATCH_36)
 
 				say	single line HELP_TEXT_BAYWATCH_29
 				wait until read
@@ -270,7 +269,7 @@ start
 				//"A whole family slaughtered, nice going!"
 				say single line HELP_TEXT_BAYWATCH_33
 
-				update snapshot details success 1 alignment -1 HELP_TEXT_TITLE_01 
+				update snapshot CHALLENGE_BAYWATCH success 1 alignment -1 HELP_TEXT_TITLE_01 StandardReminder(variable HELP_TEXT_BAYWATCH_36) //TODODETAILS
 
 				wait until read
 
@@ -285,7 +284,7 @@ start
 				set camera position to [2794.7925, 58.5139, 3067.1104]
 				set camera focus to [2784.4382, 51.3200, 3054.3350]
 
-				update snapshot success 1 alignment -0.8 HELP_TEXT_TITLE_01 StandardReminder(variable HELP_TEXT_BAYWATCH_36)
+				update snapshot CHALLENGE_BAYWATCH success 1 alignment -0.8 HELP_TEXT_TITLE_01 StandardReminder(variable HELP_TEXT_BAYWATCH_36)
 
 				eject good spirit
 
@@ -367,7 +366,7 @@ start
 					close dialogue
 					wait 0.1 seconds
 
-					snapshot challenge success 1 alignment 0.8 HELP_TEXT_TITLE_01 StandardReminder(variable HELP_TEXT_BAYWATCH_36)
+					snapshot CHALLENGE_BAYWATCH challenge success 1 alignment 0.8 HELP_TEXT_TITLE_01 StandardReminder(variable HELP_TEXT_BAYWATCH_36)
 
 					move camera position to [2803.6526, 68.4681, 3074.7102] time 4
 					move camera focus to [2784.4626, 51.4354, 3053.8333] time 4
@@ -434,7 +433,7 @@ start
 					close dialogue
 					wait 0.1 seconds
 
-					snapshot challenge success 1 alignment -0.5 HELP_TEXT_TITLE_01 StandardReminder(variable HELP_TEXT_BAYWATCH_36)
+					snapshot CHALLENGE_BAYWATCH challenge success 1 alignment -0.5 HELP_TEXT_TITLE_01 StandardReminder(variable HELP_TEXT_BAYWATCH_36)
 
 					move camera position to [2803.6526, 68.4681, 3074.7102]	time 4
 					move camera focus to [2784.4626, 51.4354, 3053.8333] time 4

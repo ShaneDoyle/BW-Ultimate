@@ -1,6 +1,3 @@
-challenge DID_YOU_KNOW
-
-
 //------------------------------------------------------------------------------------------------------------------------
 // FIRST TIME DYK EXPLANATION
 //------------------------------------------------------------------------------------------------------------------------
@@ -22,34 +19,30 @@ start
 end script FirstDYKExplained
 
 
-
-//------------------------------------------------------------------------------------------------------------------------
-//  DID YOU KNOW SCRIPTS
-//  A specific script for bronze highlights
-//------------------------------------------------------------------------------------------------------------------------
-/*begin help script DidYouKnowNotify(Location, HelpTextEnum, NotifyTextEnum) 
-	Highlight = 0
-start
-	Highlight = create highlight HIGHLIGHT_TIPS at [Location]
-	ALTITUDE of Highlight = 0
-	set Highlight text property constant HelpTextEnum
-
-	//Wait for first time clicked
-	run script DidYouKnowHighlightNotify(Highlight, variable GOOD_ADVISOR, NotifyTextEnum)
-
-	release Highlight
-end script DidYouKnowNotify
-*/
-
 //------------------------------------------------------------------------------------------------------------------------
 //  DID YOU KNOW SCRIPTS
 //  A specific script for bronze highlights
 //------------------------------------------------------------------------------------------------------------------------
 begin help script DidYouKnow(Location, HelpTextEnum, HelpTextCategory) 
 	Highlight = 0
+	AlreadyPlacedObj =  get HIGHLIGHT HIGHLIGHT_TIPS at [Location]
 start
-	Highlight = create highlight HIGHLIGHT_TIPS at [Location]
-	set Highlight text property text constant HelpTextEnum category constant HelpTextCategory
-	ALTITUDE of Highlight = 0
-	release Highlight
+	if AlreadyPlacedObj not exists
+		Highlight = create highlight CHALLENGE_NONE HIGHLIGHT_TIPS at [Location]
+		set Highlight text property text constant HelpTextEnum category constant HelpTextCategory
+		release Highlight
+	end if
 end script DidYouKnow
+
+
+//------------------------------------------------------------------------------------------------------------------------
+//	Script:		DeleteDYK
+//	Argument:	Position variable
+//	Function:	Deletes DidYouKnow at Position
+//------------------------------------------------------------------------------------------------------------------------
+begin help script DeleteDYK(Location)
+	DidYouKnow = 0
+start
+	DidYouKnow = get HIGHLIGHT SCRIPT_HIGHLIGHT_INFO_SCRIPT_BRONZE at [Location]
+	delete DidYouKnow
+end script DeleteDYK

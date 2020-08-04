@@ -1,4 +1,4 @@
-// Land 3
+//Land 3
 SetupLand3.txt
 Shaolin.txt
 LeaveThroughVortexL3.txt
@@ -7,33 +7,4 @@ GetThroughVortexL2.txt
 SwapToApe.txt
 TreePuzzleTwo.txt
 throwbloke.txt
-LandControl3.txt
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

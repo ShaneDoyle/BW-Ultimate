@@ -1,4 +1,4 @@
-challenge LEAVE_THROUGH_VORTEX_LAND1
+//challenge CHALLENGE_LEAVE_THROUGH_VORTEX_LAND1
 
 //------------------------------------------------------------------------------------------------------------------------
 //Vortex first appears and bloke gets sucked in------------------------------------------------------------------------
@@ -183,7 +183,7 @@ start
 			move camera focus to [1810.351, 0.170, 2402.020]   time 3
 			wait 1 second // wait 1 sec before pointing to tie in with text
 
-			Highlight = create highlight HIGHLIGHT_QUEST at [CamPosIn]  
+			Highlight = create highlight CHALLENGE_LEAVE_THROUGH_VORTEX_LAND1 HIGHLIGHT_QUEST at [CamPosIn]  
 			ALTITUDE of Highlight = 20
 
 			make good spirit point at [Highlight]
@@ -199,11 +199,11 @@ start
 	else
 		VortexOpen=1
 		Vort = create VORTEX VORTEX_TYPE_IN at [CamPosIn] 
-		Highlight = create highlight HIGHLIGHT_QUEST at [CamPosIn]  
+		Highlight = create highlight CHALLENGE_LEAVE_THROUGH_VORTEX_LAND1 HIGHLIGHT_QUEST at [CamPosIn]  
 		ALTITUDE of Highlight = 20
 	end if
 
-	run script QuestHighlightNotify(Highlight, CamPosIn, variable EVIL_ADVISOR, variable HELP_TEXT_GENERAL_LEAVE_THROUGH_VORTEX_01, variable HELP_TEXT_NARRATOR_EVIL_SPIRIT, variable HELP_TEXT_LEAVE_THROUGH_VORTEX1_QUEST_REMINDER_01, 30*60)
+	run script QuestHighlightNotify(Highlight, CamPosIn, variable EVIL_ADVISOR, variable HELP_TEXT_GENERAL_LEAVE_THROUGH_VORTEX_01, variable HELP_TEXT_NARRATOR_EVIL_SPIRIT, variable HELP_TEXT_LEAVE_THROUGH_VORTEX1_QUEST_REMINDER_01, 30*60) //TOFIX
 	SCRIPT_OBJECT_PROPERTY_TYPE_CREATURE_CAN_GO_THROUGH_VORTEX of MyCreature = 1
 
 //------------------------------------------------------------------------------------------------------------------------

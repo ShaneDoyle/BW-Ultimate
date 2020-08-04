@@ -1,4 +1,4 @@
-challenge LION_PUZZLE
+//challenge CHALLENGE_LION_PUZZLE
 
 //------------------------------------------------------------------------------------------------------------------------
 begin script LPSitDown (Tamer)
@@ -45,7 +45,7 @@ start
 	run background script LPSitDown (Tamer)
 	Campfire = create OBJECT MOBILE_STATIC_INFO_BONFIRE at [TamerPos]+[2,2]
 	// challenge notify
-	Highlight = create highlight HIGHLIGHT_CHALLENGE at [PuzzlePos]
+	Highlight = create highlight CHALLENGE_LION_PUZZLE HIGHLIGHT_CHALLENGE at [PuzzlePos]
 	run background script ChallengeHighlightNotifyWithEndVariable(Highlight, PuzzlePos, variable GOOD_ADVISOR, variable HELP_TEXT_GENERAL_CHALLENGE_START_04)
 
 	ChallengeHighlightEndVariable=0
@@ -76,7 +76,7 @@ start
 
 		run background script DidYouKnow(dyklionpuzzle,variable HELP_TEXT_DYK_RULES_05, variable DYK_MISC)
 		wait 0.5 seconds
-		snapshot challenge success 0.0 alignment 0.0 HELP_TEXT_TITLE_30 StandardReminder(variable HELP_TEXT_REMINDER_51)
+		snapshot CHALLENGE_LION_PUZZLE challenge success 0.0 alignment 0.0 HELP_TEXT_TITLE_30 StandardReminder(variable HELP_TEXT_REMINDER_51)
 		
 		Tamer play ANM_P_GOSSIP_MAN  loop 1
 		wait until Tamer played
@@ -169,7 +169,7 @@ if HEALTH of Tamer > 0
 		run background script LPSitDown (Tamer)
 		set Lion focus to camera position
 		wait 1 second
-		update snapshot success 1.0 alignment 0.0 HELP_TEXT_TITLE_30 StandardReminder(variable HELP_TEXT_REMINDER_51)
+		update snapshot CHALLENGE_LION_PUZZLE success 1.0 alignment 0.0 HELP_TEXT_TITLE_30 StandardReminder(variable HELP_TEXT_REMINDER_51)
 		wait until read
 		force Lion CREATURE_WAVE_AT_PLAYER Lion
 		make good spirit point at [Lion]

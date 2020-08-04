@@ -1,4 +1,4 @@
-challenge TREE_PUZZLE_ONE
+//challenge CHALLENGE_TREE_PUZZLE_ONE
 
 begin script TreePuzzleOne
 	Highlight=0
@@ -15,7 +15,7 @@ start
 	
 	wait until TreePuzzleOne played
 
-	Highlight = get HIGHLIGHT HIGHLIGHT_TIPS at [TreePuzzleOneDYKPos] radius 2
+	Highlight = get HIGHLIGHT CHALLENGE_TREE_PUZZLE_ONE at [TreePuzzleOneDYKPos] radius 2
 	delete Highlight with fade
 run script GiveSpellDispenserReward(RewardDispenserPos, variable MAGIC_TYPE_FLOCK_FLYING, 300, 0, 7*60)
  

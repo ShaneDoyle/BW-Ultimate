@@ -1,4 +1,4 @@
-challenge LOST_TREASURE
+//challenge CHALLENGE_LOST_TREASURE
 
 global WolfPackUnwanted
 global PuzzleSolved
@@ -81,7 +81,7 @@ start
 
 		move camera focus to [2643.445, 33.430, 2475.515] time 8
 
-		snapshot challenge success 0.0 alignment 0.0 HELP_TEXT_TITLE_16 Riddle(AnnikaHome, AnnikaPos)
+		snapshot CHALLENGE_LOST_TREASURE challenge success 0.0 alignment 0.0 HELP_TEXT_TITLE_16 Riddle(AnnikaHome, AnnikaPos)
 	
 		if HEALTH of AnnikaHome < 1
 			say single line HELP_TEXT_LOST_TREASURE_25 // "Apparantly the broad won't tell us any more clues until she's fixed her house."
@@ -221,7 +221,7 @@ begin script LostTreasureMain
 	Shroom7Pos = marker at [Altar] + [0,-5*Size]
 	Shroom8Pos = marker at [Altar] + [3.5*Size,-3.5*Size]
 
-	Highlight = create highlight HIGHLIGHT_CHALLENGE at [AnnikaHome]
+	Highlight = create highlight CHALLENGE_LOST_TREASURE HIGHLIGHT_CHALLENGE at [AnnikaHome]
 
 start
 
@@ -269,7 +269,7 @@ start
 
 		wait until camera ready
 
-		snapshot challenge success 1.0 alignment 0.0 HELP_TEXT_TITLE_16 StandardReminder(variable HELP_TEXT_REMINDER_16)
+		snapshot CHALLENGE_LOST_TREASURE challenge success 1.0 alignment 0.0 HELP_TEXT_TITLE_16 StandardReminder(variable HELP_TEXT_REMINDER_16)
 
 		eject good spirit
 		eject evil spirit

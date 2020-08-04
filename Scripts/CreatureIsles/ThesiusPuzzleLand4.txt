@@ -1,4 +1,4 @@
-challenge THESIUS_PUZZLE_LAND_FOUR
+//challenge CHALLENGE_THESIUS_PUZZLE_LAND_FOUR
 
 begin script ThesiusPuzzleLand4
 

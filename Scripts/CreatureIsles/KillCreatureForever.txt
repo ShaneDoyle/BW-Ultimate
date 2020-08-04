@@ -1,0 +1,23 @@
+//------------------------------------------------------------------------------------------------------------------------
+//--KillCreatureForever----------------------------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------------------------------------
+begin script KillCreatureForever(Creature)
+
+LoopForever = 0
+
+start
+
+	LoopForever = 1
+
+	force Creature CREATURE_DEAD_FOREVER Creature
+	
+	//(Shane) Never end the script and keep creature dead forever. This is hacky as shit but oh well
+	while LoopForever >= 0
+		//Set HP and other stuff.
+		HEALTH of Creature = 0
+		disable Creature pickup
+
+	end while
+
+	
+end script KillCreatureForever

@@ -1,4 +1,4 @@
-challenge LEARN_WORSHIPPING
+//challenge CHALLENGE_LEARN_WORSHIPPING
 
 //------------------------------------------------------------------------------------------------------------------------
 define script WaitAndCreateWorshipSite(TownCentre)
@@ -103,7 +103,7 @@ start
 		release computer player 2
 		KhazarInScript=0
 
-		Highlight = create highlight HIGHLIGHT_QUEST at [TownCentreScrollPos]
+		Highlight = create highlight CHALLENGE_LEARN_WORSHIPPING HIGHLIGHT_QUEST at [TownCentreScrollPos]
 		ALTITUDE of Highlight = 0
 
 		run script CheckForKhazarChallengeHighlightNotify(Highlight, Highlight, variable GOOD_ADVISOR, variable HELP_TEXT_NEW_LAND_2_NOTIFIER_05)
@@ -158,11 +158,15 @@ start
 
 			move computer player 2 to [3333.156, 77.050, 3241.797] speed 30 with fixed height
 
-			move camera to T00_000 time 3
+			move camera position to [3266.424805, 48.353252, 3342.325928] time 3 //T00_000 time 3
 			wait until camera ready
 
 			set WorshipSite mana 0
-			camera path TRACK00
+			//camera path TRACK00  TOFIXPATH
+			
+			//(Custom) Probably hacky.
+			move camera position to [3311.519, 90.222, 3266.543] time 9
+			move camera focus to [3321.465, 77.258, 3246.431] time 9
 
 			wait until 9 seconds
 
@@ -275,7 +279,7 @@ start
 		release computer player 2
 		KhazarInScript=0
 
-		Highlight = create highlight HIGHLIGHT_QUEST at [HighlightPos]
+		Highlight = create highlight CHALLENGE_LEARN_WORSHIPPING HIGHLIGHT_QUEST at [HighlightPos]
 		ALTITUDE of Highlight = 5
 
 		run script CheckForKhazarChallengeHighlightNotify(Highlight, HighlightPos, variable GOOD_ADVISOR, variable HELP_TEXT_NEW_LAND_2_NOTIFIER_04)
@@ -335,7 +339,7 @@ start
 			move camera position to [3301.4871, 101.1075, 3275.1289] time 5
 			move camera focus to [3352.2732, 78.0504, 3233.4875] time 5
 
-			snapshot quest success 0.0 alignment 0 HELP_TEXT_TITLE_114 StandardReminder(variable HELP_TEXT_REMINDER_113)
+			snapshot CHALLENGE_LEARN_WORSHIPPING quest success 0.0 alignment 0 HELP_TEXT_TITLE_114 StandardReminder(variable HELP_TEXT_REMINDER_113)
 
 			eject good spirit
 			eject evil spirit
@@ -353,16 +357,16 @@ start
 
 		wait until BUILT of WorshipSite >= 0.5
 		if WorshipSite viewed
-			snapshot quest success 0.5 alignment 0 HELP_TEXT_TITLE_114 StandardReminder(variable HELP_TEXT_REMINDER_113)
+			snapshot CHALLENGE_LEARN_WORSHIPPING quest success 0.5 alignment 0 HELP_TEXT_TITLE_114 StandardReminder(variable HELP_TEXT_REMINDER_113)
 		else
-			update snapshot success 0.5 alignment 0 HELP_TEXT_TITLE_114 StandardReminder(variable HELP_TEXT_REMINDER_113)
+			update snapshot CHALLENGE_LEARN_WORSHIPPING success 0.5 alignment 0 HELP_TEXT_TITLE_114 StandardReminder(variable HELP_TEXT_REMINDER_113)
 		end if
 
 		wait until BUILT of WorshipSite == 1
 		delete Highlight with fade
 
 		wait until WorshipSite viewed or 30 seconds
-		snapshot quest success 1 alignment 0 HELP_TEXT_TITLE_114 StandardReminder(variable HELP_TEXT_REMINDER_113)
+		snapshot CHALLENGE_LEARN_WORSHIPPING quest success 1 alignment 0 HELP_TEXT_TITLE_114 StandardReminder(variable HELP_TEXT_REMINDER_113)
 		run script ComputerPlayerConfrontPlayer(2, variable HELP_TEXT_L2_GOD_REACTION_06, 1)
 	else 
 		enable LocalTown build worship site

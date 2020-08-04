@@ -1,4 +1,4 @@
-challenge SINGING_STONES_SONGS
+//challenge CHALLENGE_SINGING_STONES_SONGS
 
 //------------------------------------------------------------------------------------------------------------------------
 // Tune tap globals
@@ -557,7 +557,7 @@ start
 
 		wait until camera ready
 
-		snapshot challenge success 0.0 alignment 0.0 HELP_TEXT_TITLE_44 StoneSongReminder
+		snapshot CHALLENGE_SINGING_STONES_SONGS challenge success 0.0 alignment 0.0 HELP_TEXT_TITLE_44 StoneSongReminder
 		stop music
 
 	end cinema
@@ -1132,7 +1132,7 @@ start
 	run background script CheckForTap
 	
 
-	Highlight = create highlight HIGHLIGHT_CHALLENGE at [Hut]
+	Highlight = create highlight CHALLENGE_SINGING_STONES_SONGS HIGHLIGHT_CHALLENGE at [Hut]
 	run script ChallengeHighlightNotify(Highlight,Hut, variable GOOD_ADVISOR, variable HELP_TEXT_GENERAL_CHALLENGE_START_04)
 
 	Man = create SCRIPT_OBJECT_TYPE_VILLAGER PRIEST at [Hut]
@@ -1146,8 +1146,7 @@ start
 
 	SPEED of Man = 0.2
 
-	state Man WANDER_AROUND
-		position [2106.779, 9.597, 2997.927]
+	state Man WANDER_AROUND position [2106.779, 9.597, 2997.927]
 		float 6
 		ulong 4, 30
 																		   
@@ -1155,7 +1154,7 @@ start
 
 		if TinkleComplete == 1
 			if TwinkleDoneOnce == 0
-				update snapshot success (SuccessValue * 0.33) alignment 0.0 HELP_TEXT_TITLE_44 StoneSongReminder			
+				update snapshot CHALLENGE_SINGING_STONES_SONGS success (SuccessValue * 0.33) alignment 0.0 HELP_TEXT_TITLE_44 StoneSongReminder			
 				SuccessValue++
 				TwinkleDoneOnce = 1
 			end if
@@ -1163,7 +1162,7 @@ start
 			run script TwinkleSequence
 		elsif FuneralComplete == 1
 			if FuneralDoneOnce == 0
-				update snapshot success (SuccessValue * 0.33) alignment 0.0 HELP_TEXT_TITLE_44 StoneSongReminder
+				update snapshot CHALLENGE_SINGING_STONES_SONGS success (SuccessValue * 0.33) alignment 0.0 HELP_TEXT_TITLE_44 StoneSongReminder
 				SuccessValue++
 				FuneralDoneOnce = 1
 			end if
@@ -1171,7 +1170,7 @@ start
 			run script FuneralSequence(Man)
 		elsif WhiteChristmasComplete == 1
 			if ChristmasDoneOnce == 0
-				update snapshot success (SuccessValue * 0.33) alignment 0.0 HELP_TEXT_TITLE_44 StoneSongReminder
+				update snapshot CHALLENGE_SINGING_STONES_SONGS success (SuccessValue * 0.33) alignment 0.0 HELP_TEXT_TITLE_44 StoneSongReminder
 				SuccessValue++
 				ChristmasDoneOnce = 1
 			end if
@@ -1181,7 +1180,7 @@ start
 
 		// Done all songs at least once
 		if SuccessValue == 4
-			update snapshot success 1.0 alignment 0.0 HELP_TEXT_TITLE_44 StoneSongReminder
+			update snapshot CHALLENGE_SINGING_STONES_SONGS success 1.0 alignment 0.0 HELP_TEXT_TITLE_44 StoneSongReminder
 		end if 
 
 		if HEALTH of Man <=0 and Murdered == 0

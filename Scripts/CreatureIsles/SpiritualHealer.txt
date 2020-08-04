@@ -1,4 +1,4 @@
-challenge SPIRITUAL_HEALER
+//challenge CHALLENGE_SPIRITUAL_HEALER
 
 //------------------------------------------------------------------------------------------------------------------------
 global	SaidSpiritualHealerChildKillCount=0
@@ -115,7 +115,7 @@ start
 	set Child focus to [Healer]
 
 	if SaidSpiritualHealerChildKillCount <= 1
-		if camera position near [Healer] radius 150 and Healer viewed and widescreen ready
+		if camera position near [Healer] radius 150 and Healer viewed and in widescreen
 			
 			begin dialogue
 

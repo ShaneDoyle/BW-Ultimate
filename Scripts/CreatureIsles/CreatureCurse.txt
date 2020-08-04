@@ -1,4 +1,4 @@
-challenge CREATURE_CURSE
+//challenge CHALLENGE_CREATURE_CURSE
 
 global OriginalStrengthOfMyCreature
 global OriginalSizeOfMyCreature

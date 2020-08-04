@@ -1,6 +1,6 @@
-challenge ChallengeNotify
+//challenge CHALLENGE_ChallengeNotify
 
-global NotifyDistance = 100
+//NotifyDistance = 100
 
 /*run script SetUpNotify
 
@@ -24,7 +24,7 @@ start
 		if camera position near [Highlight] radius NotifyDistance and Highlight viewed
 			//wait until cameramode
 			if time-Count>30
-				if widescreen ready
+				if in widescreen
 					begin dialogue
 						if AdvisorType == variable GOOD_ADVISOR
 							eject good spirit
@@ -62,7 +62,7 @@ start
 		if camera position near [Highlight] radius NotifyDistance and Highlight viewed
 			//wait until cameramode
 			if time-Count>30
-				if widescreen ready
+				if in widescreen
 					begin dialogue
 						if AdvisorType == variable GOOD_ADVISOR
 							eject good spirit
@@ -83,7 +83,7 @@ start
 	end loop
 	enable Highlight active
 end script ChallengeHighlightNotifyWithEndVariable
-
+/*
 //------------------------------------------------------------------------------------------------------------------------
 // **** CHALLENGE NOTIFY OGRE ****
 //  A specific Notify script for the Ogre Meteorite challenge on land 4
@@ -122,7 +122,7 @@ start
 	// If reasonably close - exit
 	end loop
 end script ChallengeNotifyOgre
-
+*/
 //------------------------------------------------------------------------------------------------------------------------
 // **** Challenge notify quest scroll ****
 // A specific script for gold!
@@ -137,7 +137,7 @@ start
 
 	begin loop
 		if time-Count>Timing-1
-			if widescreen ready
+			if in widescreen
 				begin dialogue
 					if AdvisorReminderType == variable GOOD_ADVISOR
 						eject good spirit
@@ -159,6 +159,7 @@ start
 	enable Highlight active
 end script QuestHighlightNotify
 
+/*
 //------------------------------------------------------------------------------------------------------------------------
 // **** QUEST REMINDER ****
 //------------------------------------------------------------------------------------------------------------------------
@@ -242,5 +243,5 @@ start
 	end loop
 	enable Highlight active
 end script DidYouKnowHighlightNotify
-
+*/
 

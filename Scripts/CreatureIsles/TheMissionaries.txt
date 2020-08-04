@@ -1,4 +1,4 @@
-challenge THE_MISSIONARIES
+//challenge THE_MISSIONARIES
 
 //------------------------------------------------------------------------------------------------------------------------
 global TheMissionaries
@@ -59,21 +59,21 @@ start
 
 	if GSailor1Dead == 1 or GSailor2Dead == 1 or GSailor3Dead == 1
 
-		update snapshot success (SailorDeadCount/3) alignment 0 HELP_TEXT_TITLE_35 StandardReminder(variable HELP_TEXT_MISSIONARIES_54)
+		update snapshot CHALLENGE_THE_MISSIONARIES success (SailorDeadCount/3) alignment 0 HELP_TEXT_TITLE_35 StandardReminder(variable HELP_TEXT_MISSIONARIES_54)
 
 	else
 	
 		if GotWood == 0 
 
-			update snapshot success 0.2 alignment 0.2 HELP_TEXT_TITLE_35 TheMissionariesVerseOne
+			update snapshot CHALLENGE_THE_MISSIONARIES success 0.2 alignment 0.2 HELP_TEXT_TITLE_35 TheMissionariesVerseOne
 
 		elsif GotWood == 1 and GotGrain == 0	
 
-			update snapshot success 0.4 alignment 0.2 HELP_TEXT_TITLE_35 TheMissionariesVerseTwo
+			update snapshot CHALLENGE_THE_MISSIONARIES success 0.4 alignment 0.2 HELP_TEXT_TITLE_35 TheMissionariesVerseTwo
 
 		elsif GotGrain == 1 and GotMeat == 0	
 
-			update snapshot success 0.6 alignment 0.2 HELP_TEXT_TITLE_35 TheMissionariesVerseThree
+			update snapshot CHALLENGE_THE_MISSIONARIES success 0.6 alignment 0.2 HELP_TEXT_TITLE_35 TheMissionariesVerseThree
 
 		end if
 
@@ -96,7 +96,7 @@ start
 		say HELP_TEXT_MISSIONARIES_44
 		wait until read
 	end dialogue
-	update snapshot details success 1.0 alignment -1.0 HELP_TEXT_TITLE_35
+	update snapshot CHALLENGE_THE_MISSIONARIES success 1.0 alignment -1.0 HELP_TEXT_TITLE_35 TheMissionariesVerseOne //CHALLENGE_THE_MISSIONARIES
 	//stop scripts in files "TheMissionaries.txt" excluding "SailorsDead"
 	KilledAllSailors = 1
 end script SailorsDead
@@ -172,7 +172,7 @@ start
 			move GSailor3 position to [DoorPos]
 		end if
 
-		update snapshot details success 1.0 alignment -0.6 HELP_TEXT_TITLE_35
+		update snapshot CHALLENGE_THE_MISSIONARIES success 1.0 alignment -0.6 HELP_TEXT_TITLE_35 TheMissionariesVerseOne
 
 		begin dialogue
 			say single line HELP_TEXT_MISSIONARIES_38 with interaction // "The missionaries have given up waiting for you."
@@ -199,7 +199,7 @@ start
 						wait until read
 					end dialogue
 
-				update snapshot details success (SailorDeadCount/3) alignment -0.2 HELP_TEXT_TITLE_35
+				update snapshot CHALLENGE_THE_MISSIONARIES success (SailorDeadCount/3) alignment -0.2 HELP_TEXT_TITLE_35 TheMissionariesVerseOne
 
 				end if
 
@@ -210,7 +210,7 @@ start
 				end if
 
 				if GSailor2Dead == 0 
-					update snapshot details success 0.3 alignment -0.4 HELP_TEXT_TITLE_35
+					update snapshot CHALLENGE_THE_MISSIONARIES success 0.3 alignment -0.4 HELP_TEXT_TITLE_35 TheMissionariesVerseOne
 					if SailorWithMusic == 1
 						// Delete Sailor2 and replace with accordian mesh
 						delete GSailor2
@@ -221,7 +221,7 @@ start
 						SailorWithMusic = 2
 					end if
 				elsif GSailor3Dead == 0
-					update snapshot details success 0.3 alignment -0.6 HELP_TEXT_TITLE_35
+					update snapshot CHALLENGE_THE_MISSIONARIES success 0.3 alignment -0.6 HELP_TEXT_TITLE_35 TheMissionariesVerseOne
 					if SailorWithMusic == 1
 						// Delete Sailor3 and replace with accordian mesh
 						delete GSailor3
@@ -263,7 +263,7 @@ start
 						wait until read
 					end dialogue
 
-				update snapshot details success (SailorDeadCount/3) alignment -0.2 HELP_TEXT_TITLE_35
+				update snapshot CHALLENGE_THE_MISSIONARIES success (SailorDeadCount/3) alignment -0.2 HELP_TEXT_TITLE_35 TheMissionariesVerseOne
 
 				end if
 
@@ -272,7 +272,7 @@ start
 				end if
 
 				if GSailor1Dead == 0 
-					update snapshot details success 0.3 alignment -0.4 HELP_TEXT_TITLE_35
+					update snapshot CHALLENGE_THE_MISSIONARIES success 0.3 alignment -0.4 HELP_TEXT_TITLE_35 TheMissionariesVerseOne
 					if SailorWithMusic == 2
 						// Delete Sailor1 and replace with accordian mesh
 						delete GSailor1
@@ -283,7 +283,7 @@ start
 						SailorWithMusic = 1
 					end if
 				elsif GSailor3Dead == 0
-					update snapshot details success 0.3 alignment -0.6 HELP_TEXT_TITLE_35
+					update snapshot CHALLENGE_THE_MISSIONARIES success 0.3 alignment -0.6 HELP_TEXT_TITLE_35 TheMissionariesVerseOne
 					if SailorWithMusic == 2
 						// Delete Sailor3 and replace with accordian mesh
 						delete GSailor3
@@ -326,7 +326,7 @@ start
 						wait until read
 					end dialogue
 
-				update snapshot details success (SailorDeadCount/3) alignment -0.2 HELP_TEXT_TITLE_35
+				update snapshot CHALLENGE_THE_MISSIONARIES success (SailorDeadCount/3) alignment -0.2 HELP_TEXT_TITLE_35 TheMissionariesVerseOne
 
 				end if
 
@@ -335,7 +335,7 @@ start
 				end if
 				
 				if GSailor1Dead == 0 
-					update snapshot details success 0.3 alignment -0.4 HELP_TEXT_TITLE_35
+					update snapshot CHALLENGE_THE_MISSIONARIES success 0.3 alignment -0.4 HELP_TEXT_TITLE_35 TheMissionariesVerseOne
 					if SailorWithMusic == 3
 						// Delete Sailor1 and replace with accordian mesh
 						delete GSailor1
@@ -346,7 +346,7 @@ start
 						SailorWithMusic = 1
 					end if
 				elsif GSailor2Dead == 0
-					update snapshot details success 0.3 alignment -0.6 HELP_TEXT_TITLE_35
+					update snapshot CHALLENGE_THE_MISSIONARIES success 0.3 alignment -0.6 HELP_TEXT_TITLE_35 TheMissionariesVerseOne
 					if SailorWithMusic == 3
 						// Delete Sailor2 and replace with accordian mesh
 						delete GSailor2
@@ -773,7 +773,7 @@ start
 				set GSailor3 focus to [GCampfirePos]
 			end if
 
-			snapshot challenge success 0.0 alignment 0.0 HELP_TEXT_TITLE_35 TheMissionariesVerseOne
+			snapshot CHALLENGE_THE_MISSIONARIES challenge success 0.0 alignment 0.0 HELP_TEXT_TITLE_35 TheMissionariesVerseOne
 
 			SPEED of GSailor1 = 0.2
 			SPEED of GSailor2 = 0.2
@@ -913,11 +913,11 @@ start
 			enable GSailor2 high gfx detail
 			enable GSailor3 high gfx detail
 
-			move camera to T00_000 time 2
+			move camera position to [1882.979492, 9.153408, 3160.894287] time 2   //T00_000
 
 			start music MUSIC_TYPE_SCRIPT_MISSIONARIES_VERSE_2
 
-			camera path TRACK00	 
+			//camera path TRACK00	//(TOFIXPATH)
 
 			run background script TheMissionariesVerseTwoText
 
@@ -975,7 +975,7 @@ start
 				move GSailor2 position to [GSoapBox2]
 			end if
 
-			snapshot challenge success 0.4 alignment 0.2 HELP_TEXT_TITLE_35 TheMissionariesVerseTwo
+			snapshot CHALLENGE_THE_MISSIONARIES challenge success 0.4 alignment 0.2 HELP_TEXT_TITLE_35 TheMissionariesVerseTwo
 
 			set camera position to [1855.707, 7.390, 3157.255] 
 			set camera focus to [1858.868, 5.582, 3160.765] 
@@ -1112,7 +1112,7 @@ start
 				GSailor1 play ANM_P_SITTING_DOWN_DANCE_SAILING1 loop -1
 			end if
 
-			update snapshot success 0.5 alignment 0.1 HELP_TEXT_TITLE_35 TheMissionariesVerseThree
+			update snapshot CHALLENGE_THE_MISSIONARIES success 0.5 alignment 0.1 HELP_TEXT_TITLE_35 TheMissionariesVerseThree
 
 			move camera position to [1855.707, 7.390, 3157.255] time 3 
 			move camera focus to [1858.868, 5.582, 3160.765] time 3
@@ -1235,7 +1235,7 @@ start
 		
 		wait until 5 seconds
 
-		update snapshot details success 1 alignment ModifAl HELP_TEXT_TITLE_35 taking picture
+		update snapshot CHALLENGE_THE_MISSIONARIES success 1 alignment ModifAl HELP_TEXT_TITLE_35 TheMissionariesVerseOne
 
 		move camera position to [1319.754, 14.249, 3153.582] time 8
 		move camera focus to [1360.319, 0.319, 3161.911] time 8
@@ -1333,7 +1333,7 @@ start
 
 	enable Campfire on fire	1.0
 
-	Highlight = create highlight HIGHLIGHT_CHALLENGE at [GArk]
+	Highlight = create highlight CHALLENGE_THE_MISSIONARIES HIGHLIGHT_CHALLENGE at [GArk]
 
 	ALTITUDE of Highlight = 16
 	run background script PointOutScroll (Highlight)

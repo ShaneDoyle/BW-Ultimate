@@ -1,4 +1,4 @@
-challenge HANOI_FLOOD
+//challenge CHALLENGE_HANOI_FLOOD
 
 //------------------------------------------------------------------------------------------------------------------------
 global HanoiIntroTriggered=0
@@ -26,7 +26,7 @@ begin script HanoiPuzzleStart(HanoiPuzzlePos)
 	Master = 0
 	MasterPosTwo = marker at [2374.845, 0.000, 2633.988]  
 	HighlightPos = marker at [2385.287, 0.000, 2649.390]   
-	Highlight = create highlight HIGHLIGHT_CHALLENGE at [HighlightPos]
+	Highlight = create highlight CHALLENGE_HANOI_FLOOD HIGHLIGHT_CHALLENGE at [HighlightPos]
 	HanoiDYKPos = marker at [2376.031, 0.000, 2640.963]   
 
 start
@@ -57,7 +57,7 @@ start
 			wait until camera ready
 			set Master focus to camera position
 
-			snapshot challenge success 0.0 alignment -0.5 HELP_TEXT_TITLE_02 StandardReminder(variable HELP_TEXT_BEACH_PUZZLE_19)
+			snapshot CHALLENGE_HANOI_FLOOD challenge success 0.0 alignment -0.5 HELP_TEXT_TITLE_02 StandardReminder(variable HELP_TEXT_BEACH_PUZZLE_19)
 
 			wait 0.1 seconds
 
@@ -177,7 +177,7 @@ start
 		Master play ANM_PIED_PIPER_SUMMON loop 2
 		wait 2 seconds
 
-		snapshot challenge success 1 alignment 1 HELP_TEXT_TITLE_02 StandardReminder(variable HELP_TEXT_BEACH_PUZZLE_19)
+		snapshot CHALLENGE_HANOI_FLOOD challenge success 1 alignment 1 HELP_TEXT_TITLE_02 StandardReminder(variable HELP_TEXT_BEACH_PUZZLE_19)
 		
 		move camera position to [2363.050, 7.383, 2593.420] time 3
 		move camera focus to [2399.493, 14.488, 2593.673] time 3

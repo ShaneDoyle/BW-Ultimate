@@ -99,12 +99,14 @@ start
 			//wait until MyCreature played
 			stop music
 
-			wait until get MyCreature played percentage > 0.8
+			wait until get MyCreature played percentage > 0.6
+			
+			set fade red 0 green 0 blue 0 time 2
 
 			start sound LH_SCRIPT_SAMPLE_CREATUREFROZENMOAN_01 AUDIO_SFX_BANK_TYPE_SCRIPT_SFX
 
 			start music MUSIC_TYPE_SCRIPT_CREATURE_END_SEQUENCE 
-			wait until get MyCreature played percentage > 0.9
+			wait until get MyCreature played percentage > 0.75
 
 
 //			stop sound LH_SAMPLE_G_CREED_01
@@ -113,10 +115,11 @@ start
 
 			enable MyCreature anim time modify
 			disable sound effects
+		
 
 //------------------------------------------------------------------------------------------------------------------------
 
-			enable SCRIPT_AVI_SEQUENCE_FALLING avi sequence							// Falling into volcano movie
+			//enable SCRIPT_AVI_SEQUENCE_FALLING avi sequence							// Falling into volcano movie
 
 //------------------------------------------------------------------------------------------------------------------------
 

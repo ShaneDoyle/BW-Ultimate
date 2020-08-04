@@ -1,4 +1,4 @@
-challenge CREATURE_DEVELOPMENT
+//challenge CHALLENGE_CREATURE_DEVELOPMENT
 
 //-GLOBALS-----------------------------------------------------------------------------------------------------------------------
 global GuideSpell
@@ -107,15 +107,15 @@ begin script EndScriptsForStorm
 start
 
 	if LostFlockInitiated == 1 and TheLostFlockFinished == 0
-		challenge LOST_FLOCK
-		update snapshot success 1.0 alignment 0.0 HELP_TEXT_TITLE_34 StandardReminder(variable HELP_TEXT_REMINDER_33)
-		challenge CREATURE_DEVELOPMENT
+		//challenge LOST_FLOCK  (TOFIXSCRIPT)
+		update snapshot CHALLENGE_LOST_FLOCK success 1.0 alignment 0.0 HELP_TEXT_TITLE_34 StandardReminder(variable HELP_TEXT_REMINDER_33)
+		//challenge CREATURE_DEVELOPMENT
 	end if
 
 	if PiedPiperInitiated == 1 and PiedPiperFinished == 0
-		challenge PIED_PIPER
-		update snapshot success 1.0 alignment 0.0 HELP_TEXT_TITLE_20 StandardReminder(variable HELP_TEXT_PIED_PIPER_20)
-		challenge CREATURE_DEVELOPMENT
+		//challenge PIED_PIPER  (TOFIXSCRIPT)
+		//update snapshot success 1.0 alignment 0.0 HELP_TEXT_TITLE_20 StandardReminder(variable HELP_TEXT_PIED_PIPER_20)
+		//challenge CREATURE_DEVELOPMENT
 	end if
 
 	stop script "TheLostFlock"
@@ -207,7 +207,7 @@ start
 	EXHAUSTION of Guide = 1
 	force Guide CREATURE_SLEEP Guide
 
-	Highlight = create highlight HIGHLIGHT_QUEST at [Guide]+[10,0]
+	Highlight = create highlight CHALLENGE_CREATURE_DEVELOPMENT HIGHLIGHT_QUEST at [Guide]+[10,0]
 	ALTITUDE of Highlight = 0
 //	update snapshot success 1 alignment 0 HELP_TEXT_TITLE_105 StandardReminder(variable HELP_TEXT_REMINDER_108)
 	enable Highlight active
@@ -224,7 +224,7 @@ start
 
 				wait until camera ready
 
-				update snapshot success 0.85 alignment 0 HELP_TEXT_TITLE_105 StandardReminder(variable HELP_TEXT_GUIDE_DIES_30)
+				update snapshot CHALLENGE_CREATURE_DEVELOPMENT success 0.85 alignment 0 HELP_TEXT_TITLE_105 StandardReminder(variable HELP_TEXT_GUIDE_DIES_30)
 
 				disable creature sound
 				//sy "I need rest. I will tell you the secret later."
@@ -250,7 +250,7 @@ start
 		end if
 	end while
 
-	update snapshot success 0.9 alignment 0 HELP_TEXT_TITLE_105 StandardReminder(variable HELP_TEXT_GUIDE_DIES_14)
+	update snapshot CHALLENGE_CREATURE_DEVELOPMENT success 0.9 alignment 0 HELP_TEXT_TITLE_105 StandardReminder(variable HELP_TEXT_GUIDE_DIES_14)
 
 	EXHAUSTION of Guide = 0
 	force Guide CREATURE_IDLE Guide
@@ -293,7 +293,7 @@ start
 		set Guide focus to [MyCreature]
 
 		// Last snapshot for creature training
-		snapshot quest success 0.9 alignment 0 HELP_TEXT_TITLE_105 StandardReminder(variable HELP_TEXT_GUIDE_DIES_14)
+		snapshot CHALLENGE_CREATURE_DEVELOPMENT quest success 0.9 alignment 0 HELP_TEXT_TITLE_105 StandardReminder(variable HELP_TEXT_GUIDE_DIES_14)
 
 		disable creature sound
 		say HELP_TEXT_GUIDE_DIES_01									// Come, little one. The most important lesson of all awaits.
@@ -387,7 +387,7 @@ start
 				move camera position to [2320.214, 127.700, 2566.452] time 20		// pan round creature at guides feet
 				move camera focus to [954.115, 1288.787, -372.529]	time 20
 
-				snapshot quest success 0.95 alignment 0 HELP_TEXT_TITLE_105 StandardReminder(variable HELP_TEXT_GUIDE_DIES_01)
+				snapshot CHALLENGE_CREATURE_DEVELOPMENT quest success 0.95 alignment 0 HELP_TEXT_TITLE_105 StandardReminder(variable HELP_TEXT_GUIDE_DIES_01)
 
 				// "What I have to tell you is the secret of the Creed, the  source of my gods powers" with interaction  // Creature. Speak no more.
 				disable creature sound
@@ -538,7 +538,7 @@ start
 		end dialogue
 	end while
 
-	update snapshot success 0.99 alignment 0 HELP_TEXT_TITLE_105 StandardReminder(variable HELP_TEXT_GUIDE_DIES_12)
+	update snapshot CHALLENGE_CREATURE_DEVELOPMENT success 0.99 alignment 0 HELP_TEXT_TITLE_105 StandardReminder(variable HELP_TEXT_GUIDE_DIES_12)
 	
 	wait until 5 seconds
 
@@ -563,7 +563,7 @@ start
 		wait 0.5 seconds
 		LightningAttack2 = cast SPELL_LIGHTNING_LEVEL_3 spell at [Guide] from [LightPos2]+[0,60,0] radius 5.0 time 3 curl 1
 	
-		snapshot quest success 1 alignment 0 HELP_TEXT_TITLE_105 StandardReminder(variable HELP_TEXT_GUIDE_DIES_14)
+		snapshot CHALLENGE_CREATURE_DEVELOPMENT quest success 1 alignment 0 HELP_TEXT_TITLE_105 StandardReminder(variable HELP_TEXT_GUIDE_DIES_14)
 
 		move camera position to [2290.140, 157.622, 2555.677] time 8			// Dolly cam on guide
 		move camera focus to [2360.386, 135.797, 2491.297] time 8
@@ -788,7 +788,7 @@ start
 
 	HighlightPos = marker at [Guide] + [-10,-10]	 
 
-	Highlight = create highlight HIGHLIGHT_QUEST at [HighlightPos]
+	Highlight = create highlight CHALLENGE_CREATURE_DEVELOPMENT HIGHLIGHT_QUEST at [HighlightPos]
 	ALTITUDE of Highlight = 0
 
 	//if camera position not near [HighlightPos] radius 200 and [HighlightPos] not viewed
@@ -796,7 +796,7 @@ start
 			//"I have awoken and am ready to teach your little creature more."
 			say single line HELP_TEXT_NEW_DEVELOPMENT_STAGE_GUIDE_TEACHES_FIGHT_11
 
-			update snapshot success 0.75 alignment 0 HELP_TEXT_TITLE_105 StandardReminder(variable HELP_TEXT_NEW_DEVELOPMENT_STAGE_GUIDE_TEACHES_FIGHT_11)
+			update snapshot CHALLENGE_CREATURE_DEVELOPMENT success 0.75 alignment 0 HELP_TEXT_TITLE_105 StandardReminder(variable HELP_TEXT_NEW_DEVELOPMENT_STAGE_GUIDE_TEACHES_FIGHT_11)
 
 			wait until read
 		end dialogue
@@ -812,13 +812,13 @@ start
 			wait until read
 		end dialogue
 
-		update snapshot success 0.75 alignment 0 HELP_TEXT_TITLE_105 StandardReminder(variable HELP_TEXT_NEW_DEVELOPMENT_STAGE_GENERAL_09)
+		update snapshot CHALLENGE_CREATURE_DEVELOPMENT success 0.75 alignment 0 HELP_TEXT_TITLE_105 StandardReminder(variable HELP_TEXT_NEW_DEVELOPMENT_STAGE_GENERAL_09)
 
 		wait until [MyCreature] near [Guide] radius 40
 
 	end if
 
-	update snapshot success 0.75 alignment 0 HELP_TEXT_TITLE_105 StandardReminder(variable HELP_TEXT_SHOW_CREATURE_DEVELOPMENT_CRITERIA_11)
+	update snapshot CHALLENGE_CREATURE_DEVELOPMENT success 0.75 alignment 0 HELP_TEXT_TITLE_105 StandardReminder(variable HELP_TEXT_SHOW_CREATURE_DEVELOPMENT_CRITERIA_11)
 	
 	begin cinema
 		start music MUSIC_TYPE_SCRIPT_CREATURE_GUIDE
@@ -850,7 +850,14 @@ start
 		close dialogue
 
 		//Set the size the guide will shrink down to on a small spell...
-		enable Guide auto scale 1.2
+		//enable Guide auto scale 1.2
+		
+		//Custom Scale (Shane). Scale down to Creature.
+		while SCALE of Guide > SCALE of MyCreature
+			SCALE of Guide = ((SCALE of Guide) - 0.2)
+		end while
+		SCALE of Guide = SCALE of MyCreature + 0.1
+		
 //		SCRIPT_OBJECT_PROPERTY_TYPE_CREATURE_MIN_SIZE of Guide = SCALE of MyCreature + 0.2
 
 //		small_spell = cast CREATURE_SPELL_SMALL spell on Guide from [Guide] + [0, 5, 0] radius 0 time -1 curl 0
@@ -882,7 +889,7 @@ start
 			disable creature sound
 			Guide play C_INDIVIDUAL_TAUNT
 
-			snapshot quest success 0.8 alignment 0 HELP_TEXT_TITLE_105 StandardReminder(variable HELP_TEXT_SHOW_CREATURE_DEVELOPMENT_CRITERIA_11)
+			snapshot CHALLENGE_CREATURE_DEVELOPMENT quest success 0.8 alignment 0 HELP_TEXT_TITLE_105 StandardReminder(variable HELP_TEXT_SHOW_CREATURE_DEVELOPMENT_CRITERIA_11)
 
 			//G:Now you must learn to fight, my friend.
 			say HELP_TEXT_GUIDE_EXTRA_LINES_07
@@ -1179,7 +1186,7 @@ start
 	EXHAUSTION of Guide = 0
 
 	//delete small_spell
-	disable Guide auto scale
+	//disable Guide auto scale (auto scale seems to be buggy with CI)
 	while SCALE of Guide < 1.9
 		SCALE of Guide = ((SCALE of Guide) + 0.1)
 	end while
@@ -1228,7 +1235,7 @@ start
 
 			wait until Guide played
 
-			snapshot quest success 0.85 alignment 0 HELP_TEXT_TITLE_105 StandardReminder(variable HELP_TEXT_NEW_DEVELOPMENT_STAGE_GUIDE_TEACHES_FIGHT_06)
+			snapshot CHALLENGE_CREATURE_DEVELOPMENT quest success 0.85 alignment 0 HELP_TEXT_TITLE_105 StandardReminder(variable HELP_TEXT_NEW_DEVELOPMENT_STAGE_GUIDE_TEACHES_FIGHT_06)
 
 			disable creature sound
 			// "I have a secret to tell you, but I must warn you this knowledge is a dangerous thing." with interaction
@@ -1252,9 +1259,12 @@ start
 		release MyCreature
 		release Guide
 
-		update snapshot success 0.85 alignment 0 HELP_TEXT_TITLE_105 StandardReminder(variable HELP_TEXT_MEET_THE_AZTEC_VILLAGE_14)
+		update snapshot CHALLENGE_CREATURE_DEVELOPMENT success 0.85 alignment 0 HELP_TEXT_TITLE_105 StandardReminder(variable HELP_TEXT_MEET_THE_AZTEC_VILLAGE_14)
 
 	end cinema
+	
+	//Custom Addition (Shane), just for good measure...
+	SCALE of Guide = 2.0
 
 end script CreatureDevGuideTeachesFight
 
@@ -1290,10 +1300,10 @@ start
 
 	EXHAUSTION of Guide = 1
 	force Guide CREATURE_SLEEP Guide
-	Highlight = create highlight HIGHLIGHT_QUEST at [Guide]
+	Highlight = create highlight CHALLENGE_CREATURE_DEVELOPMENT HIGHLIGHT_QUEST at [Guide]
 	ALTITUDE of Highlight = 8
 	enable Highlight active
-	update snapshot success 0.7 alignment 0 HELP_TEXT_TITLE_105 StandardReminder(variable HELP_TEXT_REMINDER_112)
+	update snapshot CHALLENGE_CREATURE_DEVELOPMENT success 0.7 alignment 0 HELP_TEXT_TITLE_105 StandardReminder(variable HELP_TEXT_REMINDER_112)
 
 	wait until PLAYER of TheAztecTown == 1
 
@@ -1327,7 +1337,7 @@ start
 		wait until read
 		enable creature sound
 
-		update snapshot success 0.75 alignment 0 HELP_TEXT_TITLE_105 StandardReminder(variable HELP_TEXT_MEET_THE_AZTEC_VILLAGE_14)
+		update snapshot CHALLENGE_CREATURE_DEVELOPMENT success 0.75 alignment 0 HELP_TEXT_TITLE_105 StandardReminder(variable HELP_TEXT_MEET_THE_AZTEC_VILLAGE_14)
 		
 		if MissionariesInitiated == 0 or ((ScrollSuggested == 1) and (MissionariesCompletedNow == 0))
 			//"You have not done many silver scrolls, try a few, the reward is usually worth the effort."
@@ -1381,7 +1391,7 @@ start
 //	enable Highlight active
 	EXHAUSTION of Guide = 0
 
-	update snapshot success 0.75 alignment 0 HELP_TEXT_TITLE_105 GuideImpressTownLessonReminder
+	update snapshot CHALLENGE_CREATURE_DEVELOPMENT success 0.75 alignment 0 HELP_TEXT_TITLE_105 GuideImpressTownLessonReminder
 
 	set SnoozeTimer time to 300 seconds
 	while Snoozing == 0
@@ -1534,7 +1544,7 @@ start
 	TownBelief=get Town belief for player 1
 	remove resource RESOURCE_TYPE_FOOD 900000 from StoragePit
 
-	Highlight = create highlight HIGHLIGHT_QUEST at [ImpressVillagePos]+[15,0]
+	Highlight = create highlight CHALLENGE_CREATURE_DEVELOPMENT HIGHLIGHT_QUEST at [ImpressVillagePos]+[15,0]
 	ALTITUDE of Highlight = 2
 
 	EndWhile=0
@@ -1627,14 +1637,14 @@ start
 		run map script line "CREATE_ONE_SHOT_SPELL_PU(\"2438.81,2623.54\", \"FOOD\")"		// Safe one shot spell
 
 		wait 2 seconds
-		snapshot quest success 0.7 alignment 0 HELP_TEXT_TITLE_105 StandardReminder(variable HELP_TEXT_NEW_DEVELOPMENT_STAGE_GUIDE_IMPRESSES_TOWN_22)
+		snapshot CHALLENGE_CREATURE_DEVELOPMENT quest success 0.7 alignment 0 HELP_TEXT_TITLE_105 StandardReminder(variable HELP_TEXT_NEW_DEVELOPMENT_STAGE_GUIDE_IMPRESSES_TOWN_22)
 
 		// "This is a food Miracle One Shots"
 		say HELP_TEXT_NEW_DEVELOPMENT_STAGE_GUIDE_IMPRESSES_TOWN_17
 //		GuideSpell = create SCRIPT_OBJECT_TYPE_ONE_SHOT_SPELL SPELL_SEED_TYPE_FOOD at [SafeSpellCreatePos]
 		run background script DidYouKnow(DidYouKnowPos, variable HELP_TEXT_DYK_12, variable DYK_CREATURE)				// creature will cast miracle seed
 
-		ALTITUDE of GuideSpell = 0
+		//ALTITUDE of GuideSpell = 0
 		wait until read
 
 		// "You can pickup one shots with the action button." with interaction
@@ -1817,13 +1827,13 @@ start
 		wait until Guide played
 		GuideDistance = get distance from [Guide] to [MyCreature]
 		if GuideDistance < 20 and SaidLess20 == 0
-			start sound LH_HELP_SPRITE_HELP_TEXT_ROTATION_YES_01 AUDIO_SFX_BANK_TYPE_HELP_SPRITES
+			start sound HELP_TEXT_ROTATION_YES_01 AUDIO_SFX_BANK_TYPE_HELP_SPRITES
 			SaidLess20 = 1
 		elsif GuideDistance  < 30 and SaidLess30 == 0
-			start sound LH_HELP_SPRITE_HELP_TEXT_ROTATION_YES_01 AUDIO_SFX_BANK_TYPE_HELP_SPRITES
+			start sound HELP_TEXT_ROTATION_YES_01 AUDIO_SFX_BANK_TYPE_HELP_SPRITES
 			SaidLess30 = 1
 		elsif GuideDistance  > OriginalGuideDistance +10 and SaidGreater == 0
-			start sound LH_HELP_SPRITE_HELP_TEXT_ROTATION_NO_01 AUDIO_SFX_BANK_TYPE_HELP_SPRITES
+			start sound HELP_TEXT_ROTATION_NO_01 AUDIO_SFX_BANK_TYPE_HELP_SPRITES
 			SaidGreater = 1
 		end if
 	end while
@@ -1927,7 +1937,7 @@ start
 		wait until read
 
 		// NEW - Remind player to go to meet guide in town
-		update snapshot success 0.6 alignment 0 HELP_TEXT_TITLE_105 StandardReminder(variable HELP_TEXT_NEW_DEVELOPMENT_STAGE_MEET_GUIDE_25)		
+		update snapshot CHALLENGE_CREATURE_DEVELOPMENT success 0.6 alignment 0 HELP_TEXT_TITLE_105 StandardReminder(variable HELP_TEXT_NEW_DEVELOPMENT_STAGE_MEET_GUIDE_25)		
 
 		wait until camera ready
 		stop music		
@@ -1988,7 +1998,7 @@ start
 	
 	Villager play ANM_P_ATTRACT_YOUR_ATTENTION loop -1
 
-	Highlight = create highlight HIGHLIGHT_QUEST at [VillagerTellPos]
+	Highlight = create highlight CHALLENGE_CREATURE_DEVELOPMENT HIGHLIGHT_QUEST at [VillagerTellPos]
 	ALTITUDE of Highlight = 2
 	wait until Highlight clicked
 	enable Highlight active
@@ -2009,7 +2019,7 @@ start
 
 		Villager play ANM_P_SCARED_STIFF loop -1
 
-		snapshot quest success 0.5 alignment 0 HELP_TEXT_TITLE_105 StandardReminder(variable HELP_TEXT_REMINDER_107)
+		snapshot CHALLENGE_CREATURE_DEVELOPMENT quest success 0.5 alignment 0 HELP_TEXT_TITLE_105 StandardReminder(variable HELP_TEXT_REMINDER_107)
 
 		// "Mighty Lord, I pray for your attention. there is a huge creature in the valley beyond" with interaction
 		say HELP_TEXT_NEW_DEVELOPMENT_STAGE_MEET_GUIDE_26
@@ -2116,7 +2126,7 @@ start
 				wait 1 second
 
  				// NEW take a new snapshot
-				snapshot quest success 0.5 alignment 0 HELP_TEXT_TITLE_105 StandardReminder(variable HELP_TEXT_NEW_DEVELOPMENT_STAGE_MEET_GUIDE_30)
+				snapshot CHALLENGE_CREATURE_DEVELOPMENT quest success 0.5 alignment 0 HELP_TEXT_TITLE_105 StandardReminder(variable HELP_TEXT_NEW_DEVELOPMENT_STAGE_MEET_GUIDE_30)
 
 				Guide play C_INDIVIDUAL_SAD
 				WhileFlag = 1 

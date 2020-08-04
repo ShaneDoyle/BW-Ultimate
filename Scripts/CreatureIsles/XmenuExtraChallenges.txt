@@ -1,2 +1,0 @@
-//Challenge list extra for xmenu.
-landcontrolall.txt

@@ -1,4 +1,4 @@
-challenge CREATURE_GUARDIAN
+//challenge CHALLENGE_CREATURE_GUARDIAN
 
 //------------------------------------------------------------------------------------------------------------------------
 global CreatureGuardianFinished
@@ -105,7 +105,7 @@ begin dialogue
 	force MyCreature CREATURE_IDLE MyCreature
 	say single line HELP_TEXT_CREATURE_GUARDIAN_08
 	wait until read
-	update snapshot success 0.0 alignment 0.0 HELP_TEXT_TITLE_03 StandardReminder(variable HELP_TEXT_REMINDER_05)
+	update snapshot CHALLENGE_CREATURE_GUARDIAN success 0.0 alignment 0.0 HELP_TEXT_TITLE_03 StandardReminder(variable HELP_TEXT_REMINDER_05)
 	move CreatureGuardian position to [Lair]
 	wait until [CreatureGuardian] near [Lair] radius 10
 	set CreatureGuardian focus to [MyCreature]
@@ -188,7 +188,7 @@ start
 			delete FoodFound
 		end if
 
-		update snapshot success 0.25 alignment 0.0 HELP_TEXT_TITLE_03 StandardReminder(variable HELP_TEXT_REMINDER_05)
+		update snapshot CHALLENGE_CREATURE_GUARDIAN success 0.25 alignment 0.0 HELP_TEXT_TITLE_03 StandardReminder(variable HELP_TEXT_REMINDER_05)
 		say single line HELP_TEXT_CREATURE_GUARDIAN_04
 
 		move CreatureGuardian position to [Lair]
@@ -240,7 +240,7 @@ start
 		say single line HELP_TEXT_CREATURE_GUARDIAN_05
 		wait until read
 
-		update snapshot success 0.5 alignment 0.0 HELP_TEXT_TITLE_03 StandardReminder(variable HELP_TEXT_REMINDER_05)
+		update snapshot CHALLENGE_CREATURE_GUARDIAN success 0.5 alignment 0.0 HELP_TEXT_TITLE_03 StandardReminder(variable HELP_TEXT_REMINDER_05)
 		///KenCinema
 
 		move camera position to [TunnelStartPos] time 3
@@ -317,7 +317,9 @@ start
 
 	wait until CreatureDevelopment_Fight == 1
 	MyCreature = get player 1 creature
-	CreatureGuardian = create_creature_from_creature MyCreature 1 at [Lair] CREATURE_TYPE_OGRE
+	
+	//CreatureGuardian = create_creature_from_creature MyCreature 1 at [Lair] CREATURE_TYPE_ //CREATURE_TYPE_OGRE
+	CreatureGuardian = create CREATURE CREATURE_TYPE_OGRE at [Lair]
 
 	CreatureGuardianHeight = SCRIPT_OBJECT_PROPERTY_TYPE_HEIGHT of CreatureGuardian
 	CreatureGuardianHeight = CreatureGuardianHeight * 0.8
@@ -327,7 +329,7 @@ start
 	
 	run background script DayToNight (CreatureGuardian)
 	
-	ALIGNMENT of CreatureGuardian = -1
+	ALIGNMENT of CreatureGuardian = 0
 	set CreatureGuardian all desires SCRIPT_FALSE
 	set CreatureGuardian desire HUNGER SCRIPT_TRUE
 	set CreatureGuardian desire HUNGER to 0.1
@@ -345,7 +347,7 @@ start
 	CreatureGuardianInitiated = 0
 	
 
-	Highlight = create highlight HIGHLIGHT_CHALLENGE at [TriggerPos]
+	Highlight = create highlight CHALLENGE_CREATURE_GUARDIAN HIGHLIGHT_CHALLENGE at [TriggerPos]
 	run script ChallengeHighlightNotify(Highlight, TriggerPos, variable GOOD_ADVISOR, variable HELP_TEXT_GENERAL_CHALLENGE_START_02)
 
 	CreatureGuardianInitiated = 1
@@ -397,7 +399,7 @@ start
 		close dialogue
 		wait 2 seconds
 
-		snapshot challenge success 0.0 alignment 0.0 HELP_TEXT_TITLE_03 StandardReminder(variable HELP_TEXT_REMINDER_05)
+		snapshot CHALLENGE_CREATURE_GUARDIAN challenge success 0.0 alignment 0.0 HELP_TEXT_TITLE_03 StandardReminder(variable HELP_TEXT_REMINDER_05)
 		
 		//sy "Me Hungry, me guard here...."
 		say HELP_TEXT_CREATURE_GUARDIAN_12
@@ -522,7 +524,7 @@ start
 	TreasureInfluence = create influence at [Rewarded] radius 50
 	delete LairInfluence
 
-	update snapshot success 0.75 alignment 0.0 HELP_TEXT_TITLE_03 StandardReminder(variable HELP_TEXT_REMINDER_55)
+	update snapshot CHALLENGE_CREATURE_GUARDIAN success 0.75 alignment 0.0 HELP_TEXT_TITLE_03 StandardReminder(variable HELP_TEXT_REMINDER_55)
 	DayToNightActive = 1
 	if CreatureGuardian exists
 		wait until camera position not near [CreatureGuardian] radius 100 and [CreatureGuardian] not viewed
@@ -530,7 +532,7 @@ start
 	end if
 
 	wait until Reward active
-	update snapshot success 1.0 alignment 0.0 HELP_TEXT_TITLE_03 StandardReminder(variable HELP_TEXT_REMINDER_05)
+	update snapshot CHALLENGE_CREATURE_GUARDIAN success 1.0 alignment 0.0 HELP_TEXT_TITLE_03 StandardReminder(variable HELP_TEXT_REMINDER_05)
 
 	if GlobalHealSpell == 1
 		run script GiveSpellDispenserReward(SpellDispenserPos, variable MAGIC_TYPE_HEAL_PU_ONE, 0.0, 1, 0)

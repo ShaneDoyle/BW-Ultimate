@@ -1,4 +1,4 @@
-challenge THE_SLAVERS
+//challenge CHALLENGE_THE_SLAVERS
 
 //------------------------------------------------------------------------------------------------------------------------
 global SlaversAngry
@@ -247,7 +247,7 @@ start
 		move camera position to [2264.064, 54.355, 1996.042] time 12
 		move camera focus to [2263.600, 53.637, 1989.939] time 12
 
-		snapshot challenge success 0.0 alignment 0.0 HELP_TEXT_TITLE_36 StandardReminder(variable HELP_TEXT_REMINDER_34)
+		snapshot CHALLENGE_THE_SLAVERS challenge success 0.0 alignment 0.0 HELP_TEXT_TITLE_36 StandardReminder(variable HELP_TEXT_REMINDER_34)
 
 		ChiefGuard play ANM_P_GOSSIP_MAN loop 1
 		//We are simple folk who want to start a circus.
@@ -595,7 +595,7 @@ start
 
 	SPEED of SlaverPosse = 0.5
 	state SlaverPosse LIVING_MOVE_IN_FLOCK
-	update snapshot success 0.5 alignment 0.2 HELP_TEXT_TITLE_36 StandardReminder(variable HELP_TEXT_REMINDER_48)
+	update snapshot CHALLENGE_THE_SLAVERS success 0.5 alignment 0.2 HELP_TEXT_TITLE_36 StandardReminder(variable HELP_TEXT_REMINDER_48)
 	move SlaverPosse position to [LocalTownCentre]
 	wait until [SlaverPosse] near [LocalTownCentre] radius 15 or size of SlaverPosse <= 0
 	
@@ -633,10 +633,10 @@ start
 	begin loop
 	until size of SlaverPosse == 0
 		run background script SlaversDead(SlaveFlock)
-		update snapshot success 1.0 alignment -0.65 HELP_TEXT_TITLE_36 StandardReminder(variable HELP_TEXT_REMINDER_34)
+		update snapshot CHALLENGE_THE_SLAVERS success 1.0 alignment -0.65 HELP_TEXT_TITLE_36 StandardReminder(variable HELP_TEXT_REMINDER_34)
 	until SlaverVictimCount >= 10 or size of Town <= 0
 		run background script SlaversKilledEnough(SlaverPosse, SlaveFlock, Town)
-		update snapshot success 1.0 alignment -1.0 HELP_TEXT_TITLE_36 StandardReminder(variable HELP_TEXT_REMINDER_34)
+		update snapshot CHALLENGE_THE_SLAVERS success 1.0 alignment -1.0 HELP_TEXT_TITLE_36 StandardReminder(variable HELP_TEXT_REMINDER_34)
 	end loop
 
 end script TownAttack
@@ -723,7 +723,7 @@ start
 		move camera focus to [ChiefGuard]+ [0,1,0] time 3
 		wait until camera ready
 
-		update snapshot success 0.1 alignment 0.5 HELP_TEXT_TITLE_36 StandardReminder(variable HELP_TEXT_REMINDER_47)
+		update snapshot CHALLENGE_THE_SLAVERS success 0.1 alignment 0.5 HELP_TEXT_TITLE_36 StandardReminder(variable HELP_TEXT_REMINDER_47)
 		set ChiefGuard focus to camera position
 
 		//Hey don't steal our slaves or there will be trouble.
@@ -762,7 +762,7 @@ start
 		move camera focus to [ChiefGuard] + [0,1,0] time 3
 		wait until camera ready
 
-		update snapshot success 0.0 alignment -0.4 HELP_TEXT_TITLE_36 StandardReminder(variable HELP_TEXT_REMINDER_47)
+		update snapshot CHALLENGE_THE_SLAVERS success 0.0 alignment -0.4 HELP_TEXT_TITLE_36 StandardReminder(variable HELP_TEXT_REMINDER_47)
 		set ChiefGuard focus to camera position
 
 		//Stop stealing animals or there will be trouble.
@@ -802,7 +802,7 @@ start
 		move camera position to [ChiefGuard] + [2,1.5,2] time 4
 		move camera focus to [ChiefGuard]+ [0,1,0] time 3
 
-		update snapshot success 0.2 alignment 0.5 HELP_TEXT_TITLE_36 StandardReminder(variable HELP_TEXT_REMINDER_47)
+		update snapshot CHALLENGE_THE_SLAVERS success 0.2 alignment 0.5 HELP_TEXT_TITLE_36 StandardReminder(variable HELP_TEXT_REMINDER_47)
 
 		wait until camera ready
 		set ChiefGuard focus to camera position
@@ -960,7 +960,7 @@ start
 		FireWorks = create special effect SPOT_VISUAL_TOWN_FIREWORKS  at [2270.389, 52.930, 1938.073]  time 60 
 		FireWorks2 = create special effect SPOT_VISUAL_TOWN_FIREWORKS  at [2230.953, 52.930, 1922.921]  time 60
 
-		snapshot challenge success 1.0 alignment 1.0 HELP_TEXT_TITLE_36 StandardReminder(variable HELP_TEXT_REMINDER_34)
+		snapshot CHALLENGE_THE_SLAVERS challenge success 1.0 alignment 1.0 HELP_TEXT_TITLE_36 StandardReminder(variable HELP_TEXT_REMINDER_34)
 
 		ChiefGuard play ANM_P_AMBIENT1 loop 1
 		wait 2 seconds
@@ -1212,7 +1212,7 @@ start
 				SuccessValue = (((OriginalSlaveFlockSize - size of SlaveFlock) * 10))/100
 
 				//Snapshot here for steve.	   
-				snapshot challenge success SuccessValue alignment 0.1 HELP_TEXT_TITLE_36 StandardReminder(variable HELP_TEXT_REMINDER_34)
+				snapshot CHALLENGE_THE_SLAVERS challenge success SuccessValue alignment 0.1 HELP_TEXT_TITLE_36 StandardReminder(variable HELP_TEXT_REMINDER_34)
 			end if
 		end if 
 
@@ -1254,7 +1254,7 @@ begin script TheSlaversMain(Town)
 start
 	SlaverCampPos = marker at [2255.874, 52.930, 1975.426]
 	VillagerHut = get HOUSE at [VillagerHutPos]	radius 5
-	Highlight = create highlight HIGHLIGHT_CHALLENGE at [VillagerHut]
+	Highlight = create highlight CHALLENGE_THE_SLAVERS HIGHLIGHT_CHALLENGE at [VillagerHut]
 	SlaverFinished=0
 	ALTITUDE of Highlight = 4
 		

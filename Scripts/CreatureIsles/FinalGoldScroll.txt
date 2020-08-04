@@ -1,4 +1,4 @@
-challenge END_LAND_2
+//challenge CHALLENGE_END_LAND_2
 
 //------------------------------------------------------------------------------------------------------------------------
 global LethysTownTotal=3
@@ -67,7 +67,7 @@ start
 			send good spirit home
 			close dialogue
 			wait 0.5 seconds
-			snapshot quest success ((3-LethysTownTotal)/3) alignment 0 HELP_TEXT_RANDOM_ADVISOR_13 Land2FinalScrollCinema
+			snapshot CHALLENGE_END_LAND_2 quest success ((3-LethysTownTotal)/3) alignment 0 HELP_TEXT_RANDOM_ADVISOR_13 Land2FinalScrollCinema
 
 			if TownOnLeftRequired == 1
 				//Fly over to town on the left
@@ -163,7 +163,7 @@ start
 		if camera position near [Highlight] radius NotifyDistance and Highlight viewed
 			//wait until cameramode
 			if time-Count>30
-				if widescreen ready
+				if in widescreen
 					begin dialogue
 						if AdvisorType == variable GOOD_ADVISOR
 							eject good spirit
@@ -193,7 +193,7 @@ begin script Land2FinalScroll
 	Highlight=0
 start
 	if DoneExitLethysVortex == 0
-		Highlight = create highlight HIGHLIGHT_QUEST at [HighlightPos]
+		Highlight = create highlight CHALLENGE_END_LAND_2 HIGHLIGHT_QUEST at [HighlightPos]
 
 		run script ChallengeHighlightNotifyL2FinalScroll(Highlight, Highlight, variable EVIL_ADVISOR, variable HELP_TEXT_GENERAL_CHALLENGE_START_14)
 
@@ -209,7 +209,7 @@ start
 
 				//Calculate the success of the player...
 				run script UpdateLethysTownTotal
-				update snapshot success ((3-LethysTownTotal)/3) alignment 0 HELP_TEXT_RANDOM_ADVISOR_13 Land2FinalScrollCinema
+				update snapshot CHALLENGE_END_LAND_2 success ((3-LethysTownTotal)/3) alignment 0 HELP_TEXT_RANDOM_ADVISOR_13 Land2FinalScrollCinema
 
 			until DoneExitLethysVortex != 0
 			end loop

@@ -1,11 +1,11 @@
-challenge LEAVE_THROUGH_VORTEX_LAND3
+//challenge CHALLENGE_LEAVE_THROUGH_VORTEX_LAND3
 
 begin script LeaveThroughVortexL3(VortexPos)
 	Vortex = 0
 	Highlight = 0
 start
 	Vortex = create VORTEX VORTEX_TYPE_IN at [VortexPos] 
-	Highlight = create highlight HIGHLIGHT_QUEST at [VortexPos]
+	Highlight = create highlight CHALLENGE_LEAVE_THROUGH_VORTEX_LAND3 HIGHLIGHT_QUEST at [VortexPos]
 	ALTITUDE of Highlight = 20
 	run script ChallengeHighlightNotify(Highlight, VortexPos, variable EVIL_ADVISOR, variable HELP_TEXT_GENERAL_LEAVE_THROUGH_VORTEX_03)
 	begin cinema

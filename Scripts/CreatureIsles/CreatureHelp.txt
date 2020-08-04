@@ -1,5 +1,3 @@
-global Friendly
-
 //------------------------------------------------------------------------------------------------------------------------
 begin help script HelpForCreatureActingOnObject(WhichText)
 	ObjectToActOn = 0
@@ -18,11 +16,6 @@ start
 				wait until read
 				send good spirit home
 			end dialogue
-		else
-			//begin dialogue
-				//sy "ERROR! No ObjectToActOn"
-				//wait until read
-			//end dialogue
 		end if
 	end if
 end script HelpForCreatureActingOnObject
@@ -112,4 +105,3 @@ start
 		end dialogue
 	end if
 end script HelpForCreaturePointAtCreature
-

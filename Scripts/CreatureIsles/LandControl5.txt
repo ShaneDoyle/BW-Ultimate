@@ -1,4 +1,4 @@
-challenge LandControl5
+//challenge LandControl5
 
 //run script LandControl5
 global NemesisStillFighting
@@ -1724,7 +1724,7 @@ start
 					set camera position to [2673.725, 121.163, 3792.426]  
 					set camera focus to [2665.778, 113.862, 3708.882]
 
-					wait until widescreen ready
+					wait until in widescreen
 					set fade in time 1
 
 					move computer player 2 to [2666.235, 120.880, 3711.333] speed 8
@@ -1748,10 +1748,10 @@ start
 					Explosion = cast SPELL_EXPLOSION_LEVEL_1 spell at [Wonder1] from [Wonder1]+[0,30,0]  radius 50.0 time 15 curl 0
 					wait 1 seconds
 					
-					challenge CREATURE_CURSE
-					snapshot quest success (SuccessValue * 0.33) alignment 0.0 HELP_TEXT_NEW_L5_INTRO_09 StandardReminder(variable HELP_TEXT_NEW_L5_CREATURE_CURSE_03)
+					//challenge CHALLENGE_CREATURE_CURSE
+					snapshot CHALLENGE_CREATURE_CURSE quest success (SuccessValue * 0.33) alignment 0.0 HELP_TEXT_NEW_L5_INTRO_09 StandardReminder(variable HELP_TEXT_NEW_L5_CREATURE_CURSE_03)
 					SuccessValue++
-					challenge LandControl5
+					//challenge LandControl5
 
 					wait until camera ready
 
@@ -1802,7 +1802,7 @@ start
 						BeginPos = marker at camera position
 						BeginFoc = marker at camera focus
 		
-						wait until widescreen ready
+						wait until in widescreen
 						
 						GreekMan = create VILLAGER VILLAGER_INFO_GREEK_FARMER_MALE at [2309.759, 40.477, 2565.886] 
 						enable GreekMan high graphics detail		
@@ -1834,10 +1834,10 @@ start
 						Explosion = cast SPELL_EXPLOSION_LEVEL_1 spell at [2338.974, 38.860, 2576.011] from [2338.974, 68.860, 2576.011]  radius 50.0 time 15 curl 0
 						wait 1 seconds
 
-						challenge CREATURE_CURSE
-						snapshot quest success (SuccessValue * 0.33) alignment 0.0 HELP_TEXT_NEW_L5_INTRO_09 StandardReminder(variable HELP_TEXT_NEW_L5_CREATURE_CURSE_03)
+						//challenge CHALLENGE_CREATURE_CURSE
+						snapshot CHALLENGE_CREATURE_CURSE quest success (SuccessValue * 0.33) alignment 0.0 HELP_TEXT_NEW_L5_INTRO_09 StandardReminder(variable HELP_TEXT_NEW_L5_CREATURE_CURSE_03)
 						SuccessValue++
-						challenge LandControl5
+						//challenge LandControl5
 
 						start music MUSIC_TYPE_SCRIPT_NEMESIS
 						GreekMan play ANM_P_FRIGHT_DUCK loop 1
@@ -1941,7 +1941,7 @@ start
 
 						BeginPos = marker at camera position
 						BeginFoc = marker at camera focus
-						wait until widescreen ready
+						wait until in widescreen
 						set camera position to [1681.827, 130.022, 2331.194] 
 						set camera focus to [1601.964, 69.612, 2325.674] 
 
@@ -1968,10 +1968,10 @@ start
 
 						wait 1 seconds
 
-						challenge CREATURE_CURSE
-						snapshot quest success (SuccessValue * 0.33) alignment 0.0 HELP_TEXT_NEW_L5_INTRO_09 StandardReminder(variable HELP_TEXT_NEW_L5_CREATURE_CURSE_03)
+						//challenge CHALLENGE_CREATURE_CURSE
+						snapshot CHALLENGE_CREATURE_CURSE quest success (SuccessValue * 0.33) alignment 0.0 HELP_TEXT_NEW_L5_INTRO_09 StandardReminder(variable HELP_TEXT_NEW_L5_CREATURE_CURSE_03)
 						SuccessValue++
-						challenge LandControl5
+						//challenge LandControl5
 
 						move computer player 2 to [1783.423, 133.529, 2372.380] speed 4000
 						wait 1.5 seconds
@@ -2120,9 +2120,9 @@ start
 		set Traitor focus to [2279.100, 38.158, 2623.736]
 		wait 1 seconds
 
-		challenge CREATURE_CURSE
-		snapshot quest success 1.0 alignment 0.0 HELP_TEXT_NEW_L5_INTRO_09 StandardReminder(variable HELP_TEXT_NEW_L5_CREATURE_CURSE_03)
-		challenge LandControl5
+		//challenge CHALLENGE_CREATURE_CURSE
+		snapshot CHALLENGE_CREATURE_CURSE quest success 1.0 alignment 0.0 HELP_TEXT_NEW_L5_INTRO_09 StandardReminder(variable HELP_TEXT_NEW_L5_CREATURE_CURSE_03)
+		//challenge LandControl5
 						  
 		say HELP_TEXT_NEW_L5_CREATURE_RESTORED_05
 		wait until read

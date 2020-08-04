@@ -1,4 +1,4 @@
-challenge FIRE_ON_HIGH
+//challenge CHALLENGE_FIRE_ON_HIGH
 
 // globals
 global GoodCatch
@@ -192,7 +192,7 @@ start
 		move camera position to [Napalm0Pos]+[-15,15,-35] time 3
 		move camera focus to [Napalm0Pos] time 3
 		wait until camera ready
-		snapshot challenge success 0.0 alignment 0.0 HELP_TEXT_TITLE_08 StandardReminder(variable HELP_TEXT_REMINDER_10)
+		snapshot CHALLENGE_FIRE_ON_HIGH challenge success 0.0 alignment 0.0 HELP_TEXT_TITLE_08 StandardReminder(variable HELP_TEXT_REMINDER_10)
 		eject good spirit
 		eject evil spirit
 		// "It's a meteor"
@@ -517,6 +517,6 @@ wait until camera position near [Napalm1Pos5] radius 200//not sure about this
 		end dialogue
 	end if
 
-	update snapshot success 1.0 alignment AlignmentTotal HELP_TEXT_TITLE_08 StandardReminder(variable HELP_TEXT_REMINDER_10)
+	update snapshot CHALLENGE_FIRE_ON_HIGH success 1.0 alignment AlignmentTotal HELP_TEXT_TITLE_08 StandardReminder(variable HELP_TEXT_REMINDER_10)
 
 end script FireOnHighMain

@@ -1,4 +1,4 @@
-challenge PIED_PIPER
+//challenge CHALLENGE_PIED_PIPER
 
 //------------------------------------------------------------------------------------------------------------------------
 // Pied Pier script
@@ -115,7 +115,7 @@ end script PiperFlockLaugh
 begin script PiedPiperKilled30Children 
 start
 	begin cinema
-		update snapshot success 1.0 alignment -0.8 HELP_TEXT_TITLE_20 StandardReminder(variable HELP_TEXT_PIED_PIPER_20)
+		update snapshot CHALLENGE_PIED_PIPER success 1.0 alignment -0.8 HELP_TEXT_TITLE_20 StandardReminder(variable HELP_TEXT_PIED_PIPER_20)
 		start music MUSIC_TYPE_SCRIPT_GENERIC_02 
 		eject evil spirit
 		//"30 Children are now dead and the Piper retires"
@@ -152,7 +152,7 @@ start
 		//"That's one creche leader we don't have to worry about!"
 		say HELP_TEXT_PIED_PIPER_10
 		wait until read
-		update snapshot success 0.5 alignment 0 HELP_TEXT_TITLE_20 StandardReminder(variable HELP_TEXT_NEW_REMINDER_22)
+		update snapshot CHALLENGE_PIED_PIPER success 0.5 alignment 0 HELP_TEXT_TITLE_20 StandardReminder(variable HELP_TEXT_NEW_REMINDER_22)
 		//"This is just too appalling for words."
 		say HELP_TEXT_PIED_PIPER_11
 		wait until read
@@ -233,10 +233,10 @@ start
 			run script GiveSpellDispenserReward(RewardPos, variable MAGIC_TYPE_HEAL_PU_ONE, 0.0, 0, 0)
 		end if
 
-		snapshot challenge success 1.0 alignment 1 HELP_TEXT_TITLE_20 StandardReminder(variable HELP_TEXT_PIED_PIPER_20)
+		snapshot CHALLENGE_PIED_PIPER challenge success 1.0 alignment 1 HELP_TEXT_TITLE_20 StandardReminder(variable HELP_TEXT_PIED_PIPER_20)
 	else
 		run script GiveSpellDispenserReward(RewardPos, variable MAGIC_TYPE_LIGHTNING_BOLT, 0.0, 0, 0) 
-		snapshot challenge success 1.0 alignment -0.3 HELP_TEXT_TITLE_20 StandardReminder(variable HELP_TEXT_PIED_PIPER_20)
+		snapshot CHALLENGE_PIED_PIPER challenge success 1.0 alignment -0.3 HELP_TEXT_TITLE_20 StandardReminder(variable HELP_TEXT_PIED_PIPER_20)
 	end if
 
 	PiedPiperFinished=1
@@ -703,7 +703,7 @@ start
 
 	PiedPiperFinished = 0
 
-	Highlight = create highlight HIGHLIGHT_CHALLENGE at [Creche]
+	Highlight = create highlight CHALLENGE_PIED_PIPER HIGHLIGHT_CHALLENGE at [Creche]
 	run script ChallengeHighlightNotify(Highlight, Creche, variable GOOD_ADVISOR, variable HELP_TEXT_GENERAL_CHALLENGE_START_02)
 
 	PiedPiperInitiated = 1
@@ -822,7 +822,7 @@ start
 		close dialogue
 		wait 0.1 seconds
 
-		snapshot challenge success 0.0 alignment 0.0 HELP_TEXT_TITLE_20 StandardReminder(variable HELP_TEXT_NEW_REMINDER_22)
+		snapshot CHALLENGE_PIED_PIPER challenge success 0.0 alignment 0.0 HELP_TEXT_TITLE_20 StandardReminder(variable HELP_TEXT_NEW_REMINDER_22)
 
 		move camera position to [BeginPos] time 3			// Camera pos back to player pos
 		move camera focus to [BeginFoc] time 3				// Camera foc back to player foc
@@ -849,20 +849,24 @@ start
 	run background script PiperProd(Piper)
 	run background script CheckPiperDamaged(Piper)
 
-	while PiedPiperFinished==0
+
+	while PiedPiperFinished == 0
 		//Creshe leader dead
-		when HEALTH of CrecheLeader <= 0.01 and CrecheLeaderDead==0 
+		if HEALTH of CrecheLeader <= 0.01 and CrecheLeaderDead==0 
 			CrecheLeaderDead=1
 			run script PiedPiperCrecheLeaderDead(CrecheLeader)
+		end if
 
 		//Check the pied piper
-		when PiedPiperDead==0 and PiedPiperChildrenInCave >= 35
+		if PiedPiperDead==0 and PiedPiperChildrenInCave >= 35
 			run script PiedPiperKilled30Children
-
+		end if
+		
 		//Check damage to the creshe
-		when HEALTH of Creche < OriginalHealthOfCreche and CrecheDamagedSpeech == 0
+		if HEALTH of Creche < OriginalHealthOfCreche and CrecheDamagedSpeech == 0
 			run script PiedPiperCrecheDamaged (CrecheLeader,Creche)
 			CrecheDamagedSpeech = 1
+		end if
 	end while
 
 	PiedPiperCompletedNow = 1

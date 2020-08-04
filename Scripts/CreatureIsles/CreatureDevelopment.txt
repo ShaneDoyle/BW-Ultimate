@@ -1,4 +1,4 @@
-challenge CREATURE_DEVELOPMENT
+//challenge CHALLENGE_CREATURE_DEVELOPMENT
 //------------------------------------------------------------------------------------------------------------------------
 //-GLOBALS-----------------------------------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------------------------------------
@@ -26,8 +26,21 @@ run script CreatureDevelopmentAutoRun
 
 //------------------------------------------------------------------------------------------------------------------------
 begin script CreatureDevelopmentAutoRun
+	//SheepCreature = 0
 start
 	CitadelEntrancePos = marker at [1906.8438, 18.0900, 2514.3760]
+	 /*
+	set player 1 ally with player 2 percentage 1
+	
+	SheepCreature = create CREATURE CREATURE_TYPE_CROCODILE at [2538.63,2763.37]
+	run background script SwapCreatures(SheepCreature)
+	
+	begin dialogue
+		say "Hello World"
+		wait until read
+	end dialogue
+	*/
+	
 end script CreatureDevelopmentAutoRun
 
 //------------------------------------------------------------------------------------------------------------------------
@@ -366,7 +379,7 @@ begin script CreatureDevSeeHome
 	dyk13 = marker at [1882.1720,  29.019, 2519.0260]				// resting creatures grow quicker
 
 start
-
+	CitadelEntrancePos = marker at [1906.8438, 18.0900, 2514.3760]
 	set game time 04.59															// Wake up to a luvly sunset
 	enable game time
 
@@ -375,7 +388,7 @@ start
 
 	if IsSkippingCreatureGuide == 0
 		Trainer = create VILLAGER VILLAGER_INFO_CREATURE_TRAINER at [CitadelEntrancePos]
-		Highlight = create highlight HIGHLIGHT_QUEST at [HighlightPos]
+		Highlight = create highlight CHALLENGE_CREATURE_DEVELOPMENT HIGHLIGHT_QUEST at [HighlightPos]
 		ALTITUDE of Highlight = 6
 
 		set MyCreature DEVELOPMENT_PHASE_INITIAL development
@@ -426,7 +439,7 @@ start
 
 			wait until camera ready
 
-			snapshot quest success 0 alignment 0 HELP_TEXT_TITLE_105 StandardReminder(variable HELP_TEXT_NEW_DEVELOPMENT_STAGE_INITIAL_05)
+			snapshot CHALLENGE_CREATURE_DEVELOPMENT quest success 0 alignment 0 HELP_TEXT_TITLE_105 StandardReminder(variable HELP_TEXT_NEW_DEVELOPMENT_STAGE_INITIAL_05)
 
 			set Trainer focus to camera position							// Trainer look at camera
 			Trainer play ANM_P_GOSSIP_WOMAN_2 loop 1
@@ -499,7 +512,7 @@ start
 
 			wait 0.1 seconds
 
-			snapshot quest success 0 alignment 0 HELP_TEXT_TITLE_105 StandardReminder(variable HELP_TEXT_EXTRA_TRAINER_06)
+			snapshot CHALLENGE_CREATURE_DEVELOPMENT quest success 0 alignment 0 HELP_TEXT_TITLE_105 StandardReminder(variable HELP_TEXT_EXTRA_TRAINER_06)
 
 			disable Trainer high graphics detail
 
@@ -666,11 +679,11 @@ start
 	CreatureEnergyInitial = get ENERGY of MyCreature
 	run script CreatureDevelopmentTrainerLeaveCitadel(Trainer, TrainerPos) 
 
-	Highlight = create highlight HIGHLIGHT_QUEST at [HighlightPos]
+	Highlight = create highlight CHALLENGE_CREATURE_DEVELOPMENT HIGHLIGHT_QUEST at [HighlightPos]
 	ALTITUDE of Highlight = 6
 
 	run script CreatureDevelopmentHighlightNotify(Highlight, Trainer, 200, variable EVIL_ADVISOR, variable HELP_TEXT_SPECIFIC_CHALLENGE_START_12)
-	update snapshot success 0.08 alignment 0 HELP_TEXT_TITLE_105 StandardReminder(variable HELP_TEXT_SHOW_CREATURE_DEVELOPMENT_CRITERIA_02)
+	update snapshot CHALLENGE_CREATURE_DEVELOPMENT success 0.08 alignment 0 HELP_TEXT_TITLE_105 StandardReminder(variable HELP_TEXT_SHOW_CREATURE_DEVELOPMENT_CRITERIA_02)
 
 	BeginPos = marker at camera position
 	BeginFoc = marker at camera focus
@@ -731,7 +744,7 @@ start
 
 	run background script DidYouKnow(dyk111, variable HELP_TEXT_DYK_111, variable DYK_CREATURE)
 
-	update snapshot success 0.08 alignment 0 HELP_TEXT_TITLE_105 StandardReminder(variable HELP_TEXT_INTERIM_REMINDER_09)
+	update snapshot CHALLENGE_CREATURE_DEVELOPMENT success 0.08 alignment 0 HELP_TEXT_TITLE_105 StandardReminder(variable HELP_TEXT_INTERIM_REMINDER_09)
 
 	// Player goes to get some food or whatever
 	// Directions of how to feed
@@ -750,7 +763,7 @@ start
 
 	stop script "CheckForCommentOnFoodItems"
 
-	update snapshot success 0.08 alignment 0 HELP_TEXT_TITLE_105 StandardReminder(variable HELP_TEXT_INTERIM_REMINDER_10)
+	update snapshot CHALLENGE_CREATURE_DEVELOPMENT success 0.08 alignment 0 HELP_TEXT_TITLE_105 StandardReminder(variable HELP_TEXT_INTERIM_REMINDER_10)
 
 	begin dialogue
 		say single line HELP_TEXT_NEW_DEVELOPMENT_STAGE_LEARN_TO_EAT_04
@@ -831,12 +844,12 @@ start
 	MyCreature = get player 1 creature		
 		
 	run script CreatureDevelopmentTrainerLeaveCitadel(Trainer, TrainerPos) 
-	Highlight = create highlight HIGHLIGHT_QUEST at [HighlightPos]
+	Highlight = create highlight CHALLENGE_CREATURE_DEVELOPMENT HIGHLIGHT_QUEST at [HighlightPos]
 	ALTITUDE of Highlight = 6
 
 	run script CreatureDevelopmentHighlightNotify(Highlight, Trainer, 100, variable EVIL_ADVISOR, variable HELP_TEXT_SPECIFIC_CHALLENGE_START_12)
 
-	update snapshot success 0.15 alignment 0 HELP_TEXT_TITLE_105 StandardReminder(variable HELP_TEXT_SHOW_CREATURE_DEVELOPMENT_CRITERIA_03)
+	update snapshot CHALLENGE_CREATURE_DEVELOPMENT success 0.15 alignment 0 HELP_TEXT_TITLE_105 StandardReminder(variable HELP_TEXT_SHOW_CREATURE_DEVELOPMENT_CRITERIA_03)
 
 	move MyCreature position to [MyCreaturePos]
 
@@ -1057,11 +1070,11 @@ start
 
 	run script CreatureDevelopmentTrainerLeaveCitadel(Trainer, TrainerPos) 
 
-	Highlight = create highlight HIGHLIGHT_QUEST at [HighlightPos]
+	Highlight = create highlight CHALLENGE_CREATURE_DEVELOPMENT HIGHLIGHT_QUEST at [HighlightPos]
 	ALTITUDE of Highlight = 6
 
 	run script CreatureDevelopmentHighlightNotify (Highlight, Trainer, 100, variable EVIL_ADVISOR, variable HELP_TEXT_SPECIFIC_CHALLENGE_START_12)
-	update snapshot success 0.23 alignment 0 HELP_TEXT_TITLE_105 StandardReminder(variable HELP_TEXT_INTERIM_REMINDER_03)
+	update snapshot CHALLENGE_CREATURE_DEVELOPMENT success 0.23 alignment 0 HELP_TEXT_TITLE_105 StandardReminder(variable HELP_TEXT_INTERIM_REMINDER_03)
 	move MyCreature position to [MyCreaturePos]
 
 	// Make sure player cannot leash creature too early
@@ -1118,7 +1131,7 @@ start
 		say single line HELP_TEXT_NEW_DEVELOPMENT_STAGE_LEASH_INTRO_03
 		wait until read
 		close dialogue
-		update snapshot success 0.23 alignment 0 HELP_TEXT_TITLE_105 StandardReminder(variable HELP_TEXT_INTERIM_REMINDER_04)	
+		update snapshot CHALLENGE_CREATURE_DEVELOPMENT success 0.23 alignment 0 HELP_TEXT_TITLE_105 StandardReminder(variable HELP_TEXT_INTERIM_REMINDER_04)	
 		set Trainer focus to [MyCreature]
 		release MyCreature
 		wait until Trainer played
@@ -1205,7 +1218,7 @@ start
 		move camera focus to [1886.963, 34.967, 2526.744] time 3
 
 		wait until camera ready
-		update snapshot success 0.23 alignment 0 HELP_TEXT_TITLE_105 StandardReminder(variable HELP_TEXT_REMINDER_109)
+		update snapshot CHALLENGE_CREATURE_DEVELOPMENT success 0.23 alignment 0 HELP_TEXT_TITLE_105 StandardReminder(variable HELP_TEXT_REMINDER_109)
 		wait until read
 		send good spirit home
 		disable Trainer high graphics detail
@@ -1313,7 +1326,7 @@ start
 
 		Trainer play ANM_P_AMBIENT1 loop -1
 
-		update snapshot success 0.23 alignment 0 HELP_TEXT_TITLE_105 StandardReminder(variable HELP_TEXT_INTERIM_REMINDER_06)
+		update snapshot CHALLENGE_CREATURE_DEVELOPMENT success 0.23 alignment 0 HELP_TEXT_TITLE_105 StandardReminder(variable HELP_TEXT_INTERIM_REMINDER_06)
 
 		disable leash draw
 		disable Trainer high graphics detail
@@ -1473,16 +1486,16 @@ start
 	enable Trainer indestructible
 
 	set MyCreature DEVELOPMENT_PHASE_LEASH_ATTACH_TO_HOUSE development
-	HighlightTwo = create highlight HIGHLIGHT_QUEST at [HighlightTwoPos]
+	HighlightTwo = create highlight CHALLENGE_CREATURE_DEVELOPMENT HIGHLIGHT_QUEST at [HighlightTwoPos]
 	ALTITUDE of HighlightTwo = 6
-	Highlight = create highlight HIGHLIGHT_QUEST at [HighlightPos]
+	Highlight = create highlight CHALLENGE_CREATURE_DEVELOPMENT HIGHLIGHT_QUEST at [HighlightPos]
 	ALTITUDE of Highlight = 12
 
 	run script CreatureDevelopmentHighlightNotifyTwo(Highlight, HighlightTwo, Trainer, 100, variable EVIL_ADVISOR, variable HELP_TEXT_SPECIFIC_CHALLENGE_START_12)
 	enable HighlightTwo	active
 	enable Highlight active
 
-	update snapshot success 0.31 alignment 0 HELP_TEXT_TITLE_105 StandardReminder(variable HELP_TEXT_SHOW_CREATURE_DEVELOPMENT_CRITERIA_05)
+	update snapshot CHALLENGE_CREATURE_DEVELOPMENT success 0.31 alignment 0 HELP_TEXT_TITLE_105 StandardReminder(variable HELP_TEXT_SHOW_CREATURE_DEVELOPMENT_CRITERIA_05)
 
 	begin cinema
 
@@ -1699,11 +1712,11 @@ start
 	MyCreature = get player 1 creature
 	run script CreatureDevelopmentTrainerLeaveCitadel(Trainer, TrainerPos) 
 
-	Highlight = create highlight HIGHLIGHT_QUEST at [HighlightPos]
+	Highlight = create highlight CHALLENGE_CREATURE_DEVELOPMENT HIGHLIGHT_QUEST at [HighlightPos]
 	ALTITUDE of Highlight = 0
 	
 	run script CreatureDevelopmentHighlightNotify(Highlight, Trainer, 100, variable EVIL_ADVISOR, variable HELP_TEXT_SPECIFIC_CHALLENGE_START_12)
-	update snapshot success 0.92 alignment 0 HELP_TEXT_TITLE_105 StandardReminder(variable HELP_TEXT_SHOW_CREATURE_DEVELOPMENT_CRITERIA_13)
+	update snapshot CHALLENGE_CREATURE_DEVELOPMENT success 0.92 alignment 0 HELP_TEXT_TITLE_105 StandardReminder(variable HELP_TEXT_SHOW_CREATURE_DEVELOPMENT_CRITERIA_13)
 	detach MyCreature leash
 	move MyCreature position to [MyCreaturePos]	
 

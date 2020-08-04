@@ -1,4 +1,4 @@
-challenge VOLCANO
+//challenge VOLCANO
 
 begin script Volcano
 

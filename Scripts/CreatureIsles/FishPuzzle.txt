@@ -1,4 +1,4 @@
-challenge FISH_PUZZLE
+//challenge CHALLENGE_FISH_PUZZLE
 
 begin script FishPuzzle
 
@@ -28,7 +28,7 @@ start
 	populate TurtleFlock with 5 ANIMAL TORTOISE
 
 	// Challenge Notify
-	Highlight = create highlight HIGHLIGHT_CHALLENGE at [ScrollPos]
+	Highlight = create highlight CHALLENGE_FISH_PUZZLE HIGHLIGHT_CHALLENGE at [ScrollPos]
 	run background script ChallengeHighlightNotify(Highlight, ScrollPos, variable GOOD_ADVISOR, variable HELP_TEXT_GENERAL_CHALLENGE_START_04)
 	
 	while PuzzleContinue == 0
@@ -47,7 +47,7 @@ start
 			move camera position to [FishermanPos] + [15,10,15] time 4
 			move camera focus to [FishermanPos] time 3
 			wait until camera ready
-//			snapshot challenge success 0.0 alignment 0.0 HELP_TEXT_TITLE_103 StandardReminder(variable HELP_TEXT_REMINDER_49)
+//			snapshot CHALLENGE_FISH_PUZZLE challenge success 0.0 alignment 0.0 HELP_TEXT_TITLE_103 StandardReminder(variable HELP_TEXT_REMINDER_49)
 			set Fisherman focus to camera position
 			// "I am trying to catch some fish but the're being elusive."
 			say HELP_TEXT_FISHING_PUZZLE_01
@@ -68,7 +68,7 @@ start
 //			send good spirit home
 			close dialogue
 			wait 0.1 seconds
-			snapshot challenge success 0.0 alignment 0.0 HELP_TEXT_TITLE_103 StandardReminder(variable HELP_TEXT_REMINDER_49)
+			snapshot CHALLENGE_FISH_PUZZLE challenge success 0.0 alignment 0.0 HELP_TEXT_TITLE_103 StandardReminder(variable HELP_TEXT_REMINDER_49)
 		end cinema
 
 		while PuzzlePlayed == 0
@@ -88,7 +88,7 @@ start
 			end if
 		end while
 
-		update snapshot success 1.0 alignment 0.0 HELP_TEXT_TITLE_103 StandardReminder(variable HELP_TEXT_REMINDER_49)
+		update snapshot CHALLENGE_FISH_PUZZLE success 1.0 alignment 0.0 HELP_TEXT_TITLE_103 StandardReminder(variable HELP_TEXT_REMINDER_49)
 
 		if HEALTH of Fisherman > 0
 			begin cinema

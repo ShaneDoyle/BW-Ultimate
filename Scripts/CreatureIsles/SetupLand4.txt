@@ -1,4 +1,4 @@
-//challenge LAND_4_METEORITES
+///challenge CHALLENGE_LAND_4_METEORITES
 
 global LighteningMeteorBroken
 global DarknessMeteorBroken

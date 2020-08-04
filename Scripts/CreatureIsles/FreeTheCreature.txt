@@ -1,4 +1,4 @@
-challenge FREE_THE_CREATURE
+//challenge CHALLENGE_FREE_THE_CREATURE
 
 global PrisonStatuesDeactivated
 global NumberOfFanaticsFinished
@@ -12,7 +12,7 @@ begin script WaitUntilTownTakenOver(Town)
 TownOwned = 0
 start
 	while TownOwned == 0
-		if get PLAYER of Town == 1
+		if get PLAYER of Town != 2   //(Shane) Check if not owned by Lethys rather than == 1.
 			TownOwned = 1
 		end if
 		if Town not exists
@@ -52,7 +52,8 @@ WolfCountAfterShaolin = 8
 start
 
 	// Make a seperate snapshot for the wolf attack
-	challenge WOLF_ATTACK
+	//challenge WOLF_ATTACK (TOFIX)
+	snapshot CHALLENGE_WOLF_ATTACK challenge success 0.0 alignment 0 HELP_TEXT_TITLE_01 StandardReminder(variable HELP_TEXT_NONE)
 
 	wait 300 seconds
 
@@ -124,7 +125,7 @@ start
 
 			close dialogue
 			wait 0.1 seconds
-			snapshot quest success 0 alignment 0 HELP_TEXT_L3_LETHYS_WOLVES_MONK_HELPS_02 StandardReminder(variable HELP_TEXT_BATTLE_ALERT_GA_05)
+			snapshot CHALLENGE_WOLF_ATTACK quest success 0 alignment 0 HELP_TEXT_L3_LETHYS_WOLVES_MONK_HELPS_02 StandardReminder(variable HELP_TEXT_BATTLE_ALERT_GA_05)
 			stop music
 		end cinema
 		Wolf = 0
@@ -139,7 +140,7 @@ start
 					wait until camera ready
 
 					// You have failed to save the town
-					snapshot quest success 1 alignment 0 HELP_TEXT_L3_LETHYS_WOLVES_MONK_HELPS_02 StandardReminder(variable HELP_TEXT_BATTLE_ALERT_GA_05)
+					snapshot CHALLENGE_WOLF_ATTACK quest success 1 alignment 0 HELP_TEXT_L3_LETHYS_WOLVES_MONK_HELPS_02 StandardReminder(variable HELP_TEXT_BATTLE_ALERT_GA_05)
 
 					eject good spirit	 
 					make good spirit point at [TargetPos]
@@ -158,10 +159,10 @@ start
 	end if
 
 	// You have saved the town  
-	update snapshot success 1 alignment 0 HELP_TEXT_L3_LETHYS_WOLVES_MONK_HELPS_02 StandardReminder(variable HELP_TEXT_BATTLE_ALERT_GA_05)
+	update snapshot CHALLENGE_WOLF_ATTACK success 1 alignment 0 HELP_TEXT_L3_LETHYS_WOLVES_MONK_HELPS_02 StandardReminder(variable HELP_TEXT_BATTLE_ALERT_GA_05)
 	
 	// Reset back to the free the creature snapshot
-	challenge FREE_THE_CREATURE
+	//challenge FREE_THE_CREATURE  //TOFIX
 
 end script WolfAttack
 
@@ -179,7 +180,9 @@ begin script FanaticOnFire(Fanatic, FinalDestination)
 start
 	
 	// Make sure there is seperate snapshot for the fanatic attack
-	challenge FANATIC_ATTACK
+	//challenge FANATIC_ATTACK (TOFIX)?
+	snapshot CHALLENGE_FANATIC_ATTACK challenge success 0.0 alignment 0 HELP_TEXT_TITLE_01 StandardReminder(variable HELP_TEXT_NONE)
+	
 
 	MyFanaticNumber = GlobalFanaticCount
 	GlobalFanaticCount++
@@ -277,14 +280,14 @@ start
 				//"Thank you, mighty one! You saved us all!"
 				say single line HELP_TEXT_L3_LETHYS_FIREBALLS_06
 				wait until read
-				update snapshot success 1 alignment 1 HELP_TEXT_THROW_BLOKE_28 StandardReminder(variable HELP_TEXT_L3_LETHYS_FIREBALLS_05)
+				update snapshot CHALLENGE_FANATIC_ATTACK success 1 alignment 1 HELP_TEXT_THROW_BLOKE_28 StandardReminder(variable HELP_TEXT_L3_LETHYS_FIREBALLS_05)
 			elsif NumberOfFanaticsSaved > 5
 				if Fanatic exists
 					if HEALTH of Fanatic > 0
 						//"Thank you! Although some of my friends died, you tried your best!"
 						say single line HELP_TEXT_L3_LETHYS_FIREBALLS_08
 						wait until read
-						update snapshot success 1 alignment 0 HELP_TEXT_THROW_BLOKE_28 StandardReminder(variable HELP_TEXT_L3_LETHYS_FIREBALLS_05)
+						update snapshot CHALLENGE_FANATIC_ATTACK success 1 alignment 0 HELP_TEXT_THROW_BLOKE_28 StandardReminder(variable HELP_TEXT_L3_LETHYS_FIREBALLS_05)
 						SaidIt = 1
 					end if
 				end if
@@ -293,7 +296,7 @@ start
 					//"Well, you saved some of them, but not all"
 					say single line HELP_TEXT_L3_LETHYS_FIREBALLS_09
 					wait until read
-					update snapshot success 1 alignment 0 HELP_TEXT_THROW_BLOKE_28 StandardReminder(variable HELP_TEXT_L3_LETHYS_FIREBALLS_05)
+					update snapshot CHALLENGE_FANATIC_ATTACK success 1 alignment 0 HELP_TEXT_THROW_BLOKE_28 StandardReminder(variable HELP_TEXT_L3_LETHYS_FIREBALLS_05)
 					send good spirit home
 				end if 
 			else
@@ -301,7 +304,7 @@ start
 				//"Well, you were a bit rubbish, really."
 				say single line HELP_TEXT_L3_LETHYS_FIREBALLS_07
 				wait until read
-				update snapshot success 1 alignment -0.8 HELP_TEXT_THROW_BLOKE_28 StandardReminder(variable HELP_TEXT_L3_LETHYS_FIREBALLS_05)
+				update snapshot CHALLENGE_FANATIC_ATTACK success 1 alignment -0.8 HELP_TEXT_THROW_BLOKE_28 StandardReminder(variable HELP_TEXT_L3_LETHYS_FIREBALLS_05)
 				send evil spirit home
 			end if
 		end cinema
@@ -312,7 +315,7 @@ start
 	end if
 
 	// Reset to the free the creature snapshot
-	challenge FREE_THE_CREATURE
+	//challenge FREE_THE_CREATURE	//TOFIX
  
 end script FanaticOnFire
 
@@ -362,7 +365,8 @@ begin script FanaticAttack(Debug)
 start
 
 	// Make sure there is seperate snapshot for the fanatic attack
-	challenge FANATIC_ATTACK
+	//challenge FANATIC_ATTACK
+	snapshot CHALLENGE_FANATIC_ATTACK challenge success 0.0 alignment 0 HELP_TEXT_TITLE_01 StandardReminder(variable HELP_TEXT_NONE)
 
 	if Debug == 0
 		wait 60 seconds	 
@@ -519,7 +523,7 @@ start
 
 			close dialogue
 			wait 0.1 seconds
-			snapshot quest success 0 alignment 0 HELP_TEXT_THROW_BLOKE_28 StandardReminder(variable HELP_TEXT_L3_LETHYS_FIREBALLS_05)
+			snapshot CHALLENGE_FANATIC_ATTACK quest success 0 alignment 0 HELP_TEXT_THROW_BLOKE_28 StandardReminder(variable HELP_TEXT_L3_LETHYS_FIREBALLS_05)
 
 			eject good spirit
 			eject evil spirit
@@ -587,7 +591,8 @@ start
 	wait 20 seconds
 
 	// Reset to the free the creature snapshot
-	challenge FREE_THE_CREATURE
+	//challenge FREE_THE_CREATURE   //TOFIX
+
 
 end script FanaticAttack
 
@@ -780,7 +785,7 @@ start
 
 						close dialogue
 						wait 0.5 seconds
-						snapshot quest success (PrisonStatuesDeactivated * 0.33) alignment 0 HELP_TEXT_L3_INTRO_10 StandardReminder(variable HELP_TEXT_L3_TAKE_OVER_TOWN_01)
+						snapshot CHALLENGE_FREE_THE_CREATURE quest success (PrisonStatuesDeactivated * 0.33) alignment 0 HELP_TEXT_L3_INTRO_10 StandardReminder(variable HELP_TEXT_L3_TAKE_OVER_TOWN_01)
 // SPL Block End						
 						if LongDownTextSeen == 0
 							eject good spirit						// SPL
@@ -836,7 +841,7 @@ start
 
 						close dialogue
 						wait 0.1 seconds
-						snapshot quest success 1 alignment 0 HELP_TEXT_L3_INTRO_10 StandardReminder(variable HELP_TEXT_L3_TAKE_OVER_TOWN_01)						
+						snapshot CHALLENGE_FREE_THE_CREATURE quest success 1 alignment 0 HELP_TEXT_L3_INTRO_10 StandardReminder(variable HELP_TEXT_L3_TAKE_OVER_TOWN_01)						
 
 						MyCreature play C_INDIVIDUAL_LOOK_AT_ME
 						wait until MyCreature played
@@ -935,7 +940,7 @@ start
 
 					close dialogue
 					wait 0.5 seconds
-					snapshot quest success (PrisonStatuesDeactivated * 0.33) alignment 0 HELP_TEXT_L3_INTRO_10 StandardReminder(variable HELP_TEXT_L3_TAKE_OVER_TOWN_04)
+					snapshot CHALLENGE_FREE_THE_CREATURE quest success (PrisonStatuesDeactivated * 0.33) alignment 0 HELP_TEXT_L3_INTRO_10 StandardReminder(variable HELP_TEXT_L3_TAKE_OVER_TOWN_04)
 // SPL Block End
 					
 					set fade red 0 green 0 blue 0 time 1
@@ -959,6 +964,7 @@ start
 			start sound LH_SAMPLE_G_PLASMASMALL at [MyCreature]
 			add FreezeRay target on StatuePos
 			FreezeSpell = cast CREATURE_SPELL_FREEZE spell on MyCreature from [Statue] radius 0 time 3 curl 0
+			//(Custom) These times were 3, now 60.
 		end if
 	end while
 	AwayFromCreaturePos = marker at get target from [PrisonerPos] to [Statue] distance 10 angle 0
@@ -1053,7 +1059,7 @@ start
 	disable MyCreature indestructible
 	TargetBelief = get LethysTown belief for player 2
 	TargetBelief = TargetBelief/2
-	wait 300 seconds
+	wait 5 seconds //(Custom) this was wait 300 seconds
 	while LethyTownInTrouble == 0
 		PlayerBelief = get LethysTown belief for player 1
 		LethysBelief = get LethysTown belief for player 2
@@ -1132,7 +1138,7 @@ start
 		//Set the creature back into its orignal position.
 		set MyCreature position to [PrisonerPos]
 		set MyCreature focus to [CreatureFocusPos]
-		set MyCreature creed properties hand HAND_GLOW_ABOVE scale 5.0 power 0.1 time 0.0
+		set MyCreature creed properties hand CREATURE_CREED_HEAD scale 5.0 power 0.1 time 0.0
 		wait 1 second
 
 		set fade in time 1
@@ -1141,7 +1147,7 @@ start
 		move camera focus to [PrisonerPos]+[0,1.3*CreatureHeight,0] time 4
 		wait until camera ready
 		wait 2 seconds
-		set MyCreature creed properties hand HAND_GLOW_ABOVE scale 5.0 power 1.0 time 0.0
+		set MyCreature creed properties hand CREATURE_CREED_HEAD scale 5.0 power 1.0 time 0.0
 		move camera position to [2105.245, 78.381, 2271.109] time 20
 		wait 4 seconds
 		say HELP_TEXT_L3_LETHYS_GIVES_CREED_04
@@ -1166,7 +1172,7 @@ start
 		wait until read
 		say HELP_TEXT_L3_LETHYS_GIVES_CREED_08
 		wait until read
-		set MyCreature creed properties hand HAND_GLOW_ABOVE scale 0.0 power 0.0 time 0.0
+		set MyCreature creed properties hand CREATURE_CREED_HEAD scale 0.0 power 0.0 time 0.0
 		stop music
 	end cinema
 	disable MyCreature indestructible

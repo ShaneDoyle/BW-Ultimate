@@ -1,4 +1,4 @@
-challenge IDOL_PYRE
+//challenge CHALLENGE_IDOL_PYRE
 
 global IdolAlive
 
@@ -37,7 +37,7 @@ begin script IdolPyreMain
 	FifthWorshipperKilledSpeech = 0
 	AlignmentTotal = 0
 
-	Highlight = create highlight HIGHLIGHT_CHALLENGE at [IdolPos]
+	Highlight = create highlight CHALLENGE_IDOL_PYRE HIGHLIGHT_CHALLENGE at [IdolPos]
 
 	PFXFlash=0
 	PFXExplosion=0
@@ -158,7 +158,7 @@ start
 */
 		wait until camera ready
 
-		snapshot challenge success 0.0 alignment 0.0 HELP_TEXT_TITLE_12 StandardReminder(variable HELP_TEXT_REMINDER_13)
+		snapshot CHALLENGE_IDOL_PYRE challenge success 0.0 alignment 0.0 HELP_TEXT_TITLE_12 StandardReminder(variable HELP_TEXT_REMINDER_13)
 		stop music
 	end cinema
 
@@ -226,7 +226,7 @@ start
 				wait until read
 			end dialogue
 			AlignmentTotal = AlignmentTotal - 0.6
-			update snapshot success 0.5 alignment AlignmentTotal HELP_TEXT_TITLE_12 StandardReminder(variable HELP_TEXT_REMINDER_13)
+			update snapshot CHALLENGE_IDOL_PYRE success 0.5 alignment AlignmentTotal HELP_TEXT_TITLE_12 StandardReminder(variable HELP_TEXT_REMINDER_13)
 			BuilderDeadSpeech = 1
 		end if
 
@@ -307,19 +307,21 @@ start
 			WorshipperTick = 0
 		end if
 		
-		when WorshipperDude exists and [WorshipperDude] at [WorshipperRandomPos]
+		if WorshipperDude exists and [WorshipperDude] at [WorshipperRandomPos]
 			// move random position nearby
 			attach WorshipperDude to AdditionalWorshippers
 			set WorshipperDude focus to [IdolPos]
 			WorshipperDude play ANM_P_PRAY loop 1
 			WorshipperDude = 0
+		end if
 
-		when WorshipperDudeTwo exists and [WorshipperDudeTwo] at [WorshipperTwoRandomPos]
+		if WorshipperDudeTwo exists and [WorshipperDudeTwo] at [WorshipperTwoRandomPos]
 			// move random position nearby
 			attach WorshipperDudeTwo to AdditionalWorshippers
 			set WorshipperDudeTwo focus to [IdolPos]
 			WorshipperDudeTwo play ANM_P_PRAY loop 1
 			WorshipperDudeTwo = 0
+		end if
 
 	until IdolAlive == 1
 	end loop
@@ -338,7 +340,7 @@ start
 		move camera focus to [2671.805, 46.773, 3675.310] time 3
 		wait until camera ready
 		AlignmentTotal = AlignmentTotal + 0.2
-		snapshot challenge success 1.0 alignment AlignmentTotal HELP_TEXT_TITLE_12 StandardReminder(variable HELP_TEXT_REMINDER_13)
+		snapshot CHALLENGE_IDOL_PYRE challenge success 1.0 alignment AlignmentTotal HELP_TEXT_TITLE_12 StandardReminder(variable HELP_TEXT_REMINDER_13)
 		move camera position to [2715.892, 38.856, 3633.211] time 20
 		eject good spirit
 		//"At last the idol is on fire
@@ -425,7 +427,7 @@ start
 				wait until read
 				send good spirit home
 				AlignmentTotal = AlignmentTotal - 0.6
-				update snapshot success 1.0 alignment AlignmentTotal HELP_TEXT_TITLE_12 StandardReminder(variable HELP_TEXT_REMINDER_13)
+				update snapshot CHALLENGE_IDOL_PYRE success 1.0 alignment AlignmentTotal HELP_TEXT_TITLE_12 StandardReminder(variable HELP_TEXT_REMINDER_13)
 		end if
 		close dialogue
 

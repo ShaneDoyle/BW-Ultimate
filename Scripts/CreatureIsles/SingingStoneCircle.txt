@@ -1,5 +1,3 @@
-challenge SINGING_STONES_CIRCLE
-
 //------------------------------------------------------------------------------------------------------------------------
 // Singing Stone Circle Script By Jonty Barnes
 //------------------------------------------------------------------------------------------------------------------------
@@ -67,8 +65,7 @@ start
 				say single line HELP_TEXT_SINGINGSTONES_17
 				wait until read
 				SPEED of Hippy = 0.1
-				state Hippy WANDER_AROUND
-				position [2545.811, 20.914, 2252.153] 
+				state Hippy WANDER_AROUND position [2545.811, 20.914, 2252.153] 
 				float 6
 				ulong 4, 20
 				set camera position to [BeginPos]
@@ -245,7 +242,7 @@ start
 		if camera position near [Highlight] radius NotifyDistance and Highlight viewed
 			//wait until cameramode
 			if time-Count>30
-				if widescreen ready
+				if in widescreen
 					begin dialogue
 						if AdvisorType == variable GOOD_ADVISOR
 							eject good spirit
@@ -262,7 +259,7 @@ start
 			end if
 		end if
 		
-	until Highlight clicked or Location clicked or SingingStoneCircleFinished != 0
+	until Highlight clicked //or Location clicked or SingingStoneCircleFinished != 0
 	end loop
 	enable Highlight active
 end script SingingStonesNotify
@@ -274,7 +271,8 @@ begin script SingingCircleIntro(Stonehenge, HippyHut)
 	BeginFoc = 0
 
 start 
-	HighlightStones = create highlight HIGHLIGHT_CHALLENGE at [2545.003, 20.770, 2244.578]
+	
+	HighlightStones = create highlight CHALLENGE_SINGING_STONES_CIRCLE HIGHLIGHT_CHALLENGE at [2545.003, 20.770, 2244.578]
 
 	run script SingingStonesNotify(HighlightStones, Stonehenge, variable GOOD_ADVISOR, variable HELP_TEXT_GENERAL_CHALLENGE_START_04)
 
@@ -308,7 +306,7 @@ start
 			set camera position to [2555.250, 25.382, 2248.130] 
 			set camera focus to [2535.064, 20.983, 2248.724]
 
-	//		snapshot challenge success 0.0 alignment 0 HELP_TEXT_TITLE_44 StandardReminder(variable HELP_TEXT_NEW_REMINDER_13)
+			snapshot CHALLENGE_SINGING_STONES_CIRCLE challenge  success 0.0 alignment 0 HELP_TEXT_TITLE_44 StandardReminder(variable HELP_TEXT_NEW_REMINDER_13)
 
 			eject good spirit
 
@@ -341,7 +339,7 @@ start
 
 			wait until camera ready
 
-			snapshot challenge success 0.0 alignment 0 HELP_TEXT_TITLE_44 StandardReminder(variable HELP_TEXT_NEW_REMINDER_13)
+			snapshot CHALLENGE_SINGING_STONES_CIRCLE challenge success 0.0 alignment 0 HELP_TEXT_TITLE_44 StandardReminder(variable HELP_TEXT_NEW_REMINDER_13) //(TOFIX)
 
 			disable Hippy high gfx detail
 			stop music
@@ -721,10 +719,10 @@ start
 	//The end sequence
 	if HippyDead == 1
 		begin cinema
-			move camera to T00_000 time 3					
+			move camera position to [2496.487305, 21.570000, 2242.900391] time 3	//(TOFIXPATH) T00_000			
 			wait until camera ready
 
-			camera path TRACK00
+			//camera path TRACK00 //(TOFIXPATH)
 
 			Storm = create SCRIPT_OBJECT_TYPE_WEATHER_THING WEATHER_INFO_MONSOON at [Stonehenge] 
 			set Storm properties time 50 fade 5
@@ -734,7 +732,7 @@ start
 			set Storm properties inner 20 outer 50
 			disable Storm affected by wind
 
-			snapshot challenge success 1 alignment 0 HELP_TEXT_TITLE_44 StandardReminder(variable HELP_TEXT_NEW_REMINDER_15)
+			snapshot CHALLENGE_SINGING_STONES_CIRCLE challenge success 1 alignment 0 HELP_TEXT_TITLE_44 StandardReminder(variable HELP_TEXT_NEW_REMINDER_15) //(TOFIXSNAP)
 		
 			say HELP_TEXT_SINGINGSTONES_09
 			wait until read
@@ -776,10 +774,10 @@ start
 
 			wait until camera ready
 
-			move camera to T00_000 time 3					
+			move camera position to [2496.487305, 21.570000, 2242.900391] time 3 //T00_000
 			wait until camera ready
 
-			camera path TRACK00
+			//camera path TRACK00  //(TOFIXPATH)
 				   
 			Storm = create SCRIPT_OBJECT_TYPE_WEATHER_THING WEATHER_INFO_MONSOON at [Stonehenge] 
 			set Storm properties time 50 fade 5
@@ -789,7 +787,7 @@ start
 			set Storm properties inner 20 outer 50
 			disable Storm affected by wind
 
-			snapshot challenge success 1 alignment 0 HELP_TEXT_TITLE_44 StandardReminder(variable HELP_TEXT_NEW_REMINDER_15)
+			snapshot CHALLENGE_SINGING_STONES_CIRCLE challenge success 1 alignment 0 HELP_TEXT_TITLE_44 StandardReminder(variable HELP_TEXT_NEW_REMINDER_15) //(TOFIXSNAP)
 
 			say HELP_TEXT_SINGINGSTONES_09
 			wait until read
@@ -948,13 +946,13 @@ start
 	while SingingStonesFormed == 0
 		if SingingStonesFilled == 1 and WrongHolesPlayed == 0 and SingingStonesFilledWithBad == 0
 			WrongHolesPlayed = 1
-			update snapshot success 0.50 alignment 0 HELP_TEXT_TITLE_44 StandardReminder(variable HELP_TEXT_NEW_REMINDER_14)
+			update snapshot CHALLENGE_SINGING_STONES_CIRCLE success 0.50 alignment 0 HELP_TEXT_TITLE_44 StandardReminder(variable HELP_TEXT_NEW_REMINDER_14) //(TOFIXSNAP)
 			run script WrongHoles(HippyHut)
 		end if
 
 		if SingingStonesFilledWithBad == 1 and WrongHolesBadPlayed == 0
 			WrongHolesBadPlayed = 1
-			update snapshot success 0.25 alignment 0 HELP_TEXT_TITLE_44 StandardReminder(variable HELP_TEXT_NEW_REMINDER_15)
+			update snapshot CHALLENGE_SINGING_STONES_CIRCLE success 0.25 alignment 0 HELP_TEXT_TITLE_44 StandardReminder(variable HELP_TEXT_NEW_REMINDER_15) //(TOFIXSNAP)
 			run script WrongHolesBad(HippyHut)
 		end if
 	end while
@@ -980,7 +978,7 @@ start
 
 
 	release Stonehenge
-//	update snapshot success 1 alignment 0 HELP_TEXT_TITLE_44 StandardReminder(variable HELP_TEXT_NEW_REMINDER_15)
+	update snapshot CHALLENGE_SINGING_STONES_CIRCLE success 1 alignment 0 HELP_TEXT_TITLE_44 StandardReminder(variable HELP_TEXT_NEW_REMINDER_15)
 	delete HighlightStones
 
 end script SingingStoneCircle

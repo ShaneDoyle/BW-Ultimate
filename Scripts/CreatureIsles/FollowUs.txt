@@ -1,5 +1,3 @@
-challenge FollowUs
-
 //------------------------------------------------------------------------------------------------------------------------
 //global FollowUsFinished
 //------------------------------------------------------------------------------------------------------------------------
@@ -17,24 +15,8 @@ begin script TrackZoomUsage
  ZoomTicker = 0
 
 start
-	StopTracking = 0
-	RequiredZoom = get HELP_EVENT_TYPE_ZOOM total event
-	RequiredZoom += 10
-	begin loop
 
-		ZoomAmount = get HELP_EVENT_TYPE_ZOOM total event
-		if ZoomAmount > RequiredZoom
-			ZoomTicker++
-			if ZoomTicker > 3
-				StopTracking = 1
-			end if
-			wait 10 seconds
-			RequiredZoom = get HELP_EVENT_TYPE_ZOOM total event
-			RequiredZoom += 10
-		end if
-
-	until StopTracking > 0 // set to 2 in Lost Bro script if not set to 1 here
-	end loop
+	wait 5 seconds
 
 end script TrackZoomUsage
 
@@ -180,9 +162,9 @@ begin script FollowUs
     Father = create VILLAGER VILLAGER_INFO_NORSE_SHEPHERD_MALE at [1577.8221, 12.5128, 2221.0671]
 	Son = create VILLAGER MALE at [1579.006, 11.458, 2220.133] 
 
-	StartMarker = marker at camera T00_000
-	EndMarker = marker at camera T02_004
-	StartPath = marker at camera T02_000
+	StartMarker = marker at [1634.691528, 5.511079, 2118.281494]	//TOFIX marker at camera T00_000
+	EndMarker = marker at [1633.719482, 18.400812, 2307.982422]				//TOFIX marker at camera T02_004
+	StartPath = marker at [1494.026855, 5.352304, 2109.630615]					//TOFIX marker at camera T02_000
 	FollowersFlock = flock at [Mother]
 	Distance =0
 	FatherDistance=0
@@ -257,8 +239,8 @@ begin script FollowUs
 	Shark1 = 0
 	Shark2 = 0
 
-	Shark1Pos = marker at camera T03_000
-	Shark2Pos = marker at camera T04_000
+	Shark1Pos = marker at [1312.572632, 0.740704, 2010.793335] //TOFIX marker at camera T03_000
+	Shark2Pos = marker at [1318.921143, 0.740685, 2000.229614]	//TOFIX camera T04_000
 
 	RequiredRotateAngle = 0
 	RequiredPitchAngle = 0
@@ -448,8 +430,8 @@ start
 		Shark1 = create WHALE at [Shark1Pos]							// Introducing the................SHARKS !!!
 		Shark2 = create WHALE at [Shark2Pos]
 
-		set Shark1 forward walk path TRACK03 from 0.0 to 1.0			 
-		set Shark2 forward walk path TRACK04 from 0.0 to 1.0
+		//set Shark1 forward walk path TRACK03 from 0.0 to 1.0			 //TOFIX
+		//set Shark2 forward walk path TRACK04 from 0.0 to 1.0			//TOFIX
 
 		wait 2.1 seconds
 
@@ -528,16 +510,17 @@ start
 		wait until not say sound HELP_TEXT_DEFINITELY_NEWEST_INTRO_08 playing //Check previous line is finished
 		start say sound HELP_TEXT_DEFINITELY_NEWEST_INTRO_09			// That god is you
 
-		set fade red 0 green 0 blue 0 time 4
+		set fade red 0 green 0 blue 0 time 3
 
 		wait until not say sound HELP_TEXT_DEFINITELY_NEWEST_INTRO_09 playing //Check previous line is finished
 		
-		wait until fade ready
+		//wait until fade ready
+		set fade in time 3
 
 
 //------------------------------------------------------------------------------------------------------------------------
 
-		enable SCRIPT_AVI_SEQUENCE_INTRO avi sequence
+		//enable SCRIPT_AVI_SEQUENCE_INTRO avi sequence
 
 //------------------------------------------------------------------------------------------------------------------------
 
@@ -844,7 +827,7 @@ start
 		disable jc special SJC_BLEND_ANGLE on Son
 		enable jc special SJC_PREPARE_ROTATE180 on Son
 		Son play ANM_P_TURN_180 loop 1
-		wait until Son played
+		//(TOFIX) wait until Son played
 
 		enable jc special SJC_BLEND_ANGLE on Father
 		enable jc special SJC_BLEND_ANGLE on Mother
@@ -894,7 +877,7 @@ start
 
 	wait until [Father] near [StartPath] radius 2
 		
-	set Father forward walk path TRACK02 from 0.0 to 1.0
+	//set Father forward walk path TRACK02 from 0.0 to 1.0		//TOFIX
 	move FollowersFlock position to [Father]
 
 	begin loop
@@ -948,7 +931,7 @@ start
 // Build Citadel Runs from here onwards
 //------------------------------------------------------------------------------------------------------------------------
 
-challenge BUILD_CITADEL
+
 
 	set camera zones to "Land1TemplePath.exc"
 	SPEED of Mother = 1

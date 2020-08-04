@@ -1,0 +1,464 @@
+
+
+begin script CustomIntroCamera
+	CameraLock = 0
+start
+
+	//Init the camera.
+	begin camera
+		move camera position to [4281.07, 50, 4140.77] time 0
+		move camera focus to [4202.48, 60, 4056.61] time 0
+	end camera
+	
+	set fade in time 5
+	
+	//Lerp to new position (transition down).
+	begin camera
+		while CameraLock == 0
+			move camera position to [4281.07, 10, 4140.77] time 3
+			move camera focus to [4202.48, 20, 4056.61] time 3
+			
+			//Speed up a bit. More responsive menu!
+			set game speed to 1.5
+			
+			if key KB_ESC down
+				CameraLock = 1
+			end if
+			
+		end while
+		
+		//Set speed back to normal.
+		set game speed to 1.0
+		
+	end camera
+	
+
+end script CustomIntroCamera
+
+
+
+begin script CustomIntroText(OptionMenu, Option1, Option2, Option3, Option4)
+	LockText = 1
+start
+	
+	//Delete Text
+	fade all draw text time 0.0 seconds
+	
+	//Alert to press a key. Don't even change this.
+	set draw text colour red 200 green 200 blue 160
+	draw text "Select an option!" across -0.145 down 0.200 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+	
+	
+	//Main Menu!
+	if OptionMenu == 1
+	
+		//Option 1.
+		if Option1 == 0
+			set draw text colour red 230 green 230 blue 230
+		else
+			set draw text colour red 230 green 230 blue 130
+		end if
+		draw text "1). Start game" across -0.158 down 0.250 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+		
+		//Option 2.
+		if Option2 == 0
+			set draw text colour red 230 green 230 blue 230
+		else
+			set draw text colour red 230 green 230 blue 130
+		end if
+		draw text "2). Settings" across -0.170 down 0.300 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+
+	end if
+	
+	//Select a game menu!
+	if OptionMenu == 2
+	
+		//Option 1.
+		if Option1 == 0
+			set draw text colour red 230 green 230 blue 230
+		else
+			set draw text colour red 230 green 230 blue 130
+		end if
+		draw text "1). Start the game normally" across -0.105 down 0.250 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+		
+		
+		//Option 2.
+		if Option2 == 0
+			set draw text colour red 230 green 230 blue 230
+		else
+			set draw text colour red 230 green 230 blue 130
+		end if
+		draw text "2). Skip straight to the Creature select" across -0.060 down 0.300 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+		
+		
+		//Option 3.
+		if Option3 == 0
+			set draw text colour red 230 green 230 blue 230
+		else
+			set draw text colour red 230 green 230 blue 130
+		end if
+		draw text "3). Skip all of the Creature tutorial" across -0.076 down 0.350 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+		
+		
+		//Option 4.
+		if Option4 == 0
+			set draw text colour red 230 green 230 blue 230
+		else
+			set draw text colour red 230 green 230 blue 130
+		end if
+		draw text "4). Keep your old Creature" across -0.11 down 0.400 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+		
+	end if
+	
+	//Settings
+	if OptionMenu == 3
+	
+		//Option 1.
+		if Option1 == 0
+			set draw text colour red 230 green 230 blue 230
+		else
+			set draw text colour red 230 green 230 blue 130
+		end if
+		draw text "1). Colour: " across -0.168 down 0.250 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+		
+			//Red.
+			if MyColour == 0
+				set draw text colour red 240 green 110 blue 110
+			end if
+			
+			//Green.
+			if MyColour == 1
+				set draw text colour red 110 green 240 blue 110
+			end if
+			
+			//Purple.
+			if MyColour == 2
+				set draw text colour red 135 green 70 blue 145
+			end if
+			
+			//Cyan (Light Blue).
+			if MyColour == 3
+				set draw text colour red 75 green 175 blue 175
+			end if
+				
+			//Draw Colour Block
+			draw text "|" across -0.102 down 0.250 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+			draw text "|" across -0.103 down 0.250 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+			draw text "|" across -0.104 down 0.250 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+			draw text "|" across -0.105 down 0.250 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+			draw text "|" across -0.106 down 0.250 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+			draw text "|" across -0.107 down 0.250 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+			draw text "|" across -0.108 down 0.250 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+			draw text "|" across -0.109 down 0.250 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+			draw text "|" across -0.110 down 0.250 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+			draw text "|" across -0.111 down 0.250 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+			draw text "|" across -0.112 down 0.250 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+			draw text "|" across -0.113 down 0.250 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+			draw text "|" across -0.114 down 0.250 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+			draw text "|" across -0.115 down 0.250 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+			draw text "|" across -0.116 down 0.250 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+			draw text "|" across -0.117 down 0.250 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+			draw text "|" across -0.118 down 0.250 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+			draw text "|" across -0.119 down 0.250 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+
+		
+		//Option 2.
+		if Option2 == 0
+			set draw text colour red 230 green 230 blue 230
+		else
+			set draw text colour red 230 green 230 blue 130
+		end if
+		draw text "             2). Difficulty: Normal" across -0.160 down 0.300 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+
+	end if
+
+
+end script CustomIntroText
+
+
+//Script to get the user's input.
+begin script CustomGetInput
+
+	LockInputLoop = 1
+	OptionMenu = 1
+	OptionToPick = 0
+	Option1 = 0
+	Option2 = 0
+	Option3 = 0
+	Option4 = 0
+start
+	
+	//Wait until goes to Creature...
+	wait 6 seconds
+	OptionToPick = 1
+	
+	//Init the text.
+	run background script CustomIntroText(OptionMenu, Option1, Option2, Option3, Option4) //Run this once to init.
+	
+	while LockInputLoop == 1
+		if OptionToPick == 1
+			Option1 = 1
+		else
+			Option1 = 0
+		end if
+		
+		if OptionToPick == 2
+			Option2 = 1
+		else
+			Option2 = 0
+		end if
+		
+		if OptionToPick == 3
+			Option3 = 1
+		else
+			Option3 = 0
+		end if
+		
+		if OptionToPick == 4
+			Option4 = 1
+		else
+			Option4 = 0
+		end if
+		
+		
+		
+		
+		
+		
+		//Settings
+		if OptionMenu == 3
+			if key KB_BACKSPACE down
+				OptionToPick = 1
+				OptionMenu = 1
+				start sound LH_SAMPLE_SKITTLECOLLIDE_01
+			end if
+			
+			if key KB_UP down
+				OptionToPick--
+				start sound LH_SAMPLE_SKITTLECOLLIDE_01
+				
+				if OptionToPick <= 0
+					OptionToPick = 2
+				end if
+			end if
+			
+			if key KB_DOWN down
+				OptionToPick++
+				start sound LH_SAMPLE_SKITTLECOLLIDE_01
+				
+				//Don't let overflow.
+				if OptionToPick >= 3
+					OptionToPick = 1
+				end if
+			end if
+			
+			if key KB_SPACE down
+			
+				if OptionToPick == 1 //Colour
+					start sound LH_SAMPLE_SKITTLECOLLIDE_01
+					MyColour++
+					if MyColour > 3
+						MyColour = 0
+					end if
+				end if
+				
+				if OptionToPick == 2 //Difficulty
+					start sound LH_SAMPLE_SKITTLECOLLIDE_01
+				end if
+			end if
+		end if
+		
+		
+		
+		
+		
+		
+		//Black & White Game Start Menu
+		if OptionMenu == 2
+			
+			if key KB_BACKSPACE down
+				OptionToPick = 1
+				OptionMenu = 1
+				start sound LH_SAMPLE_SKITTLECOLLIDE_01
+			end if
+			
+			if key KB_UP down
+				OptionToPick--
+				start sound LH_SAMPLE_SKITTLECOLLIDE_01
+				
+				if OptionToPick <= 0
+					OptionToPick = 4
+				end if
+			end if
+			
+			if key KB_DOWN down
+				OptionToPick++
+				start sound LH_SAMPLE_SKITTLECOLLIDE_01
+				
+				//Don't let overflow.
+				if OptionToPick >= 5
+					OptionToPick = 1
+				end if
+			end if
+			
+			if key KB_SPACE down
+				if OptionToPick == 1 //Start game normally
+					start sound LH_SAMPLE_SKITTLECOLLIDE_01
+					LockInputLoop = 0
+					OptionMenu = 0
+					OptionToPick = 0
+				end if
+				
+				if OptionToPick == 4 //Keep your old creature
+					start sound LH_SAMPLE_SKITTLECOLLIDE_01
+					LockInputLoop = 0
+					OptionMenu = 0
+					OptionToPick = 0
+					
+					IsSkippingToCreatureSelect = 1
+					IsSkippingCreatureGuide = 1
+					IsKeepingOldCreature = 1
+				end if
+			end if
+		end if
+		
+		
+		
+		
+	
+		//Start Game
+		if OptionMenu == 1 //Start game normally
+		
+			if key KB_BACKSPACE down
+				//OptionToPick = 1
+				//OptionMenu = 1
+				start sound LH_SAMPLE_SKITTLECOLLIDE_01
+			end if
+			
+			if key KB_UP down
+				OptionToPick--
+				start sound LH_SAMPLE_SKITTLECOLLIDE_01
+				
+				if OptionToPick <= 0
+					OptionToPick = 2
+				end if
+			end if
+			
+			if key KB_DOWN down
+				OptionToPick++
+				start sound LH_SAMPLE_SKITTLECOLLIDE_01
+				
+				//Don't let overflow.
+				if OptionToPick > 2
+					OptionToPick = 1
+				end if
+			end if
+
+			if key KB_SPACE down
+			
+				if OptionToPick == 1 //Start game normally
+					start sound LH_SAMPLE_SKITTLECOLLIDE_01
+					OptionMenu = 2
+					OptionToPick = 1
+				end if
+				
+				if OptionToPick == 2 //Settings
+					start sound LH_SAMPLE_SKITTLECOLLIDE_01
+					OptionMenu = 3
+					OptionToPick = 1
+				end if
+			end if
+			
+			
+		end if
+		
+		
+		run background script CustomIntroText(OptionMenu, Option1, Option2, Option3, Option4)
+
+	end while
+	
+	//Remove UI
+	set fade red 0 green 0 blue 0 time 2
+	wait 2 seconds
+	
+	clear clipping window time 0.1
+	fade all draw text time 0.1 seconds
+	wait 2 seconds
+	
+	//Go to Land 1!
+	load map "Ultimate/Scripts/UltimateLand1.txt"
+	run script LandControl1
+	stop all scripts excluding files "LandControl1.txt"
+
+end script CustomGetInput
+
+
+begin script CustomBlackAndWhiteIntroMenu
+	Storm = 0
+	LockMenu = 0
+	MyCreatureHeight = 0
+start
+	
+	//MyCreature=create CREATURE CREATURE_TYPE_LION at [2279.37,2877.50]
+	//set player 1 creature to MyCreature
+	
+
+	
+	//Manage the camera.
+	run background script CustomIntroCamera
+	
+	//Manage the text (+ user input).
+	set clipping window across 0.0 down 0.15 width 1.00 height 0.70 time 0
+	run background script CustomGetInput
+	
+
+	
+	//Show creature
+	MyCreature = get player 1 creature
+	if MyCreature not exists
+		//load my_creature at [2565.24, 2755.31]
+		load my_creature at [4211.68, 4081.62]
+	end if
+	wait 0.3 seconds
+	MyCreature = get player 1 creature
+	MyCreatureHeight = SCRIPT_OBJECT_PROPERTY_TYPE_HEIGHT of MyCreature
+	
+	
+	
+
+
+	//Make setting.
+	set game time 06.30
+	disable game time
+	disable alignment music
+	start music MUSIC_TYPE_SCRIPT_GENERIC_01
+
+	
+	
+	//Make a storm.
+	Storm = create SCRIPT_OBJECT_TYPE_WEATHER_THING WEATHER_INFO_DRIZZLE at [MyCreature]  
+	set Storm properties degrees 100 rainfall 3 snowfall 0 overcast 1 fallspeed 20
+	set Storm properties time 120000000 fade 0
+	set Storm properties clouds 8 shade 0.8 height 130
+	set Storm properties sheetmin 0 sheetmax 0 forkmin 0 forkmax 0
+	set Storm properties inner 1000 outer 8000
+	disable Storm affected by wind
+	
+	wait 0.3 seconds
+
+	
+	while LockMenu == 0
+		set MyCreature focus to  [4291.07, 10, 4140.77]
+		wait 3 second
+		MyCreature play C_INDIVIDUAL_FRIENDLY_WAVE
+		wait 5 second
+		MyCreature play C_INDIVIDUAL_FEELING_NICE
+		wait 5 second
+		MyCreature play C_INDIVIDUAL_PICK_ME
+		wait 5 second
+		force MyCreature CREATURE_LOOK_AT_CAMERA MyCreature
+		wait 3 second
+	end while
+	
+
+end script CustomBlackAndWhiteIntroMenu

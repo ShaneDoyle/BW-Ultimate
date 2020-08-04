@@ -1,4 +1,4 @@
-challenge LandControl2
+//challenge LandControl2
 
 //------------------------------------------------------------------------------------------------------------------------
 global DoneFinalGold=0
@@ -449,5 +449,11 @@ start
 			end if
 		end if
 	end while
+	
+	//Go to Land 3!
+	stop all scripts excluding files "LandControl2.txt"
+	load map "scripts/land3.txt"
+	run script LandControl3
+	stop all scripts excluding files "LandControl3.txt"
 
 end script LandControl2

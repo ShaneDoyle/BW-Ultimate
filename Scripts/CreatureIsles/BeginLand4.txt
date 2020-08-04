@@ -1,4 +1,4 @@
-challenge LAND_4_METEORITES
+//challenge CHALLENGE_LAND_4_METEORITES
 
 //------------------------------------------------------------------------------------------------------------ 
 
@@ -124,7 +124,12 @@ start
 			wait 14 seconds
 			wait until camera ready
 
-			move camera to T01_000 time 7
+			//move camera to T01_000 time 7 //(TOFIXPATH)
+			//Using guessed location!
+			move camera position to [2134.17, 100, 2513.58] time 7 //(Custom)
+			move camera focus to [2245.58,2662.99] time 7	//(Custom)
+			
+			
 			wait 5 seconds
 			eject evil spirit
 			eject good spirit
@@ -144,12 +149,18 @@ start
 				wait until read
 //				"You killed Lethys! Thats cool!"
 //				EA:	You killed Lethys! Thats cool!
-/*				say HELP_TEXT_NEW_L4_INTRO_04
+				say HELP_TEXT_NEW_L4_INTRO_04 //(Custom) Let's use this unused line.
 				wait until read
-*/			end if 
+			end if 
 
 			wait until camera ready
-			camera path TRACK01
+			
+			//camera path TRACK01 //(TOFIXPATH)
+			//(Custom) Let's guess the paths...
+			//Zoom out of village and focus on around Vortex position.
+			move camera position to [1903.18, 100, 2779.64] time 10 //(Custom)
+			move camera focus to [VortexPos] time 10	//(Custom)
+			
 			wait 3 seconds
 
 //			 "But!  What has happened to this land."
@@ -169,6 +180,11 @@ start
 			wait until read
 //			"What are you talking about.  We've never been here before you idiot."
 //			EA:	What? We've never been here before!
+
+			//(Custom) Pathing. Move to near gate and focus on it.
+			move camera position to [2187.63, 70, 2811.90] time 7 //(Custom)
+			move camera focus to [Gates] + [0, 20, 0] time 7	//(Custom)
+			
 			say HELP_TEXT_NEW_L4_INTRO_08
 			wait until read
 			wait 4 seconds
@@ -178,6 +194,11 @@ start
 			make good spirit point at [Gates]
 			wait until read
 			wait 2 seconds
+			
+			//(Custom) Move near village and focus on the centre. Also shows temple.
+			move camera position to [2108.71, 70, 2701.08] time 7 //(Custom)
+			move camera focus to [2245.58, 40, 2662.99] time 7	//(Custom)
+			
 			stop good spirit pointing
 			wait 3 seconds
 //			"...and look some of our buildings are still here."

@@ -1,4 +1,4 @@
-challenge CREATURE_BREEDER
+//challenge CREATURE_BREEDER
 
 
 
@@ -96,7 +96,7 @@ start
 
 		wait 10 seconds
 
-		Highlight = create highlight HIGHLIGHT_CHALLENGE at [Kennels]
+		Highlight = create highlight CHALLENGE_CREATURE_BREEDER HIGHLIGHT_CHALLENGE at [Kennels]
 		ALTITUDE of Highlight = 5
 		run script ChallengeHighlightNotify(Highlight, Kennels, variable EVIL_ADVISOR, variable HELP_TEXT_GENERAL_CHALLENGE_START_01)
 		delete Highlight

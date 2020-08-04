@@ -1,4 +1,4 @@
-challenge SACRIFICE
+//challenge CHALLENGE_SACRIFICE
 
 //------------------------------------------------------------------------------------------------------------------------
 global SacrificeFinished
@@ -109,7 +109,7 @@ start
 
 		wait until camera ready
 
-		snapshot challenge success 0.0 alignment 0.0 HELP_TEXT_TITLE_23 StandardReminder(variable HELP_TEXT_SACRIFICE_09)
+		snapshot CHALLENGE_SACRIFICE challenge success 0.0 alignment 0.0 HELP_TEXT_TITLE_23 StandardReminder(variable HELP_TEXT_SACRIFICE_09)
 		
 		set Priest focus to [Boy]
 		set Priestess focus to [Boy]
@@ -179,7 +179,7 @@ begin script Sacrifice(Town, Altar)
 start
 
 	WorshipSite = get WORSHIP at [Altar] radius 30
-	Highlight = create highlight HIGHLIGHT_CHALLENGE at [House]
+	Highlight = create highlight CHALLENGE_SACRIFICE HIGHLIGHT_CHALLENGE at [House]
 
 	run script ChallengeHighlightNotify(Highlight, House, variable EVIL_ADVISOR, variable HELP_TEXT_SACRIFICE_13)
 
@@ -281,7 +281,7 @@ start
 					wait until read
 					close dialogue
 					wait 0.1 seconds
-					snapshot challenge success 1 alignment 1 HELP_TEXT_TITLE_23 StandardReminder(variable HELP_TEXT_SACRIFICE_09)
+					snapshot CHALLENGE_SACRIFICE challenge success 1 alignment 1 HELP_TEXT_TITLE_23 StandardReminder(variable HELP_TEXT_SACRIFICE_09)
 					set camera position to [BeginPos]
 					set camera focus to [BeginFoc]
 				end cinema
@@ -300,7 +300,7 @@ start
 					wait until read
 					close dialogue
 					wait 0.1 seconds
-					snapshot challenge success 1 alignment 0.5 HELP_TEXT_TITLE_23 StandardReminder(variable HELP_TEXT_SACRIFICE_09)
+					snapshot CHALLENGE_SACRIFICE challenge success 1 alignment 0.5 HELP_TEXT_TITLE_23 StandardReminder(variable HELP_TEXT_SACRIFICE_09)
 					set camera position to [BeginPos]
 					set camera focus to [BeginFoc]
 				end cinema
@@ -328,7 +328,7 @@ start
 					wait until read
 					close dialogue
 					wait 0.1 seconds
-					snapshot challenge success 1 alignment 0 HELP_TEXT_TITLE_23 StandardReminder(variable HELP_TEXT_SACRIFICE_09)
+					snapshot CHALLENGE_SACRIFICE challenge success 1 alignment 0 HELP_TEXT_TITLE_23 StandardReminder(variable HELP_TEXT_SACRIFICE_09)
 					set camera position to [BeginPos]
 					set camera focus to [BeginFoc]
 				end cinema		
@@ -345,7 +345,7 @@ start
 					wait until read
 					close dialogue
 					wait 0.1 seconds
-					snapshot challenge success 1 alignment -0.2 HELP_TEXT_TITLE_23 StandardReminder(variable HELP_TEXT_SACRIFICE_09)
+					snapshot CHALLENGE_SACRIFICE challenge success 1 alignment -0.2 HELP_TEXT_TITLE_23 StandardReminder(variable HELP_TEXT_SACRIFICE_09)
 					set camera position to [BeginPos]
 					set camera focus to [BeginFoc]
 				end cinema
@@ -369,7 +369,7 @@ start
 					wait until read
 					close dialogue
 					wait 0.1 seconds
-					snapshot challenge success 1 alignment -1 HELP_TEXT_TITLE_23 StandardReminder(variable HELP_TEXT_SACRIFICE_09)
+					snapshot CHALLENGE_SACRIFICE challenge success 1 alignment -1 HELP_TEXT_TITLE_23 StandardReminder(variable HELP_TEXT_SACRIFICE_09)
 					set camera position to [BeginPos]
 					set camera focus to [BeginFoc]
 				end cinema
@@ -388,7 +388,7 @@ start
 					wait until read
 					close dialogue
 					wait 0.1 seconds
-					snapshot challenge success 1 alignment -1 HELP_TEXT_TITLE_23 StandardReminder(variable HELP_TEXT_SACRIFICE_09)
+					snapshot CHALLENGE_SACRIFICE challenge success 1 alignment -1 HELP_TEXT_TITLE_23 StandardReminder(variable HELP_TEXT_SACRIFICE_09)
 					set camera position to [BeginPos]
 					set camera focus to [BeginFoc]
 				end cinema
@@ -408,14 +408,14 @@ start
 						wait until read
 						close dialogue
 						wait 0.1 seconds
-						snapshot challenge success 0 alignment 0.5 HELP_TEXT_TITLE_23 StandardReminder(variable HELP_TEXT_SACRIFICE_09)
+						snapshot CHALLENGE_SACRIFICE challenge success 0 alignment 0.5 HELP_TEXT_TITLE_23 StandardReminder(variable HELP_TEXT_SACRIFICE_09)
 						BoyReleased = 1
 						release Boy
 					end cinema
 				end if
 			end if
  
-			update snapshot success ((NewSacrificeValue-StartSacrificeValue) / 4000) alignment 0 HELP_TEXT_TITLE_23 StandardReminder(variable HELP_TEXT_SACRIFICE_09)
+			update snapshot CHALLENGE_SACRIFICE success ((NewSacrificeValue-StartSacrificeValue) / 4000) alignment 0 HELP_TEXT_TITLE_23 StandardReminder(variable HELP_TEXT_SACRIFICE_09)
 
 			if NewSacrificeValue-StartSacrificeValue >= 4000
 				begin cinema
@@ -447,7 +447,7 @@ start
 					wait until read
 					close dialogue
 					wait 0.1 seconds
-					snapshot challenge success 1 alignment 1 HELP_TEXT_TITLE_23 StandardReminder(variable HELP_TEXT_SACRIFICE_09)
+					snapshot CHALLENGE_SACRIFICE challenge success 1 alignment 1 HELP_TEXT_TITLE_23 StandardReminder(variable HELP_TEXT_SACRIFICE_09)
 				end cinema
 
 				SacrificeFinished = 1

@@ -517,75 +517,7 @@ begin script TeachRotate(centre_pointer, view_pos)
 	NoNoTick = 0
 	HandState = 0
 start
-	set RotateTimer time to 30 seconds
-	enable angle sound
 
-	RequiredRotateAngle = get HELP_EVENT_TYPE_ROTATE total event
-	RequiredRotateAngle += 60
-
-	set DemoTimer time to 60 seconds
-	begin loop 
-		HandState = variable get hand state
-		if camera position not near [centre_pointer] radius 100 or camera focus not near [centre_pointer] radius 25
-			NoNoTick++
-			if NoNoTick == 3
-				begin cinema
-					move camera position to [view_pos] time 3
-					move camera focus to [centre_pointer] time 3
-					// "No no. Try rotating first."
-					say single line HELP_TEXT_FINAL_BEGINNING_46
-					wait until read
-					wait until camera ready
-					// Rotating hand demo
-					run script Rotating
-					NoNoTick = 0
-					set DemoTimer time to 60 seconds
-				end cinema
-			else
-				begin camera
-					move camera position to [view_pos] time 3
-					move camera focus to [centre_pointer] time 3
-					// "No no. Try rotating first."
-					say single line HELP_TEXT_FINAL_BEGINNING_46
-					wait until read
-					wait until camera ready
-				end camera
-			end if
-		elsif get DemoTimer time remaining <= 0 and HandState != variable HAND_STATE_ROTATE_LANDSCAPE
-			begin camera
-				move camera position to [view_pos] time 3
-				move camera focus to [centre_pointer] time 3
-				wait until camera ready
-				// Rotating hand demo
-				run script Rotating
-				NoNoTick = 0
-				set DemoTimer time to 60 seconds
-			end camera
-		end if
-
-		wait 1 second
-		RotateAngle = get HELP_EVENT_TYPE_ROTATE total event
-
-		if RotateAngle > RequiredRotateAngle
-			// "That's it you've done it."
-			RotateComplete = 1
-		end if
-
-
-		if get HELP_EVENT_TYPE_ROTATE total event < 5 and get RotateTimer time remaining == 0
-			begin dialogue
-				eject good spirit
-				say HELP_TEXT_FINAL_BEGINNING_44 with interaction
-				wait until read
-				eject evil spirit
-				say HELP_TEXT_FINAL_BEGINNING_45 with interaction
-				wait until read
-			end dialogue
-			set RotateTimer time to 30 seconds
-		end if
-		until RotateComplete == 1
-	end loop
-	disable angle sound
 
 	wait 2 seconds
 
@@ -595,75 +527,8 @@ end script TeachRotate
 //--TeachPitch----------------------------------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------------------------------------
 begin script TeachPitch(CentrePos, CentreFixedPos)
-	PitchComplete=0
-	RequiredPitchAngle=0
-	PitchTimer = create timer for 0 seconds
+	
 start
-
-	begin cinema
-		eject good spirit
-		make good spirit cling across 0.4 down 1.0
-		wait 1 second
-		
-//		sy "Very good! Now Ill show you how to look up and down." with interaction 
-		say HELP_TEXT_FINAL_BEGINNING_28 with interaction
-		wait until read
-
-		// Pitching hand demo
-		run script Pitching
-
-		wait until read
-
-	end cinema
-
-	enable pitch sound
-
-	set PitchTimer time to 30 seconds
-	RequiredPitchAngle = get HELP_EVENT_TYPE_PITCH total event
-	RequiredPitchAngle += 25
-
-	begin loop
-
-		if camera position not near [CentrePos] radius 100
-			begin camera
-				move camera position to [CentreFixedPos] time 3
-				move camera focus to [CentrePos] time 3
-				// "No no. Try pitching the camera first."
-				say single line HELP_TEXT_FINAL_BEGINNING_47
-				wait until read
-				wait until camera ready
-			end camera
-		end if
-
-		if get HELP_EVENT_TYPE_PITCH total event > RequiredPitchAngle
-			// "That's it you've done it."
-			begin dialogue
-				eject good spirit
-				// "That's it. You've got it sussed."
-				say HELP_TEXT_FINAL_BEGINNING_49
-				wait until read
-			end dialogue
-			PitchComplete = 1
-		end if	
-
-		if get HELP_EVENT_TYPE_PITCH total event < 5 and get PitchTimer time remaining == 0
-			begin dialogue
-				eject good spirit
-				say HELP_TEXT_FINAL_BEGINNING_50 with interaction
-				wait until read
-				eject evil spirit
-				// "PITCH TEXT 2 BLAH BLAH BLAH" with interaction
-				say HELP_TEXT_FINAL_BEGINNING_51 with interaction
-				wait until read
-			end dialogue
-			set PitchTimer time to 30 seconds
-		end if
-
-	until PitchComplete == 1
-	end loop
-	disable pitch sound
-
-	wait 4 seconds
 
 end script TeachPitch
 
@@ -672,76 +537,7 @@ end script TeachPitch
 //------------------------------------------------------------------------------------------------------------------------
 begin script TeachZoom(centre_pointer, view_pos)
 
-	ZoomComplete  = 0
-	RequiredZoom  = 0
-	ZoomCompleted = 0
-	ZoomAmount    = 0
-	NoNoTick = 0
-	DemoTimer = create timer for 0 seconds
-	ZoomStartPos = marker at [1873.682, 41.631, 2535.854]
-	ZoomStartFoc = marker at [1925.094, 29.676, 2505.409]
-	HandState = 0
-	CameraHeight = 0
-
-	start
-		RequiredZoom = get HELP_EVENT_TYPE_ZOOM total event
-		RequiredZoom += 15
-		
-		set DemoTimer time to 60 seconds
-		begin loop
-			HandState = variable get hand state
-			CameraHeight = marker at camera position
-			if  camera focus not near [centre_pointer] radius 50 and HandState != variable HAND_STATE_ZOOM_LANDSCAPE and ALTITUDE of CameraHeight < 100
-				NoNoTick++
-				if NoNoTick == 3
-					begin cinema
-						move camera position to [view_pos] time 3
-						move camera focus to [centre_pointer] time 3
-						// No no. Try zooming
-						say single line HELP_TEXT_FINAL_BEGINNING_67
-						wait until read
-						wait until camera ready
-						run script Zoom(ZoomStartPos, ZoomStartFoc)
-					end cinema
-					NoNoTick = 0
-					set DemoTimer time to 60 seconds
-				else
-					begin camera
-						move camera position to [view_pos] time 3
-						move camera focus to [centre_pointer] time 3
-						// No no. Try zooming
-						say single line HELP_TEXT_FINAL_BEGINNING_67
-						wait until read
-						wait until camera ready
-					end camera
-				end if
-			elsif get DemoTimer time remaining <= 0 and HandState != variable HAND_STATE_ZOOM_LANDSCAPE
-				begin camera
-					move camera position to [view_pos] time 3
-					move camera focus to [centre_pointer] time 3
-					// No no. Try zooming
-					say single line HELP_TEXT_FINAL_BEGINNING_67
-					wait until read
-					wait until camera ready
-					run script Zoom(ZoomStartPos, ZoomStartFoc)
-				end camera
-				NoNoTick = 0
-				set DemoTimer time to 60 seconds
-			end if
-	
-			ZoomAmount = get HELP_EVENT_TYPE_ZOOM total event
-
-			if ZoomAmount > RequiredZoom or ALTITUDE of CameraHeight > 100
-				begin dialogue
-					// That's it you've done it
-					say single line HELP_TEXT_FINAL_BEGINNING_68
-					wait until read
-				end dialogue
-				ZoomCompleted = 1
-			end if
-
-		until ZoomCompleted == 1
-		end loop
+start
 
 end script TeachZoom
 
@@ -749,42 +545,9 @@ end script TeachZoom
 // Hand Demo for miracle script
 //------------------------------------------------------------------------------------------------------------------------
 begin script MiracleHandDemo(WorshipSite)
-	Required=0
-	LoopTime=5*10
-	Step=0
-	Amount=0
-	TempObject=0
+
 start 
-	Required=get mana for spell SPELL_FOOD
-	set WorshipSite mana 0
 
-	begin known cinema	
-		start hand demo "miracle"
-
-		say HELP_TEXT_NEW_LAND_2_LEARN_MIRACLES_12  // To activate one, grab the Miracle with the action button and it will be charged by your worshippers.
-		while not read
-			set WorshipSite mana 0
-		end while
-		
-		say HELP_TEXT_NEW_LAND_2_LEARN_MIRACLES_13  // You'll see the energy rings flowing into your hand.
-
-		Step=(3*Required)/4
-		Step/=LoopTime
-		while LoopTime > 0
-			Amount+=Step
-			set WorshipSite mana Amount
-			LoopTime--
-		end while
-		wait until read
-
-		say HELP_TEXT_NEW_LAND_2_LEARN_MIRACLES_14	// When the miracle is charged it appears in your hand and you are ready to cast the miracle.
-		wait until read
-		TempObject=get object held
-		if TempObject not exists
-			set WorshipSite mana Amount
-		end if
-		wait until hand demo played
-	end known cinema
 
 end script MiracleHandDemo
 

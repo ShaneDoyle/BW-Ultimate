@@ -1,4 +1,4 @@
-challenge FREE_THE_CREATURE
+//challenge CHALLENGE_FREE_THE_CREATURE
 
 //run script GetThroughVortexL2
 
@@ -149,7 +149,7 @@ start
 
 		close dialogue
 		wait 0.1 seconds
-		snapshot quest success 0 alignment 0 HELP_TEXT_L3_INTRO_10 StandardReminder(variable HELP_TEXT_L3_INTRO_07)		
+		snapshot CHALLENGE_FREE_THE_CREATURE quest success 0 alignment 0 HELP_TEXT_L3_INTRO_10 StandardReminder(variable HELP_TEXT_L3_INTRO_07)		
 
 		move camera position to [2465.5010, 116.4220, 2280.4937] time 7 
 		move camera focus to [2144.6587, 22.3414, 2192.6042] time 4

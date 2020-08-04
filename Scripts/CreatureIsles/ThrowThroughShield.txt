@@ -1,4 +1,4 @@
-challenge THROW_THROUGH_SHIELD
+//challenge CHALLENGE_THROW_THROUGH_SHIELD
 
 global NumberOfActiveStones
 global ShieldFinished

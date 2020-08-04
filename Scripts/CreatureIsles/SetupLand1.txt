@@ -70,6 +70,8 @@ start
     disable player 1 virtual influence
 
 	LeaveLandNow = 0
+	//(Custom) This is now done in the custom menu?
+	/*
 	if can skip tutorial
 		IsSkippingToCreatureSelect = 1
 	else
@@ -81,6 +83,8 @@ start
 	else
 		IsSkippingCreatureGuide = 0
 	end if
+	
+	IsSkippingToCreatureSelect = 0
 
 	if is keeping old creature and current profile has creature
 		IsKeepingOldCreature = 1
@@ -90,6 +94,7 @@ start
 	else
 		IsKeepingOldCreature = 0
 	end if
+	*/
 
 	PiperCave = get FEATURE at [1970.8000, 64.4613, 2812.1201]
 	LostBrotherHousePos = marker at [1713.8300, 18.0900, 2592.5901]

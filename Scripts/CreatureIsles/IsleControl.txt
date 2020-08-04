@@ -1,0 +1,46 @@
+//------------------------------------------------------------------------------------------------------------------------
+// Sample Isle Control script.  Put your main script controllers here.
+//------------------------------------------------------------------------------------------------------------------------
+begin script IsleControl
+start
+
+	//Multiplayer scripts to always run.
+	//set fade in time 5
+	//run background script MultiplayerAutoRun
+	
+	//set fade in time 5
+	
+	// Intro.
+	//load map "scripts/landintro.txt"
+	load map "CreatureIsle/scripts/CreatureIsles/Isle01.txt"
+	run background script CustomLoadPlayerColour
+	run script CustomBlackAndWhiteIntroMenu
+	
+	
+	
+	// Land 1.
+	//load map "scripts/land1.txt"
+	run script LandControl1
+	stop all scripts excluding files "IsleControl.txt"
+
+
+	// Land 2.
+	//load map "scripts/land2.txt"
+	//run script LandControl2
+	//stop all scripts excluding files "IsleControl.txt"
+	
+	//load map "scripts/land3.txt"
+	//set fade in time 3
+	//run script LandControl3
+	//stop all scripts excluding files "IsleControl.txt"
+	
+	//load map "scripts/land4.txt"
+	//run script LandControl4
+	//stop all scripts excluding files "IsleControl.txt"
+	
+	//load map "scripts/land5.txt"
+	//run script LandControl5
+	//stop all scripts excluding files "IsleControl.txt"
+	
+end script IsleControl
+

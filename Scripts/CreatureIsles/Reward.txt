@@ -1,5 +1,3 @@
-challenge DID_YOU_KNOW
-
 global	RewardCount
 global	DispenserRewardCount
 
@@ -221,7 +219,7 @@ start
 			
 				run background script DidYouKnow(DidYouKnowPos, variable HELP_TEXT_DYK_11, variable DYK_MIRACLES)			// miracles everywhere
 
-				signpost = create highlight HIGHLIGHT_TIPS at [spell_dispenser]+[0,0,5]
+				signpost = create HIGHLIGHT_TIPS at [spell_dispenser]+[0,0,5]
 				set signpost text property text HELP_TEXT_DYK_90 category DYK_MIRACLES
 				ALTITUDE of signpost = 0
 

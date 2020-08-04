@@ -1,0 +1,5 @@
+//
+//This file contains all the scripts to compile in the Creature Isles Land
+//
+HelloWorld.txt
+//IsleControl.txt

@@ -1,4 +1,4 @@
-challenge LAND_4_METEORITES
+//challenge CHALLENGE_LAND_4_METEORITES
 
 global TotemPuzzle
 global StartLand4Nomad
@@ -205,9 +205,9 @@ Dust = 0
 OldGameTime			= 0
 
 start
-	challenge LAND_4_UNDEAD_VILLAGE
+	//challenge CHALLENGE_LAND_4_UNDEAD_VILLAGE
 	// Create the highlight
-	UndeadHighlight = create highlight HIGHLIGHT_QUEST at [UndeadHighlightPos]
+	UndeadHighlight = create highlight CHALLENGE_LAND_4_UNDEAD_VILLAGE HIGHLIGHT_QUEST at [UndeadHighlightPos]
 	run script ChallengeHighlightNotify(UndeadHighlight, UndeadHighlightPos , variable GOOD_ADVISOR, variable HELP_TEXT_GENERAL_CHALLENGE_START_06)
 
 	// Raise the totems for story telling
@@ -353,8 +353,8 @@ start
 		set camera focus to [3003.869, 13.387, 3483.293]
 		
 		// Undead Village started
-		snapshot quest success 0 alignment 0 HELP_TEXT_TITLE_108 StandardReminder(variable HELP_TEXT_REMINDER_101)
-		challenge LAND_4_METEORITES
+		snapshot CHALLENGE_LAND_4_UNDEAD_VILLAGE quest success 0 alignment 0 HELP_TEXT_TITLE_108 StandardReminder(variable HELP_TEXT_REMINDER_101)
+		//challenge CHALLENGE_LAND_4_METEORITES //(TOFIX) Maybe?
 
 		run background script LookAfterTotems
 		wait 4 seconds
@@ -512,7 +512,7 @@ start
 	MyCreature = get player 1 creature
 	set MyCreature position to [CreatureGetCreedPos]
 	set MyCreature focus to [2722.594, 143.337, 2650.061]
-	set MyCreature creed properties hand HAND_GLOW_ABOVE scale 5.0 power 0.1 time 0.0
+	set MyCreature creed properties hand CREATURE_CREED_HEAD scale 5.0 power 0.1 time 0.0
 	CreatureHeight = SCRIPT_OBJECT_PROPERTY_TYPE_HEIGHT of MyCreature
 
 	begin cinema
@@ -524,7 +524,7 @@ start
 		wait until fade ready
 		move camera position to [2714.375, 224.345, 2636.730] time 20
 		wait 4 seconds
-		set MyCreature creed properties hand HAND_GLOW_ABOVE scale 5.0 power 1.0 time 0.0
+		set MyCreature creed properties hand CREATURE_CREED_HEAD scale 5.0 power 1.0 time 0.0
 		wait until camera ready
 
 		eject good spirit
@@ -649,7 +649,7 @@ start
 	Man play ANM_P_PRAY loop -1
 
 	if IllegalExplore == 0
-		Highlight = create highlight HIGHLIGHT_QUEST at [HighlightPos]
+		Highlight = create highlight CHALLENGE_LAND_4_METEORITES HIGHLIGHT_QUEST at [HighlightPos] //(TOFIX) THIS HIGHLIGHT IS PROBABLY WRONG!
 		ALTITUDE of Highlight = 0
 		run background script ChallengeHighlightNotify(Highlight, HighlightPos , variable GOOD_ADVISOR, variable HELP_TEXT_GENERAL_CHALLENGE_START_06)
 		while WaitForScroll == 0
@@ -904,10 +904,10 @@ start
 		set fade in time 1
 		wait until fade ready
 
-		challenge LAND_4_OGRE
+		//challenge CHALLENGE_LAND_4_OGRE
 		// Ogre started
-		snapshot quest success 0 alignment 0 HELP_TEXT_TITLE_110 StandardReminder(variable HELP_TEXT_REMINDER_103)
-		challenge LAND_4_METEORITES
+		snapshot CHALLENGE_LAND_4_OGRE quest success 0 alignment 0 HELP_TEXT_TITLE_110 StandardReminder(variable HELP_TEXT_REMINDER_103)
+		//challenge LAND_4_METEORITES (TOFIX) What does this do?
 
 		wait 0.1 seconds						// Make sure no text is in the snapshot
 
@@ -1345,8 +1345,8 @@ start
 
 	wait until StartLand4Nomad == 1
 
-	challenge LAND_4_NOMAD
-	Highlight = create highlight HIGHLIGHT_QUEST at [HighlightPos]
+	//challenge CHALLENGE_LAND_4_NOMAD
+	Highlight = create highlight CHALLENGE_LAND_4_NOMAD HIGHLIGHT_QUEST at [HighlightPos]
 	run script ChallengeHighlightNotify(Highlight, HighlightPos , variable GOOD_ADVISOR, variable HELP_TEXT_GENERAL_CHALLENGE_START_06)
 
 	Woman = create VILLAGER AZTEC_HOUSEWIFE at [WomanShack]
@@ -1382,7 +1382,7 @@ start
 		wait until fade ready
 
 		// Nomad started
-		snapshot quest success 0 alignment 0 HELP_TEXT_TITLE_107 StandardReminder(variable HELP_TEXT_REMINDER_100)
+		snapshot CHALLENGE_LAND_4_NOMAD quest success 0 alignment 0 HELP_TEXT_TITLE_107 StandardReminder(variable HELP_TEXT_REMINDER_100)
 		wait 0.1 seconds						// Make sure no text is in the snapshot
 
 //		"My friend and neighbour Knobbo is in great despair!"
@@ -1461,7 +1461,7 @@ start
 				wait until fade ready
 
 				// Nomad finished - Killed girlfriend
-				snapshot quest success 1 alignment -0.8 HELP_TEXT_TITLE_107 StandardReminder(variable HELP_TEXT_REMINDER_100)
+				snapshot CHALLENGE_LAND_4_NOMAD quest success 1 alignment -0.8 HELP_TEXT_TITLE_107 StandardReminder(variable HELP_TEXT_REMINDER_100)
 				wait 1 seconds
 				
 //				"You have killed my one true love."
@@ -1506,7 +1506,7 @@ start
 				wait until fade ready
 
 				// Nomad finished - Killed Nomad
-				snapshot quest success 1 alignment 0 HELP_TEXT_TITLE_107 StandardReminder(variable HELP_TEXT_REMINDER_100)
+				snapshot CHALLENGE_LAND_4_NOMAD quest success 1 alignment 0 HELP_TEXT_TITLE_107 StandardReminder(variable HELP_TEXT_REMINDER_100)
 				wait 1 seconds
 
 //				"Noooooo!!! My neighbour is dead!"
@@ -1568,8 +1568,8 @@ start
 				Girlfriend play ANM_P_DANCE_PISS_TAKE_ loop 1
 
 				// Nomad finished - reunited both
-				snapshot quest success 1 alignment 0.8 HELP_TEXT_TITLE_107 StandardReminder(variable HELP_TEXT_REMINDER_100)
-				challenge LAND_4_METEORITES
+				snapshot CHALLENGE_LAND_4_NOMAD quest success 1 alignment 0.8 HELP_TEXT_TITLE_107 StandardReminder(variable HELP_TEXT_REMINDER_100)
+				//challenge LAND_4_METEORITES (TOFIX) What is this doing too? 2nd occurance...
 
 				wait until Nomad played
 				wait until Girlfriend played
@@ -1718,12 +1718,12 @@ start
 	delete Smoke
 
 	if OgreDefeated == 0
-		challenge LAND_4_OGRE
+		//challenge CHALLENGE_LAND_4_OGRE
 		// Create Ogre Script Reminder Scroll
-		OgreHighlight = create highlight HIGHLIGHT_QUEST at [OgreHighlightPos]
+		OgreHighlight = create highlight CHALLENGE_LAND_4_OGRE HIGHLIGHT_QUEST at [OgreHighlightPos]
 		enable OgreHighlight active 
 		ALTITUDE of OgreHighlight = 10
-		challenge LAND_4_METEORITES
+		//challenge LAND_4_METEORITES (TOFIX) 3rd time here, update snapshot maybe?...
 	end if
 
 end script Land4Nomad
@@ -1863,8 +1863,8 @@ start
 	end while
 
 	while Finished == 0 
-		challenge LAND_4_TOTEM_PUZZLE
-		Highlight = create highlight HIGHLIGHT_QUEST at [HighlightPos]
+		//challenge CHALLENGE_LAND_4_TOTEM_PUZZLE
+		Highlight = create highlight CHALLENGE_LAND_4_TOTEM_PUZZLE HIGHLIGHT_QUEST at [HighlightPos]
 		run script ChallengeHighlightNotify(Highlight, HighlightPos , variable GOOD_ADVISOR, variable HELP_TEXT_GENERAL_CHALLENGE_START_06)
 		delete Highlight
 
@@ -1924,7 +1924,7 @@ start
 				wait 0.1 seconds
 
 				// Simon Says start
-				snapshot quest success 0 alignment 0 HELP_TEXT_TITLE_109 StandardReminder(variable HELP_TEXT_NEW_L4_METEORITES_50)
+				snapshot CHALLENGE_LAND_4_TOTEM_PUZZLE quest success 0 alignment 0 HELP_TEXT_TITLE_109 StandardReminder(variable HELP_TEXT_NEW_L4_METEORITES_50)
 				disable TownElder high graphics detail
 				delete TownElder
 				stop music
@@ -2172,10 +2172,10 @@ start
 	//TotemPuzzle = create with angle 0 and scale 1 SCRIPT_OBJECT_TYPE_PUZZLE_GAME SCRIPT_PUZZLE_GAME_TYPE_TOTEM_3 at [MeteorPos]
 	//wait until TotemPuzzle played
 
-	challenge LAND_4_TOTEM_PUZZLE
+	//challenge CHALLENGE_LAND_4_TOTEM_PUZZLE
 	// Totem Puzzle finished
-	update snapshot success 1 alignment 0 HELP_TEXT_TITLE_109 StandardReminder(variable HELP_TEXT_REMINDER_102)
-	challenge LAND_4_METEORITES
+	update snapshot CHALLENGE_LAND_4_TOTEM_PUZZLE success 1 alignment 0 HELP_TEXT_TITLE_109 StandardReminder(variable HELP_TEXT_REMINDER_102)
+	//challenge CHALLENGE_LAND_4_METEORITES
 
 	delete PuzzleShield1
 	delete PuzzleShield2
@@ -2343,17 +2343,17 @@ start
 
 		set fade red 0 green 0 blue 0 time 1
 		wait until fade ready
-		set camera to T07_000
+		set camera position to [2182.613770, 56.830982, 2835.607910] // T07_000
 		set fade in time 1
 		wait until fade ready
 		wait 2 seconds
-		camera path TRACK07
-		wait until camera ready
+		//camera path TRACK07 //(TOFIXPATH)
+		//wait until camera ready
 
-		challenge LAND_4_UNDEAD_VILLAGE
+		//challenge CHALLENGE_LAND_4_UNDEAD_VILLAGE
 		// Undead Village finished - Might need to be placed elsewhere
-		snapshot quest success 1 alignment 0 HELP_TEXT_TITLE_108 StandardReminder(variable HELP_TEXT_REMINDER_101)
-		challenge LAND_4_METEORITES
+		snapshot CHALLENGE_LAND_4_UNDEAD_VILLAGE quest success 1 alignment 0 HELP_TEXT_TITLE_108 StandardReminder(variable HELP_TEXT_REMINDER_101)
+		//challenge LAND_4_METEORITES //(TOFIX) 4th damn time this is here?
 		delete UndeadHighlight
 
 		// Make the undead town killable

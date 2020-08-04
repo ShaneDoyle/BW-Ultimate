@@ -1,4 +1,4 @@
-challenge PLAGUE
+//challenge CHALLENGE_PLAGUE
 
 //------------------------------------------------------------------------------------------------------------------------
 global PlagueIntroTriggered=0
@@ -89,7 +89,7 @@ start
 		end if
 	end if
 
-	Highlight = create highlight HIGHLIGHT_CHALLENGE at [VillagerHut]
+	Highlight = create highlight CHALLENGE_PLAGUE HIGHLIGHT_CHALLENGE at [VillagerHut]
 	ALTITUDE of Highlight = 6
 
 	run script ChallengeHighlightNotify(Highlight, VillagerHut, variable EVIL_ADVISOR, variable HELP_TEXT_GENERAL_CHALLENGE_START_01)
@@ -140,7 +140,7 @@ start
 
 		wait until camera ready
 
-		snapshot challenge success 0.0 alignment 0.0 HELP_TEXT_TITLE_21 StandardReminder(variable HELP_TEXT_NEW_REMINDER_37)
+		snapshot CHALLENGE_PLAGUE challenge success 0.0 alignment 0.0 HELP_TEXT_TITLE_21 StandardReminder(variable HELP_TEXT_NEW_REMINDER_37)
 
 		wait until Villager played
 		set Villager focus to camera position
@@ -195,7 +195,7 @@ start
 				wait until [Villager] near [VillagerPos] radius 1
 				wait 1 second
 				set Villager focus to camera position
-				snapshot challenge success 1.0 alignment -0.4 HELP_TEXT_TITLE_21 StandardReminder(variable HELP_TEXT_REMINDER_20)
+				snapshot CHALLENGE_PLAGUE challenge success 1.0 alignment -0.4 HELP_TEXT_TITLE_21 StandardReminder(variable HELP_TEXT_REMINDER_20)
 				say single line HELP_TEXT_PLAGUE_06	// Call yourself a greater power ? You did nothing and now we're almost wiped out ! The survivors won't forget this !
 				wait until read
 				wait 1 second
@@ -239,7 +239,7 @@ start
 					say single line HELP_TEXT_PLAGUE_07	// Godly begin, stop healing and find the source of the sickness !
 					wait until read
 				end dialogue
-				update snapshot success 0.0 alignment 0.4 HELP_TEXT_TITLE_21 StandardReminder(variable HELP_TEXT_NEW_REMINDER_39)
+				update snapshot CHALLENGE_PLAGUE success 0.0 alignment 0.4 HELP_TEXT_TITLE_21 StandardReminder(variable HELP_TEXT_NEW_REMINDER_39)
 				VillagerRepoisoned = 1
 			end if
 		end if
@@ -267,7 +267,7 @@ start
 					eject good spirit
 					say single line HELP_TEXT_PLAGUE_11	// The poison's source is the Village Stor. We can heal them now.
 					wait until read
-					update snapshot success 0.5 alignment 0.3 HELP_TEXT_TITLE_21 StandardReminder(variable HELP_TEXT_NEW_REMINDER_38)
+					update snapshot CHALLENGE_PLAGUE success 0.5 alignment 0.3 HELP_TEXT_TITLE_21 StandardReminder(variable HELP_TEXT_NEW_REMINDER_38)
 					VillagerHealedComment = 1
 					send good spirit home
 				end dialogue
@@ -278,7 +278,7 @@ start
 					eject good spirit
 					say single line HELP_TEXT_PLAGUE_11	// The poison's source is the Village Stor. We can heal them now.
 					wait until read
-					update snapshot success 0.5 alignment 0.3 HELP_TEXT_TITLE_21 StandardReminder(variable HELP_TEXT_NEW_REMINDER_38)
+					update snapshot CHALLENGE_PLAGUE success 0.5 alignment 0.3 HELP_TEXT_TITLE_21 StandardReminder(variable HELP_TEXT_NEW_REMINDER_38)
 					VillagerHealedComment = 1
 					send good spirit home
 				end dialogue
@@ -286,7 +286,7 @@ start
 
 		if TownHealed > 0 and StorageHealed == 1 and FirstPermHeal == 0
 			begin dialogue
-				update snapshot success 0.75 alignment 0.3 HELP_TEXT_TITLE_21 StandardReminder(variable HELP_TEXT_PLAGUE_12)
+				update snapshot CHALLENGE_PLAGUE success 0.75 alignment 0.3 HELP_TEXT_TITLE_21 StandardReminder(variable HELP_TEXT_PLAGUE_12)
 				eject good spirit
 				eject evil spirit
 				say HELP_TEXT_PLAGUE_10	// You're healing more now, Leader. Fantastic.
@@ -314,7 +314,7 @@ start
 				wait until camera ready
 				set Villager focus to camera position
 				Villager play ANM_P_PRAY loop 3
-				update snapshot success 1.0 alignment 0.4 HELP_TEXT_TITLE_21 StandardReminder(variable HELP_TEXT_REMINDER_20)
+				update snapshot CHALLENGE_PLAGUE success 1.0 alignment 0.4 HELP_TEXT_TITLE_21 StandardReminder(variable HELP_TEXT_REMINDER_20)
 				say single line HELP_TEXT_PLAGUE_08	// Praise be to you, godliness ! We're going to make it ! Although we've sufferec, our faith and your genius have endured !
 				wait until read
 				wait 2 seconds

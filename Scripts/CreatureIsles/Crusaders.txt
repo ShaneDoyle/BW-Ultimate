@@ -1,4 +1,4 @@
-challenge CRUSADERS
+//challenge CHALLENGE_CRUSADERS
 
 global StopActing
 global ChargeIn
@@ -399,7 +399,7 @@ start
 	run background script Crusader5Actions (Crusader1,Crusader2,Crusader3,Crusader4,Crusader5,CrusaderStartPos, MineEntrance, MineEntrance01) // waits for AllHealedUp == 2
 
 	// HIGHLIGHT NOTIFY
-	Highlight = create highlight HIGHLIGHT_CHALLENGE at [CrusaderStartPos] + [5,20,5]
+	Highlight = create highlight CHALLENGE_CRUSADERS HIGHLIGHT_CHALLENGE at [CrusaderStartPos] + [5,20,5]
 	ALTITUDE of Highlight = 20
 	run script ChallengeHighlightNotify(Highlight, CrusaderStartPos, variable EVIL_ADVISOR, variable HELP_TEXT_GENERAL_CHALLENGE_START_03)
 
@@ -432,7 +432,7 @@ start
 
  		wait until Crusader1 played
 
-		snapshot challenge success 0.0 alignment 0.0 HELP_TEXT_TITLE_113 StandardReminder (variable HELP_TEXT_REMINDER_119)
+		snapshot CHALLENGE_CRUSADERS challenge success 0.0 alignment 0.0 HELP_TEXT_TITLE_113 StandardReminder (variable HELP_TEXT_REMINDER_119)
 
 		set Crusader1 focus to camera position
 		Crusader1 play ANM_P_AMBIENT2  loop 1
@@ -529,7 +529,7 @@ start
 
 		close dialogue
 		wait 0.1 seconds
-		snapshot challenge success 0.33 alignment 0.0 HELP_TEXT_TITLE_113 StandardReminder (variable HELP_TEXT_REMINDER_120)
+		snapshot CHALLENGE_CRUSADERS challenge success 0.33 alignment 0.0 HELP_TEXT_TITLE_113 StandardReminder (variable HELP_TEXT_REMINDER_120)
 		
 		say HELP_TEXT_NEW_L5_CRUSADERS_05
 		wait until read
@@ -657,7 +657,7 @@ start
 		wait 1 second
 		move camera position to [1895.176, 26.352, 2339.461] time 25
 		
-	snapshot challenge success 0.66 alignment 0.0 HELP_TEXT_TITLE_113 StandardReminder (variable HELP_TEXT_REMINDER_121)
+	snapshot CHALLENGE_CRUSADERS challenge success 0.66 alignment 0.0 HELP_TEXT_TITLE_113 StandardReminder (variable HELP_TEXT_REMINDER_121)
 
 		
 
@@ -822,7 +822,7 @@ start
 		Crusader1 play ANM_P_SITTING_DOWN1_SITTING loop -1
 		Crusader2 play ANM_P_SITTING_DOWN1_SITTING loop -1
 
-		snapshot challenge success 1 alignment 0.0 HELP_TEXT_TITLE_113 StandardReminder (variable HELP_TEXT_REMINDER_121)		
+		snapshot CHALLENGE_CRUSADERS challenge success 1 alignment 0.0 HELP_TEXT_TITLE_113 StandardReminder (variable HELP_TEXT_REMINDER_121)		
 		delete Highlight
 
 

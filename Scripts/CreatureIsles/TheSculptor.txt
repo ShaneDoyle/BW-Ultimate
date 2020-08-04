@@ -1,5 +1,3 @@
-challenge CREATURE_RETRIEVE
-
 //------------------------------------------------------------------------------------------------------------------------
 global CreatureRetrieve
 global CreatureRetrieveFinished
@@ -153,9 +151,9 @@ start
 		set Sculptor focus to [QuarryRock]
 		Sculptor play ANM_P_CROWD_IMPRESSED_1 loop 1
 
-		snapshot quest success 0.8 alignment 1 HELP_TEXT_TITLE_04 StandardReminder(variable HELP_TEXT_REMINDER_37)
+		snapshot CHALLENGE_CREATURE_RETRIEVE quest success 0.8 alignment 1 HELP_TEXT_TITLE_04 StandardReminder(variable HELP_TEXT_REMINDER_37)
 		// Also update the ChooseYourCreature reminder at the Gate
-		//update snapshot success 0.5 alignment 0.0 HELP_TEXT_TITLE_43 StandardReminder(variable HELP_TEXT_REMINDER_37)
+		update snapshot CHALLENGE_CREATURE_RETRIEVE success 0.5 alignment 0.0 HELP_TEXT_TITLE_43 StandardReminder(variable HELP_TEXT_REMINDER_37)
 
 		say HELP_TEXT_NEW_CREATURE_RETRIEVE_05
 		wait until read
@@ -234,7 +232,7 @@ start
 	disable SculpturProgress pickup
 	disable SculpturProgress moveable
 
-	Highlight = create highlight HIGHLIGHT_QUEST at [1760.61,0,2692.3]
+	Highlight = create highlight CHALLENGE_CREATURE_RETRIEVE HIGHLIGHT_QUEST at [1760.61,0,2692.3]
 	ALTITUDE of Highlight = 5.5
 
 	run background script SculptorSculptingOutside(Sculptor)
@@ -285,9 +283,9 @@ start
 
 			Sculptor play ANM_P_GOSSIP_MAN loop 1
 
-			snapshot quest success 0.0 alignment 0.0 HELP_TEXT_TITLE_04 StandardReminder(variable HELP_TEXT_REMINDER_06)
+			snapshot CHALLENGE_CREATURE_RETRIEVE quest success 0.0 alignment 0.0 HELP_TEXT_TITLE_04 StandardReminder(variable HELP_TEXT_REMINDER_06)
 			// Also update the ChooseYourCreature reminder at the Gate
-			//update snapshot success 0.5 alignment 0.0 HELP_TEXT_TITLE_43 StandardReminder(variable HELP_TEXT_REMINDER_06)
+			update snapshot CHALLENGE_CREATURE_RETRIEVE success 0.5 alignment 0.0 HELP_TEXT_TITLE_43 StandardReminder(variable HELP_TEXT_REMINDER_06)
 		
 			say HELP_TEXT_NEW_CREATURE_RETRIEVE_02 with interaction
 			wait until read
@@ -378,7 +376,7 @@ start
 
 			if FirstHeld == 0
 				if QuarryRock is HELD // or QuarryRock in MyCreature hand
-					update snapshot success 0.3 alignment 0.0 HELP_TEXT_TITLE_04 StandardReminder(variable HELP_TEXT_REMINDER_111)
+					update snapshot CHALLENGE_CREATURE_RETRIEVE success 0.3 alignment 0.0 HELP_TEXT_TITLE_04 StandardReminder(variable HELP_TEXT_REMINDER_111)
 					FirstHeld = 1
 				end if
 			end if
@@ -537,7 +535,7 @@ start
 						say single line HELP_TEXT_NEW_CREATURE_RETRIEVE_07
 						wait until read
 					end dialogue
-					update snapshot success 0.3 alignment 0.0 HELP_TEXT_TITLE_04 StandardReminder(variable HELP_TEXT_REMINDER_111)
+					update snapshot CHALLENGE_CREATURE_RETRIEVE success 0.3 alignment 0.0 HELP_TEXT_TITLE_04 StandardReminder(variable HELP_TEXT_REMINDER_111)
 					Sculpting = 0
 					SculptorSculptingOn =0
 				end if
@@ -578,7 +576,7 @@ start
 					ZANGLE of QuarryRock = 0
 					ALTITUDE of QuarryRock = 0
 					wait until 3 seconds
-					update snapshot success 0.8 alignment 1 HELP_TEXT_TITLE_04 StandardReminder(variable HELP_TEXT_REMINDER_37)
+					update snapshot CHALLENGE_CREATURE_RETRIEVE success 0.8 alignment 1 HELP_TEXT_TITLE_04 StandardReminder(variable HELP_TEXT_REMINDER_37)
 					Sculpting = 1
 					SculptorSculptingOn = 1
 					// Start Sculpting
@@ -604,7 +602,7 @@ start
 						wait until camera ready
 						set Sculptor focus to camera position
 						Sculptor play ANM_P_GOSSIP_MAN loop 1
-						snapshot quest success 1.0 alignment 0.0 HELP_TEXT_TITLE_04 StandardReminder(variable HELP_TEXT_REMINDER_38)
+						snapshot CHALLENGE_CREATURE_RETRIEVE quest success 1.0 alignment 0.0 HELP_TEXT_TITLE_04 StandardReminder(variable HELP_TEXT_REMINDER_38)
 						say single line HELP_TEXT_NEW_CREATURE_RETRIEVE_09
 						wait until read
 						move camera position to [GateKey3] + [0, 15, -25] time 3
@@ -612,7 +610,7 @@ start
 						// SPL end
 
 						// Also update the ChooseYourCreature reminder at the Gate
-						//update snapshot success 0.5 alignment 0.0 HELP_TEXT_TITLE_43 StandardReminder(variable HELP_TEXT_REMINDER_38)
+						update snapshot CHALLENGE_CREATURE_RETRIEVE success 0.5 alignment 0.0 HELP_TEXT_TITLE_43 StandardReminder(variable HELP_TEXT_REMINDER_38)
 						move Sculptor position to [1748.3323, 29.4512, 2717.9075]
 						wait until read
 						CreatureRetrieveFinished = 1

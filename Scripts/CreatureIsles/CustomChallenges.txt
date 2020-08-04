@@ -1,0 +1,12 @@
+// Custom Challenges
+CustomLoadPlayerColour.txt
+LandControl5.txt
+LandControl4.txt
+LandControl3.txt
+LandControl2.txt
+LandControl1.txt
+CustomBlackAndWhiteIntroMenu.txt
+CustomMultiplayerPlayerColour.txt
+CustomMultiplayerAutoRun.txt
+IsleControl.txt
+

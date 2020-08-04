@@ -19,7 +19,7 @@ start
 		if camera position near [Highlight] radius NotifyDistance and Highlight viewed
 			//wait until cameramode
 			if time-Count>30
-				if widescreen ready
+				if in widescreen
 					begin dialogue
 						if AdvisorType == variable GOOD_ADVISOR
 							eject good spirit

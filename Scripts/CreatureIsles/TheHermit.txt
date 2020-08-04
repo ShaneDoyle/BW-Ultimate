@@ -1,4 +1,4 @@
-challenge HERMIT_HUT
+//challenge CHALLENGE_HERMIT_HUT
 
 // globals
 
@@ -105,7 +105,7 @@ start
 
 			//snapshot challenge of dead Hermit and alignment alteration
 			AlignmentTotal = AlignmentTotal - 0.6
-			snapshot challenge success 1.0 alignment AlignmentTotal HELP_TEXT_TITLE_33 StandardReminder(variable HELP_TEXT_REMINDER_31)
+			snapshot CHALLENGE_HERMIT_HUT challenge success 1.0 alignment AlignmentTotal HELP_TEXT_TITLE_33 StandardReminder(variable HELP_TEXT_REMINDER_31)
 			move camera position to [BeginPos] time 3
 			move camera focus to [BeginFoc] time 3
 			wait until camera ready	
@@ -182,7 +182,7 @@ start
 				wait 0.1 seconds
 
 				AlignmentTotal = AlignmentTotal - 0.4
-				snapshot challenge success 0.99 alignment AlignmentTotal HELP_TEXT_TITLE_33 StandardReminder(variable HELP_TEXT_REMINDER_99)
+				snapshot CHALLENGE_HERMIT_HUT challenge success 0.99 alignment AlignmentTotal HELP_TEXT_TITLE_33 StandardReminder(variable HELP_TEXT_REMINDER_99)
 
 				move camera position to [Hermit] + [6.0,4,6.0] time 3			// Cam pos back off from gutted hermit
 				set Hermit focus to [1350.3199, 52.1004, 2394.9399]
@@ -320,7 +320,7 @@ start
 	if HEALTH of Hermit > 0
 		HermitFinished = 3
 		delete Hermit with fade
-		update snapshot success 1.0 alignment AlignmentTotal HELP_TEXT_TITLE_33 StandardReminder(variable HELP_TEXT_REMINDER_99)
+		update snapshot CHALLENGE_HERMIT_HUT success 1.0 alignment AlignmentTotal HELP_TEXT_TITLE_33 StandardReminder(variable HELP_TEXT_REMINDER_99)
 	end if
 	
 	if HEALTH of Hermit <= 0 and HermitFinished == 0
@@ -430,7 +430,7 @@ start
 			wait 0.1 seconds
 
 			AlignmentTotal = AlignmentTotal + 0.4
-			snapshot challenge success 0.6 alignment AlignmentTotal HELP_TEXT_TITLE_33 StandardReminder(variable HELP_TEXT_REMINDER_98)
+			snapshot CHALLENGE_HERMIT_HUT challenge success 0.6 alignment AlignmentTotal HELP_TEXT_TITLE_33 StandardReminder(variable HELP_TEXT_REMINDER_98)
 			wait until Hermit played
 			state Hermit WANDER_AROUND position [SoapBox]
 				float 6
@@ -439,7 +439,7 @@ start
 		else
 			close dialogue
 			wait 2 seconds
-			snapshot challenge success 1.0 alignment AlignmentTotal HELP_TEXT_TITLE_33 StandardReminder(variable HELP_TEXT_REMINDER_98)
+			snapshot CHALLENGE_HERMIT_HUT challenge success 1.0 alignment AlignmentTotal HELP_TEXT_TITLE_33 StandardReminder(variable HELP_TEXT_REMINDER_98)
 		end if
 
 		run background script GiveSpellDispenserReward(RewardPos, variable MAGIC_TYPE_WATER, 90, 0, 0)
@@ -471,7 +471,7 @@ start
 	wait until HermitSeedFound == 1 or HEALTH of Hermit <= 0
 
 	// This is the dodgy screenshot at the end of the script if you have picked the rock up
-	update snapshot success 1.0 alignment AlignmentTotal HELP_TEXT_TITLE_33 StandardReminder(variable HELP_TEXT_REMINDER_31)
+	update snapshot CHALLENGE_HERMIT_HUT success 1.0 alignment AlignmentTotal HELP_TEXT_TITLE_33 StandardReminder(variable HELP_TEXT_REMINDER_31)
 
 	if HEALTH of Hermit > 0
 		move Hermit position to [HermitHut]
@@ -645,7 +645,7 @@ start
 	MyCreature = get player 1 creature
 	wait 5 seconds
 	
-	Highlight = create highlight HIGHLIGHT_CHALLENGE at [HermitHut]
+	Highlight = create highlight CHALLENGE_HERMIT_HUT HIGHLIGHT_CHALLENGE at [HermitHut]
 	Campfire = create OBJECT MOBILE_STATIC_INFO_BONFIRE at [CampFirePos]
 
 	run script ChallengeHighlightNotify(Highlight, HermitHut, variable EVIL_ADVISOR, variable HELP_TEXT_GENERAL_CHALLENGE_START_05)
@@ -724,7 +724,7 @@ start
 
 			wait 0.1 seconds
 
-			snapshot challenge success 0.0 alignment 0.0 HELP_TEXT_TITLE_33 StandardReminder(variable HELP_TEXT_REMINDER_31)
+			snapshot CHALLENGE_HERMIT_HUT challenge success 0.0 alignment 0.0 HELP_TEXT_TITLE_33 StandardReminder(variable HELP_TEXT_REMINDER_31)
 			state Hermit WANDER_AROUND position [SoapBox]
 				float 6
 				ulong 4, 20

@@ -1,4 +1,4 @@
-challenge LAND2_FIREBALL_CHALLENGE
+//challenge CHALLENGE_LAND2_FIREBALL_CHALLENGE
 
 //------------------------------------------------------------------------------------------------------------------------
 // Ready to learn lessons then are we?
@@ -71,7 +71,7 @@ begin script FireBallChallenge
 	SuccessValue = 0
 
 start
-	Highlight = create highlight HIGHLIGHT_QUEST at [Hut2Pos]
+	Highlight = create highlight CHALLENGE_LAND2_FIREBALL_CHALLENGE HIGHLIGHT_QUEST at [Hut2Pos]
 
 	// Challenge Notify
 	run script CheckForKhazarChallengeHighlightNotify(Highlight, Hut2Pos, variable EVIL_ADVISOR, variable HELP_TEXT_NEW_LAND_2_NOTIFIER_02)	
@@ -102,7 +102,7 @@ start
 			close dialogue
 			wait 0.1 seconds
 
-			snapshot quest success 0.0 alignment 0.0 HELP_TEXT_TITLE_101 StandardReminder(variable HELP_TEXT_REMINDER_41)
+			snapshot CHALLENGE_LAND2_FIREBALL_CHALLENGE quest success 0.0 alignment 0.0 HELP_TEXT_TITLE_101 StandardReminder(variable HELP_TEXT_REMINDER_41)
 
 			move computer player 2 to [3281.6060, 21.3248, 3126.7168] speed 100 with fixed height
 
@@ -303,7 +303,7 @@ start
 					move camera focus to [3431.779, 5.344, 2965.851] time 10
 
 					wait 0.1 seconds
-					snapshot quest success 1.0 alignment 0.0 HELP_TEXT_TITLE_101 StandardReminder(variable HELP_TEXT_REMINDER_41)
+					snapshot CHALLENGE_LAND2_FIREBALL_CHALLENGE quest success 1.0 alignment 0.0 HELP_TEXT_TITLE_101 StandardReminder(variable HELP_TEXT_REMINDER_41)
 
 					eject evil spirit
 					// "Great shooting, Boss. You damaged all three huts."
@@ -332,7 +332,7 @@ start
 					move camera focus to [3431.779, 5.344, 2965.851] time 10
 
 					wait 0.1 seconds
-					snapshot quest success 1.0 alignment 0.0 HELP_TEXT_TITLE_101 StandardReminder(variable HELP_TEXT_REMINDER_41)
+					snapshot CHALLENGE_LAND2_FIREBALL_CHALLENGE quest success 1.0 alignment 0.0 HELP_TEXT_TITLE_101 StandardReminder(variable HELP_TEXT_REMINDER_41)
 
 					eject evil spirit
 					// "Pretty good. Two of the three huts are damaged."
@@ -361,7 +361,7 @@ start
 					move camera focus to [3431.779, 5.344, 2965.851] time 10
 
 					wait 0.1 seconds
-					snapshot quest success 1.0 alignment 0.0 HELP_TEXT_TITLE_101 StandardReminder(variable HELP_TEXT_REMINDER_41)
+					snapshot CHALLENGE_LAND2_FIREBALL_CHALLENGE quest success 1.0 alignment 0.0 HELP_TEXT_TITLE_101 StandardReminder(variable HELP_TEXT_REMINDER_41)
 
 					eject evil spirit
 					// "Not bad. You managed to damage one of the huts."
@@ -391,7 +391,7 @@ start
 					move camera position to [3401.510, 11.292, 2982.083] time 8
 					move camera focus to [3431.779, 5.344, 2965.851] time 8
 
-					update snapshot success SuccessValue alignment 0.0 HELP_TEXT_TITLE_101 StandardReminder(variable HELP_TEXT_REMINDER_41)
+					update snapshot CHALLENGE_LAND2_FIREBALL_CHALLENGE success SuccessValue alignment 0.0 HELP_TEXT_TITLE_101 StandardReminder(variable HELP_TEXT_REMINDER_41)
 
 					eject evil spirit
 					
@@ -418,7 +418,7 @@ start
 		end loop
 
 		stop music
-		update snapshot success 1.0 alignment 0.0 HELP_TEXT_TITLE_101 StandardReminder(variable HELP_TEXT_REMINDER_41)
+		update snapshot CHALLENGE_LAND2_FIREBALL_CHALLENGE success 1.0 alignment 0.0 HELP_TEXT_TITLE_101 StandardReminder(variable HELP_TEXT_REMINDER_41)
 
 		set interaction SCRIPT_INTERFACE_LEVEL_NORMAL
 		//The challenge is complete
@@ -460,7 +460,7 @@ begin script MiracleChallenges(ScrollPos)
 
 start
 	//The two miracle challenges.
-	Highlight = create highlight HIGHLIGHT_QUEST at [ScrollPos]
+	Highlight = create highlight CHALLENGE_LAND2_FIREBALL_CHALLENGE HIGHLIGHT_QUEST at [ScrollPos]
 	ALTITUDE of Highlight = 6
 
 	run script CheckForKhazarChallengeHighlightNotify(Highlight, ScrollPos, variable EVIL_ADVISOR, variable HELP_TEXT_NEW_LAND_2_NOTIFIER_03)

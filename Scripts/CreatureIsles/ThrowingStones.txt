@@ -1,4 +1,3 @@
-challenge THROWING_STONES
 global End
 global ThrowingStonesUsed
 global ThrowStonesHighlight
@@ -202,14 +201,14 @@ start
 	Radius = 150
 	wait until ThrowingStonesStart == 1 or [Rock1] not near [Rock1Pos] radius 2
 	if [Rock1] near [Rock1Pos] radius 2
-		ThrowStonesHighlight = create highlight HIGHLIGHT_CHALLENGE at [HighLightPos]
+		ThrowStonesHighlight = create highlight CHALLENGE_THROWING_STONES HIGHLIGHT_CHALLENGE at [HighLightPos]
 		ALTITUDE of ThrowStonesHighlight = 15
 		begin loop
 			//if ThrowStonesHighlight != 0 
 				if camera position near [ThrowStonesHighlight] radius Radius and ThrowStonesHighlight viewed
 					//wait until cameramode
 					if time-Count>30
-						if widescreen ready
+						if in widescreen
 							begin dialogue
 								eject good spirit
 								make good spirit point at [ThrowStonesHighlight] in world
@@ -246,21 +245,25 @@ begin script TSAmmo(Stone) //producing the infinite stones
 start
 
 	begin loop
-	until End>0
-	when not Stone exists
+	if not Stone exists
 		Stone = create with angle 0 and scale 0.9 ROCK_OBJECT ROCK at [StartPos]
 		//SCALE of Stone = 0.5
 		AtRest = 1
-	when (Stone is FLYING or Stone is HELD or Stone in MyCreature hand) and AtRest>0
+	end if
+	if (Stone is FLYING or Stone is HELD or Stone in MyCreature hand) and AtRest>0
 		AtRest=0
-	when Stone is not FLYING and Stone is not HELD and Stone not in MyCreature hand and AtRest<1
+	end if
+	if Stone is not FLYING and Stone is not HELD and Stone not in MyCreature hand and AtRest<1
 		AtRest=1
+	end if
 //	when land height at [Stone] < 0
 //		set Stone position to [StartPos]
-	when (not [Stone] near [StartPos] radius 40 and AtRest>0) 
+	if (not [Stone] near [StartPos] radius 40 and AtRest>0) 
 		set Stone position to [StartPos]
 		ThrowingStonesUsed++
 		SCALE of Stone = 0.5
+	end if
+	until End>0
 	end loop
 end script TSAmmo
 
@@ -273,6 +276,8 @@ begin script ThrowingStones
 	RewardPos = marker at [2023.378, 2.680, 2326.985]       
 	PilePos = marker at [1961.672, 14.965, 2388.286]
 	Rock1Pos = marker at [2031.129, 12.272, 2327.405] 
+	SheepCreature = 0
+	GotBall = 0 //Custom extra check
 
 	Rock1 = get ROCK_OBJECT MOBILE_STATIC_INFO_BOULDER3_LIME at [Rock1Pos] radius 5
 
@@ -366,8 +371,8 @@ start
 			send evil spirit home
 			send good spirit home
 			close dialogue
+			snapshot CHALLENGE_THROWING_STONES challenge success 0.0 alignment 0.0 HELP_TEXT_TITLE_38 StandardReminder(variable HELP_TEXT_REMINDER_36)
 			wait 1 seconds
-			snapshot challenge success 0.0 alignment 0.0 HELP_TEXT_TITLE_38 StandardReminder(variable HELP_TEXT_REMINDER_36)
 			// Play hand demo
 			run script Throwing
 		end cinema
@@ -376,11 +381,10 @@ start
 	run background script DidYouKnow(dyk93, variable HELP_TEXT_DYK_93, variable DYK_NAVIGATION)			// expain aftertouch
 
 	begin loop
-		until End>0
 
 		wait 2 seconds
 
-		when not [Rock1] near [Rock1Pos] radius 2									// Hit Rock !!!				
+		if not [Rock1] near [Rock1Pos] radius 2									// Hit Rock !!!				
 			if IntroPlayed == 1
 
 				Rock1Moved = 1
@@ -396,7 +400,7 @@ start
 //						wait 1 seconds
 
 						say single line HELP_TEXT_YOUTHROWING_09
-						update snapshot success 0.5 alignment 0.0 HELP_TEXT_TITLE_38 StandardReminder(variable HELP_TEXT_REMINDER_39)
+						update snapshot CHALLENGE_THROWING_STONES success 0.5 alignment 0.0 HELP_TEXT_TITLE_38 StandardReminder(variable HELP_TEXT_REMINDER_39)
 						wait until read
 
 						close dialogue
@@ -405,7 +409,7 @@ start
 						move camera position to	[2017.790, 18.0, 2332.306] time 5	// Camera pos rise look at rock
  
 						if Rock1Moved>0 
-							snapshot challenge success 1 alignment 0.0 HELP_TEXT_TITLE_38 StandardReminder(variable HELP_TEXT_REMINDER_39)
+							snapshot CHALLENGE_THROWING_STONES challenge success 1 alignment 0.0 HELP_TEXT_TITLE_38 StandardReminder(variable HELP_TEXT_REMINDER_39)
 							eject evil spirit
 							wait 1 seconds
 							say single line HELP_TEXT_YOUTHROWING_12
@@ -423,7 +427,10 @@ start
 
 				delete RockInfl		
 				RewardInfluence = create influence at [RewardPos] radius 10
-				run script rewardfromsky(variable REWARD_OBJECT_TOY_BALL, RewardPos, 0,0)
+				run background script rewardfromsky(variable REWARD_OBJECT_TOY_BALL, RewardPos, 0,0)
+				GotBall = 1
+				SheepCreature = create CREATURE CREATURE_TYPE_CROCODILE at [RewardPos]
+				run background script SwapCreatures(SheepCreature)
 			else
 				begin dialogue
 					eject evil spirit
@@ -435,9 +442,9 @@ start
 				end dialogue
 				End = 1
 			end if
+		end if
 
-
-		when PillarHit == 1 and Pillar hit and [Rock1] near [Rock1Pos] radius 2											// Hit The Pillar !!!
+		if PillarHit == 1 and Pillar hit and [Rock1] near [Rock1Pos] radius 2											// Hit The Pillar !!!
 			wait 2 seconds
 
 			if [Rock1] near [Rock1Pos] radius 2									//Congrats after hitting pillar
@@ -457,14 +464,14 @@ start
 					wait until read
 					send evil spirit home
 
-					update snapshot success 0.5 alignment 0.0 HELP_TEXT_TITLE_38 StandardReminder(variable HELP_TEXT_REMINDER_39)
+					update snapshot CHALLENGE_THROWING_STONES success 0.5 alignment 0.0 HELP_TEXT_TITLE_38 StandardReminder(variable HELP_TEXT_REMINDER_39)
 													
 					move camera position to	[BeginPos] time 2							// Camera pos back to start 
 					move camera focus to [BeginFoc] time 2								// Camera foc back to start
  					wait until camera ready
 				end cinema
 			end if
-
+		end if
 			
 /*		when not [Rock2] near [Rock2Pos] radius 2 and Rock2Moved < 1
 			Rock2Moved = 1
@@ -476,10 +483,10 @@ start
 				eject evil spirit
 				wait 1 seconds
 				say HELP_TEXT_YOUTHROWING_10
-				snapshot challenge success 0.0 alignment 0.0 HELP_TEXT_TITLE_38 StandardReminder(variable HELP_TEXT_REMINDER_36)
+				snapshot CHALLENGE_THROWING_STONES challenge success 0.0 alignment 0.0 HELP_TEXT_TITLE_38 StandardReminder(variable HELP_TEXT_REMINDER_36)
 				wait until read
 				if Rock1Moved>0 and Rock2Moved>0 and Rock3Moved>0
-					snapshot challenge success 1 alignment 0.0 HELP_TEXT_TITLE_38 StandardReminder(variable HELP_TEXT_REMINDER_36)
+					snapshot CHALLENGE_THROWING_STONES challenge success 1 alignment 0.0 HELP_TEXT_TITLE_38 StandardReminder(variable HELP_TEXT_REMINDER_36)
 					wait 1 seconds
 					say HELP_TEXT_YOUTHROWING_12
 					wait until read
@@ -498,10 +505,10 @@ start
 				eject good spirit
 				wait 1 seconds
 				say HELP_TEXT_YOUTHROWING_11
-				snapshot challenge success 0.0 alignment 0.0 HELP_TEXT_TITLE_38 StandardReminder(variable HELP_TEXT_REMINDER_36)
+				snapshot CHALLENGE_THROWING_STONES challenge success 0.0 alignment 0.0 HELP_TEXT_TITLE_38 StandardReminder(variable HELP_TEXT_REMINDER_36)
 				wait until read
 				if Rock1Moved>0 and Rock2Moved>0 and Rock3Moved>0
-					snapshot challenge success 1 alignment 0.0 HELP_TEXT_TITLE_38 StandardReminder(variable HELP_TEXT_REMINDER_36)
+					snapshot CHALLENGE_THROWING_STONES challenge success 1 alignment 0.0 HELP_TEXT_TITLE_38 StandardReminder(variable HELP_TEXT_REMINDER_36)
 					eject evil spirit
 					wait 1 seconds
 					say HELP_TEXT_YOUTHROWING_12
@@ -512,7 +519,7 @@ start
 			set camera focus to [BeginFoc]
 			end cinema
 */
-
+	until GotBall>0
 	end loop
 
 	run background script KeepPractising (Rock1Pos)

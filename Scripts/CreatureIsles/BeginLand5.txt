@@ -1,4 +1,4 @@
-challenge CREATURE_CURSE
+//challenge CHALLENGE_CREATURE_CURSE
 
 //run script BeginLand5
 begin script BeginLand5
@@ -299,7 +299,7 @@ start
 		close dialogue
 		wait 8 seconds
 
-		snapshot quest success 0.0 alignment 0.0 HELP_TEXT_NEW_L5_INTRO_09 StandardReminder(variable HELP_TEXT_NEW_L5_CREATURE_CURSE_03)
+		snapshot CHALLENGE_CREATURE_CURSE quest success 0.0 alignment 0.0 HELP_TEXT_NEW_L5_INTRO_09 StandardReminder(variable HELP_TEXT_NEW_L5_CREATURE_CURSE_03)
 		
 		set fade red 0 green 0 blue 0 time 2
 		wait until fade ready

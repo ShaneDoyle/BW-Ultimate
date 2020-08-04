@@ -1,5 +1,3 @@
-challenge LandControlAll
-
 //------------------------------------------------------------------------------------------------------------------------
 //This is being taken out as it is triggered in game code. - Jonty
 //run script LandControlAll
@@ -10,28 +8,14 @@ begin script LandControlAll
 	
 start
 
+	load map "scripts/land1.txt"
 	run script LandControl1
 	stop all scripts excluding files "LandControlAll.txt"
 
-	load map "scripts/land2.txt"
-//	set fade in time 3					Handled in OpenVortex (BeginLand2.txt)
-	run script LandControl2
-	stop all scripts excluding files "LandControlAll.txt"
-
-	load map "scripts/land3.txt"
-	set fade in time 3
-	run script LandControl3
-	stop all scripts excluding files "LandControlAll.txt"
-
-	load map "scripts/land4.txt"
-	run script LandControl4
-	stop all scripts excluding files "LandControlAll.txt"
-
-	load map "scripts/land5.txt"
-	run script LandControl5
-	stop all scripts excluding files "LandControlAll.txt"
-
 end script LandControlAll
+
+
+
 
 
 
@@ -303,7 +287,7 @@ start
 
 	//Don't want this to run twice.
 	if not PhoneBox exists
-		PhoneBox=create SCRIPT_OBJECT_TYPE_ANIMATED_STATUE ANIMATED_STATIC_INFO_PHONE_BOX at [CreatePos]
+		PhoneBox=create SCRIPT_OBJECT_TYPE_ABODE ANIMATED_STATIC_INFO_PHONE_BOX at [CreatePos]
 		
 		disable PhoneBox moveable
 		enable PhoneBox indestructible
@@ -478,27 +462,27 @@ start
 			clear clicked object	
 
 			delete PhoneBox
-			PhoneBoxLand1 = create SCRIPT_OBJECT_TYPE_ANIMATED_STATUE ANIMATED_STATIC_INFO_PHONE_BOX at [3124.9204, 3.3343, 1644.2760]	// Land1
+			PhoneBoxLand1 = create SCRIPT_OBJECT_TYPE_ABODE ANIMATED_STATIC_INFO_PHONE_BOX at [3124.9204, 3.3343, 1644.2760]	// Land1
 			disable PhoneBoxLand1 moveable
 			disable PhoneBoxLand1 pickup
 			enable PhoneBoxLand1 indestructible
 			ALTITUDE of PhoneBoxLand1 = -2 
-			PhoneBoxLand2 = create SCRIPT_OBJECT_TYPE_ANIMATED_STATUE ANIMATED_STATIC_INFO_PHONE_BOX at [3127.4368, 3.7845, 1644.2347]	// Land2
+			PhoneBoxLand2 = create SCRIPT_OBJECT_TYPE_ABODE ANIMATED_STATIC_INFO_PHONE_BOX at [3127.4368, 3.7845, 1644.2347]	// Land2
 			disable PhoneBoxLand2 moveable
 			disable PhoneBoxLand2 pickup
 			enable PhoneBoxLand2 indestructible
 			ALTITUDE of PhoneBoxLand2 = -2
-			PhoneBoxLand3 = create SCRIPT_OBJECT_TYPE_ANIMATED_STATUE ANIMATED_STATIC_INFO_PHONE_BOX at [3129.9468, 4.2791, 1644.1172]	// Land3
+			PhoneBoxLand3 = create SCRIPT_OBJECT_TYPE_ABODE ANIMATED_STATIC_INFO_PHONE_BOX at [3129.9468, 4.2791, 1644.1172]	// Land3
 			disable PhoneBoxLand3 moveable
 			disable PhoneBoxLand3 pickup
 			enable PhoneBoxLand3 indestructible
 			ALTITUDE of PhoneBoxLand3 = -2
-			PhoneBoxLand4 = create SCRIPT_OBJECT_TYPE_ANIMATED_STATUE ANIMATED_STATIC_INFO_PHONE_BOX at [3132.4819, 4.4414, 1643.8359]	// Land4
+			PhoneBoxLand4 = create SCRIPT_OBJECT_TYPE_ABODE ANIMATED_STATIC_INFO_PHONE_BOX at [3132.4819, 4.4414, 1643.8359]	// Land4
 			disable PhoneBoxLand4 moveable
 			disable PhoneBoxLand4 pickup
 			enable PhoneBoxLand4 indestructible
 			ALTITUDE of PhoneBoxLand4 = -2
-			PhoneBoxLand5 = create SCRIPT_OBJECT_TYPE_ANIMATED_STATUE ANIMATED_STATIC_INFO_PHONE_BOX at [3134.9253, 4.5932, 1643.6624]	// Land5
+			PhoneBoxLand5 = create SCRIPT_OBJECT_TYPE_ABODE ANIMATED_STATIC_INFO_PHONE_BOX at [3134.9253, 4.5932, 1643.6624]	// Land5
 			disable PhoneBoxLand5 moveable
 			disable PhoneBoxLand5 pickup
 			enable PhoneBoxLand5 indestructible

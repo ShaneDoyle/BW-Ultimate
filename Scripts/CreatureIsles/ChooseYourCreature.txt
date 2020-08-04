@@ -1,5 +1,3 @@
-challenge ChooseYourCreature
-
 global QuarryRockPresent
 global ApeState
 global CowState
@@ -242,10 +240,10 @@ start
 	ChooseYourCreatureFinished = 0
 
 	run background script DidYouKnow(dyk27,variable HELP_TEXT_DYK_27, variable DYK_MISC)			// do the gold scrolls
-	Highlight = create highlight HIGHLIGHT_QUEST at [HighlightPos]
+	Highlight = create highlight CHALLENGE_ChooseYourCreature HIGHLIGHT_QUEST at [HighlightPos]
 	ALTITUDE of Highlight = 14
 
-	run script ChallengeHighlightNotify(Highlight, HighlightPos, variable EVIL_ADVISOR, variable 		HELP_TEXT_GENERAL_CHALLENGE_START_14)
+	run script ChallengeHighlightNotify(Highlight, HighlightPos, variable EVIL_ADVISOR, variable HELP_TEXT_GENERAL_CHALLENGE_START_14)
 
 	Keeper = create VILLAGER VILLAGER_INFO_CREATURE_TRAINER at [1765.768, 33.416, 2818.760] // Keeper Position
 
@@ -268,7 +266,7 @@ start
 		set Keeper focus to camera position
 		wait 0.5 seconds
 
-		snapshot quest success 0.0 alignment 0.0 HELP_TEXT_TITLE_43 StandardReminder(variable HELP_TEXT_NEW_REMINDER_08)
+		snapshot CHALLENGE_ChooseYourCreature quest success 0.0 alignment 0.0 HELP_TEXT_TITLE_43 StandardReminder(variable HELP_TEXT_NEW_REMINDER_08)
 
 		move camera focus to [1775.856, 35.763, 2818.354] time 7 			// Camera foc move to see gate
 
@@ -428,7 +426,7 @@ start
 				eject good spirit
 				// "Right. We need another Gate Stone. I'm sure I've seen one before."
 				say single line HELP_TEXT_NEWEST_GET_CREATURE_20
-				update snapshot success 0.25 alignment 0.0 HELP_TEXT_TITLE_43 StandardReminder(variable HELP_TEXT_NEW_REMINDER_08)
+				update snapshot CHALLENGE_ChooseYourCreature success 0.25 alignment 0.0 HELP_TEXT_TITLE_43 StandardReminder(variable HELP_TEXT_NEW_REMINDER_08)
 				wait until read
 			end dialogue
 			set ClueTimer time to 120 seconds
@@ -455,7 +453,7 @@ start
 						// "*Weren't those Villagers dancing around another of these Key Stones earlier?*"
 						say single line HELP_TEXT_NEW_REMINDER_08
 					end if
-					update snapshot success 0.0 alignment 0.0 HELP_TEXT_TITLE_43 StandardReminder(variable HELP_TEXT_REMINDER_53)
+					update snapshot CHALLENGE_ChooseYourCreature success 0.0 alignment 0.0 HELP_TEXT_TITLE_43 StandardReminder(variable HELP_TEXT_REMINDER_53)
 					wait until read
 				end dialogue
 				set ClueTimer time to 120 seconds
@@ -472,7 +470,7 @@ start
 			GateKey2Present = 1
 
 				begin cinema
-					update snapshot success 0.25 alignment 0.0 HELP_TEXT_TITLE_43 StandardReminder(variable HELP_TEXT_NEW_REMINDER_07)
+					update snapshot CHALLENGE_ChooseYourCreature success 0.25 alignment 0.0 HELP_TEXT_TITLE_43 StandardReminder(variable HELP_TEXT_NEW_REMINDER_07)
 
 					Keeper = create VILLAGER VILLAGER_INFO_CREATURE_TRAINER at [1765.768, 33.416, 2818.760] // Keeper Position
 					enable Keeper high graphics detail
@@ -516,7 +514,7 @@ start
 
 					disable	Keeper high graphics detail
 
-//					update snapshot success 0.5 alignment 0.0 HELP_TEXT_TITLE_43 StandardReminder(variable HELP_TEXT_NEW_REMINDER_07)
+					update snapshot CHALLENGE_ChooseYourCreature success 0.5 alignment 0.0 HELP_TEXT_TITLE_43 StandardReminder(variable HELP_TEXT_NEW_REMINDER_07)
 
 				end cinema
 
@@ -540,7 +538,7 @@ start
 				GateKey1Present = 1
 
 				begin cinema
-					update snapshot success 0.5 alignment 0.0 HELP_TEXT_TITLE_43 StandardReminder(variable HELP_TEXT_NEW_REMINDER_09)
+					update snapshot CHALLENGE_ChooseYourCreature success 0.5 alignment 0.0 HELP_TEXT_TITLE_43 StandardReminder(variable HELP_TEXT_NEW_REMINDER_09)
 
 					Keeper = create VILLAGER VILLAGER_INFO_CREATURE_TRAINER at [1765.768, 33.416, 2818.760] // Keeper Position
 					enable Keeper high graphics detail
@@ -589,7 +587,7 @@ start
 
 					disable	Keeper high graphics detail
 
-//					update snapshot success 0.5 alignment 0.0 HELP_TEXT_TITLE_43 StandardReminder(variable HELP_TEXT_NEW_REMINDER_09)
+					update snapshot CHALLENGE_ChooseYourCreature success 0.5 alignment 0.0 HELP_TEXT_TITLE_43 StandardReminder(variable HELP_TEXT_NEW_REMINDER_09)
 
 				end cinema
 
@@ -728,7 +726,7 @@ start
 		CowTimer = 0
 		TigerTimer = 0
 
-		update snapshot success 0.75 alignment 0.0 HELP_TEXT_TITLE_43 StandardReminder(variable HELP_TEXT_REMINDER_54)
+		update snapshot CHALLENGE_ChooseYourCreature success 0.75 alignment 0.0 HELP_TEXT_TITLE_43 StandardReminder(variable HELP_TEXT_REMINDER_54)
 		
 		set camera zones to "Land1Zone3.exc"
 
@@ -817,10 +815,10 @@ start
 		wait until camera ready
 
 
-		move camera to T00_000 time 3										// Fly to valley of creatures
+		move camera position to [1775.785400, 33.808357, 2808.186523] time 3										// Fly to valley of creatures			//(TOFIXCAM)
 		wait until camera ready
 		start music MUSIC_TYPE_SCRIPT_EPIC_03
-		camera path TRACK00
+		//camera path TRACK00					//(TOFIXPATH)
 		wait until camera ready
 
 		force CreatureTiger CREATURE_SIT TigerBasePos
@@ -838,7 +836,7 @@ start
 		wait until CreatureApe played
 		set CreatureApe focus to camera position
 		//force CreatureTiger CREATURE_LOOK_AT_CAMERA CreatureTiger
-		snapshot quest success 0.75 alignment 0.0 HELP_TEXT_TITLE_43 StandardReminder(variable HELP_TEXT_REMINDER_54)
+		snapshot CHALLENGE_ChooseYourCreature quest success 0.75 alignment 0.0 HELP_TEXT_TITLE_43 StandardReminder(variable HELP_TEXT_REMINDER_54)
 
 	if IsSkippingToCreatureSelect == 0	
 		eject evil spirit
@@ -1153,14 +1151,14 @@ start
 			close dialogue
 
 			wait 1.5 seconds
-			snapshot quest success 1 alignment 0.0 HELP_TEXT_TITLE_43 StandardReminder(variable HELP_TEXT_REMINDER_54)
+			snapshot CHALLENGE_ChooseYourCreature quest success 1 alignment 0.0 HELP_TEXT_TITLE_43 StandardReminder(variable HELP_TEXT_REMINDER_54)
 
 			set fade red 0 green 0 blue 0 time 2
 			force CreatureCow CREATURE_LOOK_AT_CAMERA CreatureCow
 			wait 4 seconds
 			close dialogue
 
-			set player_creature to CreatureCow
+			set player 1 creature to CreatureCow
 			set CreatureCow position to [HomePos]
 			set CreatureCow home position [HomePos]
 			delete CreatureApe
@@ -1201,14 +1199,14 @@ start
 			close dialogue
 
 			wait 1 seconds
-			snapshot quest success 1 alignment 0.0 HELP_TEXT_TITLE_43 StandardReminder(variable HELP_TEXT_REMINDER_54)
+			snapshot CHALLENGE_ChooseYourCreature quest success 1 alignment 0.0 HELP_TEXT_TITLE_43 StandardReminder(variable HELP_TEXT_REMINDER_54)
 
 			set fade red 0 green 0 blue 0 time 2
 			force CreatureApe CREATURE_LOOK_AT_CAMERA CreatureApe
 			wait 4 seconds
 			close dialogue
 
-			set player_creature to CreatureApe
+			set player 1 creature to CreatureApe
 			set CreatureApe position to [HomePos]
 			set CreatureApe home position [HomePos]
 			delete CreatureCow
@@ -1249,14 +1247,14 @@ start
 			close dialogue
 
 			wait 1.2 seconds
-			snapshot quest success 1 alignment 0.0 HELP_TEXT_TITLE_43 StandardReminder(variable HELP_TEXT_REMINDER_54)
+			snapshot CHALLENGE_ChooseYourCreature quest success 1 alignment 0.0 HELP_TEXT_TITLE_43 StandardReminder(variable HELP_TEXT_REMINDER_54)
 
 			set fade red 0 green 0 blue 0 time 2
 			force CreatureTiger CREATURE_LOOK_AT_CAMERA CreatureTiger
 			wait 4 seconds
 			close dialogue
 
-			set player_creature to CreatureTiger
+			set player 1 creature to CreatureTiger
 			set CreatureTiger position to [HomePos]
 			set CreatureTiger home position [HomePos]
 			delete CreatureCow
@@ -1267,18 +1265,19 @@ start
 		end cinema
 
 
-	when read and SpiritReading == 1
+	if read and SpiritReading == 1
 		ReadCount++
 		if ReadCount > 4
 			SpiritReading = 0
 			ReadCount = 0
 		end if
+	end if
 
 	end loop
 
 	wait until ChooseYourCreatureFinished == 1
 	run SCRIPT_DEV_FUNCTION_START_DEVELOPMENT_SCRIPTS developer function
-//	update snapshot success 1 alignment 0.0 HELP_TEXT_TITLE_43 StandardReminder(variable HELP_TEXT_REMINDER_54)
+	update snapshot CHALLENGE_ChooseYourCreature success 1 alignment 0.0 HELP_TEXT_TITLE_43 StandardReminder(variable HELP_TEXT_REMINDER_54)
 	
 end script CreaturesInGlade
 

@@ -1,4 +1,4 @@
-challenge LEAVE_THROUGH_VORTEX_LAND2
+//challenge CHALLENGE_LEAVE_THROUGH_VORTEX_LAND2
 
 global ChanceMissed
 
@@ -8,7 +8,7 @@ global ChanceMissed
 
 begin script DecidedToGoThrough (VortexPos)
 
- Highlight = create highlight HIGHLIGHT_CHALLENGE at [VortexPos]
+ Highlight = create highlight CHALLENGE_LEAVE_THROUGH_VORTEX_LAND2 HIGHLIGHT_CHALLENGE at [VortexPos]
 
 start
 	// specific highlight wait until clicked or ChanceMissed == 1, no advisor reminders
@@ -22,9 +22,9 @@ start
 	if ChanceMissed == 0
 		LeavingLandTwo = 1
 		begin cinema
-			move camera to T00_000 time 4
+			move camera position to [1071.331421, 147.146820, 3599.504639] time 4 //T00_000 time 4
 			wait until camera ready
-			camera path TRACK00
+			//camera path TRACK00
 			wait 2 seconds
 			set fade red 0 green 0 blue 0 time 2							// Fade to Black
 			wait until camera ready and 2 seconds
@@ -118,7 +118,7 @@ begin script LethysVortex
 	MessageSaid=0
 
 start
-	challenge LEAVE_THROUGH_VORTEX_LAND2_SNAP_SHOT
+	//challenge LEAVE_THROUGH_VORTEX_LAND2_SNAP_SHOT
 	stop script "LethysTauntAI, ComputerPlayerConfrontPlayer"
 	LethysGone=1
 
@@ -196,7 +196,7 @@ start
 		wait 0.1 second
 
 		// Snapshot here because it's a big story bit. No reminder though.
-		snapshot quest success 1.0 alignment 0.0 HELP_TEXT_KIDNAPPED_05 StandardReminder(variable HELP_TEXT_NONE)
+		snapshot CHALLENGE_LEAVE_THROUGH_VORTEX_LAND2 quest success 1.0 alignment 0.0 HELP_TEXT_KIDNAPPED_05 StandardReminder(variable HELP_TEXT_NONE)
 				
 		// Moralities shout warning about creature
 

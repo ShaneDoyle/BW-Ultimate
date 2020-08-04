@@ -1,4 +1,4 @@
-challenge SWAP_CREATURES
+//challenge SWAP_CREATURES
 
 global GlobalReset
 global NrOfChoosenCreature
@@ -45,7 +45,8 @@ start
 	while SwapActive == 1
 
 		// Remind player and get him to initiate Swap by clicking on the scroll or the new creature
-		Highlight = create highlight HIGHLIGHT_CHALLENGE at [NewCreature] 
+		Highlight = create highlight CHALLENGE_SWAP_CREATURES HIGHLIGHT_CHALLENGE at [NewCreature] 
+		//LB_Highlight = create highlight CHALLENGE_LOST_BROTHER HIGHLIGHT_QUEST at [LostBrotherHouse]
 		ALTITUDE of Highlight = CreatureHeight+1.0
 		clear clicked object
 
@@ -271,7 +272,7 @@ start
 	while SwapActive == 1 and BreederRunning == 1
 
 		// Remind player and get him to initiate Swap by clicking on the scroll or the new creature
-		Highlight = create highlight HIGHLIGHT_CHALLENGE at [NewCreature] 
+		Highlight = create highlight CHALLENGE_SWAP_CREATURES HIGHLIGHT_CHALLENGE at [NewCreature] 
 		ALTITUDE of Highlight = CreatureHeight+1.0
 		clear clicked object
 

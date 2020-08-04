@@ -1,4 +1,4 @@
-challenge MAGIC_MUSHROOM
+//challenge CHALLENGE_MAGIC_MUSHROOM
 
 begin script MagicMushroom
 
@@ -33,7 +33,7 @@ start
 		/// challenge Notify
 		Puzzle = create with angle 0 and scale 1.2 SCRIPT_OBJECT_TYPE_PUZZLE_GAME SCRIPT_PUZZLE_GAME_TYPE_IMMERSION at [PuzzlePos]
 
-		Highlight = create highlight HIGHLIGHT_CHALLENGE at [ActorHut]
+		Highlight = create highlight CHALLENGE_MAGIC_MUSHROOM HIGHLIGHT_CHALLENGE at [ActorHut]
 		run script ChallengeHighlightNotify(Highlight, ActorHut, variable EVIL_ADVISOR, variable HELP_TEXT_GENERAL_CHALLENGE_START_05)
 		Actor = create VILLAGER VILLAGER_INFO_HIPPY at [ActorHut]
 		enable Actor indestructible
@@ -111,7 +111,7 @@ start
 
 			wait until camera ready
 
-			snapshot challenge success 0.0 alignment 0.0 HELP_TEXT_TITLE_106 StandardReminder(variable HELP_TEXT_REMINDER_96)
+			snapshot CHALLENGE_MAGIC_MUSHROOM challenge success 0.0 alignment 0.0 HELP_TEXT_TITLE_106 StandardReminder(variable HELP_TEXT_REMINDER_96)
 
 			stop music			
 		end cinema
@@ -184,7 +184,7 @@ start
 				stop sound LH_SCRIPT_SAMPLE_CHILD_CRY_MUFFLED_01
 				wait 3 seconds
 
-				snapshot challenge success 1.0 alignment 0.0 HELP_TEXT_TITLE_106 StandardReminder(variable HELP_TEXT_REMINDER_96)
+				snapshot CHALLENGE_MAGIC_MUSHROOM challenge success 1.0 alignment 0.0 HELP_TEXT_TITLE_106 StandardReminder(variable HELP_TEXT_REMINDER_96)
 
 			else
 
@@ -205,7 +205,7 @@ start
 
 				set Actor target [Me] time 2
 		
-				snapshot challenge success 1.0 alignment 0.0 HELP_TEXT_TITLE_106 StandardReminder(variable HELP_TEXT_REMINDER_96)
+				snapshot CHALLENGE_MAGIC_MUSHROOM challenge success 1.0 alignment 0.0 HELP_TEXT_TITLE_106 StandardReminder(variable HELP_TEXT_REMINDER_96)
 
 			end if
 

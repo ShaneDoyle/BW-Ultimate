@@ -1,0 +1,314 @@
+// --- General Script Global Variables
+global MyCreature				= 0
+global ChallengeTotal			= 0
+global GlobalCurrentCreature	= 0
+global Tyke						= 0
+global Eve						= 0
+global CreatureCanBuildFlag		= 0
+global Dojo						= 0
+global OldTyke					= 0
+global OutroFinished			= 0
+global NoTykeRestraint			= 0
+global KillTykeHelp				= 0
+global EveWatching				= 0
+global TykeCanBuild				= 0
+
+global TykeIsReady				= 0
+
+// Need to be able to start the following scripts seperate from putting down the script objects
+// Will be set by the control script
+global BowlingReadyToStart		= 0
+global MarblesReadyToStart		= 0
+global ZebraReadyToStart		= 0
+global TriggerBuildingTrials	= 0
+global RaceTrialComplete		= 0
+global SheepTrialComplete		= 0
+global KCMissileCommandComplete = 0
+global KCDolphinShootComplete	= 0
+global KCWhackingComplete		= 0
+global KCGreetinsCompleted		= 0
+global KCTapperCompleted		= 0
+global KensFightComplete		= 0
+global SpiritActive				= 0
+global TykeFree					= 1
+global BabyHutProtection		= 0
+
+
+//------------------------------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------------------------------------
+
+//Added by Paul - used by DojoReminder to show the desired reminders...
+global	DojoReminderSoccerSkills=0
+global	DojoReminderTheRaces=0
+global	DojoReminderMissionariesLeave=0
+global	DojoReminderHerding=0
+global	DojoReminderWolfTrial=0
+global	DojoReminderGreedyHermit=0
+global	DojoReminderKingOfTheCastle=0
+global	DojoReminderSpecialCrops=0
+global	DojoReminderSmashBuildings=0
+global	DojoReminderBuildBuildings=0
+global	DojoReminderZebraBallista=0
+global	DojoReminderGraduationBody=0 //TODO - PUT IN WHEN STEVIE L HAS DONE IT
+global	DojoReminderGraduationSpirit=0
+global	DojoReminderTykesTraining=0
+global	DojoReminderPigEating=0
+global	DojoReminderBowling=0
+global	DojoReminderRhinoFight=0
+global	DojoReminderMarbles=0
+global	DojoReminderTykesNest=0
+global  DojoReminderCreatureTapper=0
+
+
+// True if MyCreature is scripted
+global ScriptLockedCreature		= 0
+
+// Set by ScriptLockedCreature scripts, position of cancel scroll for that trial
+global CurrentCancelScrollPos			= 0
+
+// Is MyCreature in fight?s
+global MyCreatureInFight		= 0
+
+//------------------------------------------------------------------------------------------------------------------------
+begin script SetupGameObjects
+	Mine = 0
+	House1 = get HOUSE at [2321.617, 1.434, 1573.072] radius 2
+	House2 = get HOUSE at [2293.202, 1.539, 1574.291] radius 2
+	House3 = get HOUSE at [2264.377, 0.000, 1565.977] radius 2
+	DojoPos		= marker at [1253.2899, 57.5075, 1021.6200]
+	DasUberRock = get ROCK_OBJECT MOBILE_STATIC_INFO_LONGROCK_SANDSTONE at [969.86,85.352,1208.19] radius 10
+	DasUberRockJunior = get ROCK_OBJECT MOBILE_STATIC_INFO_FLATROCK_SANDSTONE at [935.62,74.486,1169.29] radius 10
+	Jetty = 0
+	Stadium = 0
+	TownWonder = get HOUSE at [1095.29,136.604,1206.52]
+	Spikey[10]
+	SpikeyCount = 0
+
+	TownStorage = get HOUSE at [1113.59,122.911,1364.56]
+	TownCentre = get HOUSE at [1120.26,122.657,1313.13]
+
+	EggTree = 0
+	RacePillar = 0
+
+start
+	//Land setup...
+	BabyHutProtection = get HOUSE at [1126.945, 145.513, 1233.951]
+	enable DasUberRock indestructible
+	disable DasUberRock moveable
+	disable DasUberRock pickup
+	enable DasUberRockJunior indestructible
+	disable DasUberRockJunior moveable
+	disable DasUberRockJunior pickup
+
+	Mine = get FEATURE at [2343.867, 5.331, 1477.796] radius 10
+	enable Mine indestructible
+	Mine = get FEATURE at [2330.292, 2.698, 1471.263] radius 10
+	enable Mine indestructible
+	Mine = get FEATURE at [2320.972, 2.680, 1441.069] radius 10
+	enable Mine indestructible
+	
+	enable House1 indestructible
+	enable House2 indestructible
+	enable House3 indestructible
+	RacePillar = get FEATURE FEATURE_INFO_CREATURE_RACE_PILLAR at [1400.71,1261.55]
+	enable RacePillar indestructible
+	RacePillar = get FEATURE FEATURE_INFO_CREATURE_RACE_PILLAR at [1435.10,1274.96]
+	enable RacePillar indestructible
+	RacePillar = get FEATURE FEATURE_INFO_CREATURE_RACE_PILLAR at [1441.63,1690.01]
+	enable RacePillar indestructible
+	RacePillar = get FEATURE FEATURE_INFO_CREATURE_RACE_PILLAR at [1471.96,1896.62]
+	enable RacePillar indestructible
+	RacePillar = get FEATURE FEATURE_INFO_CREATURE_RACE_PILLAR at [1480.09,1670.90]
+	enable RacePillar indestructible
+	RacePillar = get FEATURE FEATURE_INFO_CREATURE_RACE_PILLAR at [1504.17,1907.95]
+	enable RacePillar indestructible
+	RacePillar = get FEATURE FEATURE_INFO_CREATURE_RACE_PILLAR at [1691.77,1320.38]
+	enable RacePillar indestructible
+	RacePillar = get FEATURE FEATURE_INFO_CREATURE_RACE_PILLAR at [1714.68,1318.12]
+	enable RacePillar indestructible
+	RacePillar = get FEATURE FEATURE_INFO_CREATURE_RACE_PILLAR at [1745.85,2182.50]
+	enable RacePillar indestructible
+	RacePillar = get FEATURE FEATURE_INFO_CREATURE_RACE_PILLAR at [1767.14,2164.99]
+	enable RacePillar indestructible
+	RacePillar = get FEATURE FEATURE_INFO_CREATURE_RACE_PILLAR at [1921.00,1699.15]
+	enable RacePillar indestructible
+	RacePillar = get FEATURE FEATURE_INFO_CREATURE_RACE_PILLAR at [1951.74,1698.09]
+	enable RacePillar indestructible
+	RacePillar = get FEATURE FEATURE_INFO_CREATURE_RACE_PILLAR at [4374.91,4090.53]
+	enable RacePillar indestructible
+	RacePillar = get FEATURE FEATURE_INFO_CREATURE_RACE_PILLAR at [4375.94,4105.60]
+	enable RacePillar indestructible
+	RacePillar = get FEATURE FEATURE_INFO_CREATURE_RACE_PILLAR at [4385.32,4123.88]
+	enable RacePillar indestructible
+	RacePillar = get FEATURE FEATURE_INFO_CREATURE_RACE_PILLAR at [4412.33,4024.15]
+	enable RacePillar indestructible
+	RacePillar = get FEATURE FEATURE_INFO_CREATURE_RACE_PILLAR at [4405.62,4140.52]
+	enable RacePillar indestructible
+	RacePillar = get FEATURE FEATURE_INFO_CREATURE_RACE_PILLAR at [4424.65,4151.60]
+	enable RacePillar indestructible
+	RacePillar = get FEATURE FEATURE_INFO_CREATURE_RACE_PILLAR at [4427.49,4018.90]
+	enable RacePillar indestructible
+	RacePillar = get FEATURE FEATURE_INFO_CREATURE_RACE_PILLAR at [4444.20,4156.93]
+	enable RacePillar indestructible
+	RacePillar = get FEATURE FEATURE_INFO_CREATURE_RACE_PILLAR at [4447.19,4015.91]
+	enable RacePillar indestructible
+	RacePillar = get FEATURE FEATURE_INFO_CREATURE_RACE_PILLAR at [4464.37,4015.46]
+	enable RacePillar indestructible
+	RacePillar = get FEATURE FEATURE_INFO_CREATURE_RACE_PILLAR at [4466.21,4154.11]
+	enable RacePillar indestructible
+	RacePillar = get FEATURE FEATURE_INFO_CREATURE_RACE_PILLAR at [4484.32,4145.10]
+	enable RacePillar indestructible
+	RacePillar = get FEATURE FEATURE_INFO_CREATURE_RACE_PILLAR at [4503.25,4029.09]
+	enable RacePillar indestructible
+	RacePillar = get FEATURE FEATURE_INFO_CREATURE_RACE_PILLAR at [4503.65,4135.86]
+	enable RacePillar indestructible
+	RacePillar = get FEATURE FEATURE_INFO_CREATURE_RACE_PILLAR at [4510.82,4035.66]
+	enable RacePillar indestructible
+	RacePillar = get FEATURE FEATURE_INFO_CREATURE_RACE_PILLAR at [4519.33,4043.51]
+	enable RacePillar indestructible
+	RacePillar = get FEATURE FEATURE_INFO_CREATURE_RACE_PILLAR at [4520.22,4114.99]
+	enable RacePillar indestructible
+	RacePillar = get FEATURE FEATURE_INFO_CREATURE_RACE_PILLAR at [4528.33,4057.76]
+	enable RacePillar indestructible
+	RacePillar = get FEATURE FEATURE_INFO_CREATURE_RACE_PILLAR at [4534.00,4077.57]
+	enable RacePillar indestructible
+	RacePillar = get FEATURE FEATURE_INFO_CREATURE_RACE_PILLAR at [4531.96,4093.15]
+	enable RacePillar indestructible
+
+	
+	EggTree = get FEATURE FEATURE_INFO_EGG_TREE at [233.961, 2.502, 399.364] radius 15
+	enable EggTree indestructible
+	disable EggTree set on fire
+	
+
+	Spikey[0] = get FEATURE FEATURE_INFO_SPIKEY_PILAR_VOLCANIC at [451.10,1371.93] // Volcanic
+	Spikey[1] = get FEATURE FEATURE_INFO_SPIKEY_PILAR_VOLCANIC at [469.78,1480.62] // Volcanic
+	Spikey[2] = get FEATURE FEATURE_INFO_SPIKEY_PILAR_VOLCANIC at [528.13,1385.04] // Volcanic
+	Spikey[3] = get FEATURE FEATURE_INFO_SPIKEY_PILAR_VOLCANIC at [594.21,1395.20] // Volcanic
+	Spikey[4] = get FEATURE FEATURE_INFO_SPIKEY_PILAR_VOLCANIC at [655.87,1430.02] // Volcanic
+	Spikey[5] = get FEATURE FEATURE_INFO_SPIKEY_PILAR_SAND at [2609.81,2861.48] // Sand
+	Spikey[6] = get FEATURE FEATURE_INFO_SPIKEY_PILAR_VOLCANIC at [2790.56,3115.15] // Volcanic
+	Spikey[7] = get FEATURE FEATURE_INFO_SPIKEY_PILAR_VOLCANIC at [2806.23,3102.60] // Volcanic
+	Spikey[8] = get FEATURE FEATURE_INFO_SPIKEY_PILAR_VOLCANIC at [2815.97,3115.28] // Volcanic
+	Spikey[9] = get FEATURE FEATURE_INFO_SPIKEY_PILAR_VOLCANIC at [2824.56,3129.64] // Volcanic
+
+	while SpikeyCount < 10
+		ALTITUDE of Spikey[SpikeyCount] -= 8
+		SpikeyCount++
+	end while
+
+	//These are added by Paul - to make things indestructable at the beginning of the game...
+	Jetty = get FEATURE  FEATURE_INFO_PIER at [654.863, 0.000, 1120.131] radius 30 
+	enable Jetty indestructible
+	disable Jetty set on fire
+	Jetty = get FEATURE FEATURE_INFO_PIER at [487.429, 0.000, 1617.960] radius 30 
+	enable Jetty indestructible
+	disable Jetty set on fire
+	Jetty = get FEATURE FEATURE_INFO_PIER at [1089.993, 0.000, 1996.910] radius 30 
+	enable Jetty indestructible
+	disable Jetty set on fire
+	Jetty = get FEATURE FEATURE_INFO_PIER at [938.780, 0.000, 2802.682] radius 30 
+	enable Jetty indestructible
+	disable Jetty set on fire
+	Jetty = get FEATURE FEATURE_INFO_PIER at [3132.595, 0.000, 2832.285] radius 30 
+	enable Jetty indestructible
+	disable Jetty set on fire
+	Jetty = get FEATURE FEATURE_INFO_PIER at [3215.095, 0.000, 1913.371] radius 30 
+	enable Jetty indestructible
+	disable Jetty set on fire
+
+	Stadium = get BIG_BUILDING CREATURE_ISLES_BUILDINGS_INFO_STADIUM at [1578.023, 77.720, 1236.311]  radius 50
+	enable Stadium indestructible
+	disable Stadium set on fire
+
+	enable TownWonder indestructible
+	disable TownWonder set on fire
+
+	enable TownStorage indestructible
+	disable TownStorage hurt by fire
+
+	enable TownCentre indestructible
+	disable TownCentre set on fire
+
+	// Get the dojo building and make it indestructible
+	Dojo = get BIG_BUILDING CREATURE_ISLES_BUILDINGS_INFO_DOJO at [DojoPos] radius 50
+	enable Dojo indestructible
+	disable Dojo set on fire
+
+end script SetupGameObjects
+
+//------------------------------------------------------------------------------------------------
+//	Create lanterns around landscape, used for lighting at night in cutscenes.
+//	For sequel, make camera a light source in widescreens at night...
+//------------------------------------------------------------------------------------------------
+begin script CreateLanterns
+
+	Lantern = 0
+
+start
+
+	Lantern = create OBJECT MOBILE_STATIC_INFO_STREET_LANTERN at [1139.601,127.512, 1306.000]
+	Lantern = create OBJECT MOBILE_STATIC_INFO_STREET_LANTERN at [584.804,48.910, 1271.937]
+	Lantern = create OBJECT MOBILE_STATIC_INFO_STREET_LANTERN at [695.823,10.830, 1120.571]
+	Lantern = create OBJECT MOBILE_STATIC_INFO_STREET_LANTERN at [2251.885,0.000, 1561.484]
+	Lantern = create OBJECT MOBILE_STATIC_INFO_STREET_LANTERN at [660.005,0.000, 1112.704]
+	Lantern = create OBJECT MOBILE_STATIC_INFO_STREET_LANTERN at [654.510,2.125, 1152.090]
+	Lantern = create OBJECT MOBILE_STATIC_INFO_STREET_LANTERN at [704.594,13.510, 1083.379]
+	Lantern = create OBJECT MOBILE_STATIC_INFO_STREET_LANTERN at [2668.320,20.207, 1149.951]
+	Lantern = create OBJECT MOBILE_STATIC_INFO_STREET_LANTERN at [2800.907,16.810, 1205.901]
+	Lantern = create OBJECT MOBILE_STATIC_INFO_STREET_LANTERN at [2702.790,22.110, 1249.325]
+	Lantern = create OBJECT MOBILE_STATIC_INFO_STREET_LANTERN at [2763.496,22.709, 1111.505]
+
+end script CreateLanterns
+
+//------------------------------------------------------------------------------------------------------------------------
+begin script SetupCreatureIsle
+	CreatePos	= marker at [597.6545, 48.9100, 1279.5680]
+
+start
+	MyCreature = get player 1 creature
+	if MyCreature not exists
+		load my_creature at [CreatePos]
+	end if
+	wait 0.3 seconds
+	MyCreature = get player 1 creature
+
+	if MyCreature not exists //For no creature in game yet.
+		MyCreature=create CREATURE CREATURE_TYPE_APE at [CreatePos]
+		set player 1 creature to MyCreature
+		ACTUAL_HEIGHT of MyCreature = 1
+	end if
+
+	//Disable help so these don't text coming up...
+	disable help system
+	set MyCreature DEVELOPMENT_PHASE_FULLY_MATURE development
+
+	// Set the MyCreature's normal abilities
+	teach MyCreature INTELLECTUAL CREATURE_ACTION_KNOWN_ABOUT_USE_FIELD SCRIPT_TRUE
+	teach MyCreature INTELLECTUAL CREATURE_ACTION_KNOWN_ABOUT_USE_STORAGE_PIT SCRIPT_TRUE
+	teach MyCreature INTELLECTUAL CREATURE_ACTION_KNOWN_ABOUT_FISH SCRIPT_TRUE
+	teach MyCreature INTELLECTUAL CREATURE_ACTION_KNOWN_ABOUT_DANCE SCRIPT_TRUE
+
+	//Set the MyCreature's magical abilities
+	teach MyCreature MAGICAL MAGIC_TYPE_FOOD SCRIPT_TRUE
+	teach MyCreature MAGICAL MAGIC_TYPE_WOOD SCRIPT_TRUE
+	teach MyCreature MAGICAL MAGIC_TYPE_WATER SCRIPT_TRUE
+
+	// Set MyCreatures hunger levels etc to start values
+	HEALTH of MyCreature = 1.0
+	ENERGY of MyCreature = 1.0
+	EXHAUSTION of MyCreature = 0.0
+	HUNGER of MyCreature = 0.0
+	if ACTUAL_HEIGHT of MyCreature < 1.0
+		ACTUAL_HEIGHT of MyCreature = 1.0
+	end if
+
+	enable help system
+	release MyCreature
+
+	run background script SetupGameObjects
+	run background script CreateLanterns
+	run background script PlaceDidYouKnows
+
+end script SetupCreatureIsle
+

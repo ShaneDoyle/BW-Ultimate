@@ -1,4 +1,4 @@
-challenge THE_WORKSHOP
+//challenge CHALLENGE_THE_WORKSHOP
 
 //------------------------------------------------------------------------------------------------------------------------
 begin script TheWorkshopComplete(Workshop)
@@ -41,7 +41,7 @@ begin script TheWorkshopComplete(Workshop)
 	ScaffoldCreatePos=0
 
 start
-	Highlight = create highlight HIGHLIGHT_QUEST at [HighlightPos]
+	Highlight = create highlight CHALLENGE_THE_WORKSHOP HIGHLIGHT_QUEST at [HighlightPos]
 	run script ChallengeHighlightNotify(Highlight, HighlightPos, variable EVIL_ADVISOR, variable HELP_TEXT_LAND_2_WORKSHOP_NOTIFIER_01)
 
 	Man=create VILLAGER ENGINEER at [Workshop]
@@ -79,7 +79,7 @@ start
 		close dialogue
 		wait 0.1 seconds
 
-		snapshot quest success 0.0 alignment 0.0 HELP_TEXT_TITLE_112 StandardReminder(variable HELP_TEXT_LAND_2_WORKSHOP_NOTIFIER_02)	
+		snapshot CHALLENGE_THE_WORKSHOP quest success 0.0 alignment 0.0 HELP_TEXT_TITLE_112 StandardReminder(variable HELP_TEXT_LAND_2_WORKSHOP_NOTIFIER_02)	
 
 		say HELP_TEXT_LAND_2_WORKSHOP_02		//You need to help your homeless
 		Man play ANM_P_LOOKING_FOR_SOMETHING loop 1
@@ -181,7 +181,7 @@ start
 		close dialogue
 		wait 0.1 seconds
 
-		snapshot quest success 0.1 alignment 0.0 HELP_TEXT_TITLE_112 StandardReminder(variable HELP_TEXT_LAND_2_WORKSHOP_NOTIFIER_03)
+		snapshot CHALLENGE_THE_WORKSHOP quest success 0.1 alignment 0.0 HELP_TEXT_TITLE_112 StandardReminder(variable HELP_TEXT_LAND_2_WORKSHOP_NOTIFIER_03)
 
 		move camera position to [BeginPos] time 3
 		move camera focus to [BeginFoc ] time 3
@@ -220,7 +220,7 @@ start
 		wait until read
 	end dialogue
 
-	update snapshot success 0.2 alignment 0.0 HELP_TEXT_TITLE_112 StandardReminder(variable HELP_TEXT_LAND_2_WORKSHOP_NOTIFIER_04)
+	update snapshot CHALLENGE_THE_WORKSHOP success 0.2 alignment 0.0 HELP_TEXT_TITLE_112 StandardReminder(variable HELP_TEXT_LAND_2_WORKSHOP_NOTIFIER_04)
 
 	while WaitLoopActive == 0
 		ObjectInHand = get object held
@@ -265,7 +265,7 @@ start
 	run background script DidYouKnow(dykworkshop, variable HELP_TEXT_DYK_94, variable DYK_VILLAGE_LIFE)
 //	run background script DidYouKnow(dykworkshop2, variable HELP_TEXT_DYK_95, variable DYK_VILLAGE_LIFE)
 
-	update snapshot success 0.3 alignment 0.0 HELP_TEXT_TITLE_112 StandardReminder(variable HELP_TEXT_LAND_2_WORKSHOP_15)
+	update snapshot CHALLENGE_THE_WORKSHOP success 0.3 alignment 0.0 HELP_TEXT_TITLE_112 StandardReminder(variable HELP_TEXT_LAND_2_WORKSHOP_15)
 
 	// Check to see how many homes have been built.
 	OriginalSize=adult capacity of Town
@@ -292,7 +292,7 @@ start
 	end loop
 
 	///NEED A HIGHLIGHT TO SAY ABOUT THE HOMELESS....
-	Highlight = create highlight HIGHLIGHT_QUEST at [Workshop]
+	Highlight = create highlight CHALLENGE_THE_WORKSHOP HIGHLIGHT_QUEST at [Workshop]
 	run script ChallengeHighlightNotify(Highlight, Workshop, variable EVIL_ADVISOR, variable HELP_TEXT_LAND_2_WORKSHOP_NOTIFIER_05)
 
 
@@ -352,7 +352,7 @@ start
 		enable spell SPELL_FOREST in Town
 		wait 0.1 seconds
 
-		snapshot quest success 1 alignment 0.0 HELP_TEXT_TITLE_112 StandardReminder(variable HELP_TEXT_LAND_2_WORKSHOP_15)
+		snapshot CHALLENGE_THE_WORKSHOP quest success 1 alignment 0.0 HELP_TEXT_TITLE_112 StandardReminder(variable HELP_TEXT_LAND_2_WORKSHOP_15)
 
 		wait 6 seconds
 		enable spell SPELL_FOREST in Town

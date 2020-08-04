@@ -1,4 +1,4 @@
-challenge LandControl1
+//challenge LandControl1
 
 begin script LandControl1
 
@@ -7,9 +7,34 @@ begin script LandControl1
  CreatureGates = 0
 
 start
+	
+	//stop all scripts excluding files "LandControl1.txt"
+	//load map "scripts/land1.txt"
+	
+	stop all scripts excluding files "LandControl1.txt"
+	run background script CustomLoadPlayerColour
+	
+	//DEBUG
+	/*
+	if MyCreature not exists //For no creature in game yet.
+		MyCreature=create CREATURE CREATURE_TYPE_TURTLE at [2279.37,2877.50]
+		set player 1 creature to MyCreature
+		MyCreature = get player 1 creature
+		set MyCreature DEVELOPMENT_PHASE_FULLY_MATURE development
+		run SCRIPT_DEV_FUNCTION_ROPE_LEASH_ENABLED developer function
+		run SCRIPT_DEV_FUNCTION_OTHER_LEASHES_ENABLED developer function
+		disable MyCreature development script
+		release MyCreature
+	ACTUAL_HEIGHT of MyCreature = 0.7
+	end if
+	//run script CreatureGuardian	
+	//run script CreatureDevGuideTeachesFight
+	//run script CreatureGuardian
+	*/
+	
+	
 	run script SetupLand1
 		run background script SingingStoneCircle							// Places Stones and wait until SingingStonesStart == 1
-
 	if IsSkippingToCreatureSelect == 0
 		run script FollowUs
 		run script CitadelGuide
@@ -18,13 +43,13 @@ start
 		MyCitadel = get CITADEL at [1915.05,2508.89] radius 5
 		BUILT of MyCitadel = 1
 	end if
-
+	
 	run background script DidYouKnow(dyk76,variable HELP_TEXT_DYK_76, variable DYK_VILLAGE_LIFE)			// fish farms
 
-		run background script ThrowingStones
-		ThrowingStonesStart = 1
-		run background script TheLostFlock
-	
+	run background script ThrowingStones
+	ThrowingStonesStart = 1
+	run background script TheLostFlock
+		
 	if IsSkippingToCreatureSelect == 0
 		run script ChooseYourCreature
 	else
@@ -51,9 +76,8 @@ start
 	if IsSkippingCreatureGuide == 0
 		run background script MoveTheGuideAround
 	end if
-
-//	run script CreatureDevelopmentSet
-
+	
+	
 	run script CreatureDevSeeHome
 	if IsSkippingCreatureGuide == 0
 		run script CreatureDevLearnToEat
@@ -66,44 +90,53 @@ start
 		disable MyCreature development script
 		release MyCreature
 	end if
-		run background script MagicMushroom
-		SingingStonesStart = 1
-
+	
+	run background script MagicMushroom
+	SingingStonesStart = 1
+	
 	if IsSkippingCreatureGuide == 0
 		run script CreatureDevLeashIntro
 	end if
-
-		run background script HermitMain
-
+	
+	run background script HermitMain
+	
 	if IsSkippingCreatureGuide == 0
 		run script CreatureDevLeashAttachToHouse
 	end if
-
-		LostFlockWanted = 1
-		run background script CreatureSavingPeople							// This waits until creature big enough
-//	run script CreatureGuideSet
+	
+	LostFlockWanted = 1
+	run background script CreatureSavingPeople							// This waits until creature big enough
 
 	if IsSkippingCreatureGuide == 0
 		run script MeetTheGuide
 		run script GuideAsksToMeetYourCreature
 		run script GuideImpressTownLesson
 	end if
-
-		run background script PiedPiper
+	
+	run background script PiedPiper
 
 	if IsSkippingCreatureGuide == 0
 		run script GuideImpressTownNextLesson
 		run script CreatureDevGuideTeachesFight
 	end if
-
-		run background script CreatureGuardian								
-		run background script LeaveThroughVortexL1							// This waits until OpenVortexL1 == 1 (set in TheStorm)
-
+	
+	run background script CreatureGuardian								
+	run background script LeaveThroughVortexL1							// This waits until OpenVortexL1 == 1 (set in TheStorm)
+	
 	if IsSkippingCreatureGuide == 0
-		run script TheStorm	
+		run script TheStorm
 	else
+		set fade in time 3
+		//run script LeaveThroughVortexL1
 		wait until LeaveLandNow == 1
 	end if
-
+	
+	//Go to Land 2!
+	stop all scripts excluding files "LandControl1.txt"
+	load map "Ultimate/Scripts/UltimateLand2.txt"
+	run script LandControl2
+	stop all scripts excluding files "LandControl2.txt"
+	
+	
 end script LandControl1
 

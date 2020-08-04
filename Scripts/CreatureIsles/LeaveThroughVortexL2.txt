@@ -1,4 +1,4 @@
-challenge LEAVE_THROUGH_VORTEX_LAND2
+//challenge CHALLENGE_LEAVE_THROUGH_VORTEX_LAND2
 
 
 begin script LeaveThroughVortexL2
@@ -67,16 +67,16 @@ start
 		
 	end cinema
 	
-	Highlight = create highlight HIGHLIGHT_QUEST at [VortexPos]
+	Highlight = create highlight CHALLENGE_LEAVE_THROUGH_VORTEX_LAND2 HIGHLIGHT_QUEST at [VortexPos]
 
 	ALTITUDE of Highlight = 20
 
 	run script ChallengeHighlightNotify(Highlight, VortexPos, variable GOOD_ADVISOR, variable HELP_TEXT_GENERAL_LEAVE_THROUGH_VORTEX_02)
 		
 	begin cinema
-		move camera to T00_000 time 4
+		move camera position to [1071.331421, 147.146820, 3599.504639] time 4 //T00_000 time 4
 		wait until camera ready
-		camera path TRACK00
+		//camera path TRACK00
 		wait 2 seconds
 		set fade red 0 green 0 blue 0 time 2							// Fade to Black
 		wait until camera ready and 2 seconds

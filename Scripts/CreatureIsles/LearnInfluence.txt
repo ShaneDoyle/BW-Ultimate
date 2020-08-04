@@ -1,4 +1,4 @@
-challenge LEARN_INFLUENCE
+//challenge CHALLENGE_LEARN_INFLUENCE
 
 
 begin script LearnInfluence
@@ -16,9 +16,9 @@ start
 			move computer player 2 to [2834.1638, 32.7829, 3330.7322] speed 300 with fixed height
 
 			if DidLearnGesturesBeforeOwningTown == 1
-				set camera to T00_000
+				set camera position to [2841.571045, 36.615402, 3453.742676] //T00_000
 
-				camera path TRACK00
+				//camera path TRACK00  //TOFIXPATH
 				//"Congratulations"
 				say HELP_TEXT_EXTRA_KHAZAR_26
 				wait until read
@@ -28,7 +28,7 @@ start
 				wait until read
 				wait until camera ready	
 			else 
-				set camera to T00_007 
+				set camera position to [2625.774658, 0.201016, 3337.966797] //T00_007 
 			end if
 
 			//"Time is not kind, you need to gain influence in the direction of our common enemy."

@@ -1,4 +1,4 @@
-challenge CREATURE_SAVING_PEOPLE
+//challenge CHALLENGE_CREATURE_SAVING_PEOPLE
 
 //------------------------------------------------------------------------------------------------------------------------
 global CreatureSavingPeopleSavedCounter
@@ -133,7 +133,7 @@ start
 
 	run background script Alert
 
-	Highlight = create highlight HIGHLIGHT_CHALLENGE at [ShorePos] + [10,0,10]
+	Highlight = create highlight CHALLENGE_CREATURE_SAVING_PEOPLE HIGHLIGHT_CHALLENGE at [ShorePos] + [10,0,10]
 	run script ChallengeHighlightNotify(Highlight, ShorePos, variable GOOD_ADVISOR, variable HELP_TEXT_GENERAL_CHALLENGE_START_04)
 	
 	CreatureSavingPeopleTimer = create timer for 300 seconds
@@ -197,7 +197,7 @@ start
 		close dialogue
 		wait 2 second
 
-		snapshot challenge success 0.0 alignment 0.0 HELP_TEXT_TITLE_06 StandardReminder(variable HELP_TEXT_REMINDER_08)
+		snapshot CHALLENGE_CREATURE_SAVING_PEOPLE challenge success 0.0 alignment 0.0 HELP_TEXT_TITLE_06 StandardReminder(variable HELP_TEXT_REMINDER_08)
 
 		eject evil spirit
 		move camera position to [1770.485, 5.680, 2490.528] time 8
@@ -245,7 +245,7 @@ start
 	AlignmentTotal = ((CreatureSavingPeopleSavedCounter - CreatureSavingPeopleMurderCount) * 0.2)
 	AlignmentTotal -= CreatureSavingPeopleDrownedCounter*0.1
 
-	update snapshot success 0.8 alignment AlignmentTotal HELP_TEXT_TITLE_06 CreatureNullReminder
+	update snapshot CHALLENGE_CREATURE_SAVING_PEOPLE success 0.8 alignment AlignmentTotal HELP_TEXT_TITLE_06 CreatureNullReminder
 
 	//If it was inaction which ended this script...
 	if	CreatureSavingPeopleLastDeathWasInaction == 1
@@ -377,7 +377,7 @@ start
 		close dialogue
 		wait 1 seconds
 
-		snapshot challenge success 1.0 alignment AlignmentTotal HELP_TEXT_TITLE_06 StandardReminder(variable HELP_TEXT_REMINDER_08)
+		snapshot CHALLENGE_CREATURE_SAVING_PEOPLE challenge success 1.0 alignment AlignmentTotal HELP_TEXT_TITLE_06 StandardReminder(variable HELP_TEXT_REMINDER_08)
 	end cinema
 
 	delete Highlight
