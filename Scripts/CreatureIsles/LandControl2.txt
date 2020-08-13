@@ -334,6 +334,10 @@ begin script LandControl2
 start
 	//Exit vortex do the intro and start the landscape town independant scripts.
 	run script SetupLand2
+	
+	//Check to apply hard mode.
+	run background script CustomHardModeApplier
+	
 // Do not need the following lines as they are in the map file. Also teleport is not on this town but the next one. SPL
 //	enable spell SPELL_HEAL_LEVEL_1 in Town1
 //	enable spell SPELL_TELEPORT in Town1

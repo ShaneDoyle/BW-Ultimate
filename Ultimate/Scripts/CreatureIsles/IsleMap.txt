@@ -1,0 +1,10 @@
+LOAD_FEATURE_SCRIPT(".\scripts\creatureisles\Isle01.txt")
+SET_STARTUP("ForceIntro")
+rem PAUSE_GAME()
+rem OUTPUT_VILLAGERS()
+rem OUTPUT_CREATURES()
+rem OUTPUT_COLLIDE()
+rem OUTPUT_ALLOC()
+rem LOAD_OLD_CREATURE()
+rem KEYCONFIG("J")
+

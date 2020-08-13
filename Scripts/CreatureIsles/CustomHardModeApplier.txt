@@ -1,0 +1,326 @@
+
+
+
+
+begin script CustomHardModePlayerInfluence
+	Town0 = get town with id 0
+	Town1 = get town with id 1
+	Town2 = get town with id 2
+	Town3 = get town with id 3
+	Town4 = get town with id 4
+	Town5 = get town with id 5
+	Town6 = get town with id 6
+	Town7 = get town with id 7
+	Town8 = get town with id 8
+	Town9 = get town with id 9
+	Town10 = get town with id 10
+	Town11 = get town with id 11
+	Town12 = get town with id 12
+	Town13 = get town with id 13
+	Town14 = get town with id 14
+	Town15 = get town with id 15
+	
+	
+start
+	// Land
+	while Difficulty == 1
+	
+		//Reduce influence to only 33% of normal for Player 1. Only used in Hard Mode!
+		if get PLAYER of Town0 == 1
+			run map script line "SET_A_TOWNS_INFLUENCE_MULTIPLIER(0, 0.33333333)"
+		end if
+		
+		if get PLAYER of Town1 == 1
+			run map script line "SET_A_TOWNS_INFLUENCE_MULTIPLIER(1, 0.33333333)"
+		end if
+
+		if get PLAYER of Town2 == 1
+			run map script line "SET_A_TOWNS_INFLUENCE_MULTIPLIER(2, 0.33333333)"
+		end if
+
+		if get PLAYER of Town3 == 1
+			run map script line "SET_A_TOWNS_INFLUENCE_MULTIPLIER(3, 0.33333333)"
+		end if
+		
+		if get PLAYER of Town4 == 1
+			run map script line "SET_A_TOWNS_INFLUENCE_MULTIPLIER(4, 0.33333333)"
+		end if
+		
+		if get PLAYER of Town5 == 1
+			run map script line "SET_A_TOWNS_INFLUENCE_MULTIPLIER(5, 0.33333333)"
+		end if
+		
+		if get PLAYER of Town6 == 1
+			run map script line "SET_A_TOWNS_INFLUENCE_MULTIPLIER(6, 0.33333333)"
+		end if
+		
+		if get PLAYER of Town7 == 1
+			run map script line "SET_A_TOWNS_INFLUENCE_MULTIPLIER(7, 0.33333333)"
+		end if
+		
+		if get PLAYER of Town8 == 1
+			run map script line "SET_A_TOWNS_INFLUENCE_MULTIPLIER(8, 0.33333333)"
+		end if
+		
+		if get PLAYER of Town9 == 1
+			run map script line "SET_A_TOWNS_INFLUENCE_MULTIPLIER(9, 0.33333333)"
+		end if
+		
+		if get PLAYER of Town10 == 1
+			run map script line "SET_A_TOWNS_INFLUENCE_MULTIPLIER(10, 0.33333333)"
+		end if
+		
+		if get PLAYER of Town11 == 1
+			run map script line "SET_A_TOWNS_INFLUENCE_MULTIPLIER(11, 0.33333333)"
+		end if
+		
+		if get PLAYER of Town12 == 1
+			run map script line "SET_A_TOWNS_INFLUENCE_MULTIPLIER(12, 0.33333333)"
+		end if
+		
+		if get PLAYER of Town13 == 1
+			run map script line "SET_A_TOWNS_INFLUENCE_MULTIPLIER(13, 0.33333333)"
+		end if
+		
+		if get PLAYER of Town14 == 1
+			run map script line "SET_A_TOWNS_INFLUENCE_MULTIPLIER(14, 0.33333333)"
+		end if
+		
+		if get PLAYER of Town15 == 1
+			run map script line "SET_A_TOWNS_INFLUENCE_MULTIPLIER(15, 0.33333333)"
+		end if
+		
+		wait 3 seconds
+	end while
+end script CustomHardModePlayerInfluence
+
+
+
+//Make Enemy harder.
+begin script CustomHardModeAdjustAI
+
+start
+	wait 5 seconds
+	if LandNumber == 2
+		//Make Lethys Better...
+		set computer player 3 speed 3000.0
+		
+		set computer player 3 personality "TakeOverTownByImpressing" 1.00
+		set computer player 3 personality "DefeatPlayer" 1.00
+		set computer player 3 personality "ExpandInfluence" 0.20
+		
+		set computer player 3 attitude to player 1 to 1.0
+		set computer player 3 attitude to player 2 to 1.0
+		
+	end if
+
+end script CustomHardModeAdjustAI
+
+
+
+
+// Make creature capture town.
+begin script CustomHardMode_CreatureCaptureTown(PlayerNum, TownNum)
+	Town = get town with id TownNum
+	TownStore = get STORE in Town
+	Creature = 0 //get player 3 creature
+	AddBelief = 0
+start
+	Creature = get player PlayerNum creature
+	wait 1 seconds
+	
+	if get PLAYER of Town <= 0
+		if size of Town > 0 //Check if town not dead.
+		
+			//Attach creature to storeof the village.
+			attach Creature leash to TownStore
+			
+			//Wait until town is not neutral or town dies. Also, periodically add some extra belief.
+			while get PLAYER of Town <= 0 and size of Town > 0
+				AddBelief = get Town belief for player PlayerNum
+				AddBelief += 0.05
+				set Town belief scale AddBelief
+				wait 0.2 seconds
+			end while
+			
+			detach Creature leash
+			ALIGNMENT of Creature = -1.0
+			
+		end if
+	end if
+end script CustomHardMode_CreatureCaptureTown
+
+
+
+
+
+//Make Enemy harder.
+begin script CustomHardModeLethysLand2Capture
+	LethysTown11 = 0.01
+
+
+	Town_0 = get town with id 0
+	Town_1 = get town with id 1
+	Town_2 = get town with id 2
+	Town_3 = get town with id 3
+	Town_4 = get town with id 4
+	Town_5 = get town with id 5
+	Town_6 = get town with id 6
+	Town_7 = get town with id 7
+	Town_8 = get town with id 8
+	Town_9 = get town with id 9
+	Town_10 = get town with id 10
+	Town_11 = get town with id 11
+	Town_12 = get town with id 12
+	Target_Town = 11
+	
+	ComputerAIAction = 0
+	PlayerNum = 3
+	LCreature = 0
+	HealthCheck = 0
+
+	
+	InfluenceP1 = 0 //get player 1 raw influence at camera position
+	InfluenceP3 = 0 //get player 2 raw influence at camera position
+	
+	LethysLightning = 0
+	LethysFreeze = 0
+	
+
+
+start
+
+
+	
+	
+	wait 60 seconds // Wait 10 minutes before starting.
+	
+	
+	LCreature = get player 3 creature
+	wait 3 seconds
+	
+	
+	//Lethys do nothing with our Creature. Let's do it manually.
+	set computer player 3 personality "ReactToAggressiveCreature" 0 
+	
+	while Difficulty == 1
+		
+		
+		InfluenceP1 = get player 1 raw influence at [MyCreature]
+		InfluenceP3 = get player 3 raw influence at [MyCreature]
+		
+	
+		//If Creature in LethysInfluence.
+		while InfluenceP3 > InfluenceP1
+			
+			attach LCreature leash to MyCreature
+			move computer player 3 to [MyCreature] + [0,25,0] speed 100000 // Move Lethys to the creature
+			wait 0.5 seconds
+			
+			//Cast Freeze Miracle
+			LethysFreeze = cast CREATURE_SPELL_FREEZE spell on MyCreature from computer player 3 position + [0,25,0] radius 0 time 60 curl 0
+			wait 5.00 seconds
+			
+			//Refresh again to make sure Lethys will not cheat outside his influence.
+			InfluenceP1 = get player 1 raw influence at [MyCreature]
+			InfluenceP3 = get player 3 raw influence at [MyCreature]
+			
+			if InfluenceP3 > InfluenceP1
+			
+				//Adjust Lethys position.
+				move computer player 3 to [MyCreature] + [number from 10 to 20, 25, number from 10 to 20] speed 10000 // Move Lethys to the creature
+				wait 0.5 seconds
+				
+				//Cast Lightning Bolt at Creature.
+				LethysLightning = cast SPELL_LIGHTNING_LEVEL_1 spell at [MyCreature] from computer player 3 position + [0,25,0] radius 5.0 time 5 curl 0
+				wait 5.00 seconds
+				
+				release computer player 3
+				wait 60 seconds
+				
+				InfluenceP1 = get player 1 raw influence at [MyCreature]
+				InfluenceP3 = get player 3 raw influence at [MyCreature]
+			end if
+			
+			release computer player 3
+			
+		end while
+		
+		
+		
+		
+		
+
+		//Controls the actions of the god.
+		if InfluenceP3 <= InfluenceP1
+			ComputerAIAction = 0 //number from 1 to 1
+		end if
+		
+		
+		//If no action selected. Main controller of creature action selector.
+		if ComputerAIAction == 0
+			Target_Town = number from 0 to 12
+			ComputerAIAction = 1
+		end if
+		
+		// Impress Towns.
+		if ComputerAIAction == 1
+			run script CustomHardMode_CreatureCaptureTown(PlayerNum, Target_Town)
+			ComputerAIAction = 0
+		end if
+
+	end while
+
+end script CustomHardModeLethysLand2Capture
+
+
+
+
+//Make Enemy harder.
+begin script CustomHardModeLethysCreature
+
+	LCreature = 0 //Lethys Creature
+	PlayerCreature = get player 1 creature
+	BuildCitadel = 0
+	
+start
+	wait 90 seconds
+	while Difficulty == 1
+		LCreature = get player 3 creature
+		ALIGNMENT of LCreature = -1.0
+		SCALE of LCreature = 1.0
+		
+		begin dialogue
+			say "Hello World"
+			wait until read
+		end dialogue
+
+		BuildCitadel = get CITADEL at [3361.26,3241.85] radius 50
+		wait 0.5 seconds
+		attach LCreature leash to BuildCitadel
+
+		set LCreature only desire CREATURE_DESIRE_ANGER
+		wait 10 seconds
+	end while
+
+end script CustomHardModeLethysCreature
+
+
+
+begin script CustomHardModeApplier
+
+start
+
+	//Adjust player's influence
+	run background script CustomHardModePlayerInfluence
+	
+	//Make AI more difficult.
+	run background script CustomHardModeAdjustAI
+	
+	//Lethys capture villages slowly if not taken. 
+	run background script CustomHardModeLethysLand2Capture
+	
+	//Lethys creature attacks players every once in a while
+	//run background script CustomHardModeLethysCreature
+	
+end script CustomHardModeApplier

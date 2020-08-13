@@ -1,0 +1,6 @@
+[SAY] Processing Audio/Script/Atmos
+[MAINDIR]  c:\dev\destblack
+[EXCLUDERS] *.scc mssccprj.*
+[INCLUDERS] *.sad
+[SAY] Finished processing Audio/Script/Atmos
+

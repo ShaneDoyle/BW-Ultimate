@@ -131,12 +131,24 @@ start
 		wait until LeaveLandNow == 1
 	end if
 	
-	//Go to Land 2!
-	stop all scripts excluding files "LandControl1.txt"
-	load map "Ultimate/Scripts/UltimateLand2.txt"
-	run script LandControl2
-	stop all scripts excluding files "LandControl2.txt"
 	
+	
+	
+	//Go to Land 2!
+		// Normal difficulty.
+		if Difficulty == 0
+			load map "Scripts/UltimateLand2.txt"
+			run script LandControl2
+			stop all scripts excluding files "CustomLandController.txt"
+		end if
+		
+		// Hard Mode.
+		if Difficulty == 1
+			load map "Scripts/HardUltimateLand2.txt"
+			run script LandControl2
+			stop all scripts excluding files "CustomLandController.txt"
+			//run background script CustomHardModeApplier
+		end if
 	
 end script LandControl1
 

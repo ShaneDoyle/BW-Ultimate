@@ -1,0 +1,7 @@
+[SAY] Processing Audio/SFX/Script
+[MAINDIR]  c:\dev\destblack
+[EXCLUDERS] *.scc mssccprj.* *.cie
+[INCLUDERS] *.sad
+[INCLUDERS] *.h
+[SAY] Finished processing Audio/SFX/Script
+

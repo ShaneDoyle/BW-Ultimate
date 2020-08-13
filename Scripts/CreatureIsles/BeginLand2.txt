@@ -130,13 +130,14 @@ start
 	set computer player 2 position to [2508.825, 105.190, 1772.476] 
 
 	run script StartEnterLand2(Town)
+
 	begin cinema
 		run background script LethysStartAI
 		run script OpenVortex(VortexPos, Town, FlockPos, CreaturePos)
 		start music MUSIC_TYPE_SCRIPT_KHAZAR
-		run script IntroduceKhazar
-		run script ShowNewTown
-		run script GiveScaffold
+		//run script IntroduceKhazar
+		//run script ShowNewTown
+		//run script GiveScaffold
 		// Build Citadel 30%
 		build building at [3361.26,3241.85] desire 1.0
 		BuildCitadel = get CITADEL at [3361.26,3241.85] radius 50
@@ -172,6 +173,7 @@ start
 	end dialogue
 
 	run script EndEnterLand2
+
 end script EnterLand2
 
 //------------------------------------------------------------------------------------------------------------------------

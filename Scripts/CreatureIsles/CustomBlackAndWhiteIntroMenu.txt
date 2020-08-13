@@ -386,9 +386,9 @@ start
 	wait 2 seconds
 	
 	//Go to Land 1!
-	load map "Ultimate/Scripts/UltimateLand1.txt"
-	run script LandControl1
-	stop all scripts excluding files "LandControl1.txt"
+	//load map "Scripts/UltimateLand1.txt"
+	run script CustomLandController(1)
+	//stop all scripts excluding files "IsleControl.txt"
 
 end script CustomGetInput
 
@@ -422,6 +422,7 @@ start
 	wait 0.3 seconds
 	MyCreature = get player 1 creature
 	MyCreatureHeight = SCRIPT_OBJECT_PROPERTY_TYPE_HEIGHT of MyCreature
+	ACTUAL_HEIGHT of MyCreature = 0.75
 	
 	
 	

@@ -1,0 +1,6 @@
+[SAY] Processing Audio/SFX/Game
+[MAINDIR]  c:\dev\destblack
+[EXCLUDERS] *.scc mssccprj.*
+[INCLUDERS] *.sad
+[SAY] Finished processing Audio/SFX/Game
+

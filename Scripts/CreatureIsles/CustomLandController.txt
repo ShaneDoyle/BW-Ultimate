@@ -1,0 +1,34 @@
+//------------------------------------------------------------------------------------------------------------------------
+// Land Controller. Takes in a LandNumber, and will go to the appropriate land.
+//------------------------------------------------------------------------------------------------------------------------
+begin script CustomLandController(LandDestination)
+
+
+start
+	// Land 1.
+	if LandDestination == 1
+		load map "Scripts/UltimateLand1.txt"
+		run script LandControl1
+		stop all scripts excluding files "CustomLandController.txt"
+	end if
+	
+	// Land 2.
+	if LandDestination == 2
+	
+		// Normal difficulty.
+		if Difficulty == 0
+			load map "Ultimate/Scripts/UltimateLand2.txt"
+			run script LandControl2
+			stop all scripts excluding files "CustomLandController.txt"
+		end if
+		
+		// Hard Mode.
+		if Difficulty == 1
+			load map "Ultimate/Scripts/UltimateLand2.txt"
+			run script LandControl2
+			stop all scripts excluding files "CustomLandController.txt"
+			run background script CustomHardModeApplier
+		end if
+	end if
+
+end script CustomLandController

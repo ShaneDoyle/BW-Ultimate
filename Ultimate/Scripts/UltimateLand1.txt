@@ -1,7 +1,7 @@
 VERSION(2.300000)
 SET_LAND_NUMBER(1)
 
-LOAD_LANDSCAPE(".\Ultimate\Landscape\UltimateLand1.lnd")
+LOAD_LANDSCAPE(".\Ultimate\Scripts\Landscape\UltimateLand1.lnd")
 
 START_CAMERA_POS("1441.56,2081.76")
 SET_TOWN_INFLUENCE_MULTIPLIER(1.000000)
