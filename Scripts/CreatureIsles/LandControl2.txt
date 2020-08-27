@@ -459,5 +459,21 @@ start
 	load map "scripts/land3.txt"
 	run script LandControl3
 	stop all scripts excluding files "LandControl3.txt"
+	
+	//Change Land! (Land 2)
+	
+	// Normal difficulty.
+	if Difficulty == 0
+		stop all scripts excluding files "LandControl2.txt"
+		load map "Scripts/UltimateLand3.txt"
+		run script LandControl3
+	end if
+	
+	// Hard Mode.
+	if Difficulty == 1
+		stop all scripts excluding files "LandControl3.txt"
+		load map "Scripts/HardUltimateLand3.txt"
+		run script LandControl3
+	end if
 
 end script LandControl2

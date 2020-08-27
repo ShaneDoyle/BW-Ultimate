@@ -159,15 +159,17 @@ start
 		set GestureTimer time to 5*60 seconds
 		TutorialTimer = 10
 		GestureSuccess=1
+		
+		set WorshipSite mana RequiredMana
 
 		//TOFIXTUTORIAL
 		//while	SelectGesture == get HELP_EVENT_TYPE_GESTURE_START_SPELL_SELECT total events or 
 		//		GetSpellGesture == get HELP_EVENT_TYPE_GESTURE_ACTUAL_SPELL_SELECT total events
-		while TutorialTimer > 0
+		while get WorshipSite mana total >= RequiredMana
 
 				clear player 1 spell charging
 				wait 1 seconds
-				TutorialTimer--
+				//TutorialTimer--
 
 				//Make sure you can afford the spell always
 				if get WorshipSite mana total < RequiredMana
@@ -183,6 +185,7 @@ start
 						wait until read
 						GestureSuccess = 0
 					end dialogue
+					set WorshipSite mana RequiredMana - 1
 				end if
 		end while
 

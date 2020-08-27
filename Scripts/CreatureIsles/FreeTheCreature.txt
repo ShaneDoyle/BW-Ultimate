@@ -859,7 +859,15 @@ start
 						// FREE THE CREATURE COMPLETELY FROM THE SCRIPT
 						release MyCreature
 						MyCreature = get player 1 creature
-						set computer player 2 personality "ReactToAggressiveCreature" 1 
+						
+						//If normal mode, restore Lethys aggression to creature. If hard, use custom attack script.
+						if Difficulty == 0
+							set computer player 2 personality "ReactToAggressiveCreature" 1
+						elsif Difficulty == 1
+							set computer player 2 personality "ReactToAggressiveCreature" 1 //This should be 0. Not used currently. Can't call custom hard mode scripts from here...for now.
+							//run background script CustomHardMode_GodAttack(2)
+						end if
+						
 						ENERGY of MyCreature = 1
 						enable leash on MyCreature
 						enable creature in temple				
@@ -1027,7 +1035,7 @@ start
 	set MyCreature focus to [CreatureFocusPos]				// Towards my Citadel
 	disable leash on MyCreature
 	enable MyCreature indestructible
-	HEALTH of MyCreature = 0.1
+	HEALTH of MyCreature = 0.08
 	LethysCreature = get player 2 creature
 	  
 	run background script FreezeRayStatue (Statue1, JapTownL3, PrisonerPos, Town1CameraPos, Town1CameraFoc, Statue1CameraPos)

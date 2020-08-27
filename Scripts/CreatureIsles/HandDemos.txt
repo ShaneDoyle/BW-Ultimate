@@ -36,8 +36,8 @@ start
 		say HELP_TEXT_HAND_DEMO_USE_KEYBOARD_01 with interaction//You can also use the keyboard
 		wait until read
 
-		say HELP_TEXT_HAND_DEMO_ROTATING_04			// Encourage the player to have a go
-		wait until read
+		//say HELP_TEXT_HAND_DEMO_ROTATING_04			// Encourage the player to have a go
+		//wait until read
 
 	end known cinema
 
@@ -79,8 +79,8 @@ start
 		say HELP_TEXT_HAND_DEMO_USE_KEYBOARD_02 with interaction//You can also use the keyboard
 		wait until read
 
-		say HELP_TEXT_HAND_DEMO_PITCHING_04			// Encourage the player to have a go
-		wait until read
+		//say HELP_TEXT_HAND_DEMO_PITCHING_04			// Encourage the player to have a go
+		//wait until read
 
 	end known cinema
 

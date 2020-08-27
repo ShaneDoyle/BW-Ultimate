@@ -8,6 +8,9 @@ start
 	run script BeginLand4(1)
 	run script SetupUndeadVillage
 	
+	//Check to apply hard mode.
+	run background script CustomHardModeApplier
+	
 	run background script SetUndeadTownBeliefToZero
 	run background script SetUndeadTownHealth
 	run background script ThesiusPuzzleLand4

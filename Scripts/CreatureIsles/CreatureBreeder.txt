@@ -128,7 +128,7 @@ start
 				//move camera focus to [Breeder] time 1
 				//wait until camera ready
 
-				if creature CREATURE_TYPE_LEOPARD is available	and GlobalCurrentCreature != variable CREATURE_TYPE_LEOPARD
+				if GlobalCurrentCreature != variable CREATURE_TYPE_LEOPARD
 					OfferLeopard = 1
 					SpecialCount++
 					SpecialEffect = create special effect SPOT_VISUAL_CREATURE_TARGET at [CreaturePos] time 3
@@ -141,7 +141,7 @@ start
 						LastCreature = Stored
 					end if
 				end if
-				if creature CREATURE_TYPE_HORSE is available and GlobalCurrentCreature != variable CREATURE_TYPE_HORSE
+				if GlobalCurrentCreature != variable CREATURE_TYPE_HORSE
 					OfferHorse = 1
 					SpecialCount++
 					SpecialEffect = create special effect SPOT_VISUAL_CREATURE_TARGET at [CreaturePos]  time 3
@@ -154,7 +154,7 @@ start
 						LastCreature = Stored
 					end if
 				end if
-				if creature CREATURE_TYPE_MANDRILL is available and GlobalCurrentCreature != variable CREATURE_TYPE_MANDRILL
+				if GlobalCurrentCreature != variable CREATURE_TYPE_MANDRILL
 					OfferMandrill = 1
 					SpecialCount++
 					SpecialEffect = create special effect SPOT_VISUAL_CREATURE_TARGET at [CreaturePos] time 3
@@ -167,7 +167,7 @@ start
 						LastCreature = Stored
 					end if
 				end if
-				if creature CREATURE_TYPE_GORILLA is available   and GlobalCurrentCreature != variable CREATURE_TYPE_GORILLA
+				if GlobalCurrentCreature != variable CREATURE_TYPE_GORILLA
 					OfferGorilla = 1
 					SpecialCount++
 					SpecialEffect = create special effect SPOT_VISUAL_CREATURE_TARGET at [CreaturePos] time 3
@@ -180,7 +180,7 @@ start
 						LastCreature = Stored
 					end if
 				end if
-				if creature CREATURE_TYPE_RHINO is available   and GlobalCurrentCreature != variable CREATURE_TYPE_RHINO
+				if GlobalCurrentCreature != variable CREATURE_TYPE_RHINO
 					OfferRhino = 1
 					SpecialCount++
 					SpecialEffect = create special effect SPOT_VISUAL_CREATURE_TARGET at [CreaturePos] time 3

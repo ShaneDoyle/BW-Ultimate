@@ -33,7 +33,9 @@ start
 	IndianTownL3	= get TOWN at [IndianTownPos]
 	EgyptTownL3		= get TOWN at [EgyptTownPos]
 
-	run background script DisableLocalWeather
+	if Difficulty == 0
+		run background script DisableLocalWeather
+	end if
 
 	/***********	SETUP COMPUTER PLAYERS CREATURES FOR LAND 3		***********/
 

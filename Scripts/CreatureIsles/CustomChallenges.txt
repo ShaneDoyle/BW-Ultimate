@@ -1,4 +1,5 @@
 // Custom Challenges
+CustomKillCreatureFix.txt
 CustomHardModeApplier.txt
 CustomLoadPlayerColour.txt
 LandControl5.txt

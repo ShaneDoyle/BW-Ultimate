@@ -134,21 +134,36 @@ start
 	
 	
 	
-	//Go to Land 2!
-		// Normal difficulty.
-		if Difficulty == 0
-			load map "Scripts/UltimateLand2.txt"
-			run script LandControl2
-			stop all scripts excluding files "CustomLandController.txt"
-		end if
-		
-		// Hard Mode.
-		if Difficulty == 1
-			load map "Scripts/HardUltimateLand2.txt"
-			run script LandControl2
-			stop all scripts excluding files "CustomLandController.txt"
-			//run background script CustomHardModeApplier
-		end if
+	//Change Land! (Land 2)
+	/*
+	// Normal difficulty.
+	if Difficulty == 0
+		stop all scripts excluding files "LandControl1.txt"
+		load map "Scripts/UltimateLand2.txt"
+		run script LandControl2
+	end if
+	
+	// Hard Mode.
+	if Difficulty == 1
+		stop all scripts excluding files "LandControl1.txt"
+		load map "Scripts/HardUltimateLand2.txt"
+		run script LandControl2
+	end if
+	*/
+	
+	// Normal difficulty.
+	if Difficulty == 0
+		stop all scripts excluding files "LandControl1.txt"
+		load map "Scripts/UltimateLand2.txt"
+		run script LandControl2
+	end if
+	
+	// Hard Mode.
+	if Difficulty == 1
+		stop all scripts excluding files "LandControl1.txt"
+		load map "Scripts/HardUltimateLand2.txt"
+		run script LandControl2
+	end if
 	
 end script LandControl1
 

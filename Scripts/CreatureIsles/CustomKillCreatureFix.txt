@@ -1,0 +1,22 @@
+//------------------------------------------------------------------------------------------------------------------------
+//--CustomKillCreatureFix-------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------------------------------------
+begin script CustomKillCreatureFix(PlayerNum)
+
+LoopForever = 0
+Creature = 0
+Applied = 0
+RemoveCreatureSpells = 0
+
+start
+	
+	while LoopForever >= 0
+		Creature = get player PlayerNum creature
+		if HEALTH of Creature == 0
+				detach Creature leash
+				force Creature CREATURE_DEAD Creature
+				wait until Creature played
+		end if
+	end while
+	
+end script CustomKillCreatureFix

@@ -1,0 +1,218 @@
+//Adjust AI stats and behaviours.
+begin script CustomHardMode_NemesisKillsPlayer
+
+	MyInfluence = 0 //Get influence of Player.
+	NemesisInfluence = 0 //Get influence of Nemesis.
+	
+	PlayerCitadel = get CITADEL at player 1 temple position radius 100
+	
+	BeginPos = marker at [1457.88, 42, 3465.90]
+	NemesisPosition = marker at [1490.89, 50, 3420.88]
+	//BeginFoc = 0
+	
+	MegaBlast = 0
+	
+	TemplePos = 0
+	StartPosEnding = 0
+	
+	LoopForever = 1
+
+start
+	
+	NemesisInfluence = get player 2 raw influence at [PlayerCitadel]
+	
+	//Always check if Nemesis reaches our temple with his influence.
+	while LoopForever == 1
+		wait 5 seconds
+		
+		if NemesisInfluence > 0
+			
+			start music MUSIC_TYPE_SCRIPT_NEMESIS
+			
+			//Go to in front of temple.
+			begin cinema
+
+				set fade red 64 green 0 blue 0 time 2
+				wait 1.5 seconds
+				
+				set game time 16.50 
+				disable game time
+
+				wait 1.5 seconds
+				set camera lens 83 time 3
+				set camera position to [BeginPos]
+				set camera focus to [NemesisPosition]
+				set computer player 2 position to [NemesisPosition]
+				set fade in time 3
+				wait 2.5 seconds
+				
+				//Explain the creeds.
+				say HELP_TEXT_NEW_L5_NEMESIS_EXPLAINS_CREED_01
+				wait until read
+				
+				set camera lens 80 time 8
+				say HELP_TEXT_NEW_L5_NEMESIS_EXPLAINS_CREED_02
+				wait until read
+				
+				set camera lens 77 time 8
+				say HELP_TEXT_NEW_L5_NEMESIS_EXPLAINS_CREED_03
+				wait until read
+				
+				set camera lens 74 time 8
+				say HELP_TEXT_NEW_L5_NEMESIS_EXPLAINS_CREED_04
+				wait until read
+				
+				set camera lens 71 time 8
+				say HELP_TEXT_NEW_L5_NEMESIS_EXPLAINS_CREED_05
+				wait until read
+				
+				set camera lens 68 time 8
+				say HELP_TEXT_NEW_L5_NEMESIS_EXPLAINS_CREED_06
+				wait until read
+				
+				set camera lens 65 time 8
+				say HELP_TEXT_NEW_L5_NEMESIS_EXPLAINS_CREED_07
+				wait until read
+				
+				set camera lens 62 time 8
+				say HELP_TEXT_NEW_L5_NEMESIS_EXPLAINS_CREED_08
+				wait until read
+				
+				set camera lens 59 time 8
+				say HELP_TEXT_NEW_L5_NEMESIS_EXPLAINS_CREED_09
+				wait until read
+				
+				set camera lens 56 time 8
+				say HELP_TEXT_NEW_L5_NEMESIS_EXPLAINS_CREED_10
+				wait until read
+				
+				set camera lens 53 time 8
+				say HELP_TEXT_NEW_L5_NEMESIS_EXPLAINS_CREED_11
+				wait until read
+				clear dialogue
+				
+				
+				//Now show temple.
+				set camera lens 82 time 8
+				move camera focus to [PlayerCitadel] + [0, 20, 0] time 1.5
+				wait 2.5 seconds
+				
+				
+				//Move Nemesis to on top of temple.
+				move computer player 2 to [PlayerCitadel] + [0, 75, 0]  speed 100
+				move camera focus to [PlayerCitadel] + [0, 75, 0]  time 3
+				wait 3 seconds
+				
+				//Use mega blast on the temple.
+				MegaBlast = cast SPELL_EXPLOSION_LEVEL_3 spell at [PlayerCitadel] from [PlayerCitadel]+[0,150,0]  radius 50.0 time 15 curl 0
+				
+				//Transition into game over screen.
+				TemplePos = marker at player 1 temple position
+				StartPosEnding= marker at player 1 temple entrance position radius 90 height 40
+				move camera position to [StartPosEnding] time 3 //start pos
+				move camera focus to [TemplePos] + [0,10,0] time 3
+				wait 2 seconds
+				
+				//End all scripts.
+				stop all scripts excluding files "CustomHardModeLand5.txt"
+				
+				//Kill player.
+				delete PlayerCitadel with temple explode
+				
+			end cinema
+			
+			LoopForever = 0
+		end if
+	end while
+
+end script CustomHardMode_NemesisKillsPlayer
+
+
+
+
+
+//------------------------------------------------------------------------------------------------------------------------
+// Send Nemesis to the player and say something if he's free.
+//------------------------------------------------------------------------------------------------------------------------
+begin script CustomHardMode_NemesisConfrontPlayer(HelpText, DisplayText)
+	StartTimer=create timer for 0 seconds
+	Exit=0
+	Count=0
+start
+	begin loop
+		//position 10 metres from camera
+		move computer player 2 to facing camera position distance 10 speed 650
+		wait 0.3 seconds
+	until LethysInScript == 1
+		Exit = 1
+	until get StartTimer time since set > 10
+		set computer player 2 position to facing camera position distance 10
+	until computer player 2 position near camera position radius 10
+	end loop
+
+	if Exit == 0
+		if dialogue ready
+			if DisplayText == 1
+				begin dialogue
+					say single line constant HelpText
+					wait until read
+				end dialogue
+			else
+				start say extra sound constant HelpText
+			end if
+		end if
+	end if
+
+	if LethysInScript != 1
+		release computer player 2
+	end if
+
+end script CustomHardMode_NemesisConfrontPlayer
+
+
+//Pretty much the same as Lethys taunt player...
+begin script CustomHardMode_NemesisTauntAI
+	TauntTimer=create timer for 0 seconds
+	InfluenceP1=0
+	InfluenceP2=0
+	LineToTalk=0
+start
+	while LineToTalk == 0
+		//First lets check if you are on his land...
+		if get TauntTimer time remaining <= 0
+			InfluenceP1 = get player 1 influence at camera position
+			InfluenceP2 = get player 2 influence at camera position
+
+			if InfluenceP2 > InfluenceP1
+				set TauntTimer time to 60 seconds
+				LineToTalk = number from 1 to 5
+				
+				//1st Line.
+				if LineToTalk == 1
+					LineToTalk = variable constant from HELP_TEXT_KHAZAR_DIES_03 to HELP_TEXT_KHAZAR_DIES_03
+				end if
+				
+				if LineToTalk == 2
+					LineToTalk = variable constant from HELP_TEXT_NEMESIS_SPEAKS_01 to HELP_TEXT_NEMESIS_SPEAKS_01
+				end if
+				
+				if LineToTalk == 3
+					LineToTalk = variable constant from HELP_TEXT_NEMESIS_SPEAKS_02 to HELP_TEXT_NEMESIS_SPEAKS_02
+				end if
+				
+				if LineToTalk == 4
+					LineToTalk = variable constant from HELP_TEXT_NEMESIS_SPEAKS_08 to HELP_TEXT_NEMESIS_SPEAKS_08
+				end if
+				
+				if LineToTalk == 5
+					LineToTalk = variable constant from HELP_TEXT_NEMESIS_SPEAKS2_04 to HELP_TEXT_NEMESIS_SPEAKS2_04
+				end if
+				
+				run script CustomHardMode_NemesisConfrontPlayer(LineToTalk, 0)
+				LineToTalk = 0
+			end if
+		end if
+	end while
+
+end script CustomHardMode_NemesisTauntAI
+

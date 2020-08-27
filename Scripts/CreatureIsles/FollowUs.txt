@@ -511,6 +511,8 @@ start
 		start say sound HELP_TEXT_DEFINITELY_NEWEST_INTRO_09			// That god is you
 
 		set fade red 0 green 0 blue 0 time 3
+		
+		stop music
 
 		wait until not say sound HELP_TEXT_DEFINITELY_NEWEST_INTRO_09 playing //Check previous line is finished
 		
@@ -877,7 +879,7 @@ start
 
 	wait until [Father] near [StartPath] radius 2
 		
-	//set Father forward walk path TRACK02 from 0.0 to 1.0		//TOFIX
+	//set Father forward walk path TRACK02 from 0.0 to 1.0		//OldPath
 	move FollowersFlock position to [Father]
 
 	begin loop
@@ -887,6 +889,8 @@ start
 		Distance = get distance from camera position to [Father]
 
 		move FollowersFlock position to [Father]
+		
+		move Father position to [1637.08,2311.31] //Near the gate stone.
 
 		if(PlayerDistance < FatherDistance)
 
@@ -1104,7 +1108,7 @@ start
 		run script Rotating
 
 	end cinema
-
+	
 	set interaction SCRIPT_INTERFACE_LEVEL_JUST_GRAB_DOUBLE_CLICK_AND_ROTATE
 
 	run script TeachRotate(Citadel, TemplePos)
@@ -1132,8 +1136,8 @@ start
 
 	begin dialogue
 	//sy "now you try"
-		say HELP_TEXT_NEW_ENUM_03
-		wait until read
+		//say HELP_TEXT_NEW_ENUM_03
+		//wait until read
 	end dialogue
 	run script TeachZoom(Citadel, TemplePos)
 
@@ -1149,9 +1153,11 @@ start
 		say HELP_TEXT_FINAL_BEGINNING_70
 		wait until read
 
+		//TOFIX: God's Playground doesn't work in CI...
+		
 		//"We can go to the special practice land by pressing F2 on the keyboard" with interaction
-		say HELP_TEXT_FINAL_BEGINNING_71 with interaction
-		wait until read
+		//say HELP_TEXT_FINAL_BEGINNING_71 with interaction
+		//wait until read
 
 //		sy "Okay; Now were ready to help the villagers finish building the Temple." with interaction
 		say single line HELP_TEXT_FINAL_BEGINNING_15 with interaction

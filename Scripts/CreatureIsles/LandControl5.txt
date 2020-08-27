@@ -1654,8 +1654,14 @@ start
 	OldStrength = SCRIPT_OBJECT_PROPERTY_TYPE_STRENGTH of MyCreature
 	OldAlignment = SCRIPT_OBJECT_PROPERTY_TYPE_ALIGNMENT of MyCreature
 	 
-	
 
+	//Check to apply hard mode stuff.
+	if Difficulty == 1
+		run background script CustomHardModeApplier
+		run background script CustomHardMode_NemesisKillsPlayer
+		run background script CustomHardMode_NemesisTauntAI
+	end if
+	
 	run background script CreatureCurse(Wonder1, Wonder2, Wonder3, Wonder4)
 	run background script JapaneseTraitor
 	run background script ThrowThroughShield
@@ -2211,6 +2217,16 @@ start
 //------------------------------------------------------------------------------------------------------------------------
 // **** NEMESIS HAS LOST ALL TOWNS ****
 //------------------------------------------------------------------------------------------------------------------------
+
+	//Just final fight now, we can remove hard mode stuff.
+	stop script "CustomHardModeApplier"
+	stop script "CustomHardMode_NemesisKillsPlayer"
+	stop script "CustomHardMode_NemesisTauntAI"
+	stop script "CustomHardMode_ImproveAIStats"
+	stop script "CustomHardMode_ImproveAIController"
+	stop script "CustomHardMode_GodAttack"
+	stop script "CustomKillCreatureFix"
+
 	run script TheBigFightMain
 	run script EndOfGameCreatureSequenceGoToVolcano
 	run script NemesisCitadelDestroyed

@@ -3,21 +3,38 @@
 begin script LandControl3
 
 start
-	set fade in time 3
 	run script SetupLand3
-	run background script ThrowBlokeMain
+	
+	//Check to apply hard mode.
+	run background script CustomHardModeApplier
+	
+	if Difficulty == 0
+		run background script ThrowBlokeMain
+	end if
+	
 	run background script FreeTheCreature
+	set fade in time 3
 	run script GetThroughVortexL2					// Enter the land
 	run background script SwapToApe
 	run background script ShaolinMonk				// waits until player start to take over Japanese Town
 	run background script TreePuzzleTwo
 	wait until FinishedLand3 == 1
 	
-	//Go to Land 4!
-	stop all scripts excluding files "LandControl3.txt"
-	load map "Ultimate/Scripts/UltimateLand4.txt"
-	run script LandControl4
-	stop all scripts excluding files "LandControl4.txt"
+	
+	//Change Land! (Land 3)
+	// Normal difficulty.
+	if Difficulty == 0
+		stop all scripts excluding files "LandControl3.txt"
+		load map "Scripts/UltimateLand4.txt"
+		run script LandControl4
+	end if
+	
+	// Hard Mode.
+	if Difficulty == 1
+		stop all scripts excluding files "LandControl3.txt"
+		load map "Scripts/HardUltimateLand4.txt"
+		run script LandControl4
+	end if
 	
 
 end script LandControl3

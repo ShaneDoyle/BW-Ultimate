@@ -97,28 +97,7 @@ end script CustomHardModePlayerInfluence
 
 //Make gods attack other creatures when in their influence. 
 begin script CustomHardMode_GodAttack(PlayerNum)
-	LethysTown11 = 0.01
 	LoopForever = 1
-
-
-	Town_0 = get town with id 0
-	Town_1 = get town with id 1
-	Town_2 = get town with id 2
-	Town_3 = get town with id 3
-	Town_4 = get town with id 4
-	Town_5 = get town with id 5
-	Town_6 = get town with id 6
-	Town_7 = get town with id 7
-	Town_8 = get town with id 8
-	Town_9 = get town with id 9
-	Town_10 = get town with id 10
-	Town_11 = get town with id 11
-	Town_12 = get town with id 12
-	Target_Town = 11
-	
-	ComputerAIAction = 0
-	LCreature = 0
-	HealthCheck = 0
 
 	MyInfluence = 0 //Get influence of PlayerNum
 	OtherInfluence = 0 //Get influence of other player(s).
@@ -130,12 +109,7 @@ begin script CustomHardMode_GodAttack(PlayerNum)
 
 
 start
-
-
-	
-	
-	wait 60 seconds // Wait 10 minutes before starting.
-	
+	wait 30 seconds // Wait 30 seconds before starting.
 	
 	while LoopForever == 1
 		
@@ -153,40 +127,45 @@ start
 					
 					//If other player's creature is in own influence.
 					if MyInfluence > OtherInfluence
-
-						move computer player PlayerNum to [get player CheckPlayer creature] + [0,25,0] speed 100000 // Move god to the enemy creature
-						wait 0.5 seconds
-						
-						//Cast Freeze Miracle. (TODO: Add support for checking if player has this spell)
-						MyFreeze = cast CREATURE_SPELL_FREEZE spell on get player CheckPlayer creature from computer player PlayerNum position + [0,25,0] radius 0 time 25 curl 0
-						wait 5.00 seconds
-						
-						MyInfluence = get player PlayerNum raw influence at [get player CheckPlayer creature] //Check own player influence with enemy creature.
-						OtherInfluence = get player CheckPlayer raw influence at [get player CheckPlayer creature] //Check other player influence with enemy creature.
 					
-						//If other player's creature is in own influence. 2nd check to ensure god will not cheat.
-						if MyInfluence > OtherInfluence
-						
-							//Adjust player's position.
-							move computer player PlayerNum to [get player CheckPlayer creature] + [number from 10 to 20, 25, number from 10 to 20] speed 10000 // Move the player to the enemy god's creature
-							wait 0.5 seconds
+						//If the enemy creature is still alive.
+						if HEALTH of get player CheckPlayer creature != 0
+
+							move computer player PlayerNum to [get player CheckPlayer creature] + [0,25,0] speed 100000 // Move god to the enemy creature
+							wait 1.0 seconds
 							
-							//Cast Lightning Bolt at enemy Creature. (TODO: Add support for checking if player has this spell)
-							MyLightning = cast SPELL_LIGHTNING_LEVEL_1 spell at [get player CheckPlayer creature] from computer player PlayerNum position + [0,25,0] radius 5.0 time 5 curl 0
-							wait 5.00 seconds
-							
-							release computer player PlayerNum
-							wait 10 seconds
+							//Cast Freeze Miracle. (TODO: Add support for checking if player has this spell)
+							MyFreeze = cast CREATURE_SPELL_FREEZE spell on get player CheckPlayer creature from computer player PlayerNum position + [0,25,0] radius 0 time 20 curl 0
+							wait 3.00 seconds
 							
 							MyInfluence = get player PlayerNum raw influence at [get player CheckPlayer creature] //Check own player influence with enemy creature.
 							OtherInfluence = get player CheckPlayer raw influence at [get player CheckPlayer creature] //Check other player influence with enemy creature.
+						
+							//If other player's creature is in own influence. 2nd check to ensure god will not cheat.
+							if MyInfluence > OtherInfluence
+							
+								//Adjust player's position.
+								move computer player PlayerNum to [get player CheckPlayer creature] + [number from 10 to 20, 25, number from 10 to 20] speed 10000 // Move the player to the enemy god's creature
+								wait 1.0 seconds
+								
+								//Cast Lightning Bolt at enemy Creature. (TODO: Add support for checking if player has this spell)
+								MyLightning = cast SPELL_LIGHTNING_LEVEL_1 spell at [get player CheckPlayer creature] from computer player PlayerNum position + [0,25,0] radius 5.0 time 5 curl 0
+								wait 5.00 seconds
+								
+								release computer player PlayerNum
+								wait 5 seconds
+								
+								MyInfluence = get player PlayerNum raw influence at [get player CheckPlayer creature] //Check own player influence with enemy creature.
+								OtherInfluence = get player CheckPlayer raw influence at [get player CheckPlayer creature] //Check other player influence with enemy creature.
+							end if
 						end if
 					end if
 				end if
 			end if
 			
-		wait 2 seconds //Small cooldown.
+		wait 1 seconds //Small cooldown.
 		CheckPlayer++ //Check the next player.
+		set computer player PlayerNum personality "ReactToAggressiveCreature" 0	 //Just to be sure incase external script changes this...
 		end while
 		
 		//Keep loop forever.
@@ -209,11 +188,9 @@ start
 	wait 5 seconds
 
 	set computer player PlayerNum speed 3000.0
-	
 	set computer player PlayerNum personality "TakeOverTownByImpressing" 1.00
 	set computer player PlayerNum personality "DefeatPlayer" 1.00
 	set computer player PlayerNum personality "ExpandInfluence" 1.00
-	set computer player PlayerNum personality "ReactToAggressiveCreature" 0 //Handle this with "GodAttack" function.
 
 end script CustomHardMode_ImproveAIStats
 
@@ -246,6 +223,7 @@ start
 			
 			//Release the Creature.
 			detach Creature leash
+			release Creature
 			
 		end if
 	end if
@@ -253,7 +231,7 @@ end script CustomHardMode_CreatureCaptureTown
 
 
 
-// Make creature attack another town.
+// Make creature attack another player (citadel).
 begin script CustomHardMode_CreatureAttackPlayer(PlayerNum)
 	Creature = 0
 	Citadel = PlayerNum
@@ -268,7 +246,7 @@ start
 	end while
 	
 	//Get the temple.
-	Citadel = get CITADEL at player 2 temple position radius 100
+	Citadel = get CITADEL at player PlayerToAttack temple position radius 100
 	wait 1.0 seconds
 	
 	//Make creature only want to attack and attach to temple.
@@ -279,6 +257,7 @@ start
 	wait until not Creature leashed
 	detach Creature leash
 	set Creature disable only desire
+	release Creature
 
 end script CustomHardMode_CreatureAttackPlayer
 
@@ -286,7 +265,7 @@ end script CustomHardMode_CreatureAttackPlayer
 
 
 
-//Make Enemy harder.
+//Make gods impress towns + attack players.
 begin script CustomHardMode_ImproveAIController(PlayerNum)
 	Target_Town = 11
 	ComputerAIAction = 0
@@ -306,12 +285,12 @@ start
 		//If no action selected. Main controller of creature action selector.
 		if ComputerAIAction == 0
 		
-			//80% chance to impress village.
-			if number from 1 to 100 < 0
-				Target_Town = number from 0 to 15
+			//90% chance to impress village.
+			if number from 1 to 100 < 90
+				Target_Town = number from 0 to 12
 				ComputerAIAction = 1
 				
-			//20% chance to attack.
+			//10% chance to attack.
 			else
 				ComputerAIAction = 2
 			end if
@@ -339,55 +318,79 @@ end script CustomHardMode_ImproveAIController
 
 
 
-//Make Enemy harder.
-begin script CustomHardModeLethysCreature
-
-	LCreature = 0 //Lethys Creature
-	PlayerCreature = get player 1 creature
-	BuildCitadel = 0
-	
-start
-	wait 90 seconds
-	while Difficulty == 1
-		LCreature = get player 3 creature
-		ALIGNMENT of LCreature = -1.0
-		SCALE of LCreature = 1.0
-		
-		begin dialogue
-			say "Hello World"
-			wait until read
-		end dialogue
-
-		BuildCitadel = get CITADEL at [3361.26,3241.85] radius 50
-		wait 0.5 seconds
-		attach LCreature leash to BuildCitadel
-
-		set LCreature only desire CREATURE_DESIRE_ANGER
-		wait 10 seconds
-	end while
-
-end script CustomHardModeLethysCreature
-
-
 
 begin script CustomHardModeApplier
 
 start
 
-	//Adjust player's influence
-	run background script CustomHardModePlayerInfluence
+	//Do a check for HardMode.
+	if Difficulty == 1
+
+		//Remove hand out influence.
+		disable player 1 virtual influence
+		
+		//Land 2.
+		if LandNumber == 2
+		
+			//Adjust the player's influence
+			run background script CustomHardModePlayerInfluence
+			
+			//Let Khazar defend too. Sorta improve.
+			run background script CustomHardMode_GodAttack(2)
+			run background script CustomKillCreatureFix(2)
+			
+			//Improve AI (Lethys).
+			run background script CustomHardMode_ImproveAIStats(3)
+			run background script CustomHardMode_ImproveAIController(3)
+			run background script CustomHardMode_GodAttack(3)
+			run background script CustomKillCreatureFix(3)
+
+		end if
+		
+		
+		
+		//Land 3.
+		if LandNumber == 3
+		
+			//Adjust the player's influence
+			run background script CustomHardModePlayerInfluence
+			
+			//Improve AI (Lethys).
+			run background script CustomHardMode_ImproveAIStats(2)
+			//run background script CustomHardMode_ImproveAIController(2)
+			//run background script CustomHardMode_GodAttack(2)
+			run background script CustomKillCreatureFix(2)
+
+		end if
+		
+		
+		
+		//Land 4.
+		if LandNumber == 4
+		
+			//Adjust the player's influence
+			run background script CustomHardModePlayerInfluence
+
+		end if
+		
+		
+		
+		//Land 5.
+		if LandNumber == 5
+		
+			//Adjust the player's influence
+			run background script CustomHardModePlayerInfluence
+			
+			//Improve AI (Nemesis).
+			run background script CustomHardMode_ImproveAIStats(2)
+			run background script CustomHardMode_ImproveAIController(2)
+			run background script CustomHardMode_GodAttack(2)
+			run background script CustomKillCreatureFix(2)
+
+		end if
+		
+	end if
 	
-	//Make AI more difficult.
-	run background script CustomHardMode_ImproveAIStats(3)
-	run background script CustomHardMode_GodAttack(3)
-	
-	//Lethys capture villages slowly if not taken. 
-	run background script CustomHardMode_ImproveAIController(3)
-	
-	//Let Khazar defend too.
-	run background script CustomHardMode_GodAttack(2)
-	
-	//Lethys creature attacks players every once in a while
-	//run background script CustomHardModeLethysCreature
+
 	
 end script CustomHardModeApplier

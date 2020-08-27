@@ -1,5 +1,6 @@
 // Land 5
 BeginLand5.txt
+CustomHardModeLand5.txt
 //creaturemirrorfight.txt
 FireOnHigh.txt
 LionPuzzle.txt
