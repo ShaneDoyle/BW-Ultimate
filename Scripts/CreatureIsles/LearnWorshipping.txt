@@ -165,10 +165,10 @@ start
 			//camera path TRACK00  TOFIXPATH
 			
 			//(Custom) Probably hacky.
-			move camera position to [3311.519, 90.222, 3266.543] time 9
-			move camera focus to [3321.465, 77.258, 3246.431] time 9
+			move camera position to [3311.519, 100.222, 3266.543] time 7
+			move camera focus to [3321.465, 77.258, 3246.431] time 4
 
-			wait until 9 seconds
+			wait until 7 seconds
 
 			say HELP_TEXT_NEW_LAND_2_LEARN_MIRACLES_09	// They are dancing and worshipping you, which gives you power.
 			wait until read
@@ -194,17 +194,17 @@ start
 			
 			//run script MiracleCastHandDemo
 			//start hand demo "miraclecast"
-			start hand demo "miraclecast" without hand modify
+			//start hand demo "miraclecast" without hand modify
 
 				say HELP_TEXT_NEW_LAND_2_LEARN_MIRACLES_16	// and worshipping can tire your people, and leave your town neglected.
 				wait until read
 
-				wait until camera ready
-			wait until hand demo played
+				//wait until camera ready
+			//wait until hand demo played
 
 			say HELP_TEXT_NEW_LAND_2_LEARN_MIRACLES_17	// I'll leave you now to experiment with miracles, and expand your land.
 
-			SCRIPT_OBJECT_PROPERTY_TYPE_HEIGHT of NorseTotem = 0.5
+			SCRIPT_OBJECT_PROPERTY_TYPE_HEIGHT of NorseTotem = 0.25
 
 			move camera position to [3312.757, 95.639, 3298.344] time 5
 			move camera focus to [3357.076, 77.228, 3206.820] time 5

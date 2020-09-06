@@ -84,6 +84,7 @@ begin script CreatureBreeder(Land,BreederStartPos,SoapBox,Kennels,CreaturePos,Ca
 	OfferMandrill = 0
 	OfferGorilla = 0
 	OfferRhino = 0
+	OfferCrocodile = 0
 	FirstCreature = 0
 	LastCreature = 0
 
@@ -111,6 +112,7 @@ start
 		OfferMandrill = 0
 		OfferGorilla = 0
 		OfferRhino = 0
+		OfferCrocodile = 0
 		CreaturePos =	OriginalCreaturePos
 		FirstCreature = 0
 		LastCreature = 0
@@ -193,6 +195,19 @@ start
 						LastCreature = Stored
 					end if
 				end if
+				if GlobalCurrentCreature != variable CREATURE_TYPE_CROCODILE
+					OfferCrocodile = 1
+					SpecialCount++
+					SpecialEffect = create special effect SPOT_VISUAL_CREATURE_TARGET at [CreaturePos] time 3
+					Stored = create CREATURE CREATURE_TYPE_CROCODILE at [CreaturePos]
+					CreaturePos= marker at [CreaturePos] + [-4.564,0,3.579]
+					run background script SpecialStored(Land,Breeder, Kennels, CreaturePos, Stored,SpecialCount+1)
+					if FirstCreature == 0
+						FirstCreature = Stored
+					else
+						LastCreature = Stored
+					end if
+				end if
 
 				// Has the Breeder got my old creature and is my current one different
 				if  GlobalCurrentCreature != GlobalOldCreature and GlobalOldCreature != -1
@@ -202,15 +217,17 @@ start
 							if GlobalOldCreature !=  variable CREATURE_TYPE_MANDRILL or OfferMandrill == 0	
 								if GlobalOldCreature != variable CREATURE_TYPE_GORILLA or OfferGorilla == 0	 
 									if GlobalOldCreature != variable CREATURE_TYPE_RHINO or OfferRhino == 0	 
-										SpecialCount++
-										SpecialEffect = create special effect SPOT_VISUAL_CREATURE_TARGET at [CreaturePos] time 3
-										Stored = create CREATURE constant GlobalOldCreature at [CreaturePos]
-										CreaturePos= marker at [CreaturePos] + [-4.564,0,3.579]
-										run background script SpecialStored(Land, Breeder, Kennels, CreaturePos, Stored, SpecialCount+1)
-										if FirstCreature == 0
-											FirstCreature = Stored
-										else
-											LastCreature = Stored
+										if GlobalOldCreature != variable CREATURE_TYPE_CROCODILE or OfferCrocodile == 0	 
+											SpecialCount++
+											SpecialEffect = create special effect SPOT_VISUAL_CREATURE_TARGET at [CreaturePos] time 3
+											Stored = create CREATURE constant GlobalOldCreature at [CreaturePos]
+											CreaturePos= marker at [CreaturePos] + [-4.564,0,3.579]
+											run background script SpecialStored(Land, Breeder, Kennels, CreaturePos, Stored, SpecialCount+1)
+											if FirstCreature == 0
+												FirstCreature = Stored
+											else
+												LastCreature = Stored
+											end if
 										end if
 									end if
 								end if

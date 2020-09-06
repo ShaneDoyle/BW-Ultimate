@@ -156,7 +156,7 @@ start
 
 		run background script DidYouKnow(DYKMarker, variable HELP_TEXT_DYK_107, variable DYK_MIRACLES)
 
-		set GestureTimer time to 5*60 seconds
+		set GestureTimer time to 1*60 seconds
 		TutorialTimer = 10
 		GestureSuccess=1
 		
@@ -170,11 +170,17 @@ start
 				clear player 1 spell charging
 				wait 1 seconds
 				//TutorialTimer--
-
-				//Make sure you can afford the spell always
-				if get WorshipSite mana total < RequiredMana
+				
+				//If we go over mana, revert back to required.
+				if get WorshipSite mana total > RequiredMana
 					set WorshipSite mana RequiredMana
 				end if
+
+				//Make sure you can afford the spell always
+				//if get WorshipSite mana total < RequiredMana
+				//	set WorshipSite mana RequiredMana
+				//end if
+				
 
 				if get GestureTimer time remaining <= 0
 					SelectGesture++

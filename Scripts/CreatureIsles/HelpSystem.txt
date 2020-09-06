@@ -1,4 +1,4 @@
-global LandNumber
+//global LandNumber (Moved to Headers)
 
 //------------------------------------------------------------------------------------------------------------------------
 begin help script HelpJustTalk(WhichTextFirst, WhichTextLast)

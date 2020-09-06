@@ -39,5 +39,4 @@ global help_text_retake_aztec_village_quest_reminder_02
 //global constant CITADEL = SCRIPT_OBJECT_TYPE_CITADEL
 
 //Custom (new) ones
-global MyColour = 0
-global Difficulty = 1 //0 Normal(Original), 1 Hard
+global LocalLoop = 50

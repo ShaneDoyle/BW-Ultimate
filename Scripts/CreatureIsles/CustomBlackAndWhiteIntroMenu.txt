@@ -3,7 +3,6 @@
 begin script CustomIntroCamera
 	CameraLock = 0
 start
-
 	//Init the camera.
 	begin camera
 		move camera position to [4281.07, 50, 4140.77] time 0
@@ -19,7 +18,7 @@ start
 			move camera focus to [4202.48, 20, 4056.61] time 3
 			
 			//Speed up a bit. More responsive menu!
-			set game speed to 1.5
+			set game speed to 1.2
 			
 			if key KB_ESC down
 				CameraLock = 1
@@ -39,6 +38,7 @@ end script CustomIntroCamera
 
 begin script CustomIntroText(OptionMenu, Option1, Option2, Option3, Option4)
 	LockText = 1
+	BlockPosition = 0
 start
 	
 	//Delete Text
@@ -46,8 +46,21 @@ start
 	
 	//Alert to press a key. Don't even change this.
 	set draw text colour red 200 green 200 blue 160
-	draw text "Select an option!" across -0.145 down 0.200 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+	if OptionMenu == 1
+		draw text "Menu" across -0.195 down 0.200 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+	end if
 	
+	if OptionMenu == 2
+		draw text "Menu -> Play Game" across -0.136 down 0.200 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+	end if
+	
+	if OptionMenu == 3
+		draw text "Menu -> Settings" across -0.1475 down 0.200 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+	end if
+	
+	if OptionMenu == 4
+		draw text "Menu -> Settings -> Colour" across -0.1035 down 0.200 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+	end if
 	
 	//Main Menu!
 	if OptionMenu == 1
@@ -58,7 +71,7 @@ start
 		else
 			set draw text colour red 230 green 230 blue 130
 		end if
-		draw text "1). Start game" across -0.158 down 0.250 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+		draw text "1). Play Game" across -0.160 down 0.250 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
 		
 		//Option 2.
 		if Option2 == 0
@@ -66,7 +79,7 @@ start
 		else
 			set draw text colour red 230 green 230 blue 130
 		end if
-		draw text "2). Settings" across -0.170 down 0.300 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+		draw text "2). Settings" across -0.1725 down 0.300 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
 
 	end if
 	
@@ -79,12 +92,12 @@ start
 		else
 			set draw text colour red 230 green 230 blue 130
 		end if
-		draw text "1). Start the game normally" across -0.105 down 0.250 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+		draw text "1). New Game" across -0.1615 down 0.250 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
 		
 		
 		//Option 2.
 		if Option2 == 0
-			set draw text colour red 230 green 230 blue 230
+			set draw text colour red 130 green 130 blue 130
 		else
 			set draw text colour red 230 green 230 blue 130
 		end if
@@ -93,7 +106,7 @@ start
 		
 		//Option 3.
 		if Option3 == 0
-			set draw text colour red 230 green 230 blue 230
+			set draw text colour red 130 green 130 blue 130
 		else
 			set draw text colour red 230 green 230 blue 130
 		end if
@@ -106,7 +119,7 @@ start
 		else
 			set draw text colour red 230 green 230 blue 130
 		end if
-		draw text "4). Keep your old Creature" across -0.11 down 0.400 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+		draw text "4). Skip Land 1 (Keep Creature)" across -0.09 down 0.400 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
 		
 	end if
 	
@@ -119,48 +132,31 @@ start
 		else
 			set draw text colour red 230 green 230 blue 130
 		end if
-		draw text "1). Colour: " across -0.168 down 0.250 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+		draw text "1). Colour " across -0.175 down 0.250 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
 		
-			//Red.
-			if MyColour == 0
-				set draw text colour red 240 green 110 blue 110
-			end if
-			
-			//Green.
-			if MyColour == 1
-				set draw text colour red 110 green 240 blue 110
-			end if
-			
-			//Purple.
-			if MyColour == 2
-				set draw text colour red 135 green 70 blue 145
-			end if
-			
-			//Cyan (Light Blue).
-			if MyColour == 3
-				set draw text colour red 75 green 175 blue 175
-			end if
-				
-			//Draw Colour Block
-			draw text "|" across -0.102 down 0.250 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
-			draw text "|" across -0.103 down 0.250 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
-			draw text "|" across -0.104 down 0.250 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
-			draw text "|" across -0.105 down 0.250 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
-			draw text "|" across -0.106 down 0.250 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
-			draw text "|" across -0.107 down 0.250 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
-			draw text "|" across -0.108 down 0.250 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
-			draw text "|" across -0.109 down 0.250 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
-			draw text "|" across -0.110 down 0.250 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
-			draw text "|" across -0.111 down 0.250 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
-			draw text "|" across -0.112 down 0.250 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
-			draw text "|" across -0.113 down 0.250 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
-			draw text "|" across -0.114 down 0.250 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
-			draw text "|" across -0.115 down 0.250 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
-			draw text "|" across -0.116 down 0.250 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
-			draw text "|" across -0.117 down 0.250 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
-			draw text "|" across -0.118 down 0.250 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
-			draw text "|" across -0.119 down 0.250 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
-
+		set draw text colour red MyColour_Red green MyColour_Green blue MyColour_Blue
+		draw text "|" across -0.100 down 0.250 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+		draw text "|" across -0.101 down 0.250 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+		draw text "|" across -0.102 down 0.250 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+		draw text "|" across -0.103 down 0.250 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+		draw text "|" across -0.104 down 0.250 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+		draw text "|" across -0.105 down 0.250 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+		draw text "|" across -0.106 down 0.250 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+		draw text "|" across -0.107 down 0.250 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+		draw text "|" across -0.108 down 0.250 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+		draw text "|" across -0.109 down 0.250 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+		draw text "|" across -0.110 down 0.250 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+		draw text "|" across -0.111 down 0.250 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+		draw text "|" across -0.112 down 0.250 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+		draw text "|" across -0.113 down 0.250 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+		draw text "|" across -0.114 down 0.250 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+		draw text "|" across -0.115 down 0.250 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+		draw text "|" across -0.116 down 0.250 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+		draw text "|" across -0.117 down 0.250 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+		draw text "|" across -0.118 down 0.250 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+		draw text "|" across -0.119 down 0.250 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+		draw text "|" across -0.120 down 0.250 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+		
 		
 		//Option 2.
 		if Option2 == 0
@@ -168,7 +164,181 @@ start
 		else
 			set draw text colour red 230 green 230 blue 130
 		end if
-		draw text "             2). Difficulty: Normal" across -0.160 down 0.300 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+		draw text "2). Temple " across -0.170 down 0.300 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+		
+		//Option 3.
+		if Option3 == 0
+			set draw text colour red 230 green 230 blue 230
+		else
+			set draw text colour red 230 green 230 blue 130
+		end if
+		
+		if Difficulty == 0
+			draw text "             3). Difficulty: Normal" across -0.163 down 0.350 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+		end if
+		
+		if Difficulty == 1
+			draw text "        3). Difficulty: Hard" across -0.162 down 0.350 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+		end if
+
+	end if
+	
+	
+	//Colour creator.
+	if OptionMenu == 4
+	
+		//Option 1.
+		if Option1 == 0
+			set draw text colour red 230 green 230 blue 230
+		else
+			set draw text colour red 230 green 230 blue 130
+		end if
+		draw text "       Red).  " across -0.210 down 0.250 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+		
+		//Draw Colour Block
+		set draw text colour red MyColour_Red green 0 blue 0
+		
+		/*
+		BlockPosition = -0.102
+		//LocalLoop = 50
+		while LocalLoop > 0
+			draw text "|" across -BlockPosition down 0.250 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+			BlockPosition -= 0.01
+			LocalLoop--
+		end while
+		*/
+		
+		
+		draw text "|" across -0.100 down 0.250 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+		draw text "|" across -0.101 down 0.250 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+		draw text "|" across -0.102 down 0.250 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+		draw text "|" across -0.103 down 0.250 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+		draw text "|" across -0.104 down 0.250 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+		draw text "|" across -0.105 down 0.250 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+		draw text "|" across -0.106 down 0.250 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+		draw text "|" across -0.107 down 0.250 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+		draw text "|" across -0.108 down 0.250 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+		draw text "|" across -0.109 down 0.250 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+		draw text "|" across -0.110 down 0.250 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+		draw text "|" across -0.111 down 0.250 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+		draw text "|" across -0.112 down 0.250 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+		draw text "|" across -0.113 down 0.250 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+		draw text "|" across -0.114 down 0.250 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+		draw text "|" across -0.115 down 0.250 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+		draw text "|" across -0.116 down 0.250 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+		draw text "|" across -0.117 down 0.250 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+		draw text "|" across -0.118 down 0.250 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+		draw text "|" across -0.119 down 0.250 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+		draw text "|" across -0.120 down 0.250 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+		
+		
+		
+		// Green
+		if Option2 == 0
+			set draw text colour red 230 green 230 blue 230
+		else
+			set draw text colour red 230 green 230 blue 130
+		end if
+		draw text "     Green)." across -0.200 down 0.300 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+		
+		//Draw Colour Block
+		set draw text colour red 0 green MyColour_Green blue 0
+		draw text "|" across -0.100 down 0.300 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+		draw text "|" across -0.101 down 0.300 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+		draw text "|" across -0.102 down 0.300 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+		draw text "|" across -0.103 down 0.300 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+		draw text "|" across -0.104 down 0.300 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+		draw text "|" across -0.105 down 0.300 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+		draw text "|" across -0.106 down 0.300 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+		draw text "|" across -0.107 down 0.300 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+		draw text "|" across -0.108 down 0.300 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+		draw text "|" across -0.109 down 0.300 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+		draw text "|" across -0.110 down 0.300 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+		draw text "|" across -0.111 down 0.300 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+		draw text "|" across -0.112 down 0.300 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+		draw text "|" across -0.113 down 0.300 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+		draw text "|" across -0.114 down 0.300 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+		draw text "|" across -0.115 down 0.300 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+		draw text "|" across -0.116 down 0.300 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+		draw text "|" across -0.117 down 0.300 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+		draw text "|" across -0.118 down 0.300 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+		draw text "|" across -0.119 down 0.300 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+		draw text "|" across -0.120 down 0.300 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+		
+
+		
+		// Blue
+		if Option3 == 0
+			set draw text colour red 230 green 230 blue 230
+		else
+			set draw text colour red 230 green 230 blue 130
+		end if
+		draw text "    Blue). " across -0.200 down 0.350 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+		
+		//Draw Colour Block
+		set draw text colour red 0 green 0 blue MyColour_Blue
+		draw text "|" across -0.100 down 0.350 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+		draw text "|" across -0.101 down 0.350 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+		draw text "|" across -0.102 down 0.350 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+		draw text "|" across -0.103 down 0.350 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+		draw text "|" across -0.104 down 0.350 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+		draw text "|" across -0.105 down 0.350 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+		draw text "|" across -0.106 down 0.350 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+		draw text "|" across -0.107 down 0.350 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+		draw text "|" across -0.108 down 0.350 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+		draw text "|" across -0.109 down 0.350 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+		draw text "|" across -0.110 down 0.350 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+		draw text "|" across -0.111 down 0.350 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+		draw text "|" across -0.112 down 0.350 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+		draw text "|" across -0.113 down 0.350 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+		draw text "|" across -0.114 down 0.350 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+		draw text "|" across -0.115 down 0.350 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+		draw text "|" across -0.116 down 0.350 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+		draw text "|" across -0.117 down 0.350 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+		draw text "|" across -0.118 down 0.350 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+		draw text "|" across -0.119 down 0.350 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+		draw text "|" across -0.120 down 0.350 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+		
+		
+		
+		// Final Colour (Never Used as an option)
+		if Option4 == 0
+			set draw text colour red 130 green 130 blue 130
+		else
+			set draw text colour red 130 green 130 blue 130
+		end if
+		draw text " Colour)." across -0.188 down 0.400 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+		
+		
+		
+		set draw text colour red MyColour_Red green MyColour_Green blue MyColour_Blue
+		draw text "|" across -0.100 down 0.400 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+		draw text "|" across -0.101 down 0.400 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+		draw text "|" across -0.102 down 0.400 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+		draw text "|" across -0.103 down 0.400 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+		draw text "|" across -0.104 down 0.400 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+		draw text "|" across -0.105 down 0.400 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+		draw text "|" across -0.106 down 0.400 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+		draw text "|" across -0.107 down 0.400 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+		draw text "|" across -0.108 down 0.400 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+		draw text "|" across -0.109 down 0.400 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+		draw text "|" across -0.110 down 0.400 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+		draw text "|" across -0.111 down 0.400 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+		draw text "|" across -0.112 down 0.400 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+		draw text "|" across -0.113 down 0.400 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+		draw text "|" across -0.114 down 0.400 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+		draw text "|" across -0.115 down 0.400 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+		draw text "|" across -0.116 down 0.400 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+		draw text "|" across -0.117 down 0.400 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+		draw text "|" across -0.118 down 0.400 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+		draw text "|" across -0.119 down 0.400 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+		draw text "|" across -0.120 down 0.400 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+		
+		
+		//Calculate the Hex Value of the new colour.
+		MyColour = 5 //(MyColour_Red * 65536) + (MyColour_Green * 256) + MyColour_Blue
+		
+		
 
 	end if
 
@@ -179,6 +349,7 @@ end script CustomIntroText
 //Script to get the user's input.
 begin script CustomGetInput
 
+	EnablePress = 1
 	LockInputLoop = 1
 	OptionMenu = 1
 	OptionToPick = 0
@@ -191,12 +362,18 @@ start
 	//Wait until goes to Creature...
 	wait 6 seconds
 	OptionToPick = 1
+	UseOriginalSettings = 1
+	LandNumber = 4 //Probably update this to a debug land. This is fine though.
 	
 	//Init the text.
 	run background script CustomLoadPlayerColour
-	run background script CustomIntroText(OptionMenu, Option1, Option2, Option3, Option4) //Run this once to init.
+	//run background script CustomIntroText(OptionMenu, Option1, Option2, Option3, Option4) //Run this once to init.
 	
 	while LockInputLoop == 1
+	
+		//If this isn't 0, user can't press button. Used to give small delay between presses.
+
+		
 		if OptionToPick == 1
 			Option1 = 1
 		else
@@ -222,12 +399,83 @@ start
 		end if
 		
 		
-		
+		//Colour Selector.
+		if OptionMenu == 4
+			if key KB_BACKSPACE down
+				OptionToPick = 1
+				OptionMenu = 3
+				start sound LH_SAMPLE_SKITTLECOLLIDE_01
+			end if
+			
+			if key KB_UP down
+				OptionToPick--
+				start sound LH_SAMPLE_SKITTLECOLLIDE_01
+				
+				if OptionToPick <= 0
+					OptionToPick = 3
+				end if
+			end if
+			
+			if key KB_DOWN down
+				OptionToPick++
+				start sound LH_SAMPLE_SKITTLECOLLIDE_01
+				
+				//Don't let overflow.
+				if OptionToPick >= 4
+					OptionToPick = 1
+				end if
+			end if
+			
+			if key KB_RIGHT down
+				if OptionToPick == 1 //Red Colour
+					if MyColour_Red < 255
+						MyColour_Red += 5
+						start sound LH_SAMPLE_SKITTLECOLLIDE_01
+					end if
+				end if
+				
+				if OptionToPick == 2 //Green Colour
+					if MyColour_Green < 255
+						MyColour_Green += 5
+						start sound LH_SAMPLE_SKITTLECOLLIDE_01
+					end if
+				end if
+				
+				if OptionToPick == 3 //Blue Colour
+					if MyColour_Blue < 255
+						MyColour_Blue += 5
+						start sound LH_SAMPLE_SKITTLECOLLIDE_01
+					end if
+				end if
+			end if
+			
+			if key KB_LEFT down
+				if OptionToPick == 1 //Red Colour
+					if MyColour_Red > 0
+						MyColour_Red -= 5
+						start sound LH_SAMPLE_SKITTLECOLLIDE_01
+					end if
+				end if
+				
+				if OptionToPick == 2 //Green Colour
+					if MyColour_Green > 0
+						MyColour_Green -= 5
+						start sound LH_SAMPLE_SKITTLECOLLIDE_01
+					end if
+				end if
+				
+				if OptionToPick == 3 //Blue Colour
+					if MyColour_Blue > 0
+						MyColour_Blue -= 5
+						start sound LH_SAMPLE_SKITTLECOLLIDE_01
+					end if
+				end if
+			end if
 		
 		
 		
 		//Settings
-		if OptionMenu == 3
+		elsif OptionMenu == 3
 			if key KB_BACKSPACE down
 				OptionToPick = 1
 				OptionMenu = 1
@@ -239,7 +487,7 @@ start
 				start sound LH_SAMPLE_SKITTLECOLLIDE_01
 				
 				if OptionToPick <= 0
-					OptionToPick = 2
+					OptionToPick = 3
 				end if
 			end if
 			
@@ -248,26 +496,44 @@ start
 				start sound LH_SAMPLE_SKITTLECOLLIDE_01
 				
 				//Don't let overflow.
-				if OptionToPick >= 3
+				if OptionToPick >= 4
 					OptionToPick = 1
 				end if
 			end if
 			
-			if key KB_SPACE down
+			if key KB_SPACE down and EnablePress == 1
 			
 				if OptionToPick == 1 //Colour
+					OptionToPick = 1
+					OptionMenu = 4
 					start sound LH_SAMPLE_SKITTLECOLLIDE_01
-					MyColour++
-					if MyColour > 3
-						MyColour = 0
-					end if
 				end if
 				
-				if OptionToPick == 2 //Difficulty
+				if OptionToPick == 2 //Temple
+					start sound LH_SAMPLE_SKITTLECOLLIDE_01
+					if MyTemple >= 3
+						MyTemple = 0
+					else
+						MyTemple++
+					end if
+					
+					set fade red 0 green 0 blue 0 time 1.5
+					wait until fade ready
+					wait 1 seconds
+					set fade in time 1.5
+				end if
+				
+				if OptionToPick == 3 //Difficulty
+					if Difficulty == 0
+						Difficulty = 1
+					
+					elsif Difficulty == 1
+						Difficulty = 0
+					end if
+					
 					start sound LH_SAMPLE_SKITTLECOLLIDE_01
 				end if
 			end if
-		end if
 		
 		
 		
@@ -275,7 +541,7 @@ start
 		
 		
 		//Black & White Game Start Menu
-		if OptionMenu == 2
+		elsif OptionMenu == 2
 			
 			if key KB_BACKSPACE down
 				OptionToPick = 1
@@ -302,7 +568,7 @@ start
 				end if
 			end if
 			
-			if key KB_SPACE down
+			if key KB_SPACE down and EnablePress == 1
 				if OptionToPick == 1 //Start game normally
 					start sound LH_SAMPLE_SKITTLECOLLIDE_01
 					LockInputLoop = 0
@@ -316,19 +582,26 @@ start
 					OptionMenu = 0
 					OptionToPick = 0
 					
+					MyCreature = get player 1 creature
+					
 					IsSkippingToCreatureSelect = 1
 					IsSkippingCreatureGuide = 1
-					IsKeepingOldCreature = 1
+					
+					MyCreature = get player 1 creature
+					if MyCreature not exists
+						IsKeepingOldCreature = 0
+					else
+						IsKeepingOldCreature = 1
+					end if
 				end if
 			end if
-		end if
 		
 		
 		
 		
 	
 		//Start Game
-		if OptionMenu == 1 //Start game normally
+		elsif OptionMenu == 1 //Start game normally
 		
 			if key KB_BACKSPACE down
 				//OptionToPick = 1
@@ -355,7 +628,7 @@ start
 				end if
 			end if
 
-			if key KB_SPACE down
+			if key KB_SPACE down and EnablePress == 1
 			
 				if OptionToPick == 1 //Start game normally
 					start sound LH_SAMPLE_SKITTLECOLLIDE_01
@@ -375,8 +648,17 @@ start
 		
 		
 		run background script CustomIntroText(OptionMenu, Option1, Option2, Option3, Option4)
+		
+		//Enable Delay
+		if key KB_SPACE down
+			EnablePress = 0
+		else
+			EnablePress = 1
+		end if
 
 	end while
+
+
 	
 	//Remove UI
 	set fade red 0 green 0 blue 0 time 2
@@ -400,6 +682,17 @@ begin script CustomBlackAndWhiteIntroMenu
 	MyCreatureHeight = 0
 start
 	
+	load map "Ultimate/Scripts/CreatureIsles/Isle01.txt"
+	
+	//Manage Creature
+	MyCreature = get player 1 creature
+	if MyCreature not exists
+		load my_creature at [4211.68, 4081.62]
+	end if
+	MyCreature = get player 1 creature
+	
+	wait 2 second
+	
 	//MyCreature=create CREATURE CREATURE_TYPE_LION at [2279.37,2877.50]
 	//set player 1 creature to MyCreature
 	
@@ -413,17 +706,21 @@ start
 	run background script CustomGetInput
 	
 
-	
 	//Show creature
+	/*
 	MyCreature = get player 1 creature
+	
+	//load my_creature at [4211.68, 4081.62]
 	if MyCreature not exists
 		//load my_creature at [2565.24, 2755.31]
-		load my_creature at [4211.68, 4081.62]
+		//load my_creature at [4211.68, 4081.62]
+		ACTUAL_HEIGHT of MyCreature = 0.9
 	end if
 	wait 0.3 seconds
 	MyCreature = get player 1 creature
 	MyCreatureHeight = SCRIPT_OBJECT_PROPERTY_TYPE_HEIGHT of MyCreature
-	ACTUAL_HEIGHT of MyCreature = 0.75
+	ACTUAL_HEIGHT of MyCreature = 0.9
+	*/
 	
 	
 	
@@ -451,15 +748,15 @@ start
 	
 	while LockMenu == 0
 		set MyCreature focus to  [4291.07, 10, 4140.77]
-		wait 3 second
+		wait 4 second
 		MyCreature play C_INDIVIDUAL_FRIENDLY_WAVE
-		wait 5 second
+		wait 10 second
 		MyCreature play C_INDIVIDUAL_FEELING_NICE
-		wait 5 second
+		wait 10 second
 		MyCreature play C_INDIVIDUAL_PICK_ME
-		wait 5 second
+		wait 10 second
 		force MyCreature CREATURE_LOOK_AT_CAMERA MyCreature
-		wait 3 second
+		wait 4 second
 	end while
 	
 

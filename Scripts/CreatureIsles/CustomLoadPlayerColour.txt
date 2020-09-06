@@ -3,6 +3,7 @@ begin script CustomLoadPlayerColour
 start
 
 	while ApplyCustomColour == 1
+	/*
 		//Red
 		if MyColour == 0
 			run map script line "SET_GLOBAL_LAND_BALANCE(415871,2.3443261E-38)"
@@ -26,6 +27,7 @@ start
 			run map script line "SET_GLOBAL_LAND_BALANCE(415871,6.610002E-39)"
 			run map script line "SET_GLOBAL_LAND_BALANCE(-303798,6.610002E-39)"
 		end if
+		*/
 
 		wait 1 seconds
 	end while

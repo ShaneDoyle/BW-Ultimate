@@ -95,8 +95,30 @@ start
 end script CustomHardModePlayerInfluence
 
 
+
+begin script CustomHardModeGameInfo
+	
+start
+	// Land
+	while Difficulty == 1
+		begin camera
+			set game speed to 1
+			wait 0.1 seconds
+		end camera
+	end while
+end script CustomHardModeGameInfo
+
+
 //Make gods attack other creatures when in their influence. 
-begin script CustomHardMode_GodAttack(PlayerNum)
+/*
+	CreatureSpell = 0 //Freeze
+	CreatureSpell = 1 //Itchy
+	
+	AttackSpell = 0 //Fireball
+	AttackSpell = 1 //Lightning Bolt
+	AttackSpell = 2 //Mega Blast
+*/
+begin script CustomHardMode_GodAttack(PlayerNum, CreatureSpell, AttackSpell)
 	LoopForever = 1
 
 	MyInfluence = 0 //Get influence of PlayerNum
@@ -106,15 +128,30 @@ begin script CustomHardMode_GodAttack(PlayerNum)
 	MyFreeze = 0
 	
 	CheckPlayer = 1
-
+	
+	
+	AttackPosition = 0
+	
+	/*
+	CreatureSpell = 0 //Freeze
+	CreatureSpell = 1 //Itchy
+	
+	AttackSpell = 0 //Fireball
+	AttackSpell = 1 //Lightning Bolt
+	*/
+	
+	AttackSpellToUse = 0
+	CreatureSpellToUse = 0
+	
 
 start
 	wait 30 seconds // Wait 30 seconds before starting.
+	AttackPosition = 0
 	
 	while LoopForever == 1
 		
 		//Check for 4 other players. (Maybe upgrade this to 7?)
-		while CheckPlayer <= 7
+		while CheckPlayer <= 4
 		
 			//Skip this if checking self. In other words, don't attack your own creature in own influence!
 			if PlayerNum != CheckPlayer 
@@ -134,8 +171,15 @@ start
 							move computer player PlayerNum to [get player CheckPlayer creature] + [0,25,0] speed 100000 // Move god to the enemy creature
 							wait 1.0 seconds
 							
-							//Cast Freeze Miracle. (TODO: Add support for checking if player has this spell)
-							MyFreeze = cast CREATURE_SPELL_FREEZE spell on get player CheckPlayer creature from computer player PlayerNum position + [0,25,0] radius 0 time 20 curl 0
+							if CreatureSpell == 0
+								//Cast Freeze Miracle. (TODO: Add support for checking if player has this spell)
+								CreatureSpellToUse = cast CREATURE_SPELL_FREEZE spell on get player CheckPlayer creature from computer player PlayerNum position + [0,25,0] radius 0 time 20 curl 0
+							end if
+							
+							if CreatureSpell == 1
+								//Cast Freeze Miracle. (TODO: Add support for checking if player has this spell)
+								CreatureSpellToUse = cast CREATURE_SPELL_ITCHY spell on get player CheckPlayer creature from computer player PlayerNum position + [0,25,0] radius 0 time 20 curl 0
+							end if
 							wait 3.00 seconds
 							
 							MyInfluence = get player PlayerNum raw influence at [get player CheckPlayer creature] //Check own player influence with enemy creature.
@@ -145,12 +189,30 @@ start
 							if MyInfluence > OtherInfluence
 							
 								//Adjust player's position.
-								move computer player PlayerNum to [get player CheckPlayer creature] + [number from 10 to 20, 25, number from 10 to 20] speed 10000 // Move the player to the enemy god's creature
+								AttackPosition = marker at [get player CheckPlayer creature] + [number from 10 to 20, 25, number from 10 to 20]
+								move computer player PlayerNum to [AttackPosition] speed 10000 // Move the player to the enemy god's creature
 								wait 1.0 seconds
 								
+								
+								
+								//Cast FireBall at enemy Creature. (TODO: Add support for checking if player has this spell)
+								if AttackSpell == 0
+									AttackSpellToUse = cast SPELL_FIREBALL_LEVEL_1 spell at [get player CheckPlayer creature] from [AttackPosition] + [0,25,0] radius 1.0 time 5 curl 0
+								end if
+								
 								//Cast Lightning Bolt at enemy Creature. (TODO: Add support for checking if player has this spell)
-								MyLightning = cast SPELL_LIGHTNING_LEVEL_1 spell at [get player CheckPlayer creature] from computer player PlayerNum position + [0,25,0] radius 5.0 time 5 curl 0
+								if AttackSpell == 1
+									AttackSpellToUse = cast SPELL_LIGHTNING_LEVEL_1 spell at [get player CheckPlayer creature] from [AttackPosition] + [0,25,0] radius 5.0 time 5 curl 0
+								end if
+								
+								//Cast Mega Blast at enemy Creature. (TODO: Add support for checking if player has this spell)
+								if AttackSpell == 2
+									AttackSpellToUse = cast SPELL_EXPLOSION_LEVEL_1 spell at [get player CheckPlayer creature] from [AttackPosition] + [0,25,0] radius 1.0 time 5 curl 0
+								end if
+								
 								wait 5.00 seconds
+								
+								
 								
 								release computer player PlayerNum
 								wait 5 seconds
@@ -215,6 +277,11 @@ start
 			
 			//Wait until town is not neutral or town dies and if the leash object exists (village store). Also, periodically add some extra belief.
 			while get PLAYER of Town <= 0 and size of Town > 0 and Creature leashed
+			
+				if HEALTH of Creature == 0
+					detach Creature leash
+				end if
+			
 				TotalBelief = get Town belief for player PlayerNum
 				TotalBelief += 0.001
 				set Town player PlayerNum belief TotalBelief //Will give about 1 belief per 2 seconds. For a 1k town, will take 33.3 mins to capture.
@@ -224,9 +291,9 @@ start
 			//Release the Creature.
 			detach Creature leash
 			release Creature
-			
 		end if
 	end if
+	
 end script CustomHardMode_CreatureCaptureTown
 
 
@@ -242,7 +309,7 @@ start
 	
 	//Select a player to attack. (That isn't ourself). TO-DO: Need to add Ally support here
 	while PlayerToAttack == PlayerNum
-		PlayerToAttack = number from 1 to 4
+		PlayerToAttack = 2 //number from 1 to 4
 	end while
 	
 	//Get the temple.
@@ -267,6 +334,7 @@ end script CustomHardMode_CreatureAttackPlayer
 
 //Make gods impress towns + attack players.
 begin script CustomHardMode_ImproveAIController(PlayerNum)
+	Max_Towns = 0
 	Target_Town = 11
 	ComputerAIAction = 0
 
@@ -286,7 +354,8 @@ start
 		if ComputerAIAction == 0
 		
 			//90% chance to impress village.
-			if number from 1 to 100 < 90
+			if number from 1 to 100 < 0
+				//Max_Towns = get neutral town total
 				Target_Town = number from 0 to 12
 				ComputerAIAction = 1
 				
@@ -309,7 +378,7 @@ start
 			ComputerAIAction = 0
 		end if
 		
-		wait 1 second
+		wait 30 second
 
 	end while
 
@@ -329,6 +398,9 @@ start
 		//Remove hand out influence.
 		disable player 1 virtual influence
 		
+		//Stop game speed
+		//run background script CustomHardModeGameInfo
+		
 		//Land 2.
 		if LandNumber == 2
 		
@@ -336,13 +408,13 @@ start
 			run background script CustomHardModePlayerInfluence
 			
 			//Let Khazar defend too. Sorta improve.
-			run background script CustomHardMode_GodAttack(2)
+			run background script CustomHardMode_GodAttack(2,0,0) //Itchy + FireBall
 			run background script CustomKillCreatureFix(2)
 			
 			//Improve AI (Lethys).
 			run background script CustomHardMode_ImproveAIStats(3)
 			run background script CustomHardMode_ImproveAIController(3)
-			run background script CustomHardMode_GodAttack(3)
+			run background script CustomHardMode_GodAttack(3,0,1) //Freeze + Lightning Bolt
 			run background script CustomKillCreatureFix(3)
 
 		end if
@@ -358,7 +430,7 @@ start
 			//Improve AI (Lethys).
 			run background script CustomHardMode_ImproveAIStats(2)
 			//run background script CustomHardMode_ImproveAIController(2)
-			//run background script CustomHardMode_GodAttack(2)
+			//run background script CustomHardMode_GodAttack(2,0,0)
 			run background script CustomKillCreatureFix(2)
 
 		end if
@@ -384,7 +456,7 @@ start
 			//Improve AI (Nemesis).
 			run background script CustomHardMode_ImproveAIStats(2)
 			run background script CustomHardMode_ImproveAIController(2)
-			run background script CustomHardMode_GodAttack(2)
+			run background script CustomHardMode_GodAttack(2,0,2) //Freeze + Mega Blast
 			run background script CustomKillCreatureFix(2)
 
 		end if

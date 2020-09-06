@@ -1,4 +1,5 @@
 // General
+GlobalDLLVariables.txt
 IsleHeaders.txt
 HandDemos.txt
 StandardReminder.txt
