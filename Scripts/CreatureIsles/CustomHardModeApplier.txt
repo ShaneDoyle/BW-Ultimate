@@ -171,12 +171,12 @@ start
 							move computer player PlayerNum to [get player CheckPlayer creature] + [0,25,0] speed 100000 // Move god to the enemy creature
 							wait 1.0 seconds
 							
-							if CreatureSpell == 0
+							if CreatureSpell == 0 AND spell CREATURE_SPELL_FREEZE for player PlayerNum
 								//Cast Freeze Miracle. (TODO: Add support for checking if player has this spell)
 								CreatureSpellToUse = cast CREATURE_SPELL_FREEZE spell on get player CheckPlayer creature from computer player PlayerNum position + [0,25,0] radius 0 time 20 curl 0
 							end if
 							
-							if CreatureSpell == 1
+							if CreatureSpell == 1 AND spell CREATURE_SPELL_ITCHY for player PlayerNum
 								//Cast Freeze Miracle. (TODO: Add support for checking if player has this spell)
 								CreatureSpellToUse = cast CREATURE_SPELL_ITCHY spell on get player CheckPlayer creature from computer player PlayerNum position + [0,25,0] radius 0 time 20 curl 0
 							end if
@@ -196,17 +196,17 @@ start
 								
 								
 								//Cast FireBall at enemy Creature. (TODO: Add support for checking if player has this spell)
-								if AttackSpell == 0
+								if AttackSpell == 0 AND spell SPELL_FIREBALL_LEVEL_1 for player PlayerNum
 									AttackSpellToUse = cast SPELL_FIREBALL_LEVEL_1 spell at [get player CheckPlayer creature] from [AttackPosition] + [0,25,0] radius 1.0 time 5 curl 0
 								end if
 								
 								//Cast Lightning Bolt at enemy Creature. (TODO: Add support for checking if player has this spell)
-								if AttackSpell == 1
+								if AttackSpell == 1 AND spell SPELL_LIGHTNING_LEVEL_1 for player PlayerNum
 									AttackSpellToUse = cast SPELL_LIGHTNING_LEVEL_1 spell at [get player CheckPlayer creature] from [AttackPosition] + [0,25,0] radius 5.0 time 5 curl 0
 								end if
 								
 								//Cast Mega Blast at enemy Creature. (TODO: Add support for checking if player has this spell)
-								if AttackSpell == 2
+								if AttackSpell == 2 AND spell SPELL_EXPLOSION_LEVEL_1 for player PlayerNum
 									AttackSpellToUse = cast SPELL_EXPLOSION_LEVEL_1 spell at [get player CheckPlayer creature] from [AttackPosition] + [0,25,0] radius 1.0 time 5 curl 0
 								end if
 								
