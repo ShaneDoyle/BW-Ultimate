@@ -429,8 +429,8 @@ start
 				RewardInfluence = create influence at [RewardPos] radius 10
 				run background script rewardfromsky(variable REWARD_OBJECT_TOY_BALL, RewardPos, 0,0)
 				GotBall = 1
-				SheepCreature = create CREATURE CREATURE_TYPE_CROCODILE at [RewardPos]
-				run background script SwapCreatures(SheepCreature)
+				//SheepCreature = create CREATURE CREATURE_TYPE_CROCODILE at [RewardPos]
+				//run background script SwapCreatures(SheepCreature)
 			else
 				begin dialogue
 					eject evil spirit

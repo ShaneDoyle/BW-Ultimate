@@ -405,6 +405,7 @@ start
 	begin cinema
 	
 		set fade in time 2
+		//start music MUSIC_TYPE_SCRIPT_CREATURE_END_SEQUENCE
 		//start music MUSIC_TYPE_SCRIPT_NEMESIS
 		//(Custom) set fade red 0 green 0 blue 0 time 1
 		set camera position to [3640.021, 93.264, 2577.149]

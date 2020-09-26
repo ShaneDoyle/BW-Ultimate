@@ -210,7 +210,7 @@ start
 //Leave through vortex into the unknown!!!-------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------------------------------------
 	begin cinema
-
+		
 		move camera position to [CamPosIn] + [1,100,1]  time 6	// Highest camera 
 		move camera focus to [CamPosIn] time 6
 

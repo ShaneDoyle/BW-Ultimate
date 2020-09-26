@@ -1,0 +1,217 @@
+//------------------------------------------------------------------------------------------------------------------------
+//--CustomTykeEggHatch-------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------------------------------------
+
+
+begin script CustomTykeBeam(Position)
+
+	LoopForever= 1
+
+start
+
+
+	while LoopForever == 1
+		TykeBeam = create special effect SPOT_VISUAL_SEE_THIS_BEAM at [Position] time -1
+		wait 24 seconds
+	end while
+
+end script CustomTykeBeam
+
+
+
+begin script CustomTykeLookAtCamera(Creature)
+
+buffer = 1
+
+start
+
+	while buffer > 0
+		set Creature focus to camera position
+		force Creature CREATURE_LOOK_AT_CAMERA Creature
+		wait 1 second
+	end while
+
+end script CustomTykeLookAtCamera
+
+
+begin script CustomTykeEggHatch
+	Count = time-31
+	Egg = 0
+	EggHighlight = 0
+	EggHeight = 0
+	EggHatch = 0
+	CreatureClicked = 0
+	ReminderTimer2 = create timer for 0 seconds
+	ApprenticeCreature = 0
+	NewApprenticeCreature = 0
+	
+	VolcanoLocation = marker at [3920.2275, 119.9300, 2153.4255]
+	Vortex=0
+	P1Creature = 0
+	P1Apprentice = 0
+	Crocodile = 0
+	Chicken = 0
+	
+start
+	
+	Crocodile = create CREATURE CREATURE_TYPE_CROCODILE at [3939.22,2328.68]
+	run background script SwapCreatures(Crocodile)
+	Chicken = create CREATURE CREATURE_TYPE_CHICKEN at [3963.06,2352.99] 
+	run background script SwapCreatures(Chicken)
+		
+	Egg = create OBJECT MOBILE_STATIC_INFO_EGG at [3964.96, 2109.50]
+	EggHeight = SCRIPT_OBJECT_PROPERTY_TYPE_HEIGHT of Egg
+	run background script CustomTykeBeam(Egg)
+	
+	// Remind player and get him to initiate Swap by clicking on the scroll or the new creature
+	EggHighlight = create highlight CHALLENGE_SWAP_CREATURES HIGHLIGHT_CHALLENGE at [Egg] 
+
+	while EggHatch == 0
+
+
+		
+		
+		// Remind player and get him to initiate Swap by clicking on the scroll or the new creature
+		EggHighlight = create highlight CHALLENGE_SWAP_CREATURES HIGHLIGHT_CHALLENGE at [Egg] 
+		
+		ALTITUDE of EggHighlight = EggHeight + 1.0
+		clear clicked object
+
+		// START: Wait for a click on Highlight or NewCreature or timer to expire
+		CreatureClicked = 0
+		while CreatureClicked == 0
+		
+			
+
+			if camera position near [EggHighlight] radius 250 and Egg viewed
+				if get ReminderTimer2 time remaining <= 0
+					set ReminderTimer2 time to 60 seconds
+					begin dialogue
+						eject evil spirit
+						make evil spirit point at [EggHighlight] in world
+						say single line HELP_TEXT_EGG_READY_12
+						wait until read
+					end dialogue
+				end if
+			end if
+
+			if EggHighlight clicked or Egg clicked
+				CreatureClicked = 1
+				run script ChallengeHighlightNotify(EggHighlight, EggHeight, variable GOOD_ADVISOR, variable HELP_TEXT_NONE)
+				delete EggHighlight
+				stop script "CustomTykeBeam"
+				delete TykeBeam
+
+				begin cinema
+				
+					//Initialise potential new creatures.
+					NewApprenticeCreature = create CREATURE CREATURE_TYPE_CROCODILE at [0,0,0]
+					P1Creature = get player 1 creature
+					
+					
+					
+					start music MUSIC_TYPE_SCRIPT_EPIC_02
+
+					set fade red 0 green 0 blue 0 time 1
+					wait 2 seconds
+
+					//BeginPos = marker at camera position
+					//BeginFoc = marker at camera focus
+
+
+					//Builder = create SCRIPT_OBJECT_TYPE_VILLAGER INDIAN_TRADER at [BuilderPos]
+					//set Builder focus to [IdolPos]
+					//Builder play ANM_P_PRAY loop 23
+
+
+					set camera lens  80
+					set camera position to [Egg] + [-30, 10, 30]
+					set camera focus to [Egg]
+					set fade in time 3
+					wait 4 seconds
+					set camera lens 70 time 3
+					
+					eject evil spirit
+					
+					//say HELP_TEXT_TYKE_TREE_440
+					say HELP_TEXT_TYKE_TREE_340
+					wait until read
+					clear dialogue
+					send evil spirit home
+					
+					//set fade red 255 green 255 blue 255 time 1
+					wait 1 seconds
+					
+					
+					Tyke = create young creature from P1Creature with NewApprenticeCreature knowledge at [Egg]
+					
+					run background script CustomTykeLookAtCamera(Tyke)
+					delete Egg with explosion
+					start sound LH_SCRIPT_SAMPLE_GUARDIANSTONEEXPLODE AUDIO_SFX_BANK_TYPE_SCRIPT_SFX
+					
+					ALIGNMENT of Tyke = 1.0
+					set Tyke name HELP_TEXT_NAME_CHICKEN_01
+					release Tyke
+					wait 0.3 seconds
+					set Tyke focus to camera position
+					wait 1 seconds
+					
+					//start sound SOUND_SPELL_FIREWORK_EXPLODE
+					
+					wait 1 second
+					
+					wait 2 seconds
+					
+					//set fade in time 3
+					
+					eject good spirit
+					eject evil spirit
+					
+					set camera lens 80 time 5
+					move camera position to [Tyke] + [-10, 5, 10] time 8
+					set camera focus to [Tyke]
+					wait 2 seconds
+					
+
+					// "GA: Astonishing! A brand new creature!"
+					say HELP_TEXT_TYKE_TREE_350
+					wait until read
+					
+					
+					// "EA: Alright!"
+					//say HELP_TEXT_END_OF_GAME_EXTRA_17
+					//wait until read
+					
+					// "EA: Oh boy. We can make the Tyke really cool."
+					say HELP_TEXT_TYKE_EDUCATION_28
+					wait until read
+					
+					// "GA: Well, let's get cracking with Tyke's education!"
+					say HELP_TEXT_TYKESCOMINGOFAGE_TYKELEARNING_10
+					wait until read
+					
+					//force Tyke CREATURE_LOOK_AT_CAMERA Tyke
+					stop script "CustomTykeLookAtCamera"
+					Tyke play C_INDIVIDUAL_FRIENDLY_WAVE
+					wait 3 seconds
+					
+					/*
+					move Tyke position to [3894.43,2228.21]
+					move camera position to [Tyke] + [-70, 12, 70] time 10
+					set camera focus to [Tyke]
+					wait until Tyke played
+					
+					release Tyke
+					*/
+					
+					
+					release Tyke
+					
+				end cinema
+				
+			end if 
+		end while
+	end while
+	
+
+end script CustomTykeEggHatch

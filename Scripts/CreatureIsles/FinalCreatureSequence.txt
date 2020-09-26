@@ -106,7 +106,7 @@ start
 			start sound LH_SCRIPT_SAMPLE_CREATUREFROZENMOAN_01 AUDIO_SFX_BANK_TYPE_SCRIPT_SFX
 
 			start music MUSIC_TYPE_SCRIPT_CREATURE_END_SEQUENCE 
-			wait until get MyCreature played percentage > 0.75
+			wait until get MyCreature played percentage > 0.95
 
 
 //			stop sound LH_SAMPLE_G_CREED_01
@@ -128,7 +128,7 @@ start
 			//Move him to the other side of the map so he can't be seen.
 			set MyCreature position to [1368.161, 23.149, 3570.466] 
 			
-			stop music
+			//stop music
 		end cinema
 	end if
 

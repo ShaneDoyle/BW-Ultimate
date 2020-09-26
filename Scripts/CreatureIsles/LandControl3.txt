@@ -20,6 +20,9 @@ start
 	run background script TreePuzzleTwo
 	wait until FinishedLand3 == 1
 	
+	//Set to next land number.
+	LandNumber = 4 //Set LandNumber here! (Custom)
+	wait 0.1 seconds
 	
 	//Change Land! (Land 3)
 	// Normal difficulty.

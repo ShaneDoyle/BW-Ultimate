@@ -40,3 +40,4 @@ global help_text_retake_aztec_village_quest_reminder_02
 
 //Custom (new) ones
 global LocalLoop = 50
+global TykeBeam = 0

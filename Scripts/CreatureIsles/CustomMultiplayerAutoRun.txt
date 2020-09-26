@@ -1,81 +1,39 @@
+
+
+
+
 run script MultiplayerAutoRun
 
 //------------------------------------------------------------------------------------------------------------------------
 begin script MultiplayerAutoRun
-	BlackCloud = 0
-	Storm = 0
-	Brother = 0
-	P1Creature = 0
-	P1Apprentice = 0
-	P2Creature = 0
-	P2Apprentice = 0
-	Vort = 0
-	SwapableCreature = 0
-start
-	/*
-	//CitadelEntrancePos = marker at [1906.8438, 18.0900, 2514.3760]
-	//run background script 
-	
-	//Brother = create VILLAGER VILLAGER_INFO_NORSE_FARMER_MALE  at [SickBed]
 
-	Vort = create VORTEX VORTEX_TYPE_IN at [2518.63,2763.37]
+	MyVillager = 0
+	P1Creature = 0
+	Town = 0
 	
-	stop music
+start
+	//Add Multiplayer shit here!
 	
+	
+	Town = get TOWN at [2174.32,2358.90] radius 50
+
+	//while Population > 0
+	////	if Population > 10
+	//		Villager = create VILLAGER MALE at [Town]+[number from -20 to 20, number from -20 to 20]
+			
 	P1Creature = get player 1 creature
-	
-	start music MUSIC_TYPE_SCRIPT_NEMESIS
-	//start music MUSIC_TYPE_SCRIPT_GENERIC_01
-	
-	set computer player 2 speed 300.0
-	
-	SwapableCreature = create CREATURE CREATURE_TYPE_CHICKEN at [2518.63,2763.37]
-	HEIGHT of SwapableCreature = 2.5
-	//run background script SwapCreatures(SwapableCreature)
-	set player 1 ally with player 2 percentage 1
-	
-	//LBSFX=create special effect SPOT_VISUAL_HIGHLIGHT_ON_OBJECT on P1Creature time 2
+	MyVillager = create VILLAGER MALE at [Town]
+	attach MyVillager to Town
+	wait 5 seconds
 	
 	
 	
-	
-	
-	// Create a moody storm
-	/*
-	Storm = create SCRIPT_OBJECT_TYPE_WEATHER_THING WEATHER_INFO_DRIZZLE at [P1Creature]  
-	set Storm properties degrees 15 rainfall 1 snowfall 0 overcast 1 fallspeed 10
-	set Storm properties time 120 fade 40
-	set Storm properties clouds 8 shade 0.8 height 130
-	set Storm properties sheetmin 0 sheetmax 0 forkmin 0 forkmax 0
-	set Storm properties inner 2000 outer 4000
-	disable Storm affected by wind
-	*/
-	
-	set game time 16.50
-	move game time 19.00 time 1000
-	wait 120 seconds
-	disable game time
-	*/
-	
-	//Colour shit.
-	//run background script CustomMultiplayerPlayerColour(MyColour)
-	
-	//Player 1 Adjustments.
-	disable player 1 virtual influence
-	
-	
-	//Player 2 Adjustments.
-	set computer player 2 personality "TakeOverTownByImpressing" 1.00
-	set computer player 2 personality "CastSpellOnMyCreatureForALaugh" 1.00
-	set computer player 2 speed 1000.0
-	set player 2 ally with player 2 percentage 1
-	
-	P2Creature = get player 2 creature
-	P2Apprentice = create young creature from P2Creature with P2Creature knowledge at [2518.63,2763.37]
-	ACTUAL_HEIGHT of P2Apprentice = 0.5
-	
-	P1Creature = get player 1 creature
-	P1Apprentice = create young creature from P1Creature with P1Creature knowledge at [2518.63,2763.37]
-	ACTUAL_HEIGHT of P1Apprentice = 0.5
+	//Debug shit!
+	while 1 == 1
+		move MyVillager position to [P1Creature]
+		SPEED of MyVillager = 1
+		//state MyVillager VILLAGER_STATE_DEAD
+		wait 1 second
+	end while
 	
 end script MultiplayerAutoRun

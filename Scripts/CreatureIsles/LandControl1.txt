@@ -120,6 +120,7 @@ start
 		run script CreatureDevGuideTeachesFight
 	end if
 	
+
 	run background script CreatureGuardian								
 	run background script LeaveThroughVortexL1							// This waits until OpenVortexL1 == 1 (set in TheStorm)
 	
@@ -132,24 +133,9 @@ start
 	end if
 	
 	
-	
-	
-	//Change Land! (Land 2)
-	/*
-	// Normal difficulty.
-	if Difficulty == 0
-		stop all scripts excluding files "LandControl1.txt"
-		load map "Scripts/UltimateLand2.txt"
-		run script LandControl2
-	end if
-	
-	// Hard Mode.
-	if Difficulty == 1
-		stop all scripts excluding files "LandControl1.txt"
-		load map "Scripts/HardUltimateLand2.txt"
-		run script LandControl2
-	end if
-	*/
+	//Set to next land number.
+	LandNumber = 3 //Set LandNumber here! (Custom)
+	wait 0.3 seconds
 	
 	// Normal difficulty.
 	if Difficulty == 0
@@ -161,8 +147,8 @@ start
 	// Hard Mode.
 	if Difficulty == 1
 		stop all scripts excluding files "LandControl1.txt"
-		load map "Scripts/HardUltimateLand2.txt"
-		run script LandControl2
+		load map "Scripts/HardUltimateLand3.txt"
+		run script LandControl3
 	end if
 	
 end script LandControl1

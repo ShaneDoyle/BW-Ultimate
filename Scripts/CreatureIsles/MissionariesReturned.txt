@@ -78,7 +78,9 @@ start
 	build building at [BuildPos5] desire 9.0
 	build building at [BuildPos6] desire 9.0
 	build building at [BuildPos7] desire 9.0
-	build building at [WonderPos] desire 9.0
+	if Difficulty == 0
+		build building at [WonderPos] desire 9.0
+	end if
 	build building at [CrechePos] desire 9.0
 	build building at [StorePos] desire 9.0
 	build building at [GraveYardPos] desire 9.0

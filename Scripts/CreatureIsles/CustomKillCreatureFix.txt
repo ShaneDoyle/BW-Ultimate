@@ -13,17 +13,16 @@ start
 	while LoopForever >= 0
 		Creature = get player PlayerNum creature
 		if HEALTH of Creature == 0
-				//detach Creature leash
+				detach Creature leash
 				force Creature CREATURE_DEAD Creature
-				wait 10 seconds
-				
-				begin dialogue
-					say "Hello World"
-					wait until read
-				end dialogue
+				wait 30 seconds
+				//HEALTH of Creature = 1
+				release Creature
 		end if
 	end while
 	
 	release Creature
 	
 end script CustomKillCreatureFix
+
+

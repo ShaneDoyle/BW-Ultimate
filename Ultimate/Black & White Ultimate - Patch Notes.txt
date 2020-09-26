@@ -1,0 +1,15 @@
+v1.00	- Initial Release!
+
+v1.01   - (Hard Mode) Fixed issue with AI where Creature would constantly attack a town.
+        - (Hard Mode) Adjusted AI to not make decisions as fast. The previous speed resulted in permanent creature attacks.
+        - (Hard Mode) Nerfed Lethys's Lightning Bolt on Land 2 (around 50%).
+        - Removed Crocodile from the rock throwing quest. This was a bug.
+		
+v1.02   - (Hard Mode) Adjusted AI when freezing/itchy a Creature. The creature will now have a few seconds to act once the freeze/itch has worn off.
+        - (Hard Mode) Fixed issue where AI Creatures could constantly break out of Creature fights when attacking a town.
+        - (Hard Mode) Fixed issue where Nemesis would instantly capture towns on Land 5.
+        - (Hard Mode) Fixed issue that reloading the game would re-enable virtual influence (hand outside of influence).
+        - (Hard Mode) Reduced player's influence to 25% (from 33%)
+        - (Hard Mode) Reduced the rate of belief to 75% (was 50%). Impressing towns should be a bit easier now. Belief amount/caps remain unchanged.
+        - (Hard Mode) Players can now create artifacts. Slower than Normal Mode, but now possible.
+        - (Hard Mode) Added event in Land 3 that results in a Game Over if Lethys's influence reaches the player's temple.

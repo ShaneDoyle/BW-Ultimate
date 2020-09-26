@@ -454,14 +454,11 @@ start
 		end if
 	end while
 	
-	//Go to Land 3!
-	stop all scripts excluding files "LandControl2.txt"
-	load map "scripts/land3.txt"
-	run script LandControl3
-	stop all scripts excluding files "LandControl3.txt"
+	//Set to next land number.
+	LandNumber = 3 //Set LandNumber here! (Custom)
+	wait 0.1 seconds
 	
 	//Change Land! (Land 2)
-	
 	// Normal difficulty.
 	if Difficulty == 0
 		stop all scripts excluding files "LandControl2.txt"

@@ -19,11 +19,14 @@ begin script CustomHardMode_NemesisKillsPlayer
 
 start
 	
-	NemesisInfluence = get player 2 raw influence at [PlayerCitadel]
 	
 	//Always check if Nemesis reaches our temple with his influence.
 	while LoopForever == 1
 		wait 5 seconds
+		PlayerCitadel = get CITADEL at player 1 temple position radius 100
+		wait 1 second
+		NemesisInfluence = get player 2 raw influence at [PlayerCitadel]
+		wait 1 second
 		
 		if NemesisInfluence > 0
 			

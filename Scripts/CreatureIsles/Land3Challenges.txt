@@ -1,5 +1,6 @@
 //Land 3
 SetupLand3.txt
+CustomHardModeLand3.txt
 Shaolin.txt
 LeaveThroughVortexL3.txt
 FreeTheCreature.txt

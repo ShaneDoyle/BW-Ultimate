@@ -815,17 +815,20 @@ start
 		wait until camera ready
 
 
-		move camera position to [1775.785400, 33.808357, 2808.186523] time 3										// Fly to valley of creatures			//(TOFIXCAM)
+		//move camera position to [1775.785400, 33.808357, 2808.186523] time 3										// Fly to valley of creatures			//(TOFIXCAM)
 		wait until camera ready
 		start music MUSIC_TYPE_SCRIPT_EPIC_03
 		//camera path TRACK00					//(TOFIXPATH)
+		move camera position to [1909.63, 60, 3169.65] time 10			// Camera pos move to creatures
+		move camera focus to [2033.30, 30, 3172.41] time 10 			// Camera foc move to creatures
+		
 		wait until camera ready
 
 		force CreatureTiger CREATURE_SIT TigerBasePos
 		move CreatureCow position to [CowBasePos]
 		force CreatureApe CREATURE_POINT_AT_CAMERA CreatureApe
-		move camera position to [2225.328, 17.080, 3146.622] time 4			// Camera pos move to creatures
-		move camera focus to [2238.217, 18.187, 3155.706] time 4 			// Camera foc move to creatures
+		move camera position to [2225.328, 17.080, 3146.622] time 7			// Camera pos move to creatures
+		move camera focus to [2238.217, 18.187, 3155.706] time 7 			// Camera foc move to creatures
 		wait until CreatureCow played
 		wait until CreatureApe played
 		set CreatureCow focus to camera position

@@ -47,12 +47,24 @@ start
 	run script CreatureGetsCreed
 
 	run script LeaveThroughVortexL4
+
+	//Set to next land number.
+	LandNumber = 5 //Set LandNumber here! (Custom)
+	wait 0.1 seconds
 	
+	//Change Land! (Land 4)
+	// Normal difficulty.
+	if Difficulty == 0
+		stop all scripts excluding files "LandControl4.txt"
+		load map "Scripts/UltimateLand5.txt"
+		run script LandControl5
+	end if
 	
-	//Go to Land 5!
-	stop all scripts excluding files "LandControl4.txt"
-	load map "Ultimate/Scripts/UltimateLand5.txt"
-	run script LandControl5
-	stop all scripts excluding files "LandControl5.txt"
+	// Hard Mode.
+	if Difficulty == 1
+		stop all scripts excluding files "LandControl4.txt"
+		load map "Scripts/HardUltimateLand5.txt"
+		run script LandControl5
+	end if
 
 end script LandControl4

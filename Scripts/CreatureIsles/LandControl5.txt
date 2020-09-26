@@ -1658,8 +1658,6 @@ start
 	//Check to apply hard mode stuff.
 	if Difficulty == 1
 		run background script CustomHardModeApplier
-		run background script CustomHardMode_NemesisKillsPlayer
-		run background script CustomHardMode_NemesisTauntAI
 	end if
 	
 	run background script CreatureCurse(Wonder1, Wonder2, Wonder3, Wonder4)
@@ -2212,7 +2210,8 @@ start
 		end if
 	end while
 
-	stop all scripts excluding files "LandControl5.txt"
+	//stop all scripts excluding files "LandControl5.txt"
+	stop script "ThrowBeamBlock"
 
 //------------------------------------------------------------------------------------------------------------------------
 // **** NEMESIS HAS LOST ALL TOWNS ****
@@ -2232,6 +2231,13 @@ start
 	run script NemesisCitadelDestroyed
 	disable computer player 2
 	run script VillageWavingSequence
+
+	//Reward the player if they beat the game on hard mode!
+	if Difficulty == 1
+		run background script CustomTykeEggHatch
+	end if
+	
+	
 wait 50000 seconds
 
 

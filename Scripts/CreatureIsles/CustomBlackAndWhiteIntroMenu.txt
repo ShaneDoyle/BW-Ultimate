@@ -3,6 +3,7 @@
 begin script CustomIntroCamera
 	CameraLock = 0
 start
+
 	//Init the camera.
 	begin camera
 		move camera position to [4281.07, 50, 4140.77] time 0
@@ -21,8 +22,10 @@ start
 			set game speed to 1.2
 			
 			if key KB_ESC down
-				CameraLock = 1
+				//CameraLock = 1 //DEBUG ONLY!
 			end if
+			
+			
 			
 		end while
 		
@@ -61,6 +64,11 @@ start
 	if OptionMenu == 4
 		draw text "Menu -> Settings -> Colour" across -0.1035 down 0.200 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
 	end if
+	
+
+	//Draw Version
+	set draw text colour red 230 green 230 blue 230
+	draw text "Black & White: Ultimate - V1.02" across 0.600 down 0.950 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
 	
 	//Main Menu!
 	if OptionMenu == 1
@@ -187,6 +195,11 @@ start
 	//Colour creator.
 	if OptionMenu == 4
 	
+		//Give hints to change colour.
+		set draw text colour red 130 green 130 blue 130
+		draw text "(<- & -> keys to adjust colour)" across 0.1535 down 0.200 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+		
+		
 		//Option 1.
 		if Option1 == 0
 			set draw text colour red 230 green 230 blue 230
@@ -735,7 +748,7 @@ start
 	
 	
 	//Make a storm.
-	Storm = create SCRIPT_OBJECT_TYPE_WEATHER_THING WEATHER_INFO_DRIZZLE at [MyCreature]  
+	Storm = create SCRIPT_OBJECT_TYPE_WEATHER_THING WEATHER_INFO_DRIZZLE at [4211.68, 4081.62]  
 	set Storm properties degrees 100 rainfall 3 snowfall 0 overcast 1 fallspeed 20
 	set Storm properties time 120000000 fade 0
 	set Storm properties clouds 8 shade 0.8 height 130

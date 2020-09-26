@@ -19,7 +19,7 @@ IndianTownPos		= marker at [2831.9900, 24.3933, 2547.2000]
 EgyptTownPos		= marker at [2250.2200, 33.4226, 2188.6299]
 
 start
-	LandNumber	= 3
+	LandNumber = 3
     enable player 1 virtual influence
 	set player 1 ally with player 2 percentage 0
 	

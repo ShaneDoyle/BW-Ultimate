@@ -455,7 +455,6 @@ start
 		
 		//(Custom) Script to keep KCreature dead forever.
 		run background script KillCreatureForever(KCreature)
-		//force KCreature CREATURE_DEAD_FOREVER KCreature
 		wait 1.5 seconds	// waiting for KCreature to fall......
 
 
@@ -548,7 +547,8 @@ start
 		
 		wait until camera ready
 
-		//delete KCreature // Khazar's creature should be out of view now
+		stop script "KillCreatureForever"
+		delete KCreature // Khazar's creature should be out of view now
 
 		wait until [LCreature] near [VortexPos] radius 1 or LCreature not exists or 60 seconds
 

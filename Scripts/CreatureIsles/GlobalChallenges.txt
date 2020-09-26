@@ -22,5 +22,6 @@ SetupComputerCreatures.txt
 VortexEntry.txt
 
 // Custom
+CustomTykeEggHatch.txt
 KillCreatureForever.txt
 // Add own custom functions here...
