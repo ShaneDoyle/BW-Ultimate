@@ -1,4 +1,4 @@
-LOAD_FEATURE_SCRIPT(".\scripts\creatureisles\Isle01.txt")
+LOAD_FEATURE_SCRIPT(".\Ultimate\Scripts\CreatureIsles\Isle01.txt")
 SET_STARTUP("ForceIntro")
 rem PAUSE_GAME()
 rem OUTPUT_VILLAGERS()
