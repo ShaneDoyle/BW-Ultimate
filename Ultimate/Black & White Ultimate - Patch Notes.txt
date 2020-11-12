@@ -16,17 +16,23 @@ v1.02   - (Hard Mode) Adjusted AI when freezing/itchy a Creature. The creature w
 
 v1.03   - Pathing has been "fixed". Villagers will now ignore altitude, meaning they won't try run around (wallhug) tiny hills and get stuck forever etc. However, villagers will now also ignore water (causing them to walk over water), but it's rare enough villagers are in a position to do this. Definitely much better!
         - Custom appearances will now be active during Skirmish Mode. (Custom appreances are only disabled during online Multiplayer Games).
+        - Skirmish AI colours/temples will now correctly load.
         - Replaced text references such as "Black & White: Creature Isle" to "Black & White: Ultimate".
         - Beating Land 5 should no longer cause the game to be stuck in day time permanently anymore.
         - Khazar now gives the workshop at beginning of Land 2, rather than after building the worship site. 
         - (Hard Mode) Pause is no longer disabled during the stats screen (ESC) or while in the temple. Only manually Pausing the game is disabled now (pressing P). 
-        - (Hard Mode) AI speed slightly reduced. They were previously instantly going to locations, resulting in some weird side effects sometimes.
+        - (Hard Mode) AI speed increased.
+        - (Hard Mode) AI will now create more disciples, making their towns much more efficient/larger etc.
         - (Hard Mode) AI shouldn't place weird/random buildings anymore.
-        - (Hard Mode) Cooldown between AI Creature actions (Capture, Attack etc.) has been reduced.
-        - (Hard Mode) Fixed issue where Lethys would have incorrect Symbol on Land 3.
-        - (Hard Mode) Fixed issue where Nemesis would have incorrect Temple on Land 5.
+        - (Hard Mode) AI Creature actions (Capture, Attack etc.) cooldown has been reduced.
+        - (Hard Mode) Fixed issue where Lethys would permanently have the incorrect Symbol on Land 3.
+        - (Hard Mode) Fixed issue where Nemesis would permanently have the incorrect Temple on Land 5.
+        - (Hard Mode) Fixed issue where AI would occasionally have the incorrect symbol when entering a new land.
         - (Hard Mode) Belief caps have been removed. To balance this, belief rates have been reduced (75% -> 50%).
-        - (Hard Mode) AI Creatures will now capture towns more easily (if left uncontested).
+        - (Hard Mode) AI Creatures will now have an easier time impressing towns.
         - (Hard Mode) Lethys Creature won't leave after Khazar is killed but will now leave when the player's creature is captured by Lethys.
-        - (Hard Mode) Lethys will capture Khazar's norse town when he is killed.
         - (Hard Mode) Added event in Land 2 that results in a Game Over if Lethys's influence reaches the player's temple.
+        - (Hard Mode) All towns will now only require 1,000 belief to capture.
+        - (Hard Mode) Increased player's influence back to 33% (from 25%). This is due to the AI upgrade.
+        - (Hard Mode) Slightly reduced the town influence rate for Nemesis on Land 5 (60% -> 50%).
+        - (Hard Mode) Increased the temple influence in Land 5 (100% -> 250%). The norse workshop will no longer be out of reach now.

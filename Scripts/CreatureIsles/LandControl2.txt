@@ -456,7 +456,9 @@ start
 	
 	//Set to next land number.
 	LandNumber = 3 //Set LandNumber here! (Custom)
-	wait 0.1 seconds
+	
+	//Hacky wait for symbols. TODO: Fix this in future, move it to somewhere better!
+	wait 2.0 seconds
 	
 	//Change Land! (Land 2)
 	// Normal difficulty.
@@ -468,7 +470,7 @@ start
 	
 	// Hard Mode.
 	if Difficulty == 1
-		stop all scripts excluding files "LandControl3.txt"
+		stop all scripts excluding files "LandControl2.txt"
 		load map "Scripts/HardUltimateLand3.txt"
 		run script LandControl3
 	end if

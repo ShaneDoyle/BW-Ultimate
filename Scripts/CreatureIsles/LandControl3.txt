@@ -3,6 +3,8 @@
 begin script LandControl3
 
 start
+	
+	enable computer player 2 //Added incase player doesn't reactivate.
 	run script SetupLand3
 	
 	//Check to apply hard mode.
@@ -22,8 +24,10 @@ start
 	
 	//Set to next land number.
 	LandNumber = 4 //Set LandNumber here! (Custom)
-	wait 0.1 seconds
 	
+	//Hacky wait for symbols. TODO: Fix this in future, move it to somewhere better!
+	wait 2.0 seconds
+
 	//Change Land! (Land 3)
 	// Normal difficulty.
 	if Difficulty == 0

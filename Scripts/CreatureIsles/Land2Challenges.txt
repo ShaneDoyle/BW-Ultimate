@@ -23,5 +23,6 @@ TheWorkshop.txt
 HanoiFlood.txt
 TreePuzzleOne.txt
 FinalGoldScroll.txt
+CustomHardModeLand2.txt
 //LandControl2.txt
 

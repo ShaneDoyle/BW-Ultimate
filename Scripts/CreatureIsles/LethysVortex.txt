@@ -116,10 +116,18 @@ begin script LethysVortex
 	LethysPosition = marker at [VortexPos]+[0,20,0]
 	LethysSpell = 0
 	MessageSaid=0
+	LCreature = get player 3 creature
 
 start
 	//challenge LEAVE_THROUGH_VORTEX_LAND2_SNAP_SHOT
 	stop script "LethysTauntAI, ComputerPlayerConfrontPlayer"
+	
+	//No more AI on the map now, remove all the hard mode modifiers.
+	stop script "CustomHardModeApplier"
+	stop script "CustomHardMode_ImproveAIStats"
+	stop script "CustomHardMode_ImproveAIController"
+	stop script "CustomHardMode_GodAttack"
+	stop script "CustomKillCreatureFix"
 	LethysGone=1
 
 	begin cinema
@@ -136,6 +144,13 @@ start
 		
 
 		//run background script Storms
+		
+		//If Hard Mode and LCreature still exists, add him to the cutscene.
+		if LCreature exists
+			set LCreature position to [1015.97,3595.74]
+			set LCreature focus to [VortexPos]
+			detach LCreature leash
+		end if
 
 		wait 1 second
 
@@ -244,11 +259,17 @@ start
 		wait 1.5 seconds
 		move computer player 3 to [1073.1617, 0, 3597.9407] speed 20
 		wait 2 seconds
+		
+		//Still exists from hard mode, let's move him into the Vortex too.
+		if LCreature exists
+			move LCreature position to [VortexPos] radius 1
+		end if
 
 	begin cinema
 
 		set camera position to [1004.945, 154.456, 3480.713] 
 		set camera focus to [VortexPos]
+
  
 		wait 1.5 seconds
 
@@ -290,6 +311,11 @@ start
 	end dialogue
 	
 	wait 10 seconds
+	
+	//Delete just in-case something goes wrong.
+	if LCreature exists
+		delete LCreature
+	end if
 
 	if LeavingLandTwo == 0
 		ChanceMissed = 1

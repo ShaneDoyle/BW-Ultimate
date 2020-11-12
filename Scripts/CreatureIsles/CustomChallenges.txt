@@ -1,4 +1,5 @@
 // Custom Challenges
+CustomOriginalGlobals.txt
 CustomKillCreatureFix.txt
 CustomHardModeApplier.txt
 CustomLoadPlayerColour.txt

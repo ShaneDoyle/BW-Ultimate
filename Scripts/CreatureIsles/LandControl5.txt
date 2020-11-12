@@ -1462,7 +1462,9 @@ start
 		release A7 
 		release A8 
 		release A9 
-		release A10 
+		release A10
+		
+		enable game time
 
 		stop music
 	end cinema
@@ -1627,6 +1629,13 @@ SuccessValue = 1
 
 start
 	set game time 13.00
+	
+	//Custom. Disable town properly.
+	if ArkSailed == 0
+		set get town with id 1 player 8 relative belief 1
+		wait 0.1 seconds
+		run map script line "SET_TOWN_UNINHABITABLE(1)"
+	end if
 
 	NemesisStillFighting = 0
 	
@@ -1642,8 +1651,10 @@ start
 	Wonder3 = get HOUSE at [Wonder3Pos]
 	BUILT of Wonder3 = 0.6
 	Wonder4 = get HOUSE at [Wonder4Pos]//Nemesis land
-	BUILT of Wonder4 = 0.6	
+	BUILT of Wonder4 = 0.6
 
+
+	enable computer player 2 //Added incase player doesn't reactivate.
 	run script SetupLand5
 	
 	run script BeginLand5
@@ -1666,7 +1677,10 @@ start
 	run background script Crusaders
 	if ArkSailed == 1
 		run background script MissionariesReturned
+	else
+	
 	end if
+	
 	run background script NemesisDefendHisLastTown
 //------------------------------------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------------------------------------

@@ -1,5 +1,5 @@
 //Adjust AI stats and behaviours.
-begin script CustomHardMode_LethysKillsPlayer
+begin script CustomHardMode_LethysKillsPlayer_Land3
 
 	MyInfluence = 0 //Get influence of Player.
 	NemesisInfluence = 0 //Get influence of Nemesis.
@@ -107,4 +107,4 @@ start
 		end if
 	end while
 
-end script CustomHardMode_LethysKillsPlayer
+end script CustomHardMode_LethysKillsPlayer_Land3

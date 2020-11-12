@@ -1,0 +1,5 @@
+ScriptLibraryR.DLL: 0x09ee0000
+Adress1: 0x9f2493c
+*Adress1: 0x240e20a0
+
+Adress1: 0x9f2493c

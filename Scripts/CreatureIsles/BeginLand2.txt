@@ -100,6 +100,29 @@ start
 end script LethysStartAI
 
 //------------------------------------------------------------------------------------------------------------------------
+// Send Khazar to create a workshop (Moved from Learn Worshipping)
+//------------------------------------------------------------------------------------------------------------------------
+begin script CreateWorkshop
+	Scaffold4Pos = marker at [2651.957,27.117,1945.278]
+	Scaffold4PlacePos = marker at [3252.089, 47.570, 3341.047]  
+	Scaffold4 = 0
+	CheckMyCreature = 0
+	CreaturePos = marker at [3366.689, 77.720, 3260.873]
+start
+	
+	set computer player 2 speed 150.0
+	Scaffold4 =  create SCAFFOLD at [Scaffold4Pos]
+	ANGLE of Scaffold4 = 160
+	set Scaffold4 building properties ABODE_NUMBER_WORKSHOP size 3 destroys when placed
+	force computer player 2	action "FindPlaceToUseScaffoldForBuilding" Scaffold4 Scaffold4PlacePos
+	wait until computer player 2 ready
+	release computer player 2
+	
+	disable Scaffold4 pickup
+	disable Scaffold4 moveable
+end script CreateWorkshop
+
+//------------------------------------------------------------------------------------------------------------------------
 begin script EndEnterLand2
 
 start
@@ -111,6 +134,7 @@ start
 	release computer player 3
 	release MyCreature
 	run script GiveOtherScaffolds
+	run script CreateWorkshop
 end script EndEnterLand2
 
 //------------------------------------------------------------------------------------------------------------------------
@@ -524,6 +548,8 @@ begin script GiveOtherScaffolds
 	ScaffoldCheck = 0
 
 start
+	
+	set computer player 2 speed 150.0
 	KhazarInScript=1
 	Scaffold2 = create SCAFFOLD at [Scaffold2Pos]
 	set Scaffold2 building properties ABODE_NUMBER_STORAGE_PIT size 3

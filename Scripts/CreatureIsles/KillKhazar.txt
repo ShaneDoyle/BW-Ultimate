@@ -36,7 +36,14 @@ begin script KillKhazarMain
 
 	//VillagerHutPos = marker at [2715.3101, 30.8200, 2019.9000]
 	//VillagerHut = get HOUSE at [VillagerHutPos]
-	LCreature = get player 3 creature // Lethys' creature
+	
+
+	//LCreature = get player 3 creature // Lethys' creature
+
+	
+	LCreatureBuffer = get player 3 creature
+	LCreature = create CREATURE CREATURE_TYPE_WOLF at [0,0,0] // Lethys' creature
+	//SCALE of LCreature = SCALE of LCreatureBuffer
 
 	//LCreatureStartPos = marker at [2420.596, 73.106, 1982.336] 
 	LCreatureStartPos =	marker at [2246.438, 52.930, 1979.879] 
@@ -124,6 +131,23 @@ start
 	MyCreature = get player 1 creature // Player's creature
 	KillKhazarActorsLeft = 0
 
+	//Make clone the same as Original Lethy's Creature
+	ALIGNMENT of LCreature = ALIGNMENT of LCreatureBuffer
+	enable LCreature auto scale 1.5
+	SCRIPT_OBJECT_PROPERTY_TYPE_STRENGTH of LCreature = SCRIPT_OBJECT_PROPERTY_TYPE_STRENGTH of LCreatureBuffer
+	SCRIPT_OBJECT_PROPERTY_TYPE_CREATURE_WARMTH of LCreature = SCRIPT_OBJECT_PROPERTY_TYPE_CREATURE_WARMTH of LCreature
+	SCRIPT_OBJECT_PROPERTY_TYPE_CREATURE_FATNESS of LCreature = SCRIPT_OBJECT_PROPERTY_TYPE_CREATURE_FATNESS of LCreature
+	SCRIPT_OBJECT_PROPERTY_TYPE_CREATURE_ENERGY of LCreature = SCRIPT_OBJECT_PROPERTY_TYPE_CREATURE_ENERGY of LCreature
+	SCRIPT_OBJECT_PROPERTY_TYPE_CREATURE_ITCHINESS of LCreature = SCRIPT_OBJECT_PROPERTY_TYPE_CREATURE_ITCHINESS of LCreature
+	SCRIPT_OBJECT_PROPERTY_TYPE_CREATURE_AMOUNT_OF_POO of LCreature = SCRIPT_OBJECT_PROPERTY_TYPE_CREATURE_AMOUNT_OF_POO of LCreature
+	SCRIPT_OBJECT_PROPERTY_TYPE_CREATURE_EXHAUSTION of LCreature = SCRIPT_OBJECT_PROPERTY_TYPE_CREATURE_EXHAUSTION of LCreature
+	SCRIPT_OBJECT_PROPERTY_TYPE_CREATURE_DEHYDRATION of LCreature = SCRIPT_OBJECT_PROPERTY_TYPE_CREATURE_DEHYDRATION of LCreature
+	SCRIPT_OBJECT_PROPERTY_TYPE_CREATURE_FIGHT_HEALTH of LCreature = SCRIPT_OBJECT_PROPERTY_TYPE_CREATURE_FIGHT_HEALTH of LCreature
+	
+	
+	//Put original Lethys Creature here.
+	set LCreatureBuffer position to  [1053.50, 220, 3603.51]
+	
 
 
 	// wait until camera position near [VortexPos] radius 150 and [VortexPos] viewed
@@ -536,7 +560,7 @@ start
 		// "He's taken the Creed from Khazar's Creature!"
 		say HELP_TEXT_KHAZAR_DIES_17
 		wait until read
-
+		
 		// Does this mean all is lost ? I fear it does !
 		say HELP_TEXT_KHAZAR_DIES_18
 		wait until read
@@ -547,7 +571,7 @@ start
 		
 		wait until camera ready
 
-		stop script "KillCreatureForever"
+		//stop script "KillCreatureForever"
 		delete KCreature // Khazar's creature should be out of view now
 
 		wait until [LCreature] near [VortexPos] radius 1 or LCreature not exists or 60 seconds
@@ -558,6 +582,11 @@ start
 
 		delete StrengthSpell
 		delete LCreature
+		
+		//Delete ACTUAL Lethys Creature 
+		if Difficulty == 0
+			delete LCreatureBuffer 
+		end if
 		
 		// vortex fade out
 		start Vortex fade out
@@ -580,8 +609,15 @@ start
 		set camera position to [BeginPos]
 		set camera focus to [BeginFoc]
 		set camera lens  70 
+		
+		
+
+		set LCreatureBuffer position to [VortexPos]
+		release LCreatureBuffer
+		detach LCreatureBuffer leash
 
 		set fade in time 3
+		
 
 		wait 1 second
 
@@ -632,6 +668,13 @@ start
 
 	release MyCreature
 	MyCreature = get player 1 creature
+	
+	//Lethys Captures Khazar's old town (Unused)
+	if Difficulty == 1
+		//set get town with id 1 player 3 relative belief 0.01		// Lethys take Khazar's town.
+	end if
+	
+	
 	
 end script KillKhazarMain
 

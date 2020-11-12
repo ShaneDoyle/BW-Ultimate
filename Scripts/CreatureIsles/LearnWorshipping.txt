@@ -38,27 +38,6 @@ start
 end script CheckDyingWorshippers
 
 //------------------------------------------------------------------------------------------------------------------------
-// Send Khazar to create a workshop
-//------------------------------------------------------------------------------------------------------------------------
-begin script CreateWorkshop
-	Scaffold4Pos = marker at [2651.957,27.117,1945.278]
-	Scaffold4PlacePos = marker at [3252.089, 47.570, 3341.047]  
-	Scaffold4 = 0
-start
-	
-	set computer player 2 speed 150.0
-	Scaffold4 =  create SCAFFOLD at [Scaffold4Pos]
-	ANGLE of Scaffold4 = 160
-	set Scaffold4 building properties ABODE_NUMBER_WORKSHOP size 3 destroys when placed
-	force computer player 2	action "FindPlaceToUseScaffoldForBuilding" Scaffold4 Scaffold4PlacePos
-	wait until computer player 2 ready
-	release computer player 2
-	
-	disable Scaffold4 pickup
-	disable Scaffold4 moveable
-end script CreateWorkshop
-
-//------------------------------------------------------------------------------------------------------------------------
 // Once your citadel is built, as is your worship site. So it's time to learn about worshipping.
 //------------------------------------------------------------------------------------------------------------------------
 begin script LearnWorshipping
@@ -216,8 +195,8 @@ start
 
 		delete Highlight with fade
 
-		//Create workshop
-		run script CreateWorkshop
+		//Create workshop (Moved to Begin Land 2).
+		//run script CreateWorkshop
 
 		//Place down miracles challenges
 		

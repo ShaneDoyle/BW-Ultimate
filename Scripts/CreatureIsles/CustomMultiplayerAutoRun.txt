@@ -14,7 +14,7 @@ begin script MultiplayerAutoRun
 start
 	//Add Multiplayer shit here!
 	
-	
+	/*
 	Town = get TOWN at [2174.32,2358.90] radius 50
 
 	//while Population > 0
@@ -35,5 +35,6 @@ start
 		//state MyVillager VILLAGER_STATE_DEAD
 		wait 1 second
 	end while
+	*/
 	
 end script MultiplayerAutoRun

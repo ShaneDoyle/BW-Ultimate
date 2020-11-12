@@ -1,0 +1,110 @@
+//Adjust AI stats and behaviours.
+begin script CustomHardMode_LethysKillsPlayer_Land2
+
+	MyInfluence = 0 //Get influence of Player.
+	NemesisInfluence = 0 //Get influence of Nemesis.
+	
+	PlayerCitadel = get CITADEL at player 1 temple position radius 100
+	
+	BeginPos = marker at [3329.56, 95, 3281.73]
+	NemesisPosition = marker at [3320.91, 105, 3232.62]
+	//BeginFoc = 0
+	
+	Lightning = 0
+	Lightning2 = 0
+	Lightning3 = 0
+	
+	TemplePos = 0
+	StartPosEnding = 0
+	
+	LoopForever = 1
+
+start
+
+	//NemesisInfluence = get player 3 raw influence at [PlayerCitadel]
+	wait 60 seconds
+	//Always check if Nemesis reaches our temple with his influence.
+	while LoopForever == 1
+		wait 5 seconds
+		PlayerCitadel = get CITADEL at player 1 temple position radius 100
+		wait 1 second
+		NemesisInfluence = get player 3 raw influence at [PlayerCitadel]
+		wait 1 second
+		
+		if NemesisInfluence > 0
+			
+			start music MUSIC_TYPE_SCRIPT_NEMESIS
+			
+			//Go to in front of temple.
+			begin cinema
+
+				set fade red 0 green 0 blue 64 time 2
+				wait 1.5 seconds
+				
+				set game time 16.50 
+				disable game time
+
+				wait 1.5 seconds
+				set camera lens 83 time 3
+				set camera position to [BeginPos]
+				set camera focus to [NemesisPosition]
+				set computer player 3 position to [NemesisPosition]
+				set fade in time 3
+				wait 2.5 seconds
+				
+				// My power is greater than yours.
+				say HELP_TEXT_L2_GOD_REACTION_39
+				wait until read
+				
+				//You are no match for me!
+				set camera lens 80 time 8
+				say HELP_TEXT_L2_GOD_REACTION_22
+				wait until read
+				
+				//Behold my wrath!
+				set camera lens 77 time 8
+				say HELP_TEXT_L3_LETHYS_FIREBALLS_03
+				wait until read
+				
+				//Move Nemesis to on top of temple.
+				move computer player 3 to [PlayerCitadel] + [0, 60, 0]  speed 100
+				move camera focus to [PlayerCitadel] + [0, 60, 0]  time 3
+				wait 3 seconds
+				
+				//Transition into game over screen.
+				TemplePos = marker at player 1 temple position
+				StartPosEnding= marker at player 1 temple entrance position radius 90 height 40
+				move camera position to [StartPosEnding] time 5 //start pos
+				move camera focus to [TemplePos] + [0,10,0] time 5
+				wait 2 seconds
+				
+				//Use Lightning on the temple.
+				Lightning = cast SPELL_LIGHTNING_LEVEL_3 spell at [PlayerCitadel] from [PlayerCitadel]+[0,60,0]  radius 50.0 time 30 curl 0
+				wait 1 seconds
+				
+				Lightning2 = cast SPELL_LIGHTNING_LEVEL_3 spell at [PlayerCitadel] from [PlayerCitadel]+[10,60,0]  radius 50.0 time 30 curl 0
+				wait 1 seconds
+				
+				Lightning3 = cast SPELL_LIGHTNING_LEVEL_3 spell at [PlayerCitadel] from [PlayerCitadel]+[0,60,10]  radius 50.0 time 30 curl 0
+				wait 1 seconds
+				
+				//Transition into game over screen.
+				TemplePos = marker at player 1 temple position
+				StartPosEnding= marker at player 1 temple entrance position radius 90 height 40
+				move camera position to [StartPosEnding] time 3 //start pos
+				move camera focus to [TemplePos] + [0,10,0] time 3
+				wait 2 seconds
+				
+				//End all scripts.
+				stop all scripts excluding files "CustomHardModeLand2.txt"
+				
+				//Kill player.
+				delete PlayerCitadel with temple explode
+				
+			end cinema
+			
+			LoopForever = 0
+		end if
+	end while
+
+end script CustomHardMode_LethysKillsPlayer_Land2

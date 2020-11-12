@@ -219,3 +219,51 @@ start
 
 end script CustomHardMode_NemesisTauntAI
 
+
+//Periodically, give Nemesis's main town an extra villager.
+begin script CustomHardMode_NemesisGiveAztecVillagers
+	Land5AztecTown = get town with id 2
+	Villager = 0
+	VillagerType = 0
+	Land5AztecStorage = 0
+start
+
+	/*
+	while Land5AztecStorage not exists
+		Land5AztecStorage = get SCRIPT_OBJECT_TYPE_ABODE at [3152.21, 5, 2659.90]
+		wait 2 seconds
+	end while
+	
+	add resource RESOURCE_TYPE_WOOD 50000 to Land5AztecStorage
+	*/
+
+	while get PLAYER of Land5AztecTown == 2
+		VillagerType = number from 0 to 1
+	
+		//Male
+		VillagerType = number from 0 to 1
+		if VillagerType == 0
+			Villager = create VILLAGER VILLAGER_INFO_AZTEC_LEADER_MALE at [Land5AztecTown]+[number from -20 to 20, number from -20 to 20]
+			
+		//Female
+		elsif VillagerType == 1
+			Villager = create VILLAGER VILLAGER_INFO_AZTEC_HOUSEWIFE_FEMALE at [Land5AztecTown]+[number from -20 to 20, number from -20 to 20]
+		end if
+		
+		//enable Villager skeleton
+		attach Villager to Land5AztecTown
+		release Villager
+		wait number from 60 to 90 seconds
+	end while
+	
+
+end script CustomHardMode_NemesisGiveAztecVillagers
+
+
+
+
+
+
+
+
+

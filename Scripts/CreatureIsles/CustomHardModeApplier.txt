@@ -51,70 +51,70 @@ start
 	
 		//Reduce influence to only 33% of normal for Player 1. Only used in Hard Mode!
 		if get PLAYER of Town0 == 1
-			run map script line "SET_A_TOWNS_INFLUENCE_MULTIPLIER(0, 0.25)"
+			run map script line "SET_A_TOWNS_INFLUENCE_MULTIPLIER(0, 0.33)"
 			//Temp = CustomHardModeCheckIfWonder //get HOUSE ABODE_INFO_AFRICAN_WONDER at camera position radius 1000
 			//TownOfWonder = get town of Wonder
 			
 		end if
 		
 		if get PLAYER of Town1 == 1
-			run map script line "SET_A_TOWNS_INFLUENCE_MULTIPLIER(1, 0.25)"
+			run map script line "SET_A_TOWNS_INFLUENCE_MULTIPLIER(1, 0.33)"
 		end if
 
 		if get PLAYER of Town2 == 1
-			run map script line "SET_A_TOWNS_INFLUENCE_MULTIPLIER(2, 0.25)"
+			run map script line "SET_A_TOWNS_INFLUENCE_MULTIPLIER(2, 0.33)"
 		end if
 
 		if get PLAYER of Town3 == 1
-			run map script line "SET_A_TOWNS_INFLUENCE_MULTIPLIER(3, 0.25)"
+			run map script line "SET_A_TOWNS_INFLUENCE_MULTIPLIER(3, 0.33)"
 		end if
 		
 		if get PLAYER of Town4 == 1
-			run map script line "SET_A_TOWNS_INFLUENCE_MULTIPLIER(4, 0.25)"
+			run map script line "SET_A_TOWNS_INFLUENCE_MULTIPLIER(4, 0.33)"
 		end if
 		
 		if get PLAYER of Town5 == 1
-			run map script line "SET_A_TOWNS_INFLUENCE_MULTIPLIER(5, 0.25)"
+			run map script line "SET_A_TOWNS_INFLUENCE_MULTIPLIER(5, 0.33)"
 		end if
 		
 		if get PLAYER of Town6 == 1
-			run map script line "SET_A_TOWNS_INFLUENCE_MULTIPLIER(6, 0.25)"
+			run map script line "SET_A_TOWNS_INFLUENCE_MULTIPLIER(6, 0.33)"
 		end if
 		
 		if get PLAYER of Town7 == 1
-			run map script line "SET_A_TOWNS_INFLUENCE_MULTIPLIER(7, 0.25)"
+			run map script line "SET_A_TOWNS_INFLUENCE_MULTIPLIER(7, 0.33)"
 		end if
 		
 		if get PLAYER of Town8 == 1
-			run map script line "SET_A_TOWNS_INFLUENCE_MULTIPLIER(8, 0.25)"
+			run map script line "SET_A_TOWNS_INFLUENCE_MULTIPLIER(8, 0.33)"
 		end if
 		
 		if get PLAYER of Town9 == 1
-			run map script line "SET_A_TOWNS_INFLUENCE_MULTIPLIER(9, 0.25)"
+			run map script line "SET_A_TOWNS_INFLUENCE_MULTIPLIER(9, 0.33)"
 		end if
 		
 		if get PLAYER of Town10 == 1
-			run map script line "SET_A_TOWNS_INFLUENCE_MULTIPLIER(10, 0.25)"
+			run map script line "SET_A_TOWNS_INFLUENCE_MULTIPLIER(10, 0.33)"
 		end if
 		
 		if get PLAYER of Town11 == 1
-			run map script line "SET_A_TOWNS_INFLUENCE_MULTIPLIER(11, 0.25)"
+			run map script line "SET_A_TOWNS_INFLUENCE_MULTIPLIER(11, 0.33)"
 		end if
 		
 		if get PLAYER of Town12 == 1
-			run map script line "SET_A_TOWNS_INFLUENCE_MULTIPLIER(12, 0.25)"
+			run map script line "SET_A_TOWNS_INFLUENCE_MULTIPLIER(12, 0.33)"
 		end if
 		
 		if get PLAYER of Town13 == 1
-			run map script line "SET_A_TOWNS_INFLUENCE_MULTIPLIER(13, 0.25)"
+			run map script line "SET_A_TOWNS_INFLUENCE_MULTIPLIER(13, 0.33)"
 		end if
 		
 		if get PLAYER of Town14 == 1
-			run map script line "SET_A_TOWNS_INFLUENCE_MULTIPLIER(14, 0.25)"
+			run map script line "SET_A_TOWNS_INFLUENCE_MULTIPLIER(14, 0.33)"
 		end if
 		
 		if get PLAYER of Town15 == 1
-			run map script line "SET_A_TOWNS_INFLUENCE_MULTIPLIER(15, 0.25)"
+			run map script line "SET_A_TOWNS_INFLUENCE_MULTIPLIER(15, 0.33)"
 		end if
 		
 		wait 3 seconds
@@ -259,7 +259,7 @@ start
 				end if
 			end if
 			
-		wait 10 seconds //Small cooldown.
+		wait 5 seconds //Small cooldown.
 		CheckPlayer++ //Check the next player.
 		set computer player PlayerNum personality "ReactToAggressiveCreature" 0	 //Just to be sure incase external script changes this...
 		end while
@@ -267,6 +267,12 @@ start
 		//Keep loop forever.
 		if CheckPlayer >= 4
 			CheckPlayer = 1
+		end if
+		
+		//(Land 2) Check if Khazar is dead. If so, stop this script.
+		if LandNumber == 2 and KhazarGone == 1 and PlayerNum == 2
+			LoopForever = 0
+			CheckPlayer = 10
 		end if
 		
 	end while
@@ -283,10 +289,23 @@ begin script CustomHardMode_ImproveAIStats(PlayerNum)
 start
 	wait 5 seconds
 
-	set computer player PlayerNum speed 3000.0
+	set computer player PlayerNum speed 5000.0
+	load computer player 2 personality "HardModeAI.dat" //Taken from Land 3 Lethys. Don't think this actually makes a difference?
+	
 	//set computer player PlayerNum personality "TakeOverTownByImpressing" 1.00
 	//set computer player PlayerNum personality "DefeatPlayer" 1.00
-	set computer player PlayerNum personality "ExpandInfluence" 1.00
+	//set computer player PlayerNum personality "ExpandInfluence" 0.00MakeDiscipleBreader
+	//set computer player PlayerNum personality "ExpandInfluence" 20.40
+	//set computer player PlayerNum personality "MakeDiscipleBreader" 20.60
+	set computer player PlayerNum personality "CreateDiscipleToFulfillTownDesire" 100.00
+	
+	
+	//if LandNumber == 3
+		//save computer player 2 personality "LethysLand3.dat"
+	//end if
+	
+	//load computer player 2 personality "LethysLand3.dat"
+	
 
 end script CustomHardMode_ImproveAIStats
 
@@ -334,13 +353,21 @@ start
 					end if
 					
 					//Add belief.
-					//TotalBelief = get Town belief for player PlayerNum
-					//TotalBelief += 0.001
-					//set Town player PlayerNum belief TotalBelief //Will give about 1 belief per 2 seconds. For a 1k town, will take 33.3 mins to capture.
+					TotalBelief = get Town belief for player PlayerNum
+					TotalBelief += 0.001
+					set Town player PlayerNum belief TotalBelief //Will give about 1 belief per 2 seconds. For a 1k town, will take 33.3 mins to capture.
 					wait 2 seconds
 					ImpressTimer -= 2
 					
 				end while
+				
+				/*
+				if ImpressTimer == 0
+					set Town player PlayerNum relative belief 0.01		// Give nuke of belief
+				else
+					ImpressTimer = 1800
+				end if
+				*/
 				
 				//Release the Creature.
 				detach Creature leash
@@ -350,8 +377,6 @@ start
 		Town = get town with id number from 0 to 13
 		Retries -= 1
 	end while
-	
-	wait 30 seconds
 	
 end script CustomHardMode_CreatureCaptureTown
 
@@ -388,14 +413,24 @@ start
 				*/
 				
 				//Queue up Creature to attack..
-				//clear computer player PlayerNum actions
 				queue computer player PlayerNum action "DestroytownWithCreature" Town Creature
 				wait until computer player PlayerNum ready
 				release computer player PlayerNum
-				Retries = 0
 				wait 5 seconds
-				AttackTimer = 0
 				
+				
+				//Pretty much wait for Creature to get there, around 5 mins.
+				while [Creature] not near [Town] radius 200 and AttackTimer > 0
+					AttackTimer--
+					wait 1 second
+				end while
+				
+				AttackTimer = 0
+				Retries = 0
+				
+				
+				
+				/*
 				//Keep doing this until Creature is leashed or town is dead or if the Creature gets too hungry.
 				while size of Town > 0 and Creature leashed and AttackTimer > 0
 					
@@ -407,21 +442,22 @@ start
 					end if
 					
 					//Refresh the attack.
-					wait 30 seconds
-					AttackTimer -= 30
+					wait 1 seconds
+					AttackTimer -= 1
 					
-					force computer player PlayerNum action "DestroytownWithCreature" Town Creature
-					wait until computer player PlayerNum ready
-					release computer player PlayerNum
+					//force computer player PlayerNum action "DestroytownWithCreature" Town Creature
+					//wait until computer player PlayerNum ready
+					//release computer player PlayerNum
 					
 					
 				end while
+					*/
 				
 			end if
 		end if
 		
 		
-		clear computer player PlayerNum actions
+		//clear computer player PlayerNum actions
 		
 		//Get rid of Leash.
 		//detach Creature leash
@@ -435,9 +471,10 @@ start
 	//detach Creature leash
 	//release Creature
 
-	wait 300 seconds
+	//wait 5 seconds
 	detach Creature leash
 	release Creature
+	wait 180 seconds
 
 end script CustomHardMode_CreatureAttackPlayerTown
 
@@ -450,7 +487,7 @@ begin script CustomHardMode_CreatureAttackPlayerTemple(PlayerNum)
 	Citadel = PlayerNum
 	PlayerToAttack = PlayerNum
 	LeashType = 0
-	AttackTimer = 300
+	AttackTimer = 600
 	
 start
 	Creature = get player PlayerNum creature
@@ -467,10 +504,10 @@ start
 	
 	//Queue up Creature to attack the citadel.
 	//clear computer player PlayerNum actions
-	force computer player PlayerNum action "AttackCreatureWithCreature" MyCreature Creature
+	queue computer player PlayerNum action "AttackCreatureWithCreature" MyCreature Creature
 	wait until computer player PlayerNum ready
 	release computer player PlayerNum
-	wait 3 seconds
+	wait 1 seconds
 	
 	//Attach creature to the temple.
 	attach Creature leash to Citadel
@@ -482,7 +519,7 @@ start
 		wait 1 second
 	end while
 	
-	wait 300 seconds
+	wait 180 seconds
 	
 	detach Creature leash
 	release Creature
@@ -600,6 +637,7 @@ start
 			run background script CustomHardMode_ImproveAIController(3)
 			run background script CustomHardMode_GodAttack(3,0,1) //Freeze + Lightning Bolt
 			run background script CustomKillCreatureFix(3)
+			run background script CustomHardMode_LethysKillsPlayer_Land2 
 
 		end if
 		
@@ -616,7 +654,7 @@ start
 			//run background script CustomHardMode_ImproveAIController(2)
 			//run background script CustomHardMode_GodAttack(2,0,1)
 			run background script CustomKillCreatureFix(2)
-			run background script CustomHardMode_LethysKillsPlayer
+			run background script CustomHardMode_LethysKillsPlayer_Land3
 
 		end if
 		
@@ -647,6 +685,7 @@ start
 			//Extras
 			run background script CustomHardMode_NemesisKillsPlayer
 			run background script CustomHardMode_NemesisTauntAI
+			//run background script CustomHardMode_NemesisGiveAztecVillagers (Unused)
 
 		end if
 		

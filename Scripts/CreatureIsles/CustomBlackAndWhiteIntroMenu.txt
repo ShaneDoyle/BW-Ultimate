@@ -68,7 +68,7 @@ start
 
 	//Draw Version
 	set draw text colour red 230 green 230 blue 230
-	draw text "Black & White: Ultimate - V1.02" across 0.600 down 0.950 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+	draw text "Black & White: Ultimate - V1.03" across 0.600 down 0.950 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
 	
 	//Main Menu!
 	if OptionMenu == 1
