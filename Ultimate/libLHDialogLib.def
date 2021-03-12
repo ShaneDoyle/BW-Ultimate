@@ -1,0 +1,17 @@
+EXPORTS
+    ?LHCameraParamsGetValue@@YAHH@Z = LHCameraParamsGetValue @1
+    ?LHCameraParamsInit@@YAXHPADH@Z = LHCameraParamsInit @2
+    ?LHCameraParamsLoadPressed@@YAHXZ = LHCameraParamsLoadPressed @3
+    ?LHCameraParamsResetPressed@@YAHXZ = LHCameraParamsResetPressed @4
+    ?LHCameraParamsSavePressed@@YAHXZ = LHCameraParamsSavePressed @5
+    ?LHCameraParamsStart@@YAXXZ = LHCameraParamsStart @6
+    ?LHCameraParamsStop@@YAXXZ = LHCameraParamsStop @7
+    ?LHEditBox@@YAHPBD00HPAD@Z = LHEditBox @8
+    ?LHEditBox@@YAHPBDKKKK0HPAD@Z = LHEditBox_B @9
+    ?LHProgressBox@@YAHPBD0@Z = LHProgressBox @10
+    ?LHProgressBoxDestroy@@YAHXZ = LHProgressBoxDestroy @11
+    ?LHProgressBoxPosition@@YAHH@Z = LHProgressBoxPosition @12
+    ?LHProgressBoxPrompt@@YAHPBD@Z = LHProgressBoxPrompt @13
+    ?LHSystemSpecBox@@YAHPAD000000PAK11PAH212@Z = LHSystemSpecBox @14
+    ?LHSystemSpecSummaryBox@@YAXPAD@Z = LHSystemSpecSummaryBox @15
+    DllMain@12 @16

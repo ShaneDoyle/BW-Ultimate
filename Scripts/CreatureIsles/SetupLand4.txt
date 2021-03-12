@@ -32,6 +32,7 @@ begin script SetupLand4
 
 start
 	LandNumber=4
+	ReloadSymbols = 1
 	Gates = get FEATURE at [2164.2515, 31.4900, 2889.9802]
 	open Gates
 

@@ -52,7 +52,7 @@ start
 	LandNumber = 5 //Set LandNumber here! (Custom)
 	
 	//Hacky wait for symbols. TODO: Fix this in future, move it to somewhere better!
-	wait 2.0 seconds
+	wait 1.0 seconds
 	
 	//Change Land! (Land 4)
 	// Normal difficulty.

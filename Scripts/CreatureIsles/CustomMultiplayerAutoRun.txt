@@ -8,33 +8,304 @@ run script MultiplayerAutoRun
 begin script MultiplayerAutoRun
 
 	MyVillager = 0
+	isAlly = 0
+	EveTest = 0
+	
 	P1Creature = 0
+	P2Creature = 0
+	P3Creature = 0
+	P4Creature = 0
+	
 	Town = 0
+	//P1Citadel = get WORSHIP at player 1 temple position radius 100
+	P1Citadel = get CITADEL at player 1 temple position radius 100
+	P2Citadel = get CITADEL at player 2 temple position radius 100
+	P3Citadel = get CITADEL at player 3 temple position radius 100
+	P4Citadel = get CITADEL at player 4 temple position radius 100
+	
+	MultiplayerLand = 0
+	
+	LoopForever = 0
+	Creature = 0
+	
+	P1LeashType = 0
+	P2LeashType = 0
+	P3LeashType = 0
+	P4LeashType = 0
+	
+	
 	
 start
-	//Add Multiplayer shit here!
 	
-	/*
-	Town = get TOWN at [2174.32,2358.90] radius 50
-
-	//while Population > 0
-	////	if Population > 10
-	//		Villager = create VILLAGER MALE at [Town]+[number from -20 to 20, number from -20 to 20]
-			
+	
+	
+	wait 0.3 seconds
 	P1Creature = get player 1 creature
-	MyVillager = create VILLAGER MALE at [Town]
-	attach MyVillager to Town
+	P2Creature = get player 2 creature
+	P3Creature = get player 3 creature
+	P4Creature = get player 4 creature
+	wait 0.3 seconds
+	//delete P1Creature
+	
+	EveTest = create SCRIPT_OBJECT_TYPE_FEMALE_CREATURE at [P1Creature]
+	//set player 1 creature to EveTest
+	//ACTUAL_HEIGHT of EveTest = 2.0
+	//release EveTest
+
+	
+	//Stop if not Multiplayer. .DLL will change this to 2!
+	MultiplayerPlayer1Red = get HEALTH of P1Creature
+	MultiplayerPlayer1Green = get ENERGY of P1Creature
+	MultiplayerPlayer1Blue = get EXHAUSTION of P1Creature
+	MultiplayerPlayer1Temple = get SCRIPT_OBJECT_PROPERTY_TYPE_CREATURE_AMOUNT_OF_POO of P1Creature
+	
+	MultiplayerPlayer2Red = get HEALTH of P2Creature
+	MultiplayerPlayer2Green = get ENERGY of P2Creature
+	MultiplayerPlayer2Blue = get EXHAUSTION of P2Creature
+	MultiplayerPlayer2Temple = get SCRIPT_OBJECT_PROPERTY_TYPE_CREATURE_AMOUNT_OF_POO of P2Creature
+	
+	MultiplayerPlayer3Red = get HEALTH of P3Creature
+	MultiplayerPlayer3Green = get ENERGY of P3Creature
+	MultiplayerPlayer3Blue = get EXHAUSTION of P3Creature
+	MultiplayerPlayer3Temple = get SCRIPT_OBJECT_PROPERTY_TYPE_CREATURE_AMOUNT_OF_POO of P3Creature
+	
+	MultiplayerPlayer4Red = get HEALTH of P4Creature
+	MultiplayerPlayer4Green = get ENERGY of P4Creature
+	MultiplayerPlayer4Blue = get EXHAUSTION of P4Creature
+	MultiplayerPlayer4Temple = get SCRIPT_OBJECT_PROPERTY_TYPE_CREATURE_AMOUNT_OF_POO of P4Creature
+	
+	MultiplayerGotPlayerStats = 1
+	
+	wait 1 second
+
+	wait until MultiplayerGotPlayerStats == 2
+	
+	if MultiplayerGotPlayerStats == 2
+
+		HEALTH of P1Creature = 1.0
+		ENERGY of P1Creature = 1.0
+		EXHAUSTION of P1Creature = 0.0
+		SCRIPT_OBJECT_PROPERTY_TYPE_CREATURE_AMOUNT_OF_POO of P1Creature = 0.0
+		release P1Creature
+		
+		HEALTH of P2Creature = 1.0
+		ENERGY of P2Creature = 1.0
+		EXHAUSTION of P2Creature = 0.0
+		SCRIPT_OBJECT_PROPERTY_TYPE_CREATURE_AMOUNT_OF_POO of P2Creature = 0.0
+		release P2Creature
+		
+		HEALTH of P3Creature = 1.0
+		ENERGY of P3Creature = 1.0
+		EXHAUSTION of P3Creature = 0.0
+		SCRIPT_OBJECT_PROPERTY_TYPE_CREATURE_AMOUNT_OF_POO of P3Creature = 0.0
+		release P3Creature
+		
+		HEALTH of P4Creature = 1.0
+		ENERGY of P4Creature = 1.0
+		EXHAUSTION of P4Creature = 0.0
+		SCRIPT_OBJECT_PROPERTY_TYPE_CREATURE_AMOUNT_OF_POO of P4Creature = 0.0
+		release P4Creature
+		
+		//Run script to auto save game every few seconds
+		run background script MultiplayerSaveGame
+
+		wait 3 second
+	end if
+	
+	
+	
+	
+	//Will be equal to 2 if Multiplayer is active.
+	while MultiplayerGotPlayerStats == 2
+		/********** Ally Support **********/
+		P1LeashType = variable get P1Creature leash type 
+		P2LeashType = variable get P2Creature leash type 
+		P3LeashType = variable get P3Creature leash type 
+		P4LeashType = variable get P4Creature leash type
+		
+		
+		//if P1LeashType == 3 and P1Creature leashed to P2Citadel
+		
+		/********** Player 1 support **********/
+		///P1 + P2
+		//Ally Support.
+		isAlly = get player 1 ally percentage with player 2
+		if P1LeashType == 3 and P2LeashType == 3 and P1Creature leashed to P2Citadel and P2Creature leashed to P1Citadel and isAlly == 0
+			set computer player 1 attitude to player 2 to -1
+			set computer player 2 attitude to player 1 to -1
+			set player 1 ally with player 2 percentage 1
+			start sound LH_SAMPLE_G_CLICKONSCROLL_01
+			begin dialogue
+				say "** God 1 + God 2 are now allies. ***"
+				wait 3 seconds
+				clear dialogue
+			end dialogue
+		end if
+		
+		//Enemy Support.
+		if P1LeashType == 1 and P2LeashType == 1 and P1Creature leashed to P2Citadel and P2Creature leashed to P1Citadel and isAlly == 1
+			set computer player 1 attitude to player 2 to 1
+			set computer player 2 attitude to player 1 to 1
+			set player 1 ally with player 2 percentage 0
+			start sound LH_SAMPLE_G_SACRIFICE_01
+			begin dialogue
+				say "** God 1 + God 2 are now enemies. ***"
+				wait 3 seconds
+				clear dialogue
+			end dialogue
+		end if
+		
+		///P1 + P3
+		//Ally Support.
+		isAlly = get player 1 ally percentage with player 3
+		if P1LeashType == 3 and P3LeashType == 3 and P1Creature leashed to P3Citadel and P3Creature leashed to P1Citadel and isAlly == 0
+			set computer player 1 attitude to player 3 to -1
+			set computer player 3 attitude to player 1 to -1
+			set player 1 ally with player 3 percentage 1
+			start sound LH_SAMPLE_G_CLICKONSCROLL_01
+			say "** God 1 + God 3 are now allies. ***"
+			wait until read
+		end if
+		
+		//Enemy Support.
+		if P1LeashType == 1 and P3LeashType == 1 and P1Creature leashed to P3Citadel and P3Creature leashed to P1Citadel and isAlly == 1
+			set computer player 1 attitude to player 3 to 1
+			set computer player 3 attitude to player 1 to 1
+			set player 1 ally with player 3 percentage 0
+			start sound LH_SAMPLE_G_SACRIFICE_01
+			begin dialogue
+				say "** God 1 + God 3 are now enemies. ***"
+				wait 3 seconds
+				clear dialogue
+			end dialogue
+		end if
+		
+		///P1 + P4
+		//Ally Support.
+		isAlly = get player 1 ally percentage with player 4
+		if P1LeashType == 3 and P4LeashType == 3 and P1Creature leashed to P4Citadel and P4Creature leashed to P1Citadel and isAlly == 0
+			set computer player 1 attitude to player 4 to -1
+			set computer player 4 attitude to player 1 to -1
+			set player 1 ally with player 4 percentage 1
+			start sound LH_SAMPLE_G_CLICKONSCROLL_01
+			say "** God 1 + God 4 are now allies. ***"
+			wait until read
+		end if
+		
+		//Enemy Support.
+		if P1LeashType == 1 and P4LeashType == 1 and P1Creature leashed to P4Citadel and P4Creature leashed to P1Citadel and isAlly == 1
+			set computer player 1 attitude to player 4 to 1
+			set computer player 4 attitude to player 1 to 1
+			set player 1 ally with player 4 percentage 0
+			start sound LH_SAMPLE_G_SACRIFICE_01
+			begin dialogue
+				say "** God 1 + God 4 are now enemies. ***"
+				wait 3 seconds
+				clear dialogue
+			end dialogue
+		end if
+		
+		
+		///P2 + P3
+		//Ally Support.
+		isAlly = get player 2 ally percentage with player 3
+		if P2LeashType == 3 and P3LeashType == 3 and P2Creature leashed to P3Citadel and P3Creature leashed to P2Citadel and isAlly == 0
+			set computer player 2 attitude to player 3 to -1
+			set computer player 3 attitude to player 2 to -1
+			set player 2 ally with player 3 percentage 1
+			start sound LH_SAMPLE_G_CLICKONSCROLL_01
+			begin dialogue
+				say "** God 2 + God 3 are now allies. ***"
+				wait 3 seconds
+				clear dialogue
+			end dialogue
+		end if
+		
+		//Enemy Support.
+		if P2LeashType == 1 and P3LeashType == 1 and P2Creature leashed to P3Citadel and P3Creature leashed to P2Citadel and isAlly == 1
+			set computer player 2 attitude to player 3 to 1
+			set computer player 3 attitude to player 2 to 1
+			set player 2 ally with player 3 percentage 0
+			start sound LH_SAMPLE_G_SACRIFICE_01
+			begin dialogue
+				say "** God 2 + God 3 are now enemies. ***"
+				wait 3 seconds
+				clear dialogue
+			end dialogue
+		end if
+		
+		
+		///P2 + P4
+		//Ally Support.
+		isAlly = get player 2 ally percentage with player 4
+		if P2LeashType == 3 and P4LeashType == 3 and P2Creature leashed to P4Citadel and P4Creature leashed to P2Citadel and isAlly == 0
+			set computer player 2 attitude to player 4 to -1
+			set computer player 4 attitude to player 2 to -1
+			set player 2 ally with player 4 percentage 1
+			start sound LH_SAMPLE_G_CLICKONSCROLL_01
+			begin dialogue
+				say "** God 2 + God 4 are now allies. ***"
+				wait 3 seconds
+				clear dialogue
+			end dialogue
+		end if
+		
+		//Enemy Support.
+		if P2LeashType == 1 and P3LeashType == 1 and P2Creature leashed to P3Citadel and P3Creature leashed to P2Citadel and isAlly == 1
+			set computer player 2 attitude to player 4 to 1
+			set computer player 4 attitude to player 2 to 1
+			set player 2 ally with player 4 percentage 0
+			start sound LH_SAMPLE_G_SACRIFICE_01
+			begin dialogue
+				say "** God 2 + God 4 are now enemies. ***"
+				wait 3 seconds
+				clear dialogue
+			end dialogue
+		end if
+		
+		
+		///P3 + P4
+		//Ally Support.
+		isAlly = get player 3 ally percentage with player 4
+		if P3LeashType == 3 and P4LeashType == 3 and P3Creature leashed to P4Citadel and P4Creature leashed to P3Citadel and isAlly == 0
+			set computer player 3 attitude to player 4 to -1
+			set computer player 4 attitude to player 3 to -1
+			set player 3 ally with player 4 percentage 1
+			start sound LH_SAMPLE_G_CLICKONSCROLL_01
+			begin dialogue
+				say "** God 3 + God 4 are now allies. ***"
+				wait 3 seconds
+				clear dialogue
+			end dialogue
+		end if
+		
+		//Enemy Support.
+		if P3LeashType == 1 and P4LeashType == 1 and P3Creature leashed to P4Citadel and P4Creature leashed to P3Citadel and isAlly == 1
+			set computer player 2 attitude to player 4 to 1
+			set computer player 4 attitude to player 2 to 1
+			set player 2 ally with player 4 percentage 0
+			start sound LH_SAMPLE_G_SACRIFICE_01
+			begin dialogue
+				say "** God 3 + God 4 are now enemies. ***"
+				wait 3 seconds
+				clear dialogue
+			end dialogue
+		end if
+		
+
+
+		
+		wait 1 second
+		
+	end while
+	
+	
 	wait 5 seconds
 	
-	
-	
-	//Debug shit!
-	while 1 == 1
-		move MyVillager position to [P1Creature]
-		SPEED of MyVillager = 1
-		//state MyVillager VILLAGER_STATE_DEAD
-		wait 1 second
-	end while
-	*/
+	//This should never be hit...
+	//say "Skirmish..."
+
+
 	
 end script MultiplayerAutoRun
+

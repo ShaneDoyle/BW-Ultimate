@@ -22,7 +22,8 @@ start
 	if ChanceMissed == 0
 		LeavingLandTwo = 1
 		begin cinema
-			move camera position to [1071.331421, 147.146820, 3599.504639] time 4 //T00_000 time 4
+			move camera position to [1071.331421, 157.146820, 3599.504639] time 4 //T00_000 time 4
+			move camera focus to [1071.331421, 147.146820, 3599.504639] time 4 //T00_000 time 4
 			wait until camera ready
 			//camera path TRACK00
 			wait 2 seconds
@@ -147,8 +148,9 @@ start
 		
 		//If Hard Mode and LCreature still exists, add him to the cutscene.
 		if LCreature exists
-			set LCreature position to [1015.97,3595.74]
+			set LCreature position to [1016.95, 3631.78] //[1015.97,3595.74]
 			set LCreature focus to [VortexPos]
+			force LCreature CREATURE_IDLE LCreature
 			detach LCreature leash
 		end if
 

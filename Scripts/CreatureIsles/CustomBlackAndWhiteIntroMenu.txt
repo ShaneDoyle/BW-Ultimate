@@ -44,6 +44,9 @@ begin script CustomIntroText(OptionMenu, Option1, Option2, Option3, Option4)
 	BlockPosition = 0
 start
 	
+	//LandNumber = 1
+	//MyTemple = 0
+	
 	//Delete Text
 	fade all draw text time 0.0 seconds
 	
@@ -54,7 +57,7 @@ start
 	end if
 	
 	if OptionMenu == 2
-		draw text "Menu -> Play Game" across -0.136 down 0.200 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+		draw text "Menu -> Play Game -> Classic" across -0.090 down 0.200 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
 	end if
 	
 	if OptionMenu == 3
@@ -65,10 +68,14 @@ start
 		draw text "Menu -> Settings -> Colour" across -0.1035 down 0.200 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
 	end if
 	
+	if OptionMenu == 5
+		draw text "Menu -> Play Game" across -0.1295 down 0.200 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+	end if
+	
 
 	//Draw Version
 	set draw text colour red 230 green 230 blue 230
-	draw text "Black & White: Ultimate - V1.03" across 0.600 down 0.950 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+	draw text "Black & White: Ultimate - V1.21" across 0.600 down 0.950 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
 	
 	//Main Menu!
 	if OptionMenu == 1
@@ -182,11 +189,11 @@ start
 		end if
 		
 		if Difficulty == 0
-			draw text "             3). Difficulty: Normal" across -0.163 down 0.350 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+			draw text "                           3). (Classic) Difficulty: Normal" across -0.163 down 0.350 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
 		end if
 		
 		if Difficulty == 1
-			draw text "        3). Difficulty: Hard" across -0.162 down 0.350 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+			draw text "                      3). (Classic) Difficulty: Hard" across -0.162 down 0.350 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
 		end if
 
 	end if
@@ -354,6 +361,27 @@ start
 		
 
 	end if
+	
+	//Check what mode to play (Classic or Creature Isle)
+	if OptionMenu == 5
+	
+		//Option 1.
+		if Option1 == 0
+			set draw text colour red 230 green 230 blue 230
+		else
+			set draw text colour red 230 green 230 blue 130
+		end if
+		draw text "1). Classic" across -0.180 down 0.250 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+		
+		//Option 2.
+		if Option2 == 0
+			set draw text colour red 230 green 230 blue 230
+		else
+			set draw text colour red 230 green 230 blue 130
+		end if
+		draw text "2). Creature Isle" across -0.1525 down 0.300 width 0.5 height 0.2 size 0.050 fade in time 0.0 seconds
+
+	end if
 
 
 end script CustomIntroText
@@ -371,12 +399,16 @@ begin script CustomGetInput
 	Option3 = 0
 	Option4 = 0
 start
+
+	//Init some stuff
+	UseOriginalSettings = 21
+	LandNumber = 99 //Probably update this to a debug land. This is fine though.
+	MyTemple = 0
 	
 	//Wait until goes to Creature...
 	wait 6 seconds
 	OptionToPick = 1
-	UseOriginalSettings = 1
-	LandNumber = 4 //Probably update this to a debug land. This is fine though.
+	UseOriginalSettings = 21
 	
 	//Init the text.
 	run background script CustomLoadPlayerColour
@@ -411,6 +443,69 @@ start
 			Option4 = 0
 		end if
 		
+		//Check to play Classic or Creature Isle.
+		if OptionMenu == 5
+			if key KB_BACKSPACE down
+				OptionToPick = 1
+				OptionMenu = 1
+				start sound LH_SAMPLE_SKITTLECOLLIDE_01
+			end if
+			
+			if key KB_UP down
+				OptionToPick--
+				start sound LH_SAMPLE_SKITTLECOLLIDE_01
+				
+				if OptionToPick <= 0
+					OptionToPick = 2
+				end if
+			end if
+			
+			if key KB_DOWN down
+				OptionToPick++
+				start sound LH_SAMPLE_SKITTLECOLLIDE_01
+				
+				//Don't let overflow.
+				if OptionToPick > 2
+					OptionToPick = 1
+				end if
+			end if
+
+			if key KB_SPACE down and EnablePress == 1
+			
+				EnablePress = 0
+			
+				if OptionToPick == 1 //Classic
+					start sound LH_SAMPLE_SKITTLECOLLIDE_01
+					OptionMenu = 2
+					OptionToPick = 1
+
+				
+				elsif OptionToPick == 2 //Creature Isle
+					start sound LH_SAMPLE_SKITTLECOLLIDE_01
+					LockInputLoop = 0
+					OptionMenu = 0
+					OptionToPick = 0
+					
+					MyCreature = get player 1 creature
+					
+					IsSkippingToCreatureSelect = 1
+					IsSkippingCreatureGuide = 1
+					
+					MyCreature = get player 1 creature
+					if MyCreature not exists
+						IsKeepingOldCreature = 1
+					else
+						IsKeepingOldCreature = 1
+					end if
+					
+					LoadCreatureIsle = 21
+					
+					
+				end if
+			end if
+			
+			
+		end if
 		
 		//Colour Selector.
 		if OptionMenu == 4
@@ -530,10 +625,10 @@ start
 						MyTemple++
 					end if
 					
-					set fade red 0 green 0 blue 0 time 1.5
-					wait until fade ready
-					wait 1 seconds
-					set fade in time 1.5
+					//set fade red 0 green 0 blue 0 time 1.5
+					//wait until fade ready
+					wait 0.5 seconds
+					//set fade in time 1.5
 				end if
 				
 				if OptionToPick == 3 //Difficulty
@@ -558,7 +653,7 @@ start
 			
 			if key KB_BACKSPACE down
 				OptionToPick = 1
-				OptionMenu = 1
+				OptionMenu = 5
 				start sound LH_SAMPLE_SKITTLECOLLIDE_01
 			end if
 			
@@ -643,9 +738,9 @@ start
 
 			if key KB_SPACE down and EnablePress == 1
 			
-				if OptionToPick == 1 //Start game normally
+				if OptionToPick == 1 //Play Game
 					start sound LH_SAMPLE_SKITTLECOLLIDE_01
-					OptionMenu = 2
+					OptionMenu = 5
 					OptionToPick = 1
 				end if
 				
@@ -682,8 +777,21 @@ start
 	wait 2 seconds
 	
 	//Go to Land 1!
-	//load map "Scripts/UltimateLand1.txt"
-	run script CustomLandController(1)
+	if LoadCreatureIsle == 0
+		run script CustomLandController(1)
+	end if
+	
+	
+	run script CustomLandController(99)
+	
+	//if LoadCreatureIsle == 1
+		//run script CustomLandController(10)
+	//end if
+	
+	
+	//stop all scripts
+	//load map "Scripts/CreatureIsles/Isle01.txt"
+	
 	//stop all scripts excluding files "IsleControl.txt"
 
 end script CustomGetInput
@@ -695,7 +803,7 @@ begin script CustomBlackAndWhiteIntroMenu
 	MyCreatureHeight = 0
 start
 	
-	load map "Ultimate/Scripts/CreatureIsles/Isle01.txt"
+	load map "Ultimate/Scripts/CreatureIsles/UltimateIntro.txt"
 	
 	//Manage Creature
 	MyCreature = get player 1 creature
@@ -706,8 +814,16 @@ start
 	
 	wait 2 second
 	
-	//MyCreature=create CREATURE CREATURE_TYPE_LION at [2279.37,2877.50]
-	//set player 1 creature to MyCreature
+	//Debug Creature
+	/*
+	MyCreature=create CREATURE CREATURE_TYPE_OGRE at [2279.37,2877.50]
+	ACTUAL_HEIGHT of MyCreature = 1.0
+	teach MyCreature MAGICAL MAGIC_TYPE_FOOD SCRIPT_TRUE
+	teach MyCreature MAGICAL MAGIC_TYPE_WOOD SCRIPT_TRUE
+	teach MyCreature MAGICAL MAGIC_TYPE_WATER SCRIPT_TRUE
+	teach MyCreature MAGICAL MAGIC_TYPE_FIREBALL SCRIPT_TRUE
+	set player 1 creature to MyCreature
+	*/
 	
 
 	
@@ -724,15 +840,15 @@ start
 	MyCreature = get player 1 creature
 	
 	//load my_creature at [4211.68, 4081.62]
-	if MyCreature not exists
+	//if MyCreature not exists
 		//load my_creature at [2565.24, 2755.31]
 		//load my_creature at [4211.68, 4081.62]
-		ACTUAL_HEIGHT of MyCreature = 0.9
-	end if
-	wait 0.3 seconds
-	MyCreature = get player 1 creature
-	MyCreatureHeight = SCRIPT_OBJECT_PROPERTY_TYPE_HEIGHT of MyCreature
-	ACTUAL_HEIGHT of MyCreature = 0.9
+		//ACTUAL_HEIGHT of MyCreature = 0.9
+	//end if
+	//wait 0.3 seconds
+	//MyCreature = get player 1 creature
+	//MyCreatureHeight = SCRIPT_OBJECT_PROPERTY_TYPE_HEIGHT of MyCreature
+	//ACTUAL_HEIGHT of MyCreature = 0.9
 	*/
 	
 	

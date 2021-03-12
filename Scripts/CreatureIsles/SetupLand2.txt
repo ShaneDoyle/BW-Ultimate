@@ -49,6 +49,7 @@ begin script SetupLand2
 
 start
 	LandNumber	= 2
+	ReloadSymbols = 1
     enable player 1 virtual influence
 
 

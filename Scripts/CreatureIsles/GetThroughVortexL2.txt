@@ -68,6 +68,10 @@ begin script GetThroughVortexL2
 start
 	begin cinema
 		start music MUSIC_TYPE_SCRIPT_NEMESIS
+		
+		//(Custom) Set Lethys position, now visible during cutscene.
+		enable computer player 2
+		set computer player 2 position to [2027.41, 110, 2170.35] 
 
 		run background script VortexEntry(30, VortexPos, Town, VortexPos, 20, 80, CreaturePos, NullVortexFlock)
 		set camera position to [VortexPos]+[0,1,0] 
@@ -177,6 +181,9 @@ start
 		wait until camera ready
 		stop music
 	end cinema
+	
+	//(Custom) Release Lethys. This should address bug where Lethys is not active.
+	release computer player 2
 
 	wait 30 seconds
 	begin dialogue

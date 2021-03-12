@@ -9,8 +9,12 @@ LandControl3.txt
 LandControl2.txt
 LandControl1.txt
 CustomLandController.txt
+COOPBeginLand2.txt
+COOPLandControl2.txt
 CustomBlackAndWhiteIntroMenu.txt
 CustomMultiplayerPlayerColour.txt
+CustomMultiplayerSaving.txt
 CustomMultiplayerAutoRun.txt
 IsleControl.txt
+
 

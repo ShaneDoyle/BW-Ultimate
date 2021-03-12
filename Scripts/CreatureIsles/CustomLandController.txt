@@ -12,6 +12,15 @@ start
 		stop all scripts excluding files "CustomLandController.txt"
 	end if
 	
+	//Creature Isle
+	if LandDestination == 99
+		load map "Scripts/FailSafeLand.txt"
+		wait 3 seconds
+		LoadCreatureIsle = 0
+		stop all scripts excluding files "CustomLandController.txt"
+		set fade in time 1
+	end if
+	
 	// Land 2.
 	if LandDestination == 2
 	

@@ -205,10 +205,6 @@ start
 
 	run script QuestHighlightNotify(Highlight, CamPosIn, variable EVIL_ADVISOR, variable HELP_TEXT_GENERAL_LEAVE_THROUGH_VORTEX_01, variable HELP_TEXT_NARRATOR_EVIL_SPIRIT, variable HELP_TEXT_LEAVE_THROUGH_VORTEX1_QUEST_REMINDER_01, 30*60) //TOFIX
 	SCRIPT_OBJECT_PROPERTY_TYPE_CREATURE_CAN_GO_THROUGH_VORTEX of MyCreature = 1
-
-
-	//Set to next land number.
-	LandNumber = 1 //Set LandNumber here! (Custom)
 	
 //------------------------------------------------------------------------------------------------------------------------
 //Leave through vortex into the unknown!!!-------------------------------------------------------------------------------

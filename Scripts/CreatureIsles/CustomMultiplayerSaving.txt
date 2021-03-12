@@ -1,0 +1,47 @@
+begin script MultiplayerSaveGame
+
+	P1Creature = 0
+	P2Creature = 0
+	P3Creature = 0
+	P4Creature = 0
+	P1CreatureEnergy = 0
+	P2CreatureEnergy = 0
+	P3CreatureEnergy = 0
+	P4CreatureEnergy = 0
+
+start
+
+	//Initial Wait
+	wait 2 seconds
+	
+	//Get Creatures
+	P1Creature = get player 1 creature
+	P2Creature = get player 2 creature
+	P3Creature = get player 3 creature
+	P4Creature = get player 4 creature
+	
+	//Another wait. Waits for Creatures to have their stats reset for MP games.
+	wait 3 seconds
+	
+	P1CreatureEnergy = get ENERGY of P1Creature
+	P2CreatureEnergy = get ENERGY of P2Creature
+	P3CreatureEnergy = get ENERGY of P3Creature
+	P4CreatureEnergy = get ENERGY of P4Creature
+	
+	//Wait for this condition to be met (hacky and bad but whatever). This should sync the onTick rate in .dll for Players?
+	while P1CreatureEnergy > 0.95 or P2CreatureEnergy > 0.95 or P3CreatureEnergy > 0.95 or P4CreatureEnergy > 0.95
+		P1CreatureEnergy = get ENERGY of P1Creature
+		P2CreatureEnergy = get ENERGY of P2Creature
+		P3CreatureEnergy = get ENERGY of P3Creature
+		P4CreatureEnergy = get ENERGY of P4Creature
+	end while
+	
+	//Save the game every 30 seconds.
+	while 1 == 1
+		MultiplayerSaveGame = 1
+		//say "Saving now!"
+		wait 30 seconds
+	end while
+	
+
+end script MultiplayerSaveGame

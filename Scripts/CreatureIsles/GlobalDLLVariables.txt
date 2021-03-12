@@ -5,6 +5,38 @@ global MyColour_Green = 70
 global MyColour_Blue = 70
 global LandNumber = 0
 global Difficulty = 0     //0 Normal (Original), 1 Hard
+global ReloadSymbols = 0     //0 Don't Reload , 1 Reload. (Called during SetupLand scripts).
+global MultiplayerSaveGame = 0     //0 Don't Save , 1 Save Current Map. (Called when pressed buttons for manual saving).
+global IsMultiplayer = 0 //Passed through the .DLL
+
+global MultiplayerPlayer1Red = 0
+global MultiplayerPlayer1Green = 0
+global MultiplayerPlayer1Blue = 0
+global MultiplayerPlayer1Temple = 0
+
+global MultiplayerPlayer2Red = 0
+global MultiplayerPlayer2Green = 0
+global MultiplayerPlayer2Blue = 0
+global MultiplayerPlayer2Temple = 0
+
+global MultiplayerPlayer3Red = 0
+global MultiplayerPlayer3Green = 0
+global MultiplayerPlayer3Blue = 0
+global MultiplayerPlayer3Temple = 0
+
+global MultiplayerPlayer4Red = 0
+global MultiplayerPlayer4Green = 0
+global MultiplayerPlayer4Blue = 0
+global MultiplayerPlayer4Temple = 0
+
+global MultiplayerGotPlayerStats = 0
+
+//When set to 1, will load Creature Isle!
+global LoadCreatureIsle = 0
+
+//When set to 1, reload the game!
+global RestartGame = 0
+
 global P2Color = 0
 global P3Color = 2
 global P4Color = 3

@@ -4,7 +4,6 @@ begin script LandControl3
 
 start
 	
-	enable computer player 2 //Added incase player doesn't reactivate.
 	run script SetupLand3
 	
 	//Check to apply hard mode.
@@ -22,11 +21,11 @@ start
 	run background script TreePuzzleTwo
 	wait until FinishedLand3 == 1
 	
-	//Set to next land number.
-	LandNumber = 4 //Set LandNumber here! (Custom)
+	//Set to next land number (Custom)
+	LandNumber = 4
 	
 	//Hacky wait for symbols. TODO: Fix this in future, move it to somewhere better!
-	wait 2.0 seconds
+	wait 1.0 seconds
 
 	//Change Land! (Land 3)
 	// Normal difficulty.

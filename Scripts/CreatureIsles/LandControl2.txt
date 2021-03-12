@@ -354,6 +354,8 @@ start
 	run background script HanoiFlood
 	run background script TreePuzzleOne
 	run script EnterLand2
+	//run script KillKhazarMain
+	//run script LethysVortex
 
 	run background script DidYouKnow(dyk39, variable HELP_TEXT_DYK_39, variable DYK_VILLAGE_LIFE)		// empty buildings deteriorate
 	run background script LearnWorshipping
@@ -458,7 +460,7 @@ start
 	LandNumber = 3 //Set LandNumber here! (Custom)
 	
 	//Hacky wait for symbols. TODO: Fix this in future, move it to somewhere better!
-	wait 2.0 seconds
+	wait 1.0 seconds
 	
 	//Change Land! (Land 2)
 	// Normal difficulty.

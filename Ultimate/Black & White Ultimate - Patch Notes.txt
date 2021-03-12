@@ -1,9 +1,9 @@
 v1.00	- Initial Release!
 
-v1.01   - (Hard Mode) Fixed issue with AI where Creature would constantly attack a town.
+v1.01   - Removed Crocodile from the rock throwing quest. This was a bug.
+        - (Hard Mode) Fixed issue with AI where Creature would constantly attack a town.
         - (Hard Mode) Adjusted AI to not make decisions as fast. The previous speed resulted in permanent creature attacks.
         - (Hard Mode) Nerfed Lethys's Lightning Bolt on Land 2 (around 50%).
-        - Removed Crocodile from the rock throwing quest. This was a bug.
 		
 v1.02   - (Hard Mode) Adjusted AI when freezing/itchy a Creature. The creature will now have a few seconds to act once the freeze/itch has worn off.
         - (Hard Mode) Fixed issue where AI Creatures could constantly break out of Creature fights when attacking a town.
@@ -27,7 +27,6 @@ v1.03   - Pathing has been "fixed". Villagers will now ignore altitude, meaning 
         - (Hard Mode) AI Creature actions (Capture, Attack etc.) cooldown has been reduced.
         - (Hard Mode) Fixed issue where Lethys would permanently have the incorrect Symbol on Land 3.
         - (Hard Mode) Fixed issue where Nemesis would permanently have the incorrect Temple on Land 5.
-        - (Hard Mode) Fixed issue where AI would occasionally have the incorrect symbol when entering a new land.
         - (Hard Mode) Belief caps have been removed. To balance this, belief rates have been reduced (75% -> 50%).
         - (Hard Mode) AI Creatures will now have an easier time impressing towns.
         - (Hard Mode) Lethys Creature won't leave after Khazar is killed but will now leave when the player's creature is captured by Lethys.
@@ -36,3 +35,21 @@ v1.03   - Pathing has been "fixed". Villagers will now ignore altitude, meaning 
         - (Hard Mode) Increased player's influence back to 33% (from 25%). This is due to the AI upgrade.
         - (Hard Mode) Slightly reduced the town influence rate for Nemesis on Land 5 (60% -> 50%).
         - (Hard Mode) Increased the temple influence in Land 5 (100% -> 250%). The norse workshop will no longer be out of reach now.
+
+v1.04   - Fixed bug where Lethys could sometimes be inactive in Land 3.
+        - Fixed issue where AI would occasionally have the incorrect symbol when entering a new land.
+        - Vortex to Land 3 camera should be much smoother.
+
+--------- Big Multiplayer Update! ---------
+v1.10	- Multiplayer Appearance Customisation (Each player can now select their own Colour & Temple to use online. (Note: Players can have the same colours))
+        - Multiplayer Saving (Multiplayer games will now automatically save every 30 seconds, meaning Online Games can be resumed at a later point. The game will save the map file + .lnd (landscape) file as "oos.txt" + "oos.lnd". (Note: Occasionally, players may see "PLAYER could not download the map" when attempting to resume an Online Game. This is due to slightly different "oos.txt" files. Simply send your own "oos.txt" to the other Player(s) to resolve the issue)).
+        - Multiplayer Teams (Players can team up by leashing their Creature's to each other's temples with the compassion leash (like Khazar behaviour in Land 2). (Note: Doing the same with the aggression leash will make allies enemies again)).
+        - All Creatures now have their stats set to 0 when an Online Game starts.
+
+--------- Creature Isle Update! ---------
+v1.20	- Creature Isle is now playable in Ultimate! The original game will now be known as "Classic". You can save and load games freely between Classic and Creature Isle!
+
+v1.21	- Huge rework on custom code used for Ultimate. The game should no longer crash from random memory exceptions (just typical Black & White crashes now lol)
+        - Nemesis curse no longer affects the Creature's height (temporary change while bugs are addressed).
+        - Fixed an issue that made the Creature Isle building trial impossible to complete.
+        - Selecting temple at Intro Menu is now much faster.

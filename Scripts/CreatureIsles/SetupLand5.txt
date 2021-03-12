@@ -14,6 +14,7 @@ WorkshopScaffold = 0
 
 start
 	LandNumber	= 5
+	ReloadSymbols = 1
 	enable player 1 virtual influence
 	set player 1 ally with player 2 percentage 0
 

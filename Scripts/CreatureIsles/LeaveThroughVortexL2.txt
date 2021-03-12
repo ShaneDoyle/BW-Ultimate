@@ -74,7 +74,8 @@ start
 	run script ChallengeHighlightNotify(Highlight, VortexPos, variable GOOD_ADVISOR, variable HELP_TEXT_GENERAL_LEAVE_THROUGH_VORTEX_02)
 		
 	begin cinema
-		move camera position to [1071.331421, 147.146820, 3599.504639] time 4 //T00_000 time 4
+		move camera position to [1071.331421, 157.146820, 3599.504639] time 4 //T00_000 time 4
+		move camera focus to [1071.331421, 147.146820, 3599.504639] time 4 //T00_000 time 4
 		wait until camera ready
 		//camera path TRACK00
 		wait 2 seconds

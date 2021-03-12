@@ -1,0 +1,202 @@
+//challenge LandControl2
+
+//------------------------------------------------------------------------------------------------------------------------
+begin script COOPLandControl2
+	HomeTown = get town with id 0
+	KhazarHomeTown = get town with id 1
+	LethysHomeTown = get town with id 5
+	Town1 = get town with id 12				//Nearest Town (Norse) Used For Learn Gestures & idol pyre
+	Town2 = get town with id 10				//Indian Town Used where learn influence occurs but learn gestures triggered by town1, baywatch, sacrfice and plague is at town 2
+	Town3 = get town with id 13				//Indian Town - Lost treasure
+	Town4 = get town with id 2				//Norse Near Khazar Slavers
+	Town5 = get town with id 9				//Norse Spiritual Healer town
+	Town6 = get town with id 11				//Indian Near snow edge of Lethys - no challenge but triggers Baywatch.
+	Town7 = get town with id 4				//Celtic - Greedy Farmer 
+	Town8 = get town with id 3				//Celtic near Lethys
+
+	//Condition flags.
+	CanDoIdol=0
+	DoneIdol=0
+	CanKillKhazar=0
+	DoneKillKhazar=0
+	CanLethysVortex=0
+	DoneLethysVortex=0
+	DoneWorkshop=0
+
+	//Counts
+	TownCount=0
+	Player3TownCount=0
+
+	//DYK
+	dyk34 = marker at [3346.0181, 77.7200, 3244.8525]			// spruce up worship site
+	dyk39 = marker at [3320.5674, 48.1850, 3390.8323]			// empty bldgs deteriorate
+	dyk42 = marker at [1946.6857, 21.7488, 2602.3938]			// relocate villagers
+   	dyk46 = marker at [3250.2188, 46.2300, 3457.0820]			// action button fields to pick up more food
+	dyk55 = marker at [3285.1609, 44.9319, 3220.4285]			// water fields
+	dyk58 = marker at [2074.0334, 15.4100, 2590.4585]			// fireflies
+	dyk03 = marker at [3229.724, 47.633, 3419.595]
+	dyk112 = marker at [2739.382, 50.920, 3052.035]
+	
+	LethysCitadelPos = marker at [1010.740, 149.410, 3676.572]
+	LethysCitadel=0
+
+start
+	wait 1 seconds
+	begin camera
+		set camera position to [3379.722, 72.340, 3239.962] 
+		set camera focus to [3379.752, 63.344, 3239.992]
+	end camera
+		
+	//Exit vortex do the intro and start the landscape town independant scripts.
+	//run script SetupLand2
+	LandNumber = 2 //Should do the trick instead of calling setup.
+	
+	//Check to apply hard mode.
+	run background script CustomHardModeApplier
+	
+// Do not need the following lines as they are in the map file. Also teleport is not on this town but the next one. SPL
+//	enable spell SPELL_HEAL_LEVEL_1 in Town1
+//	enable spell SPELL_TELEPORT in Town1
+
+
+	//QuestActivatorMarker = marker at [3391.28, 30, 3402.74]
+	//QuestActivator = create SCRIPT_OBJECT_TYPE_ONE_SHOT_SPELL SPELL_SEED_TYPE_WOOD at [QuestActivatorMarker]
+
+	run background script DidYouKnow(dyk42, variable HELP_TEXT_DYK_42, variable DYK_VILLAGE_LIFE)
+	run background script DidYouKnow(dyk46, variable HELP_TEXT_DYK_46, variable DYK_NAVIGATION)
+	run background script DidYouKnow(dyk55, variable HELP_TEXT_DYK_55, variable DYK_VILLAGE_LIFE)
+	run background script DidYouKnow(dyk58, variable HELP_TEXT_DYK_58, variable DYK_MISC)
+	run background script DidYouKnow(dyk03,	variable HELP_TEXT_DYK_03, variable DYK_VILLAGE_LIFE)			// learn disciples
+	run background script DidYouKnow(dyk112, variable HELP_TEXT_DYK_112, variable DYK_VILLAGE_LIFE)
+	
+	LethysCitadel = get CITADEL at [LethysCitadelPos] radius 10
+	
+	//run background script SingingStonesSongsMain
+	//run background script HanoiFlood
+	//run background script TreePuzzleOne
+	run script COOPEnterLand2
+
+	run background script DidYouKnow(dyk39, variable HELP_TEXT_DYK_39, variable DYK_VILLAGE_LIFE)		// empty buildings deteriorate
+	//run background script LearnWorshipping
+
+
+	/*
+	run background script PlagueCheck(Town2)
+	run background script LostTreasureCheck(Town3)
+	run background script SlaversCheck(Town4)
+	run background script SpiritualHealerCheck(Town5)
+	run background script SacrificeCheck(Town6)
+	run background script BayWatchCheck(Town6, Town2)
+	run background script GreedyFarmerCheck(Town7)
+	run background script TownOwnershipCheck(Town1, Town2, Town3, Town4, Town5, Town6, Town7, Town8, HomeTown, KhazarHomeTown, LethysHomeTown)
+	*/
+		
+	while LeavingLandTwo == 0
+		wait 9 seconds //To slow process hit.
+
+		if LearnWorshipCompleted == 1 and DoneWorkshop == 0
+			DoneWorkshop=1
+			run background script DidYouKnow(dyk34, variable HELP_TEXT_DYK_34, variable DYK_VILLAGE_LIFE)		// spruce up worship site
+			run background script TheWorkshop
+			run background script ExpansionCheck(HomeTown, Town1)
+			run background script InfluenceCheck(Town1)
+		end if
+
+		CanDoIdol=0
+		CanKillKhazar=0
+		CanLethysVortex=0
+
+		if PLAYER of Town1 == 1
+			CanDoIdol=1
+		end if
+ 
+		if PLAYER of Town7 != 3
+			CanKillKhazar++
+		end if
+
+		if PLAYER of Town8 != 3
+			CanKillKhazar++
+		end if
+
+		if PLAYER of LethysHomeTown != 3
+			CanKillKhazar++
+		end if
+
+		if CanKillKhazar >= 2
+			CanLethysVortex=1
+		end if
+
+		//Calculate Town Count
+		TownCount=get player 1 town total
+
+		if TownCount > 5
+			CanKillKhazar++
+	
+			//FireIdol check
+			if DoneIdol == 0
+				if CanDoIdol == 1
+					DoneIdol = 1
+					run background script IdolPyreMain
+				end if
+			end if
+		end if
+
+		Player3TownCount=get player 3 town total
+
+		//KillKhazar check
+		if DoneKillKhazar == 0
+			if get player 2 town total <= 0 or Player3TownCount <= 2
+				CanKillKhazar++
+			end if
+
+			if CanKillKhazar != 0
+				if KhazarInScript == 0
+					run script KillKhazarMain
+					DoneKillKhazar=1
+					if DoneFinalGold == 0
+						DoneFinalGold=1
+						run background script Land2FinalScroll
+					end if
+				end if
+			end if
+		else
+			//Lethys Vortex check
+			if DoneLethysVortex == 0
+				if CanLethysVortex == 1 or Player3TownCount <= 1
+					run script LethysVortex
+					DoneLethysVortex=1
+				end if
+			end if
+		end if
+		
+		//Leave through vortex check
+		if DoneExitLethysVortex == 0 and LeavingLandTwo == 0
+			if get player 3 town total <= 0	and HEALTH of LethysCitadel <= 0.1
+				DoneExitLethysVortex=1
+				run script LeaveThroughVortexL2
+			end if
+		end if
+	end while
+	
+	//Set to next land number.
+	LandNumber = 3 //Set LandNumber here! (Custom)
+	
+	//Hacky wait for symbols. TODO: Fix this in future, move it to somewhere better!
+	wait 2.0 seconds
+	
+	//Change Land! (Land 2)
+	// Normal difficulty.
+	if Difficulty == 0
+		stop all scripts excluding files "COOPLandControl2.txt"
+		load map "Scripts/UltimateLand3.txt"
+		run script LandControl3
+	end if
+	
+	// Hard Mode.
+	if Difficulty == 1
+		stop all scripts excluding files "COOPLandControl2.txt"
+		load map "Scripts/HardUltimateLand3.txt"
+		run script LandControl3
+	end if
+
+end script COOPLandControl2

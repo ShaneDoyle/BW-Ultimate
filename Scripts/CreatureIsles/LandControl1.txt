@@ -10,9 +10,14 @@ start
 	
 	//stop all scripts excluding files "LandControl1.txt"
 	//load map "scripts/land1.txt"
+
+	//Fail safe to not go back to CI.
+	LoadCreatureIsle = 0
 	
 	stop all scripts excluding files "LandControl1.txt"
 	run background script CustomLoadPlayerColour
+	
+	
 	
 	//DEBUG
 	/*
@@ -43,6 +48,9 @@ start
 		MyCitadel = get CITADEL at [1915.05,2508.89] radius 5
 		BUILT of MyCitadel = 1
 	end if
+	
+	
+	//run background script CustomTykeEggHatch
 	
 	run background script DidYouKnow(dyk76,variable HELP_TEXT_DYK_76, variable DYK_VILLAGE_LIFE)			// fish farms
 
@@ -129,6 +137,8 @@ start
 	else
 		set fade in time 3
 		//run script LeaveThroughVortexL1
+		
+		wait 3 seconds
 		wait until LeaveLandNow == 1
 	end if
 	
@@ -137,7 +147,7 @@ start
 	LandNumber = 2 //Set LandNumber here! (Custom)
 	
 	//Hacky wait for symbols. TODO: Fix this in future, move it to somewhere better!
-	wait 2.0 seconds
+	wait 1.0 seconds
 	
 	//Change Land! (Land 1)
 	// Normal difficulty.

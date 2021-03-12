@@ -102,7 +102,7 @@ start
 
 			if SCRIPT_OBJECT_PROPERTY_TYPE_HEIGHT of MyCreature	> 3 and SizeWonder exists
 				SCRIPT_OBJECT_PROPERTY_TYPE_HEIGHT of MyCreature = SCRIPT_OBJECT_PROPERTY_TYPE_HEIGHT of MyCreature - 1
-				run background script SizeWarp(MyCreature)
+				//run background script SizeWarp(MyCreature)
 			end if
 
 			if SCRIPT_OBJECT_PROPERTY_TYPE_ALIGNMENT of MyCreature > DestinationAlignment and AlignmentWonder exists
