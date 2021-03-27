@@ -1,0 +1,63 @@
+﻿  ddraw.cpp
+C:\Games\Black & White\Tools\NewDLL\ddraw\ddraw.cpp(13,12): error C2485: 'naked': unrecognized extended attribute
+C:\Games\Black & White\Tools\NewDLL\ddraw\ddraw.cpp(14,2): error C4235: nonstandard extension used: '__asm' keyword not supported on this architecture
+C:\Games\Black & White\Tools\NewDLL\ddraw\ddraw.cpp(14,7): error C2065: 'jmp': undeclared identifier
+C:\Games\Black & White\Tools\NewDLL\ddraw\ddraw.cpp(17,12): error C2485: 'naked': unrecognized extended attribute
+C:\Games\Black & White\Tools\NewDLL\ddraw\ddraw.cpp(18,2): error C4235: nonstandard extension used: '__asm' keyword not supported on this architecture
+C:\Games\Black & White\Tools\NewDLL\ddraw\ddraw.cpp(18,7): error C2065: 'jmp': undeclared identifier
+C:\Games\Black & White\Tools\NewDLL\ddraw\ddraw.cpp(21,12): error C2485: 'naked': unrecognized extended attribute
+C:\Games\Black & White\Tools\NewDLL\ddraw\ddraw.cpp(22,2): error C4235: nonstandard extension used: '__asm' keyword not supported on this architecture
+C:\Games\Black & White\Tools\NewDLL\ddraw\ddraw.cpp(22,7): error C2065: 'jmp': undeclared identifier
+C:\Games\Black & White\Tools\NewDLL\ddraw\ddraw.cpp(25,12): error C2485: 'naked': unrecognized extended attribute
+C:\Games\Black & White\Tools\NewDLL\ddraw\ddraw.cpp(26,2): error C4235: nonstandard extension used: '__asm' keyword not supported on this architecture
+C:\Games\Black & White\Tools\NewDLL\ddraw\ddraw.cpp(26,7): error C2065: 'jmp': undeclared identifier
+C:\Games\Black & White\Tools\NewDLL\ddraw\ddraw.cpp(29,12): error C2485: 'naked': unrecognized extended attribute
+C:\Games\Black & White\Tools\NewDLL\ddraw\ddraw.cpp(30,2): error C4235: nonstandard extension used: '__asm' keyword not supported on this architecture
+C:\Games\Black & White\Tools\NewDLL\ddraw\ddraw.cpp(30,7): error C2065: 'jmp': undeclared identifier
+C:\Games\Black & White\Tools\NewDLL\ddraw\ddraw.cpp(33,12): error C2485: 'naked': unrecognized extended attribute
+C:\Games\Black & White\Tools\NewDLL\ddraw\ddraw.cpp(34,2): error C4235: nonstandard extension used: '__asm' keyword not supported on this architecture
+C:\Games\Black & White\Tools\NewDLL\ddraw\ddraw.cpp(34,7): error C2065: 'jmp': undeclared identifier
+C:\Games\Black & White\Tools\NewDLL\ddraw\ddraw.cpp(37,12): error C2485: 'naked': unrecognized extended attribute
+C:\Games\Black & White\Tools\NewDLL\ddraw\ddraw.cpp(38,2): error C4235: nonstandard extension used: '__asm' keyword not supported on this architecture
+C:\Games\Black & White\Tools\NewDLL\ddraw\ddraw.cpp(38,7): error C2065: 'jmp': undeclared identifier
+C:\Games\Black & White\Tools\NewDLL\ddraw\ddraw.cpp(41,12): error C2485: 'naked': unrecognized extended attribute
+C:\Games\Black & White\Tools\NewDLL\ddraw\ddraw.cpp(42,2): error C4235: nonstandard extension used: '__asm' keyword not supported on this architecture
+C:\Games\Black & White\Tools\NewDLL\ddraw\ddraw.cpp(42,7): error C2065: 'jmp': undeclared identifier
+C:\Games\Black & White\Tools\NewDLL\ddraw\ddraw.cpp(45,12): error C2485: 'naked': unrecognized extended attribute
+C:\Games\Black & White\Tools\NewDLL\ddraw\ddraw.cpp(46,2): error C4235: nonstandard extension used: '__asm' keyword not supported on this architecture
+C:\Games\Black & White\Tools\NewDLL\ddraw\ddraw.cpp(46,7): error C2065: 'jmp': undeclared identifier
+C:\Games\Black & White\Tools\NewDLL\ddraw\ddraw.cpp(49,12): error C2485: 'naked': unrecognized extended attribute
+C:\Games\Black & White\Tools\NewDLL\ddraw\ddraw.cpp(50,2): error C4235: nonstandard extension used: '__asm' keyword not supported on this architecture
+C:\Games\Black & White\Tools\NewDLL\ddraw\ddraw.cpp(50,7): error C2065: 'jmp': undeclared identifier
+C:\Games\Black & White\Tools\NewDLL\ddraw\ddraw.cpp(53,12): error C2485: 'naked': unrecognized extended attribute
+C:\Games\Black & White\Tools\NewDLL\ddraw\ddraw.cpp(54,2): error C4235: nonstandard extension used: '__asm' keyword not supported on this architecture
+C:\Games\Black & White\Tools\NewDLL\ddraw\ddraw.cpp(54,7): error C2065: 'jmp': undeclared identifier
+C:\Games\Black & White\Tools\NewDLL\ddraw\ddraw.cpp(57,12): error C2485: 'naked': unrecognized extended attribute
+C:\Games\Black & White\Tools\NewDLL\ddraw\ddraw.cpp(58,2): error C4235: nonstandard extension used: '__asm' keyword not supported on this architecture
+C:\Games\Black & White\Tools\NewDLL\ddraw\ddraw.cpp(58,7): error C2065: 'jmp': undeclared identifier
+C:\Games\Black & White\Tools\NewDLL\ddraw\ddraw.cpp(61,12): error C2485: 'naked': unrecognized extended attribute
+C:\Games\Black & White\Tools\NewDLL\ddraw\ddraw.cpp(62,2): error C4235: nonstandard extension used: '__asm' keyword not supported on this architecture
+C:\Games\Black & White\Tools\NewDLL\ddraw\ddraw.cpp(62,7): error C2065: 'jmp': undeclared identifier
+C:\Games\Black & White\Tools\NewDLL\ddraw\ddraw.cpp(65,12): error C2485: 'naked': unrecognized extended attribute
+C:\Games\Black & White\Tools\NewDLL\ddraw\ddraw.cpp(66,2): error C4235: nonstandard extension used: '__asm' keyword not supported on this architecture
+C:\Games\Black & White\Tools\NewDLL\ddraw\ddraw.cpp(66,7): error C2065: 'jmp': undeclared identifier
+C:\Games\Black & White\Tools\NewDLL\ddraw\ddraw.cpp(69,12): error C2485: 'naked': unrecognized extended attribute
+C:\Games\Black & White\Tools\NewDLL\ddraw\ddraw.cpp(70,2): error C4235: nonstandard extension used: '__asm' keyword not supported on this architecture
+C:\Games\Black & White\Tools\NewDLL\ddraw\ddraw.cpp(70,7): error C2065: 'jmp': undeclared identifier
+C:\Games\Black & White\Tools\NewDLL\ddraw\ddraw.cpp(73,12): error C2485: 'naked': unrecognized extended attribute
+C:\Games\Black & White\Tools\NewDLL\ddraw\ddraw.cpp(74,2): error C4235: nonstandard extension used: '__asm' keyword not supported on this architecture
+C:\Games\Black & White\Tools\NewDLL\ddraw\ddraw.cpp(74,7): error C2065: 'jmp': undeclared identifier
+C:\Games\Black & White\Tools\NewDLL\ddraw\ddraw.cpp(77,12): error C2485: 'naked': unrecognized extended attribute
+C:\Games\Black & White\Tools\NewDLL\ddraw\ddraw.cpp(78,2): error C4235: nonstandard extension used: '__asm' keyword not supported on this architecture
+C:\Games\Black & White\Tools\NewDLL\ddraw\ddraw.cpp(78,7): error C2065: 'jmp': undeclared identifier
+C:\Games\Black & White\Tools\NewDLL\ddraw\ddraw.cpp(81,12): error C2485: 'naked': unrecognized extended attribute
+C:\Games\Black & White\Tools\NewDLL\ddraw\ddraw.cpp(82,2): error C4235: nonstandard extension used: '__asm' keyword not supported on this architecture
+C:\Games\Black & White\Tools\NewDLL\ddraw\ddraw.cpp(82,7): error C2065: 'jmp': undeclared identifier
+C:\Games\Black & White\Tools\NewDLL\ddraw\ddraw.cpp(85,12): error C2485: 'naked': unrecognized extended attribute
+C:\Games\Black & White\Tools\NewDLL\ddraw\ddraw.cpp(86,2): error C4235: nonstandard extension used: '__asm' keyword not supported on this architecture
+C:\Games\Black & White\Tools\NewDLL\ddraw\ddraw.cpp(86,7): error C2065: 'jmp': undeclared identifier
+  dllmain.cpp
+  mods.cpp
+  The contents of <filesystem> are available only with C++17 or later.
+C:\Games\Black & White\Tools\NewDLL\ddraw\mods.cpp(7,10): fatal error C1083: Cannot open include file: 'detours.h': No such file or directory
+  Generating Code...

@@ -1,0 +1,13 @@
+﻿  mods.cpp
+C:\Games\Black & White\Tools\NewDLL\ddraw\mods.cpp(550,13): warning C4244: 'initializing': conversion from 'std::streamoff' to 'int', possible loss of data
+C:\Games\Black & White\Tools\NewDLL\ddraw\mods.cpp(606,47): warning C4244: '=': conversion from 'double' to 'FLOAT', possible loss of data
+C:\Games\Black & White\Tools\NewDLL\ddraw\mods.cpp(617,49): warning C4244: '=': conversion from 'double' to 'FLOAT', possible loss of data
+C:\Games\Black & White\Tools\NewDLL\ddraw\mods.cpp(626,48): warning C4244: '=': conversion from 'double' to 'FLOAT', possible loss of data
+C:\Games\Black & White\Tools\NewDLL\ddraw\mods.cpp(635,44): warning C4244: '=': conversion from 'double' to 'FLOAT', possible loss of data
+C:\Games\Black & White\Tools\NewDLL\ddraw\mods.cpp(1105,55): warning C4554: '&': check operator precedence for possible error; use parentheses to clarify precedence
+C:\Games\Black & White\Tools\NewDLL\ddraw\mods.cpp(1160,9): warning C4477: 'printf' : format string '%c' requires an argument of type 'int', but variadic argument 1 has type 'char *'
+C:\Games\Black & White\Tools\NewDLL\ddraw\mods.cpp(1262,8): warning C4101: 'c': unreferenced local variable
+LINK : warning LNK4075: ignoring '/INCREMENTAL' due to '/OPT:ICF' specification
+     Creating library C:\Games\Black & White\Tools\NewDLL\Release\ddraw.lib and object C:\Games\Black & White\Tools\NewDLL\Release\ddraw.exp
+  ddraw.vcxproj -> C:\Games\Black & White\Tools\NewDLL\Release\ddraw.dll
+          1 file(s) copied.
