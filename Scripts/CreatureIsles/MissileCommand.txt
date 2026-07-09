@@ -1,0 +1,503 @@
+//LHVM Challenge source version 8
+//Decompiled with CHLASM tool by Daniels118
+
+global BlokesFinishedWith
+global DeleteWaterMiracles
+global MCChallengeComplete
+
+begin script CreateTheWaterSpells
+	WaterPos = marker at [2338.058, 0, 1568.583]
+	WaterSpell1 = 0
+	WaterSpell2 = 0
+	WaterSpell3 = 0
+	WaterSpell4 = 0
+	WaterSpell5 = 0
+	WaterSpell6 = 0
+	WaterSpell7 = 0
+	WaterSpell8 = 0
+	WaterSpell9 = 0
+	WaterSpell10 = 0
+start
+	WaterSpell1 = create ONE_SHOT SPELL_SEED_TYPE_WATER at [WaterPos] + [number from -3 to 3, 0, number from -3 to 3]
+	WaterSpell2 = create ONE_SHOT SPELL_SEED_TYPE_WATER at [WaterPos] + [number from -3 to 3, 0, number from -3 to 3]
+	WaterSpell3 = create ONE_SHOT SPELL_SEED_TYPE_WATER at [WaterPos] + [number from -3 to 3, 0, number from -3 to 3]
+	WaterSpell4 = create ONE_SHOT SPELL_SEED_TYPE_WATER at [WaterPos] + [number from -3 to 3, 0, number from -3 to 3]
+	WaterSpell5 = create ONE_SHOT SPELL_SEED_TYPE_WATER at [WaterPos] + [number from -3 to 3, 0, number from -3 to 3]
+	WaterSpell6 = create ONE_SHOT SPELL_SEED_TYPE_WATER at [WaterPos] + [number from -3 to 3, 0, number from -3 to 3]
+	WaterSpell7 = create ONE_SHOT SPELL_SEED_TYPE_WATER at [WaterPos] + [number from -3 to 3, 0, number from -3 to 3]
+	WaterSpell8 = create ONE_SHOT SPELL_SEED_TYPE_WATER at [WaterPos] + [number from -3 to 3, 0, number from -3 to 3]
+	WaterSpell9 = create ONE_SHOT SPELL_SEED_TYPE_WATER at [WaterPos] + [number from -3 to 3, 0, number from -3 to 3]
+	WaterSpell10 = create ONE_SHOT SPELL_SEED_TYPE_WATER at [WaterPos] + [number from -3 to 3, 0, number from -3 to 3]
+	while DeleteWaterMiracles == 0
+	end while
+	delete WaterSpell1
+	delete WaterSpell2
+	delete WaterSpell3
+	delete WaterSpell4
+	delete WaterSpell5
+	delete WaterSpell6
+	delete WaterSpell7
+	delete WaterSpell8
+	delete WaterSpell9
+	delete WaterSpell10
+end script CreateTheWaterSpells
+
+begin script MissileCommandCompleted(Bloke, FirstTime)
+	WaterDispensor = 0
+start
+	start music MUSIC_TYPE_SCRIPT_EPIC_04
+	begin cinema
+		set fade red 0 green 0 blue 0 time 1
+		wait until fade ready
+		set Bloke position to [2244.127, 0, 1570.031]
+		set Bloke focus to [2240.287, 2.375, 1569.299]
+		set camera position to [2240.287, 2.375, 1569.299]
+		set camera focus to [2247.223, 1.217, 1570.393]
+		ALTITUDE of Bloke = 0.9
+		enable Bloke high graphics detail
+		wait until widescreen transition complete
+		set fade in time 1
+		wait until fade ready
+		Bloke play ANM_P_CROWD_IMPRESSED_1 loop -1
+		wait until 2 seconds
+		say HELP_TEXT_MISSILE_COMMAND_100
+		wait until read
+		if FirstTime == 1
+			say HELP_TEXT_MISSILE_COMMAND_110
+			wait until read
+			WaterDispensor = create with angle 0 and scale 1 SCRIPT_OBJECT_TYPE_SPELL_DISPENSER ABODE_INFO_NORSE_SPELL_DISPENSER at [2344.219, 13.4, 1456.708]
+			set WaterDispensor magic properties SPELL_WATER_LEVEL_1 time 0
+			enable WaterDispensor active
+			set WaterDispensor time to 10 seconds
+			set camera position to [2329.412, 20.973, 1448.013]
+			set camera focus to [2380.653, 0.561, 1483.604]
+			move camera position to [2326.602, 22.092, 1446.061] time 10
+			move camera focus to [2377.843, 1.68, 1481.652] time 10
+			say HELP_TEXT_MISSILE_COMMAND_120
+			wait until read
+			clear dialogue
+			wait until camera ready
+			say single line HELP_TEXT_MISSILE_COMMAND_125
+			wait until read
+		else
+			say HELP_TEXT_MISSILE_COMMAND_125
+			wait until read
+		end if
+		set fade red 0 green 0 blue 0 time 1
+		wait until fade ready
+		set camera position to [2309.17, 25.152, 1509.092]
+		set camera focus to [2321.245, 3.114, 1469.062]
+		DeleteWaterMiracles = 1
+	end cinema
+	wait until widescreen transition complete
+	set Bloke position to [2331.349, 3.303, 1471.503]
+	set fade in time 1
+	wait until fade ready
+	stop music
+end script MissileCommandCompleted
+
+begin script TownFireGameOver(Bloke)
+start
+	start music MUSIC_TYPE_SCRIPT_FAILURE
+	begin cinema
+		set fade red 0 green 0 blue 0 time 1
+		wait until fade ready
+		set Bloke position to [2244.127, 0, 1570.031]
+		set Bloke focus to [2240.287, 2.375, 1569.299]
+		set camera position to [2240.287, 2.375, 1569.299]
+		set camera focus to [2247.223, 1.217, 1570.393]
+		ALTITUDE of Bloke = 0.9
+		enable Bloke high graphics detail
+		wait until widescreen transition complete
+		set fade in time 1
+		wait until fade ready
+		Bloke play ANM_P_CROWD_UNIMPRESSED_1 loop 1
+		wait until Bloke played
+		Bloke play ANM_P_WAITING_IMPATEINTLY loop -1
+		eject evil spirit
+		say HELP_TEXT_MISSILE_COMMAND_200
+		wait until read
+		say HELP_TEXT_MISSILE_COMMAND_210
+		wait until read
+		say HELP_TEXT_MISSILE_COMMAND_220
+		wait until read
+		send evil spirit home
+		set fade red 0 green 0 blue 0 time 1
+		wait until fade ready
+		set camera position to [2309.17, 25.152, 1509.092]
+		set camera focus to [2321.245, 3.114, 1469.062]
+		DeleteWaterMiracles = 1
+	end cinema
+	wait until widescreen transition complete
+	set Bloke position to [2331.349, 3.303, 1471.503]
+	set fade in time 1
+	wait until fade ready
+	stop music
+end script TownFireGameOver
+
+begin script LookAfterBlokeRunningTowardHouse(StartPosition, House)
+	Bloke = 0
+	Speed = 0
+	EndPosition = marker at [2253.296, 0, 1557.207] + [number from -3 to 3, 0, number from -3 to 3]
+	Smoke = 0
+start
+	Bloke = create VILLAGER VILLAGER_INFO_CRUSADER at [StartPosition]
+	disable Bloke pickup
+	enable Bloke indestructible
+	disable Bloke hurt by fire
+	enable Bloke on fire 1
+	Speed = number from 5 to 7
+	Speed = Speed / 10
+	SPEED of Bloke = Speed
+	move Bloke position to [House] radius 0
+	if MCChallengeComplete == 0
+		set Bloke anim ANM_P_ON_FIRE_RUN
+	end if
+	begin loop
+		if not Bloke on fire
+			move Bloke position to [EndPosition] radius 0
+			BlokesFinishedWith--
+			wait until get distance from [Bloke] to [EndPosition] == 0
+			if MCChallengeComplete == 0
+				Bloke play ANM_P_CROWD_WON_2 loop -1
+			end if
+			wait until 5 seconds
+			delete Bloke with fade
+		elsif get distance from [Bloke] to [House] == 0
+			if BUILT of House > 0
+				enable House on fire 1
+			end if
+			if MCChallengeComplete == 0
+				Bloke play ANM_P_ON_FIRE_DIE loop 1
+				wait until Bloke played
+			end if
+			delete Bloke with fade
+			if BUILT of House > 0
+				BUILT of House = 0
+			end if
+			BlokesFinishedWith--
+		else
+			Smoke = create special effect SPOT_VISUAL_BONFIRE at [Bloke] time 1
+		end if
+		until not Bloke exists
+	end loop
+end script LookAfterBlokeRunningTowardHouse
+
+begin script MissileCommand
+	IntroSeen = 0
+	SilverScroll = 0
+	HighlightPosition = marker at [2324.622, 2.104, 1476.768]
+	InitialGuy = 0
+	Steam1 = 0
+	Steam2 = 0
+	House1 = get HOUSE at [2321.617, 1.434, 1573.072] radius 2
+	House2 = get HOUSE at [2293.202, 1.539, 1574.291] radius 2
+	House3 = get HOUSE at [2264.377, 0, 1565.977] radius 2
+	PeopleCount = 0
+	StartPos1 = marker at [2320.874, 2.68, 1441.165]
+	StartPos2 = marker at [2331.349, 3.303, 1471.503]
+	StartPos3 = marker at [2341.349, 3.303, 1471.503]
+	HouseNumber = 0
+	StartNumber = 0
+	RealStart = 0
+	RealDest = 0
+	RandomNumber = 0
+	WaitDelay = 0
+	Smoke = 0
+	Random = 0
+	MissileCommandDYKPos = marker at [2279.872, 2.68, 1458.776]
+	Mine = 0
+start
+	Smoke = create special effect SPOT_VISUAL_BONFIRE at [StartPos1] time 2000000
+	SCALE of Smoke = 25
+	Smoke = create special effect SPOT_VISUAL_BONFIRE at [StartPos2] time 2000000
+	SCALE of Smoke = 25
+	Smoke = create special effect SPOT_VISUAL_BONFIRE at [StartPos3] time 2000000
+	SCALE of Smoke = 25
+	enable House1 indestructible
+	enable House2 indestructible
+	enable House3 indestructible
+	Mine = get FEATURE at [2343.867, 5.331, 1477.796] radius 10
+	enable Mine indestructible
+	Mine = get FEATURE at [2330.292, 2.698, 1471.263] radius 10
+	enable Mine indestructible
+	Mine = get FEATURE at [2320.972, 2.68, 1441.069] radius 10
+	enable Mine indestructible
+	begin loop
+		until get player 1 influence at [HighlightPosition] > 0
+	end loop
+	MCChallengeComplete = 0
+	begin loop
+		BUILT of House1 = 1
+		BUILT of House2 = 1
+		BUILT of House3 = 1
+		disable House1 on fire 0
+		disable House2 on fire 0
+		disable House3 on fire 0
+		SilverScroll = create highlight CHALLENGE_MISSILE_COMMAND HIGHLIGHT_CHALLENGE at [HighlightPosition]
+		run script ChallengeHighlightNotifyCI(SilverScroll, HighlightPosition, variable HELP_TEXT_GENERAL_CHALLENGE_START_06)
+		if IntroSeen == 0
+			begin cinema
+				set fade red 0 green 0 blue 0 time 1
+				start music MUSIC_TYPE_SCRIPT_SLEG
+				wait until fade ready
+				InitialGuy = create VILLAGER VILLAGER_INFO_CRUSADER at [StartPos1]
+				disable InitialGuy pickup
+				disable InitialGuy hurt by fire
+				enable InitialGuy on fire 1
+				SPEED of InitialGuy = 0.5
+				enable InitialGuy high graphics detail
+				set camera position to [2316.251, 4.99, 1446.45]
+				set camera focus follow InitialGuy
+				wait until widescreen transition complete
+				set fade in time 1
+				wait until fade ready
+				move camera position to [2310.63, 5.217, 1441.053] time 5
+				wait until 4 seconds
+				start sound constant 55 AUDIO_SFX_BANK_TYPE_SPELL at [Mine]
+				wait until camera ready
+				move InitialGuy position to [2276.42, 0, 1495.062] radius 0
+				attach 3d sound tag LH_SAMPLE_BIGSCREAM to InitialGuy
+				set InitialGuy anim ANM_P_ON_FIRE_RUN
+				wait until 4 seconds
+				set camera position to [2298.544, 4.795, 1466.462]
+				move camera position to [2261.539, 4.919, 1507.64] time 14
+				wait until 4 seconds
+				set camera position to [2290.389, 3.689, 1472.579]
+				set camera focus to [2301.256, 2.34, 1481.332]
+				wait until 1 seconds
+				wait until 1 seconds
+				set camera position to [2295.116, 7.125, 1470.616]
+				set camera focus to [2285.769, 3.787, 1480.518]
+				wait until 3 seconds
+				set camera position to [2265.15, 1.185, 1502.926]
+				set camera focus to [2269.782, -1.617, 1520.737]
+				disable InitialGuy high graphics detail
+				set InitialGuy position to [2267.709, 0, 1504.513]
+				set InitialGuy focus to [2275.173, 0, 1515.386]
+				enable InitialGuy high graphics detail
+				detach sound tag LH_SAMPLE_BIGSCREAM from InitialGuy
+				InitialGuy play ANM_P_AVOID_OBJECT_DIVE loop 1
+				wait until 0.75 seconds
+				Steam1 = create special effect SPOT_VISUAL_STEAM at [2265.555, 0, 1505.614] time 5
+				start sound LH_SAMPLE_SPLASHSIZZLE
+				SCALE of Steam1 = 2
+				wait until 0.75 seconds
+				set camera position to [2266.169, 1.222, 1505.547]
+				set camera focus to [2281.855, 1.091, 1495.523]
+				Steam2 = create special effect SPOT_VISUAL_STEAM at [InitialGuy] time 10
+				SCALE of Steam2 = 5
+				disable InitialGuy high graphics detail
+				set InitialGuy focus to [2264.975, 0, 1506.124]
+				enable InitialGuy high graphics detail
+				InitialGuy play ANM_P_LANDED loop 1
+				wait until InitialGuy played
+				InitialGuy play ANM_P_PANIC_MAN loop -1
+				say HELP_TEXT_MISSILE_COMMAND_10
+				wait until read
+				say HELP_TEXT_MISSILE_COMMAND_20
+				wait until read
+				set camera position to [2298.343, 8.645, 1502.312]
+				set camera focus to [2311.831, 7.175, 1489.565]
+				DeleteWaterMiracles = 0
+				run background script CreateTheWaterSpells
+				move camera position to [2285.567, 8.645, 1488.794] time 10
+				move camera focus to [2299.055, 7.175, 1476.048] time 10
+				say HELP_TEXT_MISSILE_COMMAND_30
+				wait until read
+				say HELP_TEXT_MISSILE_COMMAND_40
+				wait until read
+				set camera position to [2355.157, 22.876, 1603.352]
+				set camera focus to [2326.412, 2.467, 1565.909]
+				move camera position to [2279.232, 27.003, 1612.08] time 12
+				move camera focus to [2296.136, 6.244, 1562.514] time 12
+				set InitialGuy focus to [2279.232, 27.003, 1612.08]
+				say HELP_TEXT_MISSILE_COMMAND_50 with interaction
+				wait until read
+				say HELP_TEXT_MISSILE_COMMAND_60
+				wait until read
+				eject good spirit
+				make good spirit point at [StartPos2]
+				say HELP_TEXT_MISSILE_COMMAND_80
+				wait until read
+				send good spirit home
+				set InitialGuy focus to [2310.071, 6.271, 1526.438]
+			end cinema
+			run background script DidYouKnow(MissileCommandDYKPos, variable HELP_TEXT_MISSILE_COMMAND_DYK, variable DYK_MISC)
+			IntroSeen = 1
+			stop music
+		elsif MCChallengeComplete == 0
+			begin cinema
+				set fade red 0 green 0 blue 0 time 1
+				start music MUSIC_TYPE_SCRIPT_SLEG
+				wait until fade ready
+				DeleteWaterMiracles = 0
+				run background script CreateTheWaterSpells
+				wait until widescreen transition complete
+				set InitialGuy position to [2244.127, 0, 1570.031]
+				set InitialGuy focus to [2240.287, 2.375, 1569.299]
+				set camera position to [2240.287, 2.375, 1569.299]
+				set camera focus to [2247.223, 1.217, 1570.393]
+				enable InitialGuy high graphics detail
+				ALTITUDE of InitialGuy = 0.9
+				set fade in time 1
+				InitialGuy play ANM_P_WAITING_IMPATEINTLY loop -1
+				wait until fade ready
+				say single line HELP_TEXT_MISSILE_COMMAND_90
+				wait until read
+				move camera position to [2279.232, 27.003, 1612.08] time 6
+				move camera focus to [2296.136, 6.244, 1562.514] time 6
+				wait until camera ready
+			end cinema
+			stop music
+		else
+			begin cinema
+				set fade red 0 green 0 blue 0 time 1
+				wait until fade ready
+				DeleteWaterMiracles = 0
+				run background script CreateTheWaterSpells
+				wait until widescreen transition complete
+				set InitialGuy position to [2244.127, 0, 1570.031]
+				set InitialGuy focus to [2240.287, 2.375, 1569.299]
+				set camera position to [2240.287, 2.375, 1569.299]
+				set camera focus to [2247.223, 1.217, 1570.393]
+				enable InitialGuy high graphics detail
+				ALTITUDE of InitialGuy = 0.9
+				set fade in time 1
+				InitialGuy play ANM_P_WAITING_IMPATEINTLY loop -1
+				wait until fade ready
+				say single line HELP_TEXT_MISSILE_COMMAND_128
+				wait until read
+				move camera position to [2279.232, 27.003, 1612.08] time 6
+				move camera focus to [2296.136, 6.244, 1562.514] time 6
+				wait until camera ready
+			end cinema
+		end if
+		start music MUSIC_TYPE_SCRIPT_SLEG
+		start sound constant 55 AUDIO_SFX_BANK_TYPE_SPELL at [Mine]
+		PeopleCount = 8
+		BlokesFinishedWith = 8
+		while PeopleCount > 0
+			RandomNumber = number from 1 to 3
+			if RandomNumber == 1
+				RealStart = StartPos1
+			elsif RandomNumber == 2
+				RealStart = StartPos2
+			else
+				RealStart = StartPos3
+			end if
+			RandomNumber = number from 1 to 3
+			if RandomNumber == 1
+				RealDest = House1
+			elsif RandomNumber == 2
+				RealDest = House2
+			else
+				RealDest = House3
+			end if
+			run background script LookAfterBlokeRunningTowardHouse(RealStart, RealDest)
+			WaitDelay = number from 0 to 1
+			wait until WaitDelay seconds
+			PeopleCount--
+		end while
+		while BlokesFinishedWith > 0
+		end while
+		if BUILT of House1 == 0 or BUILT of House2 == 0 or BUILT of House3 == 0
+			run script TownFireGameOver(InitialGuy)
+		else
+			begin cinema
+				move camera position to [2279.232, 27.003, 1612.08] time 6
+				move camera focus to [2296.136, 6.244, 1562.514] time 6
+				wait until camera ready
+				eject good spirit
+				make good spirit point at [StartPos2]
+				Random = (variable HELP_TEXT_MISSILE_COMMAND_81) + (number from 0 to 4)
+				say single line constant Random
+				wait until read
+				send good spirit home
+			end cinema
+			PeopleCount = 9
+			BlokesFinishedWith = 9
+			start sound constant 55 AUDIO_SFX_BANK_TYPE_SPELL at [Mine]
+			while PeopleCount > 0
+				RandomNumber = number from 1 to 3
+				if RandomNumber == 1
+					RealStart = StartPos1
+				elsif RandomNumber == 2
+					RealStart = StartPos2
+				else
+					RealStart = StartPos3
+				end if
+				RandomNumber = number from 1 to 3
+				if RandomNumber == 1
+					RealDest = House1
+				elsif RandomNumber == 2
+					RealDest = House2
+				else
+					RealDest = House3
+				end if
+				run background script LookAfterBlokeRunningTowardHouse(RealStart, RealDest)
+				WaitDelay = number from 0 to 1
+				wait until WaitDelay seconds
+				PeopleCount--
+			end while
+			while BlokesFinishedWith > 0
+			end while
+			if BUILT of House1 == 0 or BUILT of House2 == 0 or BUILT of House3 == 0
+				run script TownFireGameOver(InitialGuy)
+			else
+				begin cinema
+					move camera position to [2279.232, 27.003, 1612.08] time 6
+					move camera focus to [2296.136, 6.244, 1562.514] time 6
+					wait until camera ready
+					eject good spirit
+					make good spirit point at [StartPos2]
+					Random = (variable HELP_TEXT_MISSILE_COMMAND_81) + (number from 0 to 4)
+					say single line constant Random
+					wait until read
+					send good spirit home
+				end cinema
+				PeopleCount = 10
+				BlokesFinishedWith = 10
+				start sound constant 55 AUDIO_SFX_BANK_TYPE_SPELL at [Mine]
+				while PeopleCount > 0
+					RandomNumber = number from 1 to 3
+					if RandomNumber == 1
+						RealStart = StartPos1
+					elsif RandomNumber == 2
+						RealStart = StartPos2
+					else
+						RealStart = StartPos3
+					end if
+					RandomNumber = number from 1 to 3
+					if RandomNumber == 1
+						RealDest = House1
+					elsif RandomNumber == 2
+						RealDest = House2
+					else
+						RealDest = House3
+					end if
+					run background script LookAfterBlokeRunningTowardHouse(RealStart, RealDest)
+					WaitDelay = number from 0 to 1
+					wait until WaitDelay seconds
+					PeopleCount--
+				end while
+				while BlokesFinishedWith > 0
+				end while
+				stop music
+				if BUILT of House1 == 0 or BUILT of House2 == 0 or BUILT of House3 == 0
+					run script TownFireGameOver(InitialGuy)
+				else
+					if MCChallengeComplete == 1
+						run script MissileCommandCompleted(InitialGuy, 0)
+					else
+						run script MissileCommandCompleted(InitialGuy, 1)
+					end if
+					MCChallengeComplete = 1
+					KCMissileCommandComplete = 1
+				end if
+			end if
+		end if
+	end loop
+	run background script DeleteDYK(MissileCommandDYKPos)
+end script MissileCommand
+

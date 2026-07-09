@@ -49,7 +49,118 @@ v1.10	- Multiplayer Appearance Customisation (Each player can now select their o
 --------- Creature Isle Update! ---------
 v1.20	- Creature Isle is now playable in Ultimate! The original game will now be known as "Classic". You can save and load games freely between Classic and Creature Isle!
 
-v1.21	- Huge rework on custom code used for Ultimate. The game should no longer crash from random memory exceptions (just typical Black & White crashes now lol)
+v1.21	- Huge rework on custom code used for Ultimate. The game should no longer crash from random memory exceptions (just typical Black & White crashes now lol).
         - Nemesis curse no longer affects the Creature's height (temporary change while bugs are addressed).
         - Fixed an issue that made the Creature Isle building trial impossible to complete.
+        - Now supports resolutions above 1920 x 1080 (1080p).
         - Selecting temple at Intro Menu is now much faster.
+
+--------- QoL Update! ---------
+v1.30   - Tyke can now be used in the Classic story. Players can now click on a small Egg beside their temple to toggle Tyke on/off.
+        - Infinite Draw Distance patch has been added as an optional setting. It can be toggled on/off at the Intro menu or by pressing the following keys at any time:
+            - "-" (toggle off).
+            - "+" (toggle on).
+        - Land 5 Creature Curse has been reworked. Instead, the Creature is now affected by Creature spells for a duration. The duration increases each time the Creature is cursed (starting at 1 min and increasing in increments of 15 seconds, up to 3 mins).
+        - Villagers longer walk across water.
+        - The "Skip straight to Creature select" and "Skip all of Creature tutorial" options have been restored.
+        - The Ogre fight on Land 1 is now available when skipping Land 1. 
+        - The "Creature Stats" tab now displays Tyke more neatly.
+        - Fixed bug where capturing a town could occasionally crash the game.
+        - (Hard Mode) Hard AI will now attack towns (if in their own influence).
+        - (Hard Mode) Hard AI movement speed has been reduced (still much faster than default AI).
+        - (Hard Mode) Hard AI will prioritise capturing towns slightly more than attacking other Gods. If no towns are available to capture, they will attack more.
+        - (Hard Mode) Hard AI will no longer attack Creatures outside of their influence (Bug Fix).
+        - (Hard Mode) Hard AI will no longer perform actions while cutscenes are active.
+        - (Hard Mode) Khazar no longer has Hard Mode AI.
+        - (Hard Mode) Pressing "P" in Hard Mode will now open the "Esc" main menu instead of doing nothing.
+        - (Hard Mode) Starting/temple influence has been increased in all Lands.
+        - (Hard Mode) Lethys starting population reduced by about 25-30%.
+        - (Hard Mode) Belief to capture towns have been normalised. Capturing towns should be a bit easier in Hard Mode now. The beliefs are now the following:
+            - Land 2: 500
+            - Land 3: 500
+            - Land 4: 750
+            - Land 5: 1000
+        - (Hard Mode) "SET_GLOBAL_LAND_BALANCE" (Impressiveness, Wood from trees, Artifact Speed etc.) have been normalised across all Lands.
+        - (Hard Mode) Tyke/Apprentice reward now gives warning if Player has an existing Tyke/Apprentice.
+
+v1.31   - Alignment music will now properly play (Bug Fix).
+        - Infinite Draw Distance patch is now marked as "Unstable" in the Intro menu as it can cause FPS drops and occasionally game crashes (use at own risk!).
+        - (Hard Mode) Nemesis will now start with a small amount of belief in each neutral town on Land 5.
+        - (Hard Mode) Lethys will now ignore Khazar's Creature on Land 2.
+        - (Hard Mode) Hard Mode AI will now properly attack Creatures in their influence.
+
+v1.32   - Players can now select their starting Tribe in the Classic & Creature Isle story modes.
+        - Creatures hold capacity has been greatly increased and normalised (difference between all Creatures is much lower). Additionally, the Crocodile hold limit bug has been fixed.
+        - Intro Menu animation improvements and now displays the Player's selected Tribe & God symbol.
+        - God symbols now always load correctly for AI (Before, Khazar could occasionally have Lethys symbol and vice versa etc.)
+        - Infinite Draw Distance patch should no longer cause large FPS drops after a few minutes.
+        - The 3rd Missionary (with accordian) now always his accordian on Land 5 and the Creature Isle intro.
+        - (Bug Fix/Hard Mode) Fixed issue where typing "P" during Hard Mode would cause weird things to happen (such as in Game Save room).
+        - (Bug Fix) Fixed fatal bug related to Villager pathing that could crash the Player's game.
+        - (Bug Fix) Fixed bug where Khazar would occasionally not give a workshop to the Player.
+        - (Creature Isle) No longer forces the Creature to be over a certain height (50% of max) or grant the basic starting spells (Food, Wood, Water).
+        - (Creature Isle) Tyke's egg size has been reduced.
+        - (Creature Isle) Gorilla's "Smashing" trial adjustments. It's now easier to "smash" the buildings and "smashing" the buildings is now way more responsive.
+
+v1.33   - Added Randomiser mode for Classic & Creature Isle, that has two options:
+            - (Tribes) All Tribes are random.
+            - (Tribes & Spells) All Tribes and Spells are random.
+        (Additionally, Players can hold 'R' while loading a Skirmish to enable the "Tribes & Spells" randomiser. This is temporary until a proper settings option is added).
+        - (Bug Fix) Fixed crash that could occur when map population got very large.
+
+--------- The Ogre Update! ---------
+v1.40 	- Ogres are now playable Creatures!
+			- Ogres can now cast spells.
+			- Ogres can now be interacted with.
+			- Ogres now have proper alignment skins.
+			- Extra animations slots have been added (existing animations).
+			- Crashes related to Ogres have been fixed.
+		- Creature Variants/Forms have been added (Only Ogre has variants but more will be added in future):
+			- 4 variants for Ogre.
+				- Creature Isle form.
+				- (New) Original Black & White form.
+				- (New) Alien/Humanoid form.
+				- (New) Gremlin form.
+		- New quest "The Sad Ogre" has been added on Land 4. Look after the banished sad Ogre for 30 minutes to unlock the Ogres as playable Creatures.
+		- The Land 1 Ogre fight is now accessible when selecting "Skip Land 1" option.
+		- Sleg on Land 4 is now evil (red), making him stand out from the other Ogres.
+		
+		- The old hacky custom intro menu is gone and has been completely reworked (long overdue). It also has a new features have been added.:
+			- It is now a proper menu with buttons, sliders etc.
+			- It is now separated into 3 tabs:
+				- "Play Game" - The settings to use when starting a fresh game. Not accessible once the game has started.
+				- "Customisation" - Change any appearance related settings here, such as Colour, Temple & Creature (Creature Isle Brotherhood Ring etc.). Accessible at any time.
+				- "Settings - QoL features and tweaks, such as the "Unlimited Draw Distance" patch. Accessible at any time.
+			- The menu can be opened/closed during gameplay by pressing "+".
+			- Added a new "Reset All" button that resets all intro menu values back to their default values.
+			- The "Creature Isle Brotherhood Ring" can now be toggled on/off at any time.
+			- "Eternal Special Villagers" option added!
+				- When toggled on, Villagers with unique skins (Sable, Hermit etc.) will no longer die from old age, allowing them to live forever. They can still die from other causes.
+			- "Creature Building" option added!
+				- Toggling this off prevents Creatures from building or creating new buildings, just like the original Black & White. They may still sometimes attempt to but no building will be created/built.
+			- Tribe & Spell randomisers can now be selected independently of each other. Before, if you wanted to randomise Spells, you had to randomise Tribes too.
+			- Selected Tribes now take priority over the randomiser, meaning you can select a Tribe but randomise all other Tribes.
+			- You can now select a Tribe when the Tribe randomiser is enabled.
+			- Custom appearances (Colour & Temple) no longer reset when starting a new game. They now persist and can be reset to default values with the new "Reset All" button.
+			- Custom appearances (Colour & Temple) can now be changed at any time. Before, this was only accessible when a new game was started.
+			- Only settings under the "Play Game" tab are speific to that save (randomiser, tribe, difficulty etc.). Settings under "Appearance" and "Settings" tabs will persist over all saves.
+			- This new menu is not accessible during Multiplayer.
+		
+		- Creature files are now periodically backed up, up to 100 backups. These backups can be found at "Ultimate\Scripts\CreatureMind\<CreatureFilename>.erc". If your game/Creature corrupts, you can restore them from here!
+		- Ultimate now uses "ddraw_compat.dll", increasing compatibility across all machines, especially MAC/Linux.
+		- Misc code clean ups and improvements, game should run a bit faster.
+		- Multiplayer colours are now visible in the lobby. 
+		- (Vanilla) End credits sequence now ends after a few seconds instead of waiting for the user to press the Space key.
+		- (Bug Fix) Crocodile & Chicken tooltips now display the correct text.
+		- (Bug Fix) Polar Bear village totem has been corrected. The original developers accidentally set it to the Ape.
+		- (Bug Fix) Creature Curse height/alignment bug have finally been fully fixed.
+		- (Bug Fix) Fixed bug where player couldn't activate Land 2 Worship Site quest if the Player used the randomiser.
+		- (Bug Fix) Fixed crash related to maps being too large.
+		- (Bug Fix) If a game is unable to save, it should give an error message more often instead of just crashing.
+		- (Bug Fix) Swapping your Creature no longer reduce its height. Swapping used to reduce height very slightly due to the number rounding bug.
+		- (Bug Fix) Corrected camera path issues for a few quests:
+			- Intro Menu (Sharks & Father pathing) and slight improvements to the scene.
+			- Missionary Land 1 (Verse 2 with camera pan to boat).
+			- Choose your Creature (from gate -> Creatures).
+			- Lost Brother.
+			- Singing Stones Circle (completion camera).

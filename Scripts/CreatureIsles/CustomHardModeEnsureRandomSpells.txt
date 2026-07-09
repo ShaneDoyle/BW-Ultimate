@@ -1,0 +1,25 @@
+begin script CustomHardModeEnsureRandomSpells(Land)
+
+	Town = 0
+start
+
+	// Ensure Lethys has Lightning.
+	if Land == 2
+		Town = get town with id 3
+		enable spell MAGIC_TYPE_LIGHTNING_BOLT in Town
+	end if
+	
+	// Ensure Lethys has Lightning.
+	if Land == 3
+		Town = get town with id 1
+		enable spell MAGIC_TYPE_LIGHTNING_BOLT in Town
+	end if
+
+	// Ensure Nemesis had Mega Blast.
+	if Land == 5
+		Town = get town with id 2
+		enable spell MAGIC_TYPE_EXPLOSION_ONE_PU_TWO in Town
+	end if
+	
+	
+end script CustomHardModeEnsureRandomSpells

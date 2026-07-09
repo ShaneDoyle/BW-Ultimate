@@ -1,0 +1,2679 @@
+//LHVM Challenge source version 8
+//Decompiled with CHLASM tool by Daniels118
+
+global BowlingTrialCompleted
+global BowlingTrialStarted
+global BowlingBall
+global BBallPos
+global PinPos
+global CowBowling
+global BowlingPos
+global TargetArea
+global PinHit[10]
+global Pin[10]
+global PinArray[10]
+global BowlingRock[9]
+global BowlingTree[4]
+global Fences[3]
+global SizeCI = 1.1
+global AmountOfPinsHit
+global PlayerTotalBowled
+global CowTotalBowled
+global PlayerLastScoreBowled
+global CowLastScoreBowled
+global PlayerTotalScore
+global CowTotalScore
+global CowInitialPosCI
+global PlayerCreatureInitialPos
+global PlayerPlayed
+global BowlingIntroPlayed
+global OldScale
+global PlayingForFun
+global PlayerFirstBallScore
+global CowFirstBallScore
+global PlayerSecondBallScore
+global CowSecondBallScore
+global PlayerScoreboard
+global CowScoreboard
+global MainScoreboard
+global RoundScoreboard
+global CancelCurrentGame
+global BowlingGameRunning = 1
+global BowlingBeingPlayed
+global BowlingDYKPos
+global NextMessage
+global NumberOfPinsMissed
+global TykeHasDoneAction
+global TykeHasNoActionToDo
+global FindAnActionForTykeNow
+global BowlingMaxRounds = 5
+global BowlingLogo
+global BowlingCancelGameHighlight
+global FirstStrikeOrSpare
+global CreatureInPosition
+global OkToDisplayScrollNow
+global BowlingPen
+global MakeCowEasier = 1
+global PlayerUnclaimedPoints
+global CowUnclaimedPoints
+
+define script TykesBehaviourInBowling
+define script WaitUntilPinsStopMoving
+define script TykeKicksPins
+define script GoodBowl(WhosBowl)
+define script CalculateBestTarget
+define script MoveCowToStartPos
+define script CowBowlsBall(Bowl)
+define script TestForCancelledGame
+define script ConfirmCancelMessage
+define script PositionLanterns
+define script BowlingCheckForObstructions(Pos, SearchSize)
+define script PlayPinSound
+define script Bowl(WhosBowl, RoundNo, WhatBowl)
+define script CowFrame(RoundNo)
+define script PositionBall
+define script MoveCreatureIntoPosition
+define script DeleteFelledPins
+define script PlayGame
+define script DeleteBowlingBall
+define script ResetBowlingScore
+define script BowlingFireCheck
+define script MoveTykeToFinishPos
+define script MoveTykeToNearCreaturePos
+define script CreateBowlingHighlightWithReminder
+define script PositionPins
+define script AdvisorsHappy
+define script ScoreRound(RoundNo, WhosBowl)
+define script PositionBowlingCamera
+define script CowHappy
+define script AdvisorsUnhappy
+define script PositionBrotherhoodLogo
+define script PlayerLostBowling
+define script PlayerFrame(RoundNo)
+define script MoveTykeToPinsPos
+define script CreateCow
+define script PositionFences
+define script TestForFelledPins
+define script PlayerBowlsBall
+define script CreateBowlingHighlight
+define script PlayerWonBowling
+define script DeleteAnyRemainingPins
+define script ReactionToBowl(WhosBowl, WhatBowl, RoundNo)
+define script CowUnhappy
+define script MakeSureCreatureIsAtBowling
+define script BadBowl(WhosBowl)
+define script CommentOnHowGameIsGoing(WhosBowl, WhatBowl, RoundNo)
+define script TykeLooksAtBall
+define script PlayersCreatureBowlsBall(RoundNo)
+define script DisplayBowlingScore(WhoIsBowling, WhatBowl, RoundNo)
+define script CleanUpCreature
+define script CreateScoreboards
+define script Intro
+define script MakePinsMovable(Moveable)
+define script ComplainAboutCheating
+
+begin script Bowling
+	Area[5]
+	SearchSize = 20
+start
+	PinPos = marker at [694.319, 48.91, 1291.9722]
+	BBallPos = marker at [PinPos] + ([-80, 0])
+	BowlingPos = marker at [BBallPos] - [14, 0, 0]
+	CowInitialPosCI = marker at [597.6545, 48.91, 1279.568]
+	PlayerCreatureInitialPos = marker at [597.6187, 48.91, 1300.5262]
+	BowlingDYKPos = marker at [584.5299, 48.91, 1277.5367]
+	Area[0] = marker at [PinPos]
+	Area[1] = marker at [BBallPos]
+	Area[2] = marker at [630.6587, 48.91, 1291.8635]
+	Area[3] = marker at [650.3812, 48.91, 1292.2659]
+	Area[4] = marker at [670.5403, 48.91, 1291.7822]
+	MyCreature = get player 1 creature
+	run script CreateCow
+	run background script KeepCreatureHealthy(CowBowling)
+	run background script BowlingFireCheck
+	run script PositionBrotherhoodLogo
+	run script PositionFences
+	run script PositionLanterns
+	run script CreateScoreboards
+	run script PositionPins
+	run script PositionBall
+	run background script BowlingCheckForObstructions(Area[0], SearchSize)
+	run background script BowlingCheckForObstructions(Area[1], SearchSize)
+	run background script BowlingCheckForObstructions(Area[2], SearchSize)
+	run background script BowlingCheckForObstructions(Area[3], SearchSize)
+	run background script BowlingCheckForObstructions(Area[4], SearchSize)
+	wait until BowlingReadyToStart == 1
+	OkToDisplayScrollNow = 1
+	DojoReminderBowling = 1
+	run background script DidYouKnow(BowlingDYKPos, variable HELP_TEXT_COW_BOWLING_DYK_01, variable DYK_MISC)
+	while BowlingTrialCompleted == 0 
+		run script PositionPins
+		run script PositionBall
+		run script PlayGame
+	end while
+	run script Dojo(CowBowling)
+	move CowBowling position to [CowInitialPosCI] radius 0
+	DojoReminderBowling = 0
+	PlayingForFun = 1
+	while PlayingForFun == 1
+		wait until get distance from [CowBowling] to [CowInitialPosCI] < 1 or 10 seconds
+		if not get distance from [CowBowling] to [CowInitialPosCI] < 2
+			set CowBowling position to [CowInitialPosCI]
+		end if
+		set CowBowling focus to [PinPos]
+		run script PositionPins
+		run script PositionBall
+		run script PlayGame
+	end while
+	run background script DeleteDYK(BowlingDYKPos)
+	BowlingGameRunning = 0
+end script Bowling
+
+begin script PlayGame
+	CurrentRound = 1
+start
+	PlayerUnclaimedPoints = 0
+	CowUnclaimedPoints = 0
+	BowlingTrialStarted = 0
+	PlayerTotalScore = 0
+	CowTotalScore = 0
+	PlayerTotalBowled = 0
+	CowTotalBowled = 0
+	PlayerLastScoreBowled = 0
+	CowLastScoreBowled = 0
+	PlayerFirstBallScore = 0
+	PlayerSecondBallScore = 0
+	CowFirstBallScore = 0
+	CowSecondBallScore = 0
+	AmountOfPinsHit = 0
+	CancelCurrentGame = 0
+	if PlayingForFun == 0
+		run script CreateBowlingHighlightWithReminder
+		run background script MoveCreatureIntoPosition
+	else
+		run script CreateBowlingHighlight
+	end if
+	BowlingBeingPlayed = 1
+	run script ResetBowlingScore
+	if BowlingIntroPlayed == 0
+		run script Intro
+		BowlingIntroPlayed = 1
+	end if
+	BowlingTrialStarted = 1
+	run background script TestForCancelledGame
+	run background script MakeSureCreatureIsAtBowling
+	if PlayingForFun == 0
+		run background script TykesBehaviourInBowling
+	end if
+	PlayerPlayed = 1
+	while CurrentRound <= BowlingMaxRounds and CancelCurrentGame == 0
+		set RoundScoreboard score CurrentRound
+		run script PlayerFrame(CurrentRound)
+		set MainScoreboard score 0
+		run script CowFrame(CurrentRound)
+		set MainScoreboard score 0
+		CurrentRound++
+	end while
+	if CancelCurrentGame == 0
+		if PlayerTotalScore > CowTotalScore
+			run script PlayerWonBowling
+		else
+			run script PlayerLostBowling
+		end if
+	end if
+end script PlayGame
+
+begin script PlayerFrame(RoundNo)
+	Strike = 0
+	Spare = 0
+	Player = 0
+	FirstBowl = 1
+	SecondBowl = 2
+	ExtraBowl = 3
+start
+	run background script ScoreRound(RoundNo, 0)
+	if CancelCurrentGame == 0
+		run script Bowl(Player, RoundNo, FirstBowl)
+		if AmountOfPinsHit == 10
+			Strike = 1
+		end if
+		PlayerFirstBallScore = PlayerLastScoreBowled
+		if Strike == 0 or RoundNo == BowlingMaxRounds
+			run script Bowl(Player, RoundNo, SecondBowl)
+			if PlayerFirstBallScore + PlayerLastScoreBowled == 10
+				Spare = 1
+			end if
+		end if
+		PlayerSecondBallScore = PlayerLastScoreBowled
+		if RoundNo == BowlingMaxRounds
+			if Strike == 1 or Spare == 1
+				run script Bowl(Player, RoundNo, ExtraBowl)
+			end if
+		end if
+	end if
+end script PlayerFrame
+
+begin script CowFrame(RoundNo)
+	Strike = 0
+	Spare = 0
+	Cow = 1
+	FirstBowl = 1
+	SecondBowl = 2
+	ExtraBowl = 3
+start
+	run background script ScoreRound(RoundNo, 1)
+	if CancelCurrentGame == 0
+		run script Bowl(Cow, RoundNo, FirstBowl)
+		if AmountOfPinsHit == 10
+			Strike = 1
+		end if
+		CowFirstBallScore = CowLastScoreBowled
+		if Strike == 0 or RoundNo == BowlingMaxRounds
+			run script Bowl(Cow, RoundNo, SecondBowl)
+			if CowFirstBallScore + CowLastScoreBowled == 10
+				Spare = 1
+			end if
+		end if
+		CowSecondBallScore = CowLastScoreBowled
+		if RoundNo == BowlingMaxRounds
+			if Strike == 1 or Spare == 1
+				run script Bowl(Cow, RoundNo, ExtraBowl)
+			end if
+		end if
+	end if
+end script CowFrame
+
+begin script Bowl(WhosBowl, RoundNo, WhatBowl)
+	Player = 0
+	Cow = 1
+	FirstBowl = 1
+	SecondBowl = 2
+	ExtraBowl = 3
+	MissedPins = 0
+	Spare = 1
+	Strike = 2
+	RoundsLeft = 0
+	BallInfluence = 0
+	PlayerBowlBallPos = marker at [584.9398, 75.7081, 1290.7913]
+	PlayerBowlBallFoc = marker at [631.8033, 49.3994, 1291.0276]
+	LookingAtCowBowlingPos = marker at [588.262, 60.655, 1263.583]
+	LookingAtCowBowlingFoc = marker at [621.828, 49.162, 1292.27]
+start
+	if CancelCurrentGame == 0
+		RoundsLeft = BowlingMaxRounds - RoundNo
+		if WhosBowl == Cow or PlayingForFun == 1
+			run script PositionBall
+		end if
+		if WhatBowl == FirstBowl
+			run script PositionPins
+		elsif WhatBowl == SecondBowl
+			if RoundNo == BowlingMaxRounds and AmountOfPinsHit == 10
+				run script PositionPins
+			end if
+		elsif WhatBowl == ExtraBowl
+			if PlayerFirstBallScore + AmountOfPinsHit == 10 or CowFirstBallScore + AmountOfPinsHit == 10 or AmountOfPinsHit == 10
+				run script PositionPins
+			end if
+		end if
+		if CancelCurrentGame == 0
+			if RoundNo == 1 and WhatBowl == FirstBowl and WhosBowl == Player
+				run script PositionBowlingCamera
+			end if
+		end if
+		if WhosBowl == Player
+			if PlayingForFun == 0
+				if PlayerPlayed == 0
+					if RoundNo != 1
+						begin dialogue
+							if CancelCurrentGame == 0
+								NextMessage = variable constant from HELP_TEXT_COW_BOWLING_YOUR_GO_01 to HELP_TEXT_COW_BOWLING_YOUR_GO_05
+							end if
+							say single line constant NextMessage by CowBowling
+							enable BowlingBall pickup
+							enable BowlingBall moveable
+							BallInfluence = create influence on BowlingBall radius 5
+							wait until read or not BowlingBall exists or BowlingBall is HELD or BowlingCancelGameHighlight clicked
+						end dialogue
+					end if
+					run script PlayerBowlsBall
+				else
+					begin dialogue
+						if RoundsLeft == 2 and WhatBowl == FirstBowl
+							say single line HELP_TEXT_COW_BOWLING_COW_EXPLAINS_30 by CowBowling
+							wait until read
+						elsif RoundsLeft == 1 and WhatBowl == FirstBowl
+							say single line HELP_TEXT_COW_BOWLING_COW_EXPLAINS_40 by CowBowling
+							wait until read
+						elsif RoundsLeft == 0 and WhatBowl == FirstBowl
+							say single line HELP_TEXT_COW_BOWLING_COW_EXPLAINS_40 by CowBowling
+							wait until read
+						end if
+					end dialogue
+					run script PlayersCreatureBowlsBall(RoundNo)
+				end if
+			else
+				begin dialogue
+					if RoundNo == 1 and WhatBowl == FirstBowl
+						say single line HELP_TEXT_COW_BOWLING_GOD_ARRIVES_10 by CowBowling
+						wait until read or not BowlingBall exists or BowlingBall is HELD or BowlingCancelGameHighlight clicked
+					end if
+					if RoundsLeft == 2 and WhatBowl == FirstBowl
+						say single line HELP_TEXT_COW_BOWLING_COW_EXPLAINS_30 by CowBowling
+						wait until read
+					elsif RoundsLeft == 1 and WhatBowl == FirstBowl
+						say single line HELP_TEXT_COW_BOWLING_COW_EXPLAINS_40 by CowBowling
+						wait until read
+					elsif RoundsLeft == 0 and WhatBowl == FirstBowl
+						say single line HELP_TEXT_COW_BOWLING_COW_EXPLAINS_50 by CowBowling
+						wait until read
+					end if
+					if CancelCurrentGame == 0
+						NextMessage = variable constant from HELP_TEXT_COW_BOWLING_YOUR_GO_01 to HELP_TEXT_COW_BOWLING_YOUR_GO_05
+					end if
+					say single line constant NextMessage by CowBowling
+					enable BowlingBall pickup
+					enable BowlingBall moveable
+					BallInfluence = create influence on BowlingBall radius 5
+					wait until read or not BowlingBall exists or BowlingBall is HELD or BowlingCancelGameHighlight clicked
+				end dialogue
+				run script PlayerBowlsBall
+			end if
+		else
+			run script CowBowlsBall(WhatBowl)
+		end if
+	end if
+	run script MakePinsMovable(0)
+	if CancelCurrentGame == 0
+		run script WaitUntilPinsStopMoving
+		run script TestForFelledPins
+		if Tyke exists and TykeIsReady == 1 and TykeFree == 1 and WhosBowl == Player and PlayerPlayed == 1 and PlayingForFun == 0
+			FindAnActionForTykeNow = 1
+			wait until TykeHasDoneAction == 1 or TykeHasNoActionToDo == 1 or CancelCurrentGame == 1 or BowlingBeingPlayed == 0 or 20 seconds
+			if TykeHasDoneAction == 1
+				run script TestForFelledPins
+			end if
+		end if
+		run script DeleteFelledPins
+		run script DeleteBowlingBall
+		if RoundNo < BowlingMaxRounds
+			if WhatBowl == SecondBowl
+				run script DeleteAnyRemainingPins
+			end if
+		elsif RoundNo == BowlingMaxRounds
+			if WhatBowl == SecondBowl
+				if WhosBowl == Player
+					if PlayerFirstBallScore < 10
+						run script DeleteAnyRemainingPins
+					end if
+				else
+					if CowFirstBallScore < 10
+						run script DeleteAnyRemainingPins
+					end if
+				end if
+			elsif WhatBowl == ExtraBowl
+				run script DeleteAnyRemainingPins
+			end if
+		end if
+		if WhosBowl == Player
+			PlayerLastScoreBowled = AmountOfPinsHit
+			PlayerTotalBowled++
+		else
+			CowLastScoreBowled = AmountOfPinsHit
+			CowTotalBowled++
+		end if
+		if PlayingForFun == 0 and WhosBowl == Player
+			move MyCreature position to [PlayerCreatureInitialPos] radius 0
+		elsif WhosBowl == Cow
+			if not (RoundNo < BowlingMaxRounds and WhatBowl == FirstBowl and CowLastScoreBowled != 10 or RoundNo == BowlingMaxRounds and WhatBowl == FirstBowl or RoundNo == BowlingMaxRounds and WhatBowl == SecondBowl and CowFirstBallScore == 10 or RoundNo == BowlingMaxRounds and WhatBowl == SecondBowl and CowFirstBallScore + CowLastScoreBowled == 10)
+				move CowBowling position to [CowInitialPosCI] radius 0
+			end if
+		end if
+		run script DisplayBowlingScore(WhosBowl, WhatBowl, RoundNo)
+		wait until 2 seconds
+		if PlayingForFun == 0 and WhosBowl == Player
+			set MyCreature focus to [PinPos]
+		elsif WhosBowl == Cow
+			set CowBowling focus to [PinPos]
+		end if
+		run script ReactionToBowl(WhosBowl, WhatBowl, RoundNo)
+	end if
+end script Bowl
+
+begin script CreateBowlingHighlight
+	Highlight = 0
+	HighlightPos = marker at [BBallPos]
+start
+	Highlight = create highlight CHALLENGE_BOWLING HIGHLIGHT_CHALLENGE at [HighlightPos]
+	ALTITUDE of Highlight = 10
+	run script ChallengeHighlightNotifyCI(Highlight, HighlightPos, variable HELP_TEXT_GENERAL_CHALLENGE_START_04)
+	delete Highlight
+end script CreateBowlingHighlight
+
+begin script CreateBowlingHighlightWithReminder
+	Highlight = 0
+	HighlightPos = marker at [BBallPos]
+	PlayerCreatureReady = 0
+	RemindPlayerTimer = create timer for 0 seconds
+	RandomNotify = 0
+	OrigPos = 0
+	OrigFoc = 0
+	DoneFirstReminder = 0
+	FirstTimeReminderPos = marker at [588.7317, 57.499, 1282.358]
+	FirstTimeReminderFoc = marker at [611.2256, 49.2495, 1286.488]
+	TykeInitialPos = marker at [584.418, 48.91, 1302.341]
+start
+	wait until OkToDisplayScrollNow == 1
+	Highlight = create highlight CHALLENGE_BOWLING HIGHLIGHT_TRIAL at [HighlightPos]
+	ALTITUDE of Highlight = 10
+	while PlayerCreatureReady == 0
+		RandomNotify = variable constant from HELP_TEXT_GENERAL_TRIAL_STARTS_01 to HELP_TEXT_GENERAL_TRIAL_STARTS_08
+		if get distance from (camera position) to [Highlight] < 100 and Highlight viewed
+			if get RemindPlayerTimer time remaining == 0
+				begin dialogue
+					if good spirit speaks constant RandomNotify
+						eject good spirit
+						make good spirit point at [Highlight] in world
+					else
+						eject evil spirit
+						make evil spirit point at [Highlight] in world
+					end if
+					say single line constant RandomNotify
+					wait until read or Highlight clicked
+				end dialogue
+				set RemindPlayerTimer time to 30 seconds
+			end if
+		end if
+		if Highlight clicked
+			if ScriptLockedCreature == 0
+				ScriptLockedCreature = 1
+				enable Highlight active
+				clear clicked object
+				clear spells on MyCreature
+				enable MyCreature immune to spells
+				if Tyke exists and TykeIsReady == 1 and TykeFree == 1
+					clear spells on Tyke
+					enable Tyke immune to spells
+				end if
+				set fade red 0 green 0 blue 0 time 1
+				wait until fade ready
+				set MyCreature position to [PlayerCreatureInitialPos]
+				if Tyke exists and TykeIsReady == 1 and TykeFree == 1
+					set Tyke position to [TykeInitialPos]
+				end if
+				set fade in time 1
+				PlayerCreatureReady = 1
+			elsif ScriptLockedCreature == 1
+				run script ScriptLockedHighlight(Highlight)
+			end if
+		end if
+		wait until 0.1 seconds
+	end while
+	delete Highlight
+end script CreateBowlingHighlightWithReminder
+
+begin script PositionFences
+	FencingOffset = 0
+	Counter = 0
+	BowlingPenPos = marker at [PinPos]
+start
+	BowlingPen = create with angle -90 and scale 0.8 FEATURE FEATURE_INFO_BOWLING_END at [BowlingPenPos]
+	ALTITUDE of BowlingPen = -3
+	enable BowlingPen indestructible
+	disable BowlingPen set on fire
+end script PositionFences
+
+begin script PositionRocksBehindFences
+	RockOffset = 0
+	TreeOffset = 0
+	Counter = 0
+start
+	while Counter < 9
+		if Counter == 0
+			RockOffset = marker at ([15, 0])
+		elsif Counter == 1
+			RockOffset = marker at ([15, 6])
+		elsif Counter == 2
+			RockOffset = marker at ([15, -6])
+		elsif Counter == 3
+			RockOffset = marker at ([9, -9.2])
+		elsif Counter == 4
+			RockOffset = marker at ([5, -9.5])
+		elsif Counter == 5
+			RockOffset = marker at ([1, -9.7])
+		elsif Counter == 6
+			RockOffset = marker at ([9, 10.1])
+		elsif Counter == 7
+			RockOffset = marker at ([5, 9.9])
+		elsif Counter == 8
+			RockOffset = marker at ([1, 9.6])
+		end if
+		if Counter < 3
+			BowlingRock[Counter] = create with angle 90 and scale 1.5 OBJECT MOBILE_STATIC_INFO_SQUAREROCK_LIMESTONE at [PinPos] + [RockOffset]
+		else
+			BowlingRock[Counter] = create with angle 0 and scale 1 OBJECT MOBILE_STATIC_INFO_SQUAREROCK_LIMESTONE at [PinPos] + [RockOffset]
+		end if
+		enable BowlingRock[Counter] indestructible
+		disable BowlingRock[Counter] moveable
+		disable BowlingRock[Counter] pickup
+		disable BowlingRock[Counter] set on fire
+		Counter++
+	end while
+	Counter = 0
+	while Counter < 4
+		if Counter == 0
+			TreeOffset = marker at ([13.5, 10])
+		elsif Counter == 1
+			TreeOffset = marker at ([13.5, -9])
+		elsif Counter == 2
+			TreeOffset = marker at ([-2, 10])
+		elsif Counter == 3
+			TreeOffset = marker at ([-2, -10])
+		end if
+		BowlingTree[Counter] = create TREE TREE_INFO_PALM_B at [PinPos] + [TreeOffset]
+		enable BowlingTree[Counter] indestructible
+		disable BowlingTree[Counter] moveable
+		disable BowlingTree[Counter] pickup
+		disable BowlingTree[Counter] set on fire
+		Counter++
+	end while
+	wait until not BowlingRock[8] is FLYING
+end script PositionRocksBehindFences
+
+begin script PositionLanterns
+	Lantern[4]
+	LanternOffset = 0
+	TreeOffset = 0
+	Counter = 0
+start
+	while Counter < 4
+		if Counter == 0
+			LanternOffset = marker at ([12.5, 8.5])
+		elsif Counter == 1
+			LanternOffset = marker at ([12.5, -8.5])
+		elsif Counter == 2
+			LanternOffset = marker at ([10, 7])
+		elsif Counter == 3
+			LanternOffset = marker at ([10, -7])
+		end if
+		if Counter < 2
+			Lantern[Counter] = create with angle 0 and scale 1 OBJECT MOBILE_STATIC_INFO_STREET_LANTERN at [PinPos] + [LanternOffset]
+		else
+			Lantern[Counter] = create with angle 0 and scale 1 OBJECT MOBILE_STATIC_INFO_STREET_LANTERN at [BBallPos] + [LanternOffset]
+		end if
+		enable Lantern[Counter] indestructible
+		disable Lantern[Counter] moveable
+		disable Lantern[Counter] pickup
+		Counter++
+	end while
+	Counter = 0
+	while Counter < 2
+		if Counter == 0
+			TreeOffset = marker at ([-9, 12])
+		elsif Counter == 1
+			TreeOffset = marker at ([-9, -11.5])
+		end if
+		BowlingTree[Counter] = create TREE TREE_INFO_PALM_B at [PinPos] + [TreeOffset]
+		enable BowlingTree[Counter] indestructible
+		disable BowlingTree[Counter] moveable
+		disable BowlingTree[Counter] pickup
+		disable BowlingTree[Counter] set on fire
+		Counter++
+	end while
+end script PositionLanterns
+
+begin script PositionBrotherhoodLogo
+start
+end script PositionBrotherhoodLogo
+
+begin script PositionBall
+	BowlInf = 0
+start
+	if not BowlingBall exists
+		BowlingBall = create with angle 0 and scale 1.3 OBJECT MOBILE_STATIC_INFO_TOY_BOWLING_BALL at [BBallPos]
+		BowlInf = create influence on BowlingBall radius 5
+		release BowlInf
+	end if
+	disable BowlingBall pickup
+	disable BowlingBall moveable
+	enable BowlingBall indestructible
+	disable BowlingBall set on fire
+	enable jc special SJC_ALWAYS_VISIBLE on BowlingBall with number 0
+end script PositionBall
+
+begin script PositionPins
+	Counter = 0
+	PinOffset = 0
+	AngleOfPin = 0
+start
+	while Counter < 10
+		if Counter == 0
+			PinOffset = marker at [0, 0, 0]
+		elsif Counter == 1
+			PinOffset = marker at [2 * SizeCI, 0, -SizeCI]
+		elsif Counter == 2
+			PinOffset = marker at [2 * SizeCI, 0, SizeCI]
+		elsif Counter == 3
+			PinOffset = marker at [4 * SizeCI, 0, (-2) * SizeCI]
+		elsif Counter == 4
+			PinOffset = marker at [4 * SizeCI, 0, 0]
+		elsif Counter == 5
+			PinOffset = marker at [4 * SizeCI, 0, 2 * SizeCI]
+		elsif Counter == 6
+			PinOffset = marker at [6 * SizeCI, 0, (-3) * SizeCI]
+		elsif Counter == 7
+			PinOffset = marker at [6 * SizeCI, 0, -SizeCI]
+		elsif Counter == 8
+			PinOffset = marker at [6 * SizeCI, 0, SizeCI]
+		elsif Counter == 9
+			PinOffset = marker at [6 * SizeCI, 0, 3 * SizeCI]
+		end if
+		AngleOfPin = number from -60 to 60
+		if not Pin[Counter] exists
+			Pin[Counter] = create with angle AngleOfPin and scale 1.3 OBJECT MOBILE_STATIC_INFO_TOY_SKITTLE at [PinPos] + [PinOffset]
+			enable Pin[Counter] indestructible
+			disable Pin[Counter] pickup
+			disable Pin[Counter] moveable
+			disable Pin[Counter] set on fire
+			enable jc special SJC_ALWAYS_VISIBLE on Pin[Counter] with number 0
+		end if
+		Counter++
+	end while
+end script PositionPins
+
+begin script PlayerBowlsBall
+	BallBowled = 0
+	BallInfluence = 0
+start
+	while BallBowled == 0 and CancelCurrentGame == 0
+		if BowlingBall exists
+			if BowlingBall is HELD
+				if not get distance from (hand position) to [BBallPos] < 14
+					delete BowlingBall with fade
+					run script PositionBall
+					enable BowlingBall pickup
+					enable BowlingBall moveable
+					BallInfluence = create influence on BowlingBall radius 5
+					begin dialogue
+						say single line HELP_TEXT_COW_BOWLING_150 by CowBowling
+						wait until read or BowlingBall is HELD
+					end dialogue
+				end if
+			end if
+			if not BowlingBall is HELD
+				if not get distance from [BowlingBall] to [BBallPos] < 15
+					BallBowled = 1
+					BallInfluence = create anti influence on BowlingBall radius 5
+					disable BowlingBall pickup
+					run background script PlayPinSound
+					run script MakePinsMovable(1)
+				end if
+			end if
+		end if
+	end while
+	wait until not BowlingBall is FLYING or not BowlingBall exists or not get distance from [BowlingBall] to [BBallPos] < 90
+end script PlayerBowlsBall
+
+begin script WaitUntilPinsStopMoving
+	Counter = 0
+start
+	while Counter < 10
+		if Pin[Counter] exists
+			wait until not Pin[Counter] is FLYING or 5 seconds
+		end if
+		Counter++
+	end while
+end script WaitUntilPinsStopMoving
+
+begin script TestForFelledPins
+	PinXAngle = 0
+	PinZAngle = 0
+	Felled = 30
+	Counter = 0
+start
+	if Tyke exists and TykeIsReady == 1 and TykeFree == 1
+		NumberOfPinsMissed = 0
+	end if
+	while Counter < 10
+		if Pin[Counter] exists
+			PinXAngle = XANGLE of Pin[Counter]
+			PinZAngle = ZANGLE of Pin[Counter]
+			if PinXAngle < -Felled or PinXAngle > Felled or (PinZAngle < -Felled or PinZAngle > Felled)
+				PinHit[Counter] = 1
+			else
+				PinHit[Counter] = 0
+				if Tyke exists and TykeIsReady == 1 and TykeFree == 1
+					NumberOfPinsMissed++
+				end if
+			end if
+		end if
+		Counter++
+	end while
+end script TestForFelledPins
+
+begin script DeleteBowlingBall
+start
+	if BowlingBall exists
+		delete BowlingBall with fade
+	end if
+end script DeleteBowlingBall
+
+begin script DeleteFelledPins
+	Counter = 0
+start
+	AmountOfPinsHit = 0
+	while Counter < 10
+		if Pin[Counter] exists
+			if PinHit[Counter] == 1
+				delete Pin[Counter] with fade
+				AmountOfPinsHit++
+			end if
+		end if
+		Counter++
+	end while
+end script DeleteFelledPins
+
+begin script DeleteAnyRemainingPins
+	Counter = 0
+start
+	while Counter < 10
+		if Pin[Counter] exists
+			delete Pin[Counter] with fade
+		end if
+		Counter++
+	end while
+end script DeleteAnyRemainingPins
+
+begin script CreateScoreboards
+	PlayerScoreboardPos = marker at [BBallPos] + [20, 0, 15]
+	CowScoreboardPos = marker at [BBallPos] + [20, 0, -15]
+	MainScoreboardPos = marker at [PinPos] + [16, 0, 0]
+	RoundScoreboardPos = marker at [BBallPos] - [0, 0, -15]
+start
+	PlayerScoreboard = create highlight CHALLENGE_NONE SCRIPT_HIGHLIGHT_INFO_SCOREBOARD_BIG at [PlayerScoreboardPos]
+	CowScoreboard = create highlight CHALLENGE_NONE SCRIPT_HIGHLIGHT_INFO_SCOREBOARD_BIG at [CowScoreboardPos]
+	MainScoreboard = create highlight CHALLENGE_NONE SCRIPT_HIGHLIGHT_INFO_SCOREBOARD at [MainScoreboardPos]
+	RoundScoreboard = create highlight CHALLENGE_NONE SCRIPT_HIGHLIGHT_INFO_SCOREBOARD at [RoundScoreboardPos]
+	ALTITUDE of PlayerScoreboard = 0
+	ALTITUDE of CowScoreboard = 0
+	ALTITUDE of MainScoreboard = 7
+	ALTITUDE of RoundScoreboard = 0
+	enable PlayerScoreboard indestructible
+	enable CowScoreboard indestructible
+	enable MainScoreboard indestructible
+	enable RoundScoreboard indestructible
+	enable jc special SJC_ALWAYS_VISIBLE on MainScoreboard with number 0
+end script CreateScoreboards
+
+begin script ScoreRound(RoundNo, WhosBowl)
+	PlayerOldBallCount = 0
+	PlayerThisScore = 0
+	CowOldBallCount = 0
+	CowThisScore = 0
+	DoneScoring = 0
+	UnclaimedPoints = 0
+start
+	while DoneScoring == 0
+		if WhosBowl == 0
+			PlayerOldBallCount = PlayerTotalBowled
+			wait until PlayerOldBallCount != PlayerTotalBowled
+			if PlayerLastScoreBowled == 10
+				PlayerOldBallCount = PlayerTotalBowled
+				PlayerUnclaimedPoints += 10
+				UnclaimedPoints = 10
+				wait until PlayerOldBallCount != PlayerTotalBowled
+				PlayerThisScore = 10 + PlayerLastScoreBowled
+				PlayerUnclaimedPoints += PlayerLastScoreBowled
+				UnclaimedPoints += PlayerLastScoreBowled
+				PlayerOldBallCount = PlayerTotalBowled
+				wait until PlayerOldBallCount != PlayerTotalBowled
+				PlayerThisScore += PlayerLastScoreBowled
+				PlayerUnclaimedPoints += PlayerLastScoreBowled
+				UnclaimedPoints += PlayerLastScoreBowled
+			else
+				PlayerThisScore = PlayerLastScoreBowled
+				PlayerUnclaimedPoints += PlayerLastScoreBowled
+				UnclaimedPoints = PlayerLastScoreBowled
+				PlayerOldBallCount = PlayerTotalBowled
+				wait until PlayerOldBallCount != PlayerTotalBowled
+				PlayerUnclaimedPoints += PlayerLastScoreBowled
+				UnclaimedPoints += PlayerLastScoreBowled
+				if PlayerThisScore + PlayerLastScoreBowled == 10
+					PlayerOldBallCount = PlayerTotalBowled
+					wait until PlayerOldBallCount != PlayerTotalBowled
+					PlayerThisScore = 10 + PlayerLastScoreBowled
+					PlayerUnclaimedPoints += PlayerLastScoreBowled
+					UnclaimedPoints += PlayerLastScoreBowled
+				else
+					PlayerThisScore += PlayerLastScoreBowled
+				end if
+			end if
+		else
+			CowOldBallCount = CowTotalBowled
+			wait until CowOldBallCount != CowTotalBowled
+			if CowLastScoreBowled == 10
+				CowOldBallCount = CowTotalBowled
+				CowUnclaimedPoints += 10
+				UnclaimedPoints = 10
+				wait until CowOldBallCount != CowTotalBowled
+				CowThisScore = 10 + CowLastScoreBowled
+				CowUnclaimedPoints += CowLastScoreBowled
+				UnclaimedPoints += CowLastScoreBowled
+				CowOldBallCount = CowTotalBowled
+				wait until CowOldBallCount != CowTotalBowled
+				CowThisScore += CowLastScoreBowled
+				CowUnclaimedPoints += CowLastScoreBowled
+				UnclaimedPoints += CowLastScoreBowled
+			else
+				CowThisScore = CowLastScoreBowled
+				CowUnclaimedPoints += CowLastScoreBowled
+				UnclaimedPoints = CowLastScoreBowled
+				CowOldBallCount = CowTotalBowled
+				wait until CowOldBallCount != CowTotalBowled
+				CowUnclaimedPoints += CowLastScoreBowled
+				UnclaimedPoints += CowLastScoreBowled
+				if CowThisScore + CowLastScoreBowled == 10
+					CowOldBallCount = CowTotalBowled
+					wait until CowOldBallCount != CowTotalBowled
+					CowThisScore = 10 + CowLastScoreBowled
+					CowUnclaimedPoints += CowLastScoreBowled
+					UnclaimedPoints += CowLastScoreBowled
+				else
+					CowThisScore += CowLastScoreBowled
+				end if
+			end if
+		end if
+		if WhosBowl == 0
+			PlayerTotalScore += PlayerThisScore
+			PlayerUnclaimedPoints -= UnclaimedPoints
+		else
+			CowTotalScore += CowThisScore
+			CowUnclaimedPoints -= UnclaimedPoints
+		end if
+		DoneScoring = 1
+		until CancelCurrentGame == 1
+	end while
+	if CancelCurrentGame == 1
+		PlayerUnclaimedPoints = 0
+		CowUnclaimedPoints = 0
+		PlayerTotalScore = 0
+		CowTotalScore = 0
+		PlayerTotalBowled = 0
+		CowTotalBowled = 0
+		PlayerLastScoreBowled = 0
+		CowLastScoreBowled = 0
+		PlayerFirstBallScore = 0
+		PlayerSecondBallScore = 0
+		CowFirstBallScore = 0
+		CowSecondBallScore = 0
+		AmountOfPinsHit = 0
+	end if
+end script ScoreRound
+
+begin script DisplayBowlingScore(WhoIsBowling, WhatBowl, RoundNo)
+	PlayerIsBowling = 0
+	CowIsBowling = 1
+	FirstBowl = 1
+	SecondBowl = 2
+	ExtraBowl = 3
+start
+	if CancelCurrentGame == 0
+		if WhoIsBowling == PlayerIsBowling
+			if RoundNo < BowlingMaxRounds
+				if WhatBowl == FirstBowl
+					if PlayerLastScoreBowled == 10
+						set MainScoreboard score 11
+					else
+						set MainScoreboard score PlayerLastScoreBowled
+					end if
+				elsif WhatBowl == SecondBowl
+					if PlayerFirstBallScore + PlayerLastScoreBowled == 10
+						set MainScoreboard score 10
+					else
+						set MainScoreboard score PlayerFirstBallScore + PlayerLastScoreBowled
+					end if
+				end if
+			elsif RoundNo == BowlingMaxRounds
+				if WhatBowl == FirstBowl
+					if PlayerLastScoreBowled == 10
+						set MainScoreboard score 11
+					elsif PlayerLastScoreBowled < 10
+						set MainScoreboard score PlayerLastScoreBowled
+					end if
+				elsif WhatBowl == SecondBowl
+					if PlayerFirstBallScore == 10
+						if PlayerLastScoreBowled == 10
+							set MainScoreboard score 11
+						else
+							set MainScoreboard score PlayerLastScoreBowled
+						end if
+					else
+						if PlayerLastScoreBowled + PlayerFirstBallScore == 10
+							set MainScoreboard score 10
+						else
+							set MainScoreboard score PlayerFirstBallScore + PlayerLastScoreBowled
+						end if
+					end if
+				elsif WhatBowl == ExtraBowl
+					if PlayerSecondBallScore == 10
+						if PlayerLastScoreBowled == 10
+							set MainScoreboard score 11
+						else
+							set MainScoreboard score PlayerLastScoreBowled
+						end if
+					elsif PlayerFirstBallScore + PlayerSecondBallScore == 10
+						if PlayerLastScoreBowled == 10
+							set MainScoreboard score 11
+						else
+							set MainScoreboard score PlayerLastScoreBowled
+						end if
+					else
+						if PlayerLastScoreBowled + PlayerSecondBallScore == 10
+							set MainScoreboard score 10
+						else
+							set MainScoreboard score PlayerSecondBallScore + PlayerLastScoreBowled
+						end if
+					end if
+				end if
+			end if
+			set PlayerScoreboard score PlayerTotalScore
+		else
+			if RoundNo < BowlingMaxRounds
+				if WhatBowl == FirstBowl
+					if CowLastScoreBowled == 10
+						set MainScoreboard score 11
+					else
+						set MainScoreboard score CowLastScoreBowled
+					end if
+				elsif WhatBowl == SecondBowl
+					if CowFirstBallScore + CowLastScoreBowled == 10
+						set MainScoreboard score 10
+					else
+						set MainScoreboard score CowFirstBallScore + CowLastScoreBowled
+					end if
+				end if
+			elsif RoundNo == BowlingMaxRounds
+				if WhatBowl == FirstBowl
+					if CowLastScoreBowled == 10
+						set MainScoreboard score 11
+					elsif CowLastScoreBowled < 10
+						set MainScoreboard score CowLastScoreBowled
+					end if
+				elsif WhatBowl == SecondBowl
+					if CowFirstBallScore == 10
+						if CowLastScoreBowled == 10
+							set MainScoreboard score 11
+						else
+							set MainScoreboard score CowLastScoreBowled
+						end if
+					else
+						if CowLastScoreBowled + CowFirstBallScore == 10
+							set MainScoreboard score 10
+						else
+							set MainScoreboard score CowFirstBallScore + CowLastScoreBowled
+						end if
+					end if
+				elsif WhatBowl == ExtraBowl
+					if CowSecondBallScore == 10
+						if CowLastScoreBowled == 10
+							set MainScoreboard score 11
+						else
+							set MainScoreboard score CowLastScoreBowled
+						end if
+					elsif CowFirstBallScore + CowSecondBallScore == 10
+						if CowLastScoreBowled == 10
+							set MainScoreboard score 11
+						else
+							set MainScoreboard score CowLastScoreBowled
+						end if
+					else
+						if CowLastScoreBowled + CowSecondBallScore == 10
+							set MainScoreboard score 10
+						else
+							set MainScoreboard score CowSecondBallScore + CowLastScoreBowled
+						end if
+					end if
+				end if
+			end if
+			set CowScoreboard score CowTotalScore
+		end if
+	end if
+end script DisplayBowlingScore
+
+begin script ResetBowlingScore
+start
+	set MainScoreboard score 0
+	set PlayerScoreboard score 0
+	set CowScoreboard score 0
+	set RoundScoreboard score 0
+end script ResetBowlingScore
+
+begin script PlayerWonBowling
+	ViewFinalScorePos = marker at [660.97, 60.3119, 1291.8931]
+	ViewFinalScoreFoc = marker at [618.2328, 49.1628, 1291.9445]
+	SetToCloseUpOfCow = 0
+	CowHeight = 0
+start
+	BowlingTrialStarted = 0
+	CowHeight = HEIGHT of CowBowling
+	CowHeight = CowHeight * 0.8
+	if PlayingForFun == 0
+		begin cinema
+			set camera position to [ViewFinalScorePos]
+			set camera focus to [ViewFinalScoreFoc]
+			wait until 5 seconds
+			if PlayerPlayed == 1
+				move camera position to [604.169, 56.394, 1290.799] time 4
+				move camera focus to [582.544, 46.817, 1251.622] time 4
+				wait until camera ready
+				say single line HELP_TEXT_COW_BOWLING_COW_LOST_20 by CowBowling
+				CowBowling play ANM_GATE_TOTEM_PLINTHE loop 1
+				move camera position to [611.188, 55.404, 1309.285] time 8
+				move camera focus to [589.58, 49.095, 1283.544] time 8
+				BowlingTrialCompleted = 1
+				wait until 4 seconds
+				wait until read
+				close dialogue
+				if MyCreature type CREATURE CREATURE_TYPE_OGRE
+					MyCreature play C_INDIVIDUAL_TAUNT
+				else
+					MyCreature play ANM_PHONEBOX loop 1
+				end if
+				move CowBowling position to [610.874, 44.89, 1228.197] radius 0
+				wait until camera ready
+				if MyCreature type CREATURE CREATURE_TYPE_OGRE
+					MyCreature play C_INDIVIDUAL_TAUNT
+				else
+					MyCreature play ANM_PHONEBOX loop 1
+				end if
+			else
+			end if
+		end cinema with widescreen
+	else
+		begin cinema
+			set camera position to [ViewFinalScorePos]
+			set camera focus to [ViewFinalScoreFoc]
+			wait until 5 seconds
+			SetToCloseUpOfCow = marker at (get target from [BBallPos] to [CowBowling] distance 15 angle 180)
+			set camera position to [SetToCloseUpOfCow] + [0, CowHeight, 0]
+			set camera focus to [CowBowling] + [0, CowHeight, 0]
+			say single line HELP_TEXT_COW_BOWLING_COW_LOST_10 by CowBowling
+			disable creature sound
+			CowBowling play ANM_A_COW_DIE loop 1
+			wait until read
+			wait until CowBowling played
+			enable creature sound
+		end cinema
+	end if
+	if PlayingForFun == 0
+		run background script CleanUpCreature
+	end if
+end script PlayerWonBowling
+
+begin script PlayerLostBowling
+	CowWins = 0
+	ViewFinalScorePos = marker at [660.97, 60.3119, 1291.8931]
+	ViewFinalScoreFoc = marker at [618.2328, 49.1628, 1291.9445]
+	CowHeight = 0
+	MyCreatureHeight = 0
+	LookOverCreature = 0
+	Dist = 0
+	FocusPoint = 0
+	CloseUpOfCowPos = 0
+	LookAtCowPos = 0
+	CowAndSunPos = 0
+	ZoomBackFromCow = 0
+	SetToCloseUpOfCow = 0
+start
+	BowlingTrialStarted = 0
+	CowHeight = HEIGHT of CowBowling
+	CowHeight = CowHeight * 0.8
+	MyCreatureHeight = HEIGHT of MyCreature
+	MyCreatureHeight = MyCreatureHeight * 0.8
+	if PlayerTotalScore < CowTotalScore
+		CowWins = variable constant from HELP_TEXT_COW_BOWLING_COW_WON_01 to HELP_TEXT_COW_BOWLING_COW_WON_05
+		begin cinema
+			set camera position to [ViewFinalScorePos]
+			set camera focus to [ViewFinalScoreFoc]
+			wait until 5 seconds
+			if PlayingForFun == 0
+				if PlayerPlayed == 1
+					LookAtCowPos = marker at (get target from [MyCreature] to [CowBowling] distance 15 angle 45)
+					move camera position to [607.801, 58.222, 1287.894] time 3
+					move camera focus to [591.171, 49.299, 1274.77] + [5, 3, 0] time 3
+					wait until 2 seconds
+					CowBowling play ANM_A_COW_LANDED_RIGHT_SIDE loop 1
+					disable creature sound
+					say single line constant CowWins by CowBowling
+					wait until camera ready
+					move camera position to [LookAtCowPos] time 4
+					move camera focus to [CowBowling] + [0, CowHeight, 0] time 4
+					wait until read
+					enable creature sound
+					update snapshot CHALLENGE_BOWLING success 0.1 alignment 0 HELP_TEXT_CREATURE_ISLE_TITLE_03 StandardReminder (variable HELP_TEXT_CI_REMINDER_02)
+					wait until CowBowling played
+				else
+					say single line constant CowWins by CowBowling
+					wait until read
+				end if
+			else
+				CowAndSunPos = marker at (get target from [BBallPos] to [CowBowling] distance 5 angle 180)
+				ZoomBackFromCow = marker at (get target from [BBallPos] to [CowBowling] distance 15 angle 180)
+				move camera position to [CowAndSunPos] + [0, CowHeight + CowHeight / 5, 0] time 1
+				move camera focus to [CowBowling] + [0, CowHeight + CowHeight / 5, 0] time 1
+				wait until camera ready
+				say single line constant CowWins by CowBowling
+				wait until 1 seconds
+				move camera position to [ZoomBackFromCow] + [0, CowHeight, 0] time 3
+				move camera focus to [CowBowling] + [0, CowHeight, 0] time 3
+				wait until read
+				set CowBowling focus to (camera position)
+				CowBowling play ANM_PIPER_CAVE_CLOSING loop 1
+				wait until 1 seconds
+				wait until camera ready
+			end if
+		end cinema
+	else
+		begin cinema
+			set camera position to [ViewFinalScorePos]
+			set camera focus to [ViewFinalScoreFoc]
+			wait until 5 seconds
+			if PlayingForFun == 0
+				if PlayerPlayed == 1
+					LookOverCreature = marker at (get target from [CowBowling] to [MyCreature] distance 10 angle -45)
+					Dist = get distance from [MyCreature] to [CowBowling]
+					FocusPoint = marker at (get target from [MyCreature] to [CowBowling] distance Dist / 3 angle 180)
+					force CowBowling POINT_AT MyCreature
+					wait until 1 seconds
+					set camera position to [LookOverCreature] + [0, CowHeight, 0]
+					set camera focus to [FocusPoint] + [0, CowHeight, 0]
+					set MyCreature focus to [CowBowling]
+					say single line HELP_TEXT_COW_BOWLING_DRAWN_10 by CowBowling
+					MyCreature play ANM_A_HORSE_EAT1 loop 2
+					wait until CowBowling played
+					CloseUpOfCowPos = marker at (get target from (camera position) to [CowBowling] distance 10 angle 180)
+					set camera position to [CloseUpOfCowPos] + [0, CowHeight * 1.5, 0]
+					set camera focus to [CowBowling] + [0, CowHeight, 0]
+					wait until read
+					CowBowling play ANM_PIPER_CAVE_CLOSING loop 1
+					update snapshot CHALLENGE_BOWLING success 0.1 alignment 0 HELP_TEXT_CREATURE_ISLE_TITLE_03 StandardReminder (variable HELP_TEXT_CI_REMINDER_02)
+				end if
+			else
+				SetToCloseUpOfCow = marker at (get target from [BBallPos] to [CowBowling] distance 15 angle 180)
+				set camera position to [SetToCloseUpOfCow] + [0, CowHeight, 0]
+				set camera focus to [CowBowling] + [0, CowHeight, 0]
+				say single line HELP_TEXT_COW_BOWLING_DRAWN_10 by CowBowling
+				disable creature sound
+				CowBowling play ANM_A_COW_DEAD_ON_RHS loop 3
+				wait until read
+				wait until CowBowling played
+				enable creature sound
+			end if
+		end cinema
+	end if
+	if PlayingForFun == 0
+		run script CleanUpCreature
+	end if
+end script PlayerLostBowling
+
+begin script CreateCow
+start
+	CowBowling = create dumb creature from creature MyCreature 1 at [CowInitialPosCI] CREATURE_TYPE_COW
+	set CowBowling name HELP_TEXT_NAME_COW_01
+	run script SetupCreatureIsleCreature(CowBowling)
+	ACTUAL_HEIGHT of CowBowling = 0.5
+	STRENGTH of CowBowling = 1
+	ALIGNMENT of CowBowling = 0.51
+	enable CowBowling immune to spells
+	force CowBowling CREATURE_LOOK_FOREVER PinPos
+	wait until 1 seconds
+end script CreateCow
+
+begin script CowBowlsBall(Bowl)
+	FirstBowl = 1
+	TargetBowlPos = 0
+	Distance = 0
+	SideAllowance = 0
+	LeftRight = 0
+	RandomOffset = 0
+	TargetPos0 = 0
+	TargetPos1 = 0
+	TargetPos2 = 0
+	TargetPos3 = 0
+	TargetPos4 = 0
+	AntiInfluence = 0
+	Counter = 0
+	CowWinningAmount = 0
+	AimingOffset = 0
+	WhichSide = 0
+	Pin0Left = 0
+	Pin1Left = 0
+	Pin2Left = 0
+	Pin3Left = 0
+	Pin4Left = 0
+	Pin5Left = 0
+	Pin6Left = 0
+	Pin7Left = 0
+	Pin8Left = 0
+	Pin9Left = 0
+	JustInFrontOfPinsPos = marker at [678.7025, 63.9988, 1292.2683]
+	JustInFrontOfPinsFoc = marker at [699.6331, 49.4799, 1292.0092]
+start
+	AntiInfluence = create anti influence on BowlingBall radius 5
+	Distance = number from 10 to 30
+	SideAllowance = number from 1 to 4
+	if SideAllowance == 1
+		LeftRight = 0.7
+	elsif SideAllowance == 2
+		LeftRight = 0.5
+	elsif SideAllowance == 3
+		LeftRight = 0.3
+	elsif SideAllowance == 4
+		LeftRight = 0.1
+	end if
+	TargetPos0 = marker at [PinPos] - ([Distance, LeftRight])
+	TargetPos1 = marker at [PinPos] - ([Distance, -1])
+	TargetPos2 = marker at [PinPos] - ([Distance, 1.5])
+	TargetPos3 = marker at [PinPos] - ([Distance, -2])
+	TargetPos4 = marker at [PinPos] - ([Distance, 2])
+	if CancelCurrentGame == 0
+		set CowBowling focus to [PinPos]
+		if not get distance from [CowBowling] to [BBallPos] - ([2, 0]) < 5
+			move CowBowling position to [BBallPos] - ([2, 0]) radius 0
+		end if
+		if CancelCurrentGame == 0
+			NextMessage = variable constant from HELP_TEXT_COW_BOWLING_COW_GO_01 to HELP_TEXT_COW_BOWLING_COW_GO_05
+		end if
+		begin dialogue
+			say single line constant NextMessage by CowBowling
+			wait until read
+			close dialogue
+		end dialogue
+		while Counter < 10
+			if Pin[Counter] exists
+				PinArray[Counter] = 1
+			else
+				PinArray[Counter] = 0
+			end if
+			Counter++
+		end while
+		run script CalculateBestTarget
+		if TargetArea == 0
+			TargetBowlPos = marker at [TargetPos0]
+		elsif TargetArea == 1
+			TargetBowlPos = marker at [TargetPos1]
+		elsif TargetArea == 2
+			TargetBowlPos = marker at [TargetPos2]
+		elsif TargetArea == 3
+			TargetBowlPos = marker at [TargetPos3]
+		elsif TargetArea == 4
+			TargetBowlPos = marker at [TargetPos4]
+		end if
+		if PlayingForFun == 0
+			WhichSide = number from 0 to 1
+			CowWinningAmount = CowTotalScore - PlayerTotalScore
+			if CowWinningAmount <= -20
+				AimingOffset = 0.8
+			elsif CowWinningAmount <= -10
+				AimingOffset = 1.1
+			elsif CowWinningAmount <= 0
+				AimingOffset = 1.4
+			elsif CowWinningAmount <= 5
+				AimingOffset = 1.7
+			elsif CowWinningAmount <= 10
+				AimingOffset = 2
+			else
+				AimingOffset = 2.3
+			end if
+			if WhichSide == 0
+				TargetBowlPos = marker at [TargetBowlPos] - ([AimingOffset, AimingOffset])
+			else
+				TargetBowlPos = marker at [TargetBowlPos] - ([-AimingOffset, -AimingOffset])
+			end if
+		end if
+		if BowlingBall exists
+			enable BowlingBall pickup
+			enable BowlingBall moveable
+			force CowBowling CREATURE_HOLD_OBJECT BowlingBall
+			wait until BowlingBall in CowBowling hand or 5 seconds
+		end if
+		if BowlingBall in CowBowling hand
+			force CowBowling CREATURE_LOOK_FOREVER TargetBowlPos
+			wait until 1 seconds
+			force CowBowling CREATURE_BOWL CowBowling
+			wait until 1 seconds
+			wait until CowBowling played
+			disable BowlingBall pickup
+			run background script PlayPinSound
+			if Tyke exists and TykeIsReady == 1 and TykeFree == 1 and PlayingForFun == 0
+				run background script TykeLooksAtBall
+			end if
+			run script MakePinsMovable(1)
+			wait until not BowlingBall is FLYING or not BowlingBall exists
+		end if
+	end if
+end script CowBowlsBall
+
+begin script CalculateBestTarget
+	AimingPos[5]
+	BestPosSoFar = 1
+	BestValueSoFar = 0
+	Counter = 0
+start
+	if PinArray[0] == 1 or PinArray[4] == 1
+		AimingPos[0]++
+		if PinArray[1] == 1 or PinArray[2] == 1
+			AimingPos[0]++
+		end if
+	end if
+	if PinArray[1] == 1 or PinArray[7] == 1
+		AimingPos[2]++
+		if PinArray[3] == 1
+			AimingPos[2]++
+		end if
+	end if
+	if PinArray[6] == 1
+		AimingPos[4]++
+		if PinArray[3] == 1
+			AimingPos[4]++
+		end if
+	end if
+	if PinArray[2] == 1 or PinArray[8] == 1
+		AimingPos[1]++
+		if PinArray[5] == 1
+			AimingPos[1]++
+		end if
+	end if
+	if PinArray[9] == 1
+		AimingPos[3]++
+		if PinArray[5] == 1
+			AimingPos[3]++
+		end if
+	end if
+	while Counter < 5
+		if AimingPos[Counter] > BestValueSoFar
+			BestValueSoFar = AimingPos[Counter]
+			BestPosSoFar = Counter
+		end if
+		Counter++
+	end while
+	TargetArea = BestPosSoFar
+end script CalculateBestTarget
+
+begin script PositionBowlingCamera
+	PlayerBowlBallPos = marker at [584.9398, 75.7081, 1290.7913]
+	PlayerBowlBallFoc = marker at [631.8033, 49.3994, 1291.0276]
+start
+	begin cinema
+		enable highlight draw
+		move camera position to [PlayerBowlBallPos] time 3
+		move camera focus to [PlayerBowlBallFoc] time 3
+		wait until camera ready
+	end cinema
+end script PositionBowlingCamera
+
+begin script CameraAbovePins
+	FollowBallPos = marker at [666.8242, 82.3907, 1290.4797]
+	FollowBallFoc = marker at [693.1708, 49.6885, 1291.1827]
+start
+	begin cinema
+		move camera position to [FollowBallPos] time 3
+		move camera focus to [FollowBallFoc] time 3
+		wait until camera ready
+	end cinema
+end script CameraAbovePins
+
+begin script CameraInFrontOfPins
+	JustInFrontOfPinsPos = marker at [678.7025, 63.9988, 1292.2683]
+	JustInFrontOfPinsFoc = marker at [699.6331, 49.4799, 1292.0092]
+start
+	begin cinema
+		move camera position to [JustInFrontOfPinsPos] time 3
+		move camera focus to [JustInFrontOfPinsFoc] time 3
+		wait until camera ready
+	end cinema
+end script CameraInFrontOfPins
+
+begin script CameraBehindPins
+	BehindPinsPos = marker at [720.123, 61.935, 1301.583]
+	BehindPinsFoc = marker at [680.471, 49.203, 1289.028]
+start
+	begin cinema
+		set camera position to [BehindPinsPos]
+		set camera focus to [BehindPinsFoc]
+		wait until camera ready
+	end cinema
+end script CameraBehindPins
+
+begin script CameraAtSideOfPins
+	SideOfPinsPos = marker at [683.9811, 63.5958, 1304.7642]
+	SideOfPinsFoc = marker at [700.2131, 49.4723, 1291.7719]
+start
+	begin cinema
+		move camera position to [SideOfPinsPos] time 3
+		move camera focus to [SideOfPinsFoc] time 3
+		wait until camera ready
+	end cinema
+end script CameraAtSideOfPins
+
+begin script Intro
+	TempCancelHighlight = 0
+	TempCancelGameHighlightPos = marker at [680.9015, 48.91, 1274.1855]
+	StartCameraPos = marker at [592.751, 57.647, 1273.408]
+	StartCameraFoc = marker at [615.432, 49.2, 1289.696]
+	LookAtBowlingAlleyPos = marker at [590.194, 58.189, 1276.148]
+	LookAtBowlingAlleyFoc = marker at [613.977, 49.232, 1287.443]
+	LookAtMyCreaturePos = marker at [574.534, 57.6, 1308.244]
+	LookAtMyCreatureFoc = marker at [638.285, 49.034, 1282.425]
+	LookAtDYKPos = marker at [577.266, 57.566, 1301.5]
+	LookAtDYKFoc = marker at [602.874, 44.971, 1238.284]
+	ViewCancelScrollPos = marker at [655.2786, 64.4172, 1299.7048]
+	ViewCancelScrollFoc = marker at [690.0261, 49.2387, 1273.4529]
+	AboutToBowlPos = marker at [584.9398, 75.7081, 1290.7913]
+	AboutToBowlFoc = marker at [631.8033, 49.3994, 1291.0276]
+	CowHeight = 0
+	MyCreatureHeight = 0
+	LookOverCowsShoulderPos = 0
+	LookAtDYK = 0
+start
+	begin cinema
+		CowHeight = HEIGHT of CowBowling
+		CowHeight = CowHeight * 0.8
+		MyCreatureHeight = HEIGHT of MyCreature
+		MyCreatureHeight = MyCreatureHeight * 0.8
+		enable highlight draw
+		move camera position to [StartCameraPos] time 4
+		move camera focus to [StartCameraFoc] time 4
+		wait until camera ready
+		wait until 1 seconds
+		set CowBowling focus to (camera position)
+		move camera focus to [LookAtBowlingAlleyFoc] time 16
+		set CowBowling focus to (camera position)
+		wait until 0.1 seconds
+		snapshot CHALLENGE_BOWLING quest success 0 alignment 0 HELP_TEXT_CREATURE_ISLE_TITLE_03 StandardReminder (variable HELP_TEXT_CI_REMINDER_02)
+		disable creature sound
+		disable creature sound
+		say HELP_TEXT_COW_BOWLING_10 by CowBowling
+		wait until read
+		say HELP_TEXT_COW_BOWLING_20 by CowBowling
+		wait until read
+		set CowBowling focus to [PinPos]
+		say HELP_TEXT_COW_BOWLING_30 with interaction by CowBowling
+		wait until 0.5 seconds
+		set CowBowling focus to (camera position)
+		wait until read
+		close dialogue
+		set CowBowling focus to [MyCreature]
+		set MyCreature focus to [CowBowling]
+		force CowBowling POINT_AT MyCreature
+		if not get distance from [MyCreature] to [PlayerCreatureInitialPos] < 1
+			set MyCreature position to [PlayerCreatureInitialPos]
+			wait until 0.5 seconds
+		end if
+		LookOverCowsShoulderPos = marker at (get target from [MyCreature] to [CowBowling] distance 15 angle -30)
+		set camera position to [LookOverCowsShoulderPos] + [0, CowHeight, 0]
+		set camera focus to [MyCreature] + [0, CowHeight, 0]
+		wait until 1 seconds
+		say single line HELP_TEXT_COW_BOWLING_50 by CowBowling
+		wait until 1 seconds
+		set MyCreature focus to (camera position)
+		//Ogre
+
+		if MyCreature type CREATURE CREATURE_TYPE_OGRE
+			MyCreature play C_INDIVIDUAL_TAUNT
+		else
+			MyCreature play ANM_A_HORSE_DEADRHS loop 1
+		end if
+		wait until MyCreature played
+		wait until read
+		close dialogue
+		LookAtDYK = marker at (get target from [MyCreature] to [CowBowling] distance 20 angle -30)
+		move camera position to [LookAtDYK] + [0, CowHeight * 1.5, 0] time 3
+		move camera focus to [MyCreature] time 3
+		set CowBowling focus to [BowlingDYKPos]
+		force CowBowling POINT_AT BowlingDYKPos
+		say single line HELP_TEXT_COW_BOWLING_60 with interaction by CowBowling
+		wait until read
+		set MyCreature focus to [BowlingDYKPos]
+		MyCreature play ANM_A_COW_IN_HAND loop 1
+		wait until MyCreature played
+		set CowBowling focus to (camera position)
+		set MyCreature focus to [CowBowling]
+		set camera position to [StartCameraPos]
+		set camera focus to [StartCameraFoc]
+		say HELP_TEXT_COW_BOWLING_70 by CowBowling
+		wait until 2 seconds
+		force MyCreature CREATURE_LOOK_FOREVER CowBowling
+		MyCreature play ANM_PIED_PIPER_DANCE_STAND_SPIN loop 2
+		wait until read
+		move camera position to [ViewCancelScrollPos] time 5
+		move camera focus to [ViewCancelScrollFoc] time 5
+		say HELP_TEXT_COW_BOWLING_80 with interaction by CowBowling
+		TempCancelHighlight = create highlight CHALLENGE_BOWLING HIGHLIGHT_CANCEL_QUEST at [TempCancelGameHighlightPos]
+		set CowBowling focus to [TempCancelHighlight]
+		force CowBowling POINT_AT TempCancelHighlight
+		wait until read
+		set camera position to [StartCameraPos]
+		set camera focus to [StartCameraFoc]
+		say HELP_TEXT_COW_BOWLING_COW_EXPLAINS_85 by CowBowling
+		wait until 0.5 seconds
+		set CowBowling focus to (camera position)
+		wait until read
+		close dialogue
+		set CowBowling focus to [PinPos]
+		set MyCreature focus to [PinPos]
+		move camera position to [AboutToBowlPos] time 3
+		move camera focus to [AboutToBowlFoc] time 3
+		say single line HELP_TEXT_COW_BOWLING_90 by CowBowling
+		wait until read
+		delete TempCancelHighlight
+	end cinema with widescreen
+end script Intro
+
+begin script PlayAnims(Who, Result)
+	Player = 0
+	Cow = 1
+	MissedPins = 0
+	Spare = 1
+	Strike = 2
+	Emotion = 0
+	LookAtCameraPosition = 0
+	PlayerBowlBallPos = marker at [584.9398, 75.7081, 1290.7913]
+	PlayerBowlBallFoc = marker at [631.8033, 49.3994, 1291.0276]
+start
+	if CancelCurrentGame == 0
+		begin cinema
+			if Who == Player
+				set camera position to [581.358, 55.441, 1312.775]
+				set camera focus to [620.218, 49.04, 1283.544]
+			else
+				set camera position to [584.848, 57.075, 1267.092]
+				set camera focus to [625.031, 49.058, 1302.903]
+			end if
+			if PlayingForFun == 0
+				set MyCreature focus to (camera position)
+			end if
+			set CowBowling focus to (camera position)
+			wait until 1 seconds
+			LookAtCameraPosition = marker at (camera position)
+			if Result == Strike or Result == Spare
+				Emotion = 1
+			else
+				Emotion = 0
+			end if
+			if Who == Player
+				if PlayingForFun == 0
+					set MyCreature focus to (camera position)
+					set CowBowling focus to (camera position)
+					wait until 1 seconds
+				end if
+				if Emotion == 0
+					if PlayingForFun == 0
+						MyCreature play ANM_PIPER_CAVE_OPENING loop 1
+						CowBowling play ANM_PIPER_CAVE_CLOSING loop 1
+					else
+						CowBowling play ANM_PIPER_CAVE_CLOSING loop 1
+					end if
+					run script AdvisorsUnhappy
+					if good spirit speaks constant NextMessage
+						eject good spirit
+					else
+						eject evil spirit
+					end if
+					say single line constant NextMessage
+					wait until read
+				else
+					if PlayingForFun == 0
+						MyCreature play ANM_PIPER_CAVE_CLOSING loop 1
+						CowBowling play ANM_PIPER_CAVE_OPENING loop 1
+					else
+						CowBowling play ANM_PIPER_CAVE_OPENING loop 1
+					end if
+					if FirstStrikeOrSpare == 0
+						say single line HELP_TEXT_COW_BOWLING_COW_EXPLAINS_10 by CowBowling
+						wait until read
+						FirstStrikeOrSpare = 1
+					else
+						run script AdvisorsHappy
+						if good spirit speaks constant NextMessage
+							eject good spirit
+						else
+							eject evil spirit
+						end if
+						say single line constant NextMessage
+						wait until read
+					end if
+				end if
+			elsif Who == Cow
+				if PlayingForFun == 0
+					set MyCreature focus to (camera position)
+					set CowBowling focus to (camera position)
+					wait until 1 seconds
+				end if
+				if Emotion == 0
+					if PlayingForFun == 0
+						MyCreature play ANM_PIPER_CAVE_CLOSING loop 1
+						CowBowling play ANM_PIPER_CAVE_OPENING loop 1
+					else
+						CowBowling play ANM_PIPER_CAVE_OPENING loop 1
+					end if
+					disable creature sound
+					run script CowUnhappy
+					say single line constant NextMessage by CowBowling
+					wait until read
+					enable creature sound
+				else
+					if PlayingForFun == 0
+						MyCreature play ANM_PIPER_CAVE_OPENING loop 1
+						CowBowling play ANM_PIPER_CAVE_CLOSING loop 1
+					else
+						CowBowling play ANM_PIPER_CAVE_CLOSING loop 1
+					end if
+					disable creature sound
+					run script CowHappy
+					say single line constant NextMessage by CowBowling
+					wait until read
+					enable creature sound
+				end if
+			end if
+			if PlayingForFun == 0
+				wait until MyCreature played
+			end if
+			wait until CowBowling played
+			send evil spirit home
+			send good spirit home
+			move camera position to [PlayerBowlBallPos] time 1
+			move camera focus to [PlayerBowlBallFoc] time 1
+			close dialogue
+			if PlayingForFun == 0
+				force MyCreature CREATURE_LOOK_FOREVER PinPos
+			end if
+			force CowBowling CREATURE_LOOK_FOREVER PinPos
+			wait until 1 seconds
+		end cinema
+		if PlayingForFun == 0
+			set MyCreature focus to [PinPos]
+		end if
+		set CowBowling focus to [PinPos]
+	end if
+end script PlayAnims
+
+begin script PlayersCreatureBowlsBall(RoundNo)
+	TellUsToBowl = 0
+	Fireball = 0
+	Marker = 0
+	MarkerSet = 0
+	MarkerThrown = 0
+	MarkerFlying = 0
+	MarkerImpactPoint = 0
+	MarkerDeleted = 0
+	DistanceOfMarker = 0
+	BallSpeed = 0
+	CreatureBowled = 0
+	HandPointer = 0
+	MarkerInf = 0
+	AntiInfluence = 0
+	RemindPlayerToThrowMarker = create timer for 0 seconds
+	MarkerStopped = create timer for 0 seconds
+start
+	if CancelCurrentGame == 0
+		if RoundNo != 1
+			NextMessage = variable constant from HELP_TEXT_COW_BOWLING_YOUR_GO_01 to HELP_TEXT_COW_BOWLING_YOUR_GO_05
+			start say sound constant NextMessage
+		end if
+	end if
+	if Tyke exists and TykeIsReady == 1 and TykeFree == 1
+		run background script MoveTykeToPinsPos
+	end if
+	while MarkerSet == 0 and CancelCurrentGame == 0
+		if BowlingBall exists
+			delete BowlingBall with fade
+		end if
+		if not Marker exists
+			Marker = create with angle 0 and scale 2 MOBILE_OBJECT MOBILE_OBJECT_BROTHERHOOD_PUCK at [BBallPos]
+			MarkerInf = create influence on Marker radius 5
+			release MarkerInf
+			enable Marker indestructible
+			enable jc special SJC_ALWAYS_VISIBLE on Marker with number 0
+		end if
+		run script MakePinsMovable(0)
+		if get RemindPlayerToThrowMarker time remaining <= 0
+			begin dialogue
+				if RoundNo != 1
+					wait until not say sound constant NextMessage playing or Marker is HELD
+					TellUsToBowl = variable constant from HELP_TEXT_THROW_MARKER_10 to HELP_TEXT_THROW_MARKER_13
+					if good spirit speaks constant TellUsToBowl
+						eject good spirit
+					else
+						eject evil spirit
+					end if
+					say single line constant TellUsToBowl
+					wait until read or Marker is HELD
+					send good spirit home
+					send evil spirit home
+				else
+					eject good spirit
+					say single line HELP_TEXT_THROWING_INSTRUCTION_10
+					wait until read or Marker is HELD
+					close dialogue
+					send good spirit home
+				end if
+			end dialogue
+			set RemindPlayerToThrowMarker time to 30 seconds
+		end if
+		while MarkerThrown == 0 and CancelCurrentGame == 0
+			if Marker exists
+				if Marker is HELD
+					if not get distance from (hand position) to [BBallPos] < 14
+						delete Marker with fade
+						Marker = create with angle 0 and scale 2 MOBILE_OBJECT MOBILE_OBJECT_BROTHERHOOD_PUCK at [BBallPos]
+						MarkerInf = create influence on Marker radius 5
+						release MarkerInf
+						enable Marker indestructible
+						enable jc special SJC_ALWAYS_VISIBLE on Marker with number 0
+						begin dialogue
+							say single line HELP_TEXT_COW_BOWLING_155 by CowBowling
+							wait until read or Marker is HELD
+							close dialogue
+						end dialogue
+					end if
+				end if
+				if not Marker is HELD
+					if not get distance from [Marker] to [BBallPos] < 15
+						MarkerThrown = 1
+						MarkerFlying = 1
+						disable Marker pickup
+						set MarkerStopped time to 10 seconds
+					end if
+				end if
+			end if
+			until CancelCurrentGame == 1
+		end while
+		clear hit land object
+		clear hit object
+		while MarkerFlying == 1 and CancelCurrentGame == 0
+			if get object which hit land == Marker or get hit object == BowlingPen or not Marker is FLYING or get MarkerStopped time remaining <= 0
+				clear hit land object
+				clear hit object
+				MarkerImpactPoint = marker at [Marker]
+				DistanceOfMarker = get distance from [Marker] to [BBallPos]
+				Fireball = cast SPELL_FIREBALL_LEVEL_1 spell at [Marker] from [Marker] radius 1 time 30 curl 0
+				delete Marker with explosion
+				MarkerFlying = 0
+				MarkerDeleted = 0
+				wait until 0.5 seconds
+				delete Fireball
+			elsif not Marker exists
+				MarkerFlying = 0
+				MarkerDeleted = 1
+			end if
+			until CancelCurrentGame == 1
+		end while
+		if MarkerDeleted == 0 and get distance from [MarkerImpactPoint] to [PinPos] < 80
+			HandPointer = create with angle 45 and scale 1 FEATURE FEATURE_INFO_POINTER_HAND at [MarkerImpactPoint]
+			ALTITUDE of HandPointer = 3
+			enable jc special SJC_ALWAYS_VISIBLE on HandPointer with number 0
+			MarkerSet = 1
+		else
+			MarkerThrown = 0
+			MarkerFlying = 0
+		end if
+		until CancelCurrentGame == 1
+	end while
+	update snapshot CHALLENGE_BOWLING success 0.2 alignment 0 HELP_TEXT_CREATURE_ISLE_TITLE_03 StandardReminder (variable HELP_TEXT_CI_REMINDER_02)
+	run script PositionBall
+	if DistanceOfMarker / 10 < 1
+		BallSpeed += 15
+	elsif DistanceOfMarker / 10 < 2
+		BallSpeed += 18
+	elsif DistanceOfMarker / 10 < 3
+		BallSpeed += 21
+	elsif DistanceOfMarker / 10 < 4
+		BallSpeed += 24
+	elsif DistanceOfMarker / 10 < 5
+		BallSpeed += 27
+	elsif DistanceOfMarker / 10 < 6
+		BallSpeed += 30
+	elsif DistanceOfMarker / 10 < 7
+		BallSpeed += 33
+	elsif DistanceOfMarker / 10 < 8
+		BallSpeed += 36
+	elsif DistanceOfMarker / 10 < 9
+		BallSpeed += 39
+	else
+		BallSpeed += 42
+	end if
+	wait until CreatureInPosition == 1 or CancelCurrentGame == 1
+	if CancelCurrentGame == 0
+		set MyCreature focus to [BBallPos] + ([2, 2])
+		move MyCreature position to [BBallPos] + ([2, 2]) radius 0
+	end if
+	while CreatureBowled == 0 and CancelCurrentGame == 0
+		while CreatureBowled == 0
+			if BowlingBall exists
+				AntiInfluence = create anti influence on BowlingBall radius 5
+				wait until get distance from [MyCreature] to [BBallPos] + ([2, 2]) < 1 or 5 seconds
+				enable right hand only for MyCreature
+				enable BowlingBall pickup
+				enable BowlingBall moveable
+				force MyCreature CREATURE_HOLD_OBJECT BowlingBall
+				wait until BowlingBall in MyCreature hand
+				force MyCreature CREATURE_LOOK_FOREVER MarkerImpactPoint
+				wait until 1 seconds
+				if MyCreature type CREATURE CREATURE_TYPE_OGRE // Custom: Make sure Ogre doesn't do bowl animation as it doesn't have one.
+					force MyCreature CREATURE_HURL_OBJECT_IN_HAND MarkerImpactPoint
+				else
+					force MyCreature CREATURE_BOWL MyCreature
+				end if
+				run script MakePinsMovable(1)
+				wait until BowlingBall is FLYING
+				set BowlingBall velocity heading [MarkerImpactPoint] speed BallSpeed angular x 0 y 0 z 0
+				set MyCreature focus to [PinPos]
+				wait until MyCreature played
+				disable BowlingBall pickup
+				run background script PlayPinSound
+				CreatureBowled = 1
+				if HandPointer exists
+					delete HandPointer with fade
+				end if
+				disable right hand only for MyCreature
+				wait until not BowlingBall is FLYING or not BowlingBall exists or not get distance from [BowlingBall] to [BBallPos] < 90
+			end if
+			until CancelCurrentGame == 1
+		end while
+		until CancelCurrentGame == 1
+	end while
+	if CancelCurrentGame == 1
+		if HandPointer exists
+			delete HandPointer with fade
+		end if
+		if Marker exists
+			delete Marker with fade
+		end if
+		disable right hand only for MyCreature
+	end if
+end script PlayersCreatureBowlsBall
+
+begin script MoveCreatureIntoPosition
+	CowSize = 0
+start
+	CreatureInPosition = 0
+	if Tyke exists and TykeIsReady == 1 and TykeFree == 1
+		run background script MoveTykeToNearCreaturePos
+	end if
+	move MyCreature position to [PlayerCreatureInitialPos] radius 0
+	wait until get distance from [MyCreature] to [PlayerCreatureInitialPos] < 5 or 60 seconds or CancelCurrentGame == 1
+	if CancelCurrentGame == 0
+		wait until 1 seconds
+		force MyCreature CREATURE_LOOK_FOREVER PinPos
+		wait until 0.1 seconds
+		detach MyCreature leash
+		OldScale = ACTUAL_HEIGHT of MyCreature
+		CowSize = SCALE of CowBowling
+		run script ScaleCreature(MyCreature, CowSize)
+		run script CreatureDropsHeldObject(MyCreature)
+		CreatureInPosition = 1
+	end if
+end script MoveCreatureIntoPosition
+
+begin script MoveMyCreatureToFinishPos
+	MyCreatureFinishedGamePos = marker at [573.1973, 48.91, 1286.9529]
+start
+	set MyCreature focus to [MyCreatureFinishedGamePos]
+	move MyCreature position to [MyCreatureFinishedGamePos] radius 0
+	wait until get distance from [MyCreature] to [MyCreatureFinishedGamePos] < 5 or 20 seconds
+	if Tyke exists and TykeIsReady == 1 and TykeFree == 1
+		run background script MoveTykeToFinishPos
+	end if
+	wait until 1 seconds
+	force MyCreature CREATURE_LOOK_FOREVER PinPos
+	wait until 1 seconds
+end script MoveMyCreatureToFinishPos
+
+begin script CleanUpCreature
+start
+	OkToDisplayScrollNow = 0
+	BowlingBeingPlayed = 0
+	if CreatureInPosition == 1
+		run script MoveMyCreatureToFinishPos
+		run script ScaleCreature(MyCreature, OldScale)
+	end if
+	disable MyCreature immune to spells
+	ScriptLockedCreature = 0
+	release MyCreature
+	if Tyke exists and TykeIsReady == 1 and TykeFree == 1
+		disable Tyke immune to spells
+		release Tyke
+	end if
+	OkToDisplayScrollNow = 1
+end script CleanUpCreature
+
+begin script TestForCancelledGame
+	CancelGameHighlightPos = marker at [680.9015, 48.91, 1274.1855]
+	ClickedOnce = 0
+	ConfirmMessage = 0
+	CancelConfirmedOrCancelled = 0
+	ConfirmTimer = create timer for 0 seconds
+start
+	CurrentCancelScrollPos = marker at [CancelGameHighlightPos]
+	if BowlingTrialStarted == 1 and not BowlingCancelGameHighlight exists
+		if PlayingForFun == 0
+			BowlingCancelGameHighlight = create highlight CHALLENGE_NONE HIGHLIGHT_CANCEL_QUEST at [CancelGameHighlightPos]
+			ALTITUDE of BowlingCancelGameHighlight = 0
+		else
+			BowlingCancelGameHighlight = create highlight CHALLENGE_NONE HIGHLIGHT_CANCEL_CHALLENGE at [CancelGameHighlightPos]
+			ALTITUDE of BowlingCancelGameHighlight = 0
+		end if
+	end if
+	clear clicked object
+	while CancelConfirmedOrCancelled == 0 and CancelCurrentGame == 0 and BowlingTrialStarted == 1
+		if BowlingCancelGameHighlight exists
+			if BowlingCancelGameHighlight clicked
+				if ClickedOnce == 0
+					ClickedOnce = 1
+					wait until 0.1 seconds
+					clear clicked object
+					set ConfirmTimer time to 30 seconds
+					run background script ConfirmCancelMessage
+				elsif ClickedOnce == 1
+					CancelCurrentGame = 1
+					CancelConfirmedOrCancelled = 1
+					delete BowlingCancelGameHighlight with fade
+					clear clicked object
+					PlayerPlayed = 1
+					run script DeleteAnyRemainingPins
+					run script DeleteBowlingBall
+					run script PositionPins
+					run script PositionBall
+					if MyCreature exists and PlayingForFun == 0
+						run background script CleanUpCreature
+					end if
+					if CowBowling exists
+						run background script MoveCowToStartPos
+					end if
+				end if
+			end if
+			if ClickedOnce == 1
+				if get ConfirmTimer time remaining <= 0
+					ClickedOnce = 0
+				end if
+			end if
+		else
+			CancelConfirmedOrCancelled = 1
+		end if
+	end while
+	if BowlingCancelGameHighlight exists
+		delete BowlingCancelGameHighlight
+	end if
+	CurrentCancelScrollPos = 0
+end script TestForCancelledGame
+
+begin script MoveCowToStartPos
+start
+	set CowBowling focus to [CowInitialPosCI]
+	move CowBowling position to [CowInitialPosCI] radius 0
+	wait until get distance from [CowBowling] to [CowInitialPosCI] < 5 or 20 seconds
+	if not get distance from [CowBowling] to [CowInitialPosCI] < 7
+		set CowBowling position to [CowInitialPosCI]
+	end if
+	set CowBowling focus to [PinPos]
+end script MoveCowToStartPos
+
+begin script ReactionToBowl(WhosBowl, WhatBowl, RoundNo)
+	Player = 0
+	Cow = 1
+	FirstBowl = 1
+	SecondBowl = 2
+	ExtraBowl = 3
+	MissedPins = 0
+	Spare = 1
+	Strike = 2
+	GotStrike = 0
+	GotSpare = 0
+	GotNothing = 0
+start
+	wait until 1 seconds
+	if CancelCurrentGame == 0
+		if WhosBowl == Player
+			if RoundNo < BowlingMaxRounds
+				if WhatBowl == FirstBowl
+					if PlayerLastScoreBowled == 10
+						run script PlayAnims(Player, Strike)
+						GotStrike = 1
+					elsif PlayerLastScoreBowled == 0
+						run script PlayAnims(Player, MissedPins)
+						GotNothing = 1
+					end if
+				elsif WhatBowl == SecondBowl
+					if PlayerFirstBallScore + PlayerLastScoreBowled == 10
+						run script PlayAnims(Player, Spare)
+						GotSpare = 1
+					elsif PlayerFirstBallScore == 0 and PlayerLastScoreBowled == 0
+						run script PlayAnims(Player, MissedPins)
+						GotNothing = 1
+					end if
+				end if
+			elsif RoundNo == BowlingMaxRounds
+				if WhatBowl == FirstBowl
+					if PlayerLastScoreBowled == 10
+						run script PlayAnims(Player, Strike)
+						GotStrike = 1
+					elsif PlayerLastScoreBowled == 0
+						run script PlayAnims(Player, MissedPins)
+						GotNothing = 1
+					end if
+				elsif WhatBowl == SecondBowl
+					if PlayerFirstBallScore == 10
+						if PlayerLastScoreBowled == 10
+							run script PlayAnims(Player, Strike)
+							GotStrike = 1
+						elsif PlayerLastScoreBowled == 0
+							run script PlayAnims(Player, MissedPins)
+							GotNothing = 1
+						end if
+					else
+						if PlayerLastScoreBowled + PlayerFirstBallScore == 10
+							run script PlayAnims(Player, Spare)
+							GotSpare = 1
+						elsif PlayerLastScoreBowled + PlayerFirstBallScore == 0
+							run script PlayAnims(Player, MissedPins)
+							GotNothing = 1
+						end if
+					end if
+				elsif WhatBowl == ExtraBowl
+					if PlayerSecondBallScore == 10
+						if PlayerLastScoreBowled == 10
+							run script PlayAnims(Player, Strike)
+							GotStrike = 1
+						elsif PlayerLastScoreBowled == 0
+							run script PlayAnims(Player, MissedPins)
+							GotNothing = 1
+						end if
+					elsif PlayerFirstBallScore + PlayerSecondBallScore == 10
+						if PlayerLastScoreBowled == 10
+							run script PlayAnims(Player, Strike)
+							GotStrike = 1
+						elsif PlayerLastScoreBowled == 0
+							run script PlayAnims(Player, MissedPins)
+							GotNothing = 1
+						end if
+					else
+						if PlayerLastScoreBowled + PlayerSecondBallScore == 10
+							run script PlayAnims(Player, Spare)
+							GotSpare = 1
+						elsif PlayerLastScoreBowled + PlayerSecondBallScore == 0
+							run script PlayAnims(Player, MissedPins)
+							GotNothing = 1
+						end if
+					end if
+				end if
+			end if
+		elsif WhosBowl == Cow
+			if RoundNo < BowlingMaxRounds
+				if WhatBowl == FirstBowl
+					if CowLastScoreBowled == 10
+						run script PlayAnims(Cow, Strike)
+						GotStrike = 1
+					elsif CowLastScoreBowled == 0
+						run script PlayAnims(Cow, MissedPins)
+						GotNothing = 1
+					end if
+				elsif WhatBowl == SecondBowl
+					if CowFirstBallScore + CowLastScoreBowled == 10
+						run script PlayAnims(Cow, Spare)
+						GotSpare = 1
+					elsif CowFirstBallScore == 0 and CowLastScoreBowled == 0
+						run script PlayAnims(Cow, MissedPins)
+						GotNothing = 1
+					end if
+				end if
+			elsif RoundNo == BowlingMaxRounds
+				if WhatBowl == FirstBowl
+					if CowLastScoreBowled == 10
+						run script PlayAnims(Cow, Strike)
+						GotStrike = 1
+					elsif CowLastScoreBowled == 0
+						run script PlayAnims(Cow, MissedPins)
+						GotNothing = 1
+					end if
+				elsif WhatBowl == SecondBowl
+					if CowFirstBallScore == 10
+						if CowLastScoreBowled == 10
+							run script PlayAnims(Cow, Strike)
+							GotStrike = 1
+						elsif CowLastScoreBowled == 0
+							run script PlayAnims(Cow, MissedPins)
+							GotNothing = 1
+						end if
+					else
+						if CowLastScoreBowled + CowFirstBallScore == 10
+							run script PlayAnims(Cow, Spare)
+							GotSpare = 1
+						elsif CowLastScoreBowled + CowFirstBallScore == 0
+							run script PlayAnims(Cow, MissedPins)
+							GotNothing = 1
+						end if
+					end if
+				elsif WhatBowl == ExtraBowl
+					if CowSecondBallScore == 10
+						if CowLastScoreBowled == 10
+							run script PlayAnims(Cow, Strike)
+							GotStrike = 1
+						elsif CowLastScoreBowled == 0
+							run script PlayAnims(Cow, MissedPins)
+							GotNothing = 1
+						end if
+					elsif CowFirstBallScore + CowSecondBallScore == 10
+						if CowLastScoreBowled == 10
+							run script PlayAnims(Cow, Strike)
+							GotStrike = 1
+						elsif CowLastScoreBowled == 0
+							run script PlayAnims(Cow, MissedPins)
+							GotNothing = 1
+						end if
+					else
+						if CowLastScoreBowled + CowSecondBallScore == 10
+							run script PlayAnims(Cow, Spare)
+							GotSpare = 1
+						elsif CowLastScoreBowled + CowSecondBallScore == 0
+							run script PlayAnims(Cow, MissedPins)
+							GotNothing = 1
+						end if
+					end if
+				end if
+			end if
+		end if
+	end if
+	if GotStrike == 0 and GotSpare == 0 and GotNothing == 0 and CancelCurrentGame == 0
+		run script CommentOnHowGameIsGoing(WhosBowl, WhatBowl, RoundNo)
+	end if
+end script ReactionToBowl
+
+begin script CommentOnHowGameIsGoing(WhosBowl, WhatBowl, RoundNo)
+	Player = 0
+	Cow = 1
+	FirstBowl = 1
+	SecondBowl = 2
+	ExtraBowl = 3
+	LineToSay = 0
+	LineAlreadySpoken = 0
+	RealPlayerTotalScore = 0
+	RealCowTotalScore = 0
+start
+	if WhosBowl == Player
+		if WhatBowl == FirstBowl
+			if PlayerLastScoreBowled <= 3
+				run script BadBowl(Player)
+				LineAlreadySpoken = 1
+			elsif PlayerLastScoreBowled >= 7
+				run script GoodBowl(Player)
+				LineAlreadySpoken = 1
+			else
+				LineAlreadySpoken = 0
+			end if
+		elsif WhatBowl == SecondBowl
+			if PlayerFirstBallScore + PlayerLastScoreBowled <= 3
+				run script BadBowl(Player)
+				LineAlreadySpoken = 1
+			elsif PlayerFirstBallScore + PlayerLastScoreBowled >= 7 and PlayerLastScoreBowled > 0
+				run script GoodBowl(Player)
+				LineAlreadySpoken = 1
+			else
+				LineAlreadySpoken = 0
+			end if
+		end if
+	else
+		if WhatBowl == FirstBowl
+			if CowLastScoreBowled <= 3
+				run script BadBowl(Cow)
+				LineAlreadySpoken = 1
+			elsif CowLastScoreBowled >= 7
+				run script GoodBowl(Cow)
+				LineAlreadySpoken = 0
+			else
+				LineAlreadySpoken = 0
+			end if
+		elsif WhatBowl == SecondBowl
+			if CowFirstBallScore + CowLastScoreBowled <= 3
+				run script BadBowl(Cow)
+				LineAlreadySpoken = 1
+			elsif CowFirstBallScore + CowLastScoreBowled >= 7 and CowLastScoreBowled > 0
+				run script GoodBowl(Cow)
+				LineAlreadySpoken = 0
+			else
+				LineAlreadySpoken = 0
+			end if
+		end if
+	end if
+	RealPlayerTotalScore = PlayerTotalScore + PlayerUnclaimedPoints
+	RealCowTotalScore = CowTotalScore + CowUnclaimedPoints
+	if LineAlreadySpoken == 0 and WhosBowl == Cow and WhatBowl == SecondBowl and RoundNo < BowlingMaxRounds
+		if RealPlayerTotalScore > RealCowTotalScore
+			begin dialogue
+				LineToSay = variable constant from HELP_TEXT_COW_BOWLING_LOSING_01 to HELP_TEXT_COW_BOWLING_LOSING_05
+				say single line constant LineToSay by CowBowling
+				wait until read
+			end dialogue
+		elsif RealPlayerTotalScore < RealCowTotalScore
+			begin dialogue
+				LineToSay = variable constant from HELP_TEXT_COW_BOWLING_WINNING_01 to HELP_TEXT_COW_BOWLING_WINNING_05
+				say single line constant LineToSay by CowBowling
+				wait until read
+			end dialogue
+		else
+			begin dialogue
+				say single line HELP_TEXT_COW_BOWLING_DRAWING_10 by CowBowling
+				wait until read
+			end dialogue
+		end if
+	end if
+end script CommentOnHowGameIsGoing
+
+begin script BadBowl(WhosBowl)
+	Player = 0
+	RandomLine = 0
+	LineToSay = 0
+start
+	if WhosBowl == Player
+		RandomLine = number from 1 to 4
+		begin dialogue
+			if RandomLine == 1
+				say single line HELP_TEXT_COW_BOWLING_YOU_BAD_01 by CowBowling
+			elsif RandomLine == 2
+				say single line HELP_TEXT_COW_BOWLING_YOU_BAD_02 by CowBowling
+			elsif RandomLine == 3
+				say single line HELP_TEXT_COW_BOWLING_YOU_BAD_04 by CowBowling
+			elsif RandomLine == 4
+				say single line HELP_TEXT_COW_BOWLING_YOU_BAD_05 by CowBowling
+			end if
+			wait until read
+		end dialogue
+	else
+		begin dialogue
+			LineToSay = variable constant from HELP_TEXT_COW_BOWLING_COW_JUST_LOSING_01 to HELP_TEXT_COW_BOWLING_COW_JUST_LOSING_03
+			say single line constant LineToSay by CowBowling
+			wait until read
+		end dialogue
+	end if
+end script BadBowl
+
+begin script GoodBowl(WhosBowl)
+	Player = 0
+	LineToSay = 0
+start
+	if WhosBowl == Player
+		begin dialogue
+			LineToSay = variable constant from HELP_TEXT_COW_BOWLING_YOU_GOOD_01 to HELP_TEXT_COW_BOWLING_YOU_GOOD_05
+			say single line constant LineToSay by CowBowling
+			wait until read
+		end dialogue
+	else
+	end if
+end script GoodBowl
+
+begin script MakePinsMovable(Moveable)
+	Count = 0
+start
+	if Moveable == 1
+		enable Pin[0] moveable
+		enable Pin[1] moveable
+		enable Pin[2] moveable
+		enable Pin[3] moveable
+		enable Pin[4] moveable
+		enable Pin[5] moveable
+		enable Pin[6] moveable
+		enable Pin[7] moveable
+		enable Pin[8] moveable
+		enable Pin[9] moveable
+	else
+		disable Pin[0] moveable
+		disable Pin[1] moveable
+		disable Pin[2] moveable
+		disable Pin[3] moveable
+		disable Pin[4] moveable
+		disable Pin[5] moveable
+		disable Pin[6] moveable
+		disable Pin[7] moveable
+		disable Pin[8] moveable
+		disable Pin[9] moveable
+	end if
+end script MakePinsMovable
+
+begin script AdvisorsUnhappy
+start
+	if CancelCurrentGame == 0
+		NextMessage = variable constant from HELP_TEXT_COW_BOWLING_ADVISOR_POOR_01 to HELP_TEXT_COW_BOWLING_ADVISOR_POOR_05
+	end if
+end script AdvisorsUnhappy
+
+begin script AdvisorsHappy
+start
+	if CancelCurrentGame == 0
+		NextMessage = variable constant from HELP_TEXT_COW_BOWLING_ADVISOR_WELL_03 to HELP_TEXT_COW_BOWLING_ADVISOR_WELL_06
+	end if
+end script AdvisorsHappy
+
+begin script CowHappy
+start
+	if CancelCurrentGame == 0
+		NextMessage = variable constant from HELP_TEXT_COW_BOWLING_COW_GOOD_01 to HELP_TEXT_COW_BOWLING_COW_GOOD_05
+	end if
+end script CowHappy
+
+begin script CowUnhappy
+start
+	if CancelCurrentGame == 0
+		NextMessage = variable constant from HELP_TEXT_COW_BOWLING_COW_BAD_01 to HELP_TEXT_COW_BOWLING_COW_BAD_05
+	end if
+end script CowUnhappy
+
+begin script TykesBehaviourInBowling
+	Counter = 0
+	FoundFelledPin = 0
+	PinFelled = 0
+start
+	begin loop
+		if Tyke exists and TykeIsReady == 1 and TykeFree == 1 and PlayerPlayed == 1 and PlayingForFun == 0 and BowlingBeingPlayed == 1
+			TykeHasDoneAction = 0
+			TykeHasNoActionToDo = 0
+			FindAnActionForTykeNow = 0
+			wait until FindAnActionForTykeNow == 1
+			if (CowTotalScore - PlayerTotalScore >= 10 or NumberOfPinsMissed == 10) and PlayerTotalBowled % 2 == 0
+				if CancelCurrentGame == 0
+					run background script MakePinsMovable(1)
+					run script TykeKicksPins
+					run background script MoveTykeToPinsPos
+					TykeHasDoneAction = 1
+				end if
+			else
+				TykeHasNoActionToDo = 1
+			end if
+		end if
+		until CancelCurrentGame == 1
+		until BowlingBeingPlayed == 0
+		until PlayingForFun == 1
+	end loop
+end script TykesBehaviourInBowling
+
+begin script MoveTykeToNearCreaturePos
+	TykesByCreaturePos = marker at [591.7518, 48.91, 1297.3436]
+	TykesIntermediatePos = marker at [549.2877, 48.91, 1292.715]
+start
+	move Tyke position to [TykesIntermediatePos] radius 0
+	wait until get distance from [Tyke] to [TykesIntermediatePos] < 5 or 60 seconds or CancelCurrentGame == 1
+	move Tyke position to [TykesByCreaturePos] radius 0
+	wait until get distance from [Tyke] to [TykesByCreaturePos] < 5 or 60 seconds or CancelCurrentGame == 1
+	wait until 1 seconds
+	force Tyke CREATURE_SMILE_AT_FRIEND MyCreature
+	wait until Tyke played
+end script MoveTykeToNearCreaturePos
+
+begin script MoveTykeToPinsPos
+	TykeByPinsPos = marker at [PinPos] + ([-15, 10])
+	Counter = 0
+	PinFound = 0
+start
+	move Tyke position to [TykeByPinsPos] radius 0
+	wait until get distance from [Tyke] to [TykeByPinsPos] < 5 or 60 seconds or CancelCurrentGame == 1
+	while Counter < 10 and PinFound == 0 and CancelCurrentGame == 0
+		if Pin[Counter] exists
+			PinFound = 1
+		end if
+		Counter++
+	end while
+	if Pin[Counter - 1] exists
+		force Tyke CREATURE_LOOK_BUT_DONT_APPROACH Pin[Counter - 1]
+		wait until Tyke played
+		force Tyke POINT_AT Pin[Counter - 1]
+		wait until Tyke played
+	else
+		force Tyke CREATURE_LOOK_BUT_DONT_APPROACH MainScoreboard
+		wait until Tyke played
+	end if
+end script MoveTykeToPinsPos
+
+begin script MoveTykeToFinishPos
+	TykesFinishPos = marker at [573.1973, 48.91, 1286.9529] + ([10, 10])
+start
+	move Tyke position to [TykesFinishPos] radius 0
+end script MoveTykeToFinishPos
+
+begin script TykeKicksPins
+	Counter = 0
+	PinFound = 0
+	PinToKick = 0
+	FaceItTheresNoPin = create timer for 0 seconds
+	PinNotFound = 0
+start
+	set FaceItTheresNoPin time to 4 seconds
+	while PinFound == 0 and CancelCurrentGame == 0
+		PinToKick = number from 0 to 9
+		if Pin[PinToKick] exists and PinHit[PinToKick] == 0
+			if PinToKick != 4 and PinToKick != 7 and PinToKick != 8
+				PinFound = 1
+			end if
+		end if
+		if get FaceItTheresNoPin time remaining <= 0
+			PinNotFound = 1
+		end if
+	end while
+	if PinNotFound == 0
+		force Tyke CREATURE_KICK_AT_POS Pin[PinToKick]
+		wait until Tyke played
+	end if
+end script TykeKicksPins
+
+begin script BowlingFireCheck
+	AlwaysCheck = 1
+start
+	while AlwaysCheck == 1
+		if MyCreature exists
+			if MyCreature on fire and get distance from [MyCreature] to [BBallPos] < 20
+				delete fire at [MyCreature] radius 10
+			end if
+		end if
+		wait until 0.1 seconds
+		if Tyke exists and TykeIsReady == 1 and TykeFree == 1
+			if Tyke on fire and get distance from [Tyke] to [PinPos] < 30
+				delete fire at [Tyke] radius 10
+			end if
+		end if
+		wait until 0.1 seconds
+		if CowBowling exists
+			if CowBowling on fire
+				delete fire at [CowBowling] radius 10
+			end if
+		end if
+		wait until 0.1 seconds
+	end while
+end script BowlingFireCheck
+
+begin script BowlingCheckForObstructions(Pos, SearchSize)
+	Object = 0
+	KeepChecking = 1
+	DeletedObject = 0
+	ReadyForComment = create timer for 0 seconds
+start
+	while KeepChecking == 1
+		DeletedObject = 0
+		Object = get ROCK_OBJECT at [Pos] radius SearchSize excluding scripted
+		if Object exists
+			delete Object with fade
+			DeletedObject = 1
+		end if
+		wait until 0.1 seconds
+		Object = get TREE at [Pos] radius SearchSize excluding scripted
+		if Object exists
+			delete Object with fade
+			DeletedObject = 1
+		end if
+		wait until 0.1 seconds
+		Object = get SCRIPT_OBJECT_TYPE_DEAD_TREE at [Pos] radius SearchSize excluding scripted
+		if Object exists
+			delete Object with fade
+			DeletedObject = 1
+		end if
+		wait until 0.1 seconds
+		Object = get STORE at [Pos] radius SearchSize excluding scripted
+		if Object exists
+			delete Object with fade
+			DeletedObject = 1
+		end if
+		wait until 0.1 seconds
+		Object = get OBJECT MOBILE_STATIC_INFO_CELT_FENCE_SHORT at [Pos] radius SearchSize excluding scripted
+		if Object exists
+			delete Object with fade
+			DeletedObject = 1
+		end if
+		wait until 0.1 seconds
+		Object = get OBJECT MOBILE_STATIC_INFO_CELT_FENCE_TALL at [Pos] radius SearchSize excluding scripted
+		if Object exists
+			delete Object with fade
+			DeletedObject = 1
+		end if
+		wait until 0.1 seconds
+		Object = get POO at [Pos] radius SearchSize excluding scripted
+		if Object exists
+			delete Object with fade
+			DeletedObject = 1
+		end if
+		wait until 0.1 seconds
+		Object = get OBJECT SINGINGSTONE1 at [Pos] radius SearchSize excluding scripted
+		if Object exists
+			delete Object with fade
+			DeletedObject = 1
+		end if
+		wait until 0.1 seconds
+		Object = get OBJECT MOBILE_STATIC_INFO_GATE_TOTEM_COW at [Pos] radius SearchSize excluding scripted
+		if Object exists
+			delete Object with fade
+			DeletedObject = 1
+		end if
+		wait until 0.1 seconds
+		Object = get OBJECT MOBILE_STATIC_INFO_GATE_TOTEM_APE at [Pos] radius SearchSize excluding scripted
+		if Object exists
+			delete Object with fade
+			DeletedObject = 1
+		end if
+		wait until 0.1 seconds
+		Object = get OBJECT MOBILE_STATIC_INFO_GATE_TOTEM_TIGER at [Pos] radius SearchSize excluding scripted
+		if Object exists
+			delete Object with fade
+			DeletedObject = 1
+		end if
+		wait until 0.1 seconds
+		Object = get MOBILE_OBJECT at [Pos] radius SearchSize excluding scripted
+		if Object exists
+			delete Object with fade
+			DeletedObject = 1
+		end if
+		wait until 0.1 seconds
+		Object = get SCAFFOLD at [Pos] radius SearchSize excluding scripted
+		if Object exists
+			delete Object with fade
+			DeletedObject = 1
+		end if
+		wait until 0.1 seconds
+		Object = get OBJECT MOBILE_STATIC_INFO_WEEPING_STONE at [Pos] radius SearchSize excluding scripted
+		if Object exists
+			delete Object with fade
+			DeletedObject = 1
+		end if
+		wait until 0.1 seconds
+		if DeletedObject == 1
+			if BowlingReadyToStart == 1
+				if get distance from (camera position) to [BBallPos] < 100
+					if get ReadyForComment time remaining <= 0
+						run background script ComplainAboutCheating
+						set ReadyForComment time to 30 seconds
+					end if
+				end if
+			end if
+		end if
+	end while
+end script BowlingCheckForObstructions
+
+begin script ComplainAboutCheating
+	BlockMessage = 0
+start
+	if dialogue ready
+		begin dialogue
+			BlockMessage = variable constant from HELP_TEXT_COW_BOWLING_BLOCK_ALLEY_01 to HELP_TEXT_COW_BOWLING_BLOCK_ALLEY_03
+			say single line constant BlockMessage by CowBowling
+			wait until read
+		end dialogue
+	end if
+end script ComplainAboutCheating
+
+begin script MakeSureCreatureIsAtBowling
+start
+	while PlayingForFun == 0 and BowlingTrialStarted == 1 and CancelCurrentGame == 0
+		if not get distance from [MyCreature] to [PlayerCreatureInitialPos] < MinTeleportDistance
+			set MyCreature position to [PlayerCreatureInitialPos]
+			set MyCreature focus to [PinPos]
+		end if
+		wait until 0.1 seconds
+		until CancelCurrentGame == 1
+	end while
+end script MakeSureCreatureIsAtBowling
+
+begin script ConfirmCancelMessage
+	ConfirmMessage = 0
+start
+	ConfirmMessage = variable constant from HELP_TEXT_TRIAL_CANCEL_01 to HELP_TEXT_TRIAL_CANCEL_03
+	begin dialogue
+		if good spirit speaks constant ConfirmMessage
+			eject good spirit
+			make good spirit point at [BowlingCancelGameHighlight]
+		else
+			eject evil spirit
+			make evil spirit point at [BowlingCancelGameHighlight]
+		end if
+		say single line constant ConfirmMessage
+		wait until read or BowlingCancelGameHighlight clicked or not BowlingCancelGameHighlight exists or BowlingBall is HELD or [PinPos] clicked radius 20 or Pin[0] clicked or Pin[1] clicked or Pin[2] clicked or Pin[3] clicked or Pin[4] clicked or Pin[5] clicked or Pin[6] clicked or Pin[7] clicked or Pin[8] clicked or Pin[9] clicked
+	end dialogue
+end script ConfirmCancelMessage
+
+begin script TykeLooksAtBall
+start
+	while BowlingBall is FLYING
+		set Tyke focus to [BowlingBall]
+	end while
+end script TykeLooksAtBall
+
+begin script PlayPinSound
+	Counter = 0
+	QuitLoops = 0
+	SpeedOfBall = 0
+	SpeedTimer = create timer for 0 seconds
+	NumPins = 0
+start
+	begin loop
+		Counter = 0
+		while (Counter < 10 or QuitLoops == 1) and CancelCurrentGame == 0
+			if Counter != 4 and Counter != 8 and Counter != 7
+				if Pin[Counter] exists and Pin[Counter] is FLYING
+					if Counter < 3
+						SpeedOfBall = get SpeedTimer time since set
+						NumPins = 10 - AmountOfPinsHit
+						if SpeedOfBall < 3 and NumPins >= 5
+							start sound constant from LH_SAMPLE_BOWLSTRIKE_01 to LH_SAMPLE_BOWLSTRIKE_02 at [Pin[Counter]]
+						elsif SpeedOfBall < 4 and NumPins >= 3
+							start sound constant from LH_SAMPLE_SKITTLEHITMULTIPLE_01 to LH_SAMPLE_SKITTLEHITMULTIPLE_02 at [Pin[Counter]]
+						elsif SpeedOfBall < 5
+							start sound constant from LH_SAMPLE_SKITTLEHITSINGLE_01 to LH_SAMPLE_SKITTLEHITSINGLE_03 at [Pin[Counter]]
+						end if
+					else
+						start sound constant from LH_SAMPLE_SKITTLEHITSINGLE_01 to LH_SAMPLE_SKITTLEHITSINGLE_03 at [Pin[Counter]]
+					end if
+					QuitLoops = 1
+				end if
+			end if
+			Counter++
+			until CancelCurrentGame == 1
+		end while
+		until not BowlingBall is FLYING or not BowlingBall exists or not get distance from [BowlingBall] to [BBallPos] < 90
+		until QuitLoops == 1
+		until CancelCurrentGame == 1
+	end loop
+end script PlayPinSound
+

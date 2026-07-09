@@ -1,0 +1,780 @@
+//LHVM Challenge source version 8
+//Decompiled with CHLASM tool by Daniels118
+
+global WaypointReached
+global ShrinkSpell
+global Crowd1
+global Crowd2
+global Crowd3
+global Crowd4
+global Crowd5
+global Crowd6
+global Crowd7
+global Crowd8
+global TortoiseFinished
+
+begin script DoPoepleinACircle
+	Bods[160]
+	Count = 0
+start
+	while Count < 90
+		Bods[Count] = create VILLAGER VILLAGER_INFO_EGYPTIAN_FORESTER_MALE at (get target from [1519.116, 77.72, 1203.181] to [1574.507, 77.72, 1233.761] distance 70 angle Count * 4)
+		set Bods[Count] position to [Bods[Count]] + [number from -5 to 5, 0, number from -5 to 5]
+		Count++
+	end while
+	wait until 5000 seconds
+end script DoPoepleinACircle
+
+begin script CreatePeople
+start
+	Crowd1 = create VILLAGER VILLAGER_INFO_EGYPTIAN_HOUSEWIFE_FEMALE at [1612.192, 93.349, 1160.527]
+	Crowd2 = create VILLAGER VILLAGER_INFO_EGYPTIAN_FORESTER_MALE at [1613.231, 77.919, 1160.266]
+	Crowd3 = create VILLAGER VILLAGER_INFO_GREEK_FORESTER_MALE at [1611.257, 77.796, 1160.15]
+	Crowd4 = create VILLAGER VILLAGER_INFO_NORSE_FISHERMAN_MALE at [1612.433, 77.778, 1161.597]
+	Crowd5 = create VILLAGER VILLAGER_INFO_TIBETAN_HOUSEWIFE_FEMALE at [1609.135, 77.72, 1161.046]
+	Crowd6 = create VILLAGER SHAOLIN at [1614.206, 77.827, 1162.578]
+	Crowd7 = create VILLAGER HIPPY at [1614.829, 77.935, 1161.606]
+	Crowd8 = create VILLAGER PIPER at [1609.071, 77.72, 1160.262]
+	ALTITUDE of Crowd1 = 13.4
+	ALTITUDE of Crowd2 = 13.4
+	ALTITUDE of Crowd3 = 13.4
+	ALTITUDE of Crowd4 = 13.3
+	ALTITUDE of Crowd5 = 12.7
+	ALTITUDE of Crowd6 = 13.2
+	ALTITUDE of Crowd7 = 13.2
+	ALTITUDE of Crowd8 = 13.4
+	set Crowd1 focus to [1556.633, 77.72, 1263.875]
+	set Crowd2 focus to [1556.633, 77.72, 1263.875]
+	set Crowd3 focus to [1556.633, 77.72, 1263.875]
+	set Crowd4 focus to [1556.633, 77.72, 1263.875]
+	set Crowd5 focus to [1556.633, 77.72, 1263.875]
+	set Crowd6 focus to [1556.633, 77.72, 1263.875]
+	set Crowd7 focus to [1556.633, 77.72, 1263.875]
+	set Crowd8 focus to [1556.633, 77.72, 1263.875]
+	Crowd1 play ANM_P_CROWD_IMPRESSED_1 loop -1
+	Crowd2 play ANM_P_CROWD_WON loop -1
+	Crowd3 play ANM_P_CROWD_IMPRESSED_2 loop -1
+	Crowd4 play ANM_P_CONDUCT_MEETING loop -1
+	Crowd5 play ANM_P_CROWD_WON loop -1
+	Crowd6 play ANM_P_DANCE_PISS_TAKE_ loop -1
+	Crowd7 play ANM_P_CROWD_IMPRESSED_1 loop -1
+	Crowd8 play ANM_P_CLAP_1 loop -1
+end script CreatePeople
+
+begin script DeletePeople
+start
+	delete Crowd1
+	delete Crowd2
+	delete Crowd3
+	delete Crowd4
+	delete Crowd5
+	delete Crowd6
+	delete Crowd7
+	delete Crowd8
+end script DeletePeople
+
+begin script MakePeopleMexicanWave
+start
+end script MakePeopleMexicanWave
+
+begin script ExplodingBarrel(Barrel)
+	Fireball = 0
+start
+	begin loop
+		until not ALTITUDE of Barrel > 0
+	end loop
+	Fireball = cast SPELL_FIREBALL_LEVEL_1 spell at [Barrel] from [Barrel] radius 1 time 30 curl 0
+	delete Barrel with explosion
+	wait until 4 seconds
+end script ExplodingBarrel
+
+begin script OgreThrowRocks
+	Barrels[5]
+	BarrelPos = marker at [2581.28, 80.581, 2803.405]
+	OgreCI = 0
+	ThrowPos = marker at [2733.295, 34.84, 2604.821]
+	BarrelCount = 0
+	PosToThrowTo = 0
+	CreatureHeight = 0
+start
+	OgreCI = create DUMB_CREATURE CREATURE_TYPE_TORTOISE at [2580.211, 82.078, 2810.691]
+	run script SetupCreatureIsleCreature(OgreCI)
+	SCALE of OgreCI = 0.5
+	ALIGNMENT of OgreCI = -0.75
+	Barrels[0] = create MOBILE_OBJECT MOBILE_OBJECT_INFO_EGPT_BARREL at [BarrelPos]
+	Barrels[1] = create MOBILE_OBJECT MOBILE_OBJECT_INFO_EGPT_BARREL at [BarrelPos]
+	Barrels[2] = create MOBILE_OBJECT MOBILE_OBJECT_INFO_EGPT_BARREL at [BarrelPos]
+	Barrels[3] = create MOBILE_OBJECT MOBILE_OBJECT_INFO_EGPT_BARREL at [BarrelPos]
+	Barrels[4] = create MOBILE_OBJECT MOBILE_OBJECT_INFO_EGPT_BARREL at [BarrelPos]
+	SCALE of Barrels[0] = 2
+	SCALE of Barrels[1] = 2
+	SCALE of Barrels[2] = 2
+	SCALE of Barrels[3] = 2
+	SCALE of Barrels[4] = 2
+	wait until 10 seconds
+	BarrelCount = 0
+	MyCreature = get player 1 creature
+	while BarrelCount < 5
+		force OgreCI CREATURE_EXAMINE_BY_PICKING_UP Barrels[BarrelCount]
+		wait until 2 seconds
+		wait until get distance from [MyCreature] to [ThrowPos] < 250
+		CreatureHeight = HEIGHT of MyCreature
+		PosToThrowTo = marker at [PosToThrowTo] + [0, -CreatureHeight, 0]
+		force OgreCI CREATURE_HURL_OBJECT_IN_HAND MyCreature
+		wait until 4 seconds
+		run background script ExplodingBarrel(Barrels[BarrelCount])
+		BarrelCount++
+	end while
+	OgreCI play ANM_A_COW_DEAD loop 10
+	wait until OgreCI played
+	wait until 50000 seconds
+end script OgreThrowRocks
+
+begin script CreateFireBallShooter(ShooterPos, Delay)
+	FireBall = 0
+	VolcanoPos = marker at [2121.726, 52.961, 2068.837]
+start
+	begin loop
+		FireBall = cast SPELL_FIREBALL_LEVEL_1 spell at [ShooterPos] + [number from -7 to 7, 0, number from -7 to 7] from [VolcanoPos] radius 1 time 40 curl 0
+		wait until Delay seconds
+	end loop
+end script CreateFireBallShooter
+
+begin script LookAfterGateOpeningAndClosing
+	Lookout = 0
+	GateMan = 0
+	LookOutPos = marker at [1785.399, 42.88, 1559.408]
+	GateManPos = marker at [1809.557, 42.88, 1568.601]
+	ActivationPoint = marker at [1750.499, 47.198, 1541.978]
+	CreatureGates = get FEATURE at [1802.745, 42.71, 1550.225] radius 5
+start
+	MyCreature = get player 1 creature
+	Lookout = create VILLAGER VILLAGER_INFO_GREEK_HOUSEWIFE_FEMALE at [LookOutPos]
+	ALTITUDE of Lookout = 5.8
+	GateMan = create VILLAGER VILLAGER_INFO_GREEK_FORESTER_MALE at [GateManPos]
+	begin loop
+		set Lookout focus to [1749.032, 50.52, 1551.769]
+		set GateMan focus to [Lookout]
+		disable Lookout pickup
+		disable GateMan pickup
+		Lookout play ANM_P_LOOKING_FOR_SOMETHING loop -1
+		GateMan play ANM_P_AMBIENT2 loop -1
+		begin loop
+			until get distance from [MyCreature] to [ActivationPoint] < 20 or get distance from [Tyke] to [ActivationPoint] < 20
+		end loop
+		set Lookout focus to [GateMan]
+		Lookout play ANM_P_CLAP_2 loop 1
+		GateMan play ANM_P_LOVING_TOUCH loop 1
+		open CreatureGates
+		wait until 20 seconds
+		begin loop
+			until not get distance from [MyCreature] to [ActivationPoint] < 20 and not get distance from [Tyke] to [ActivationPoint] < 20
+		end loop
+		close CreatureGates
+		until not Lookout exists or not GateMan exists
+	end loop
+	if Lookout exists
+		ALTITUDE of Lookout = 0
+		release Lookout
+	end if
+	if GateMan exists
+		release GateMan
+	end if
+end script LookAfterGateOpeningAndClosing
+
+begin script FreezeCreature(Creature)
+	Spell = 0
+start
+	Spell = cast CREATURE_SPELL_FREEZE spell on Creature from [Creature] + [0, 5, 0] radius 0 time -1 curl 0
+	wait until 15 seconds
+	delete Spell
+end script FreezeCreature
+
+begin script SpeedUpCreature(Creature)
+	Spell = 0
+start
+	Spell = cast MAGIC_TYPE_CREATURE_SPELL_FAST spell on Creature from [Creature] radius 0 time -1 curl 0
+	wait until 15 seconds
+	delete Spell
+end script SpeedUpCreature
+
+begin script MakeCreatureRunAroundRaceTrack(Creature)
+	Waypoint[8]
+	TWaypointReached = 0
+	ShrinkSpellCast = 0
+	SpeedSpellCast = 0
+	PlayerCreature = 0
+	Timer = 0
+start
+	TortoiseFinished = 0
+	teach Creature MAGICAL SPELL_WATER_LEVEL_1 TRUE percentage 1
+	Waypoint[0] = marker at [1702.88, 74.684, 1322.499]
+	Waypoint[1] = marker at [1932.906, 57.081, 1692.267]
+	Waypoint[2] = marker at [2691.928, 26.839, 1938.709]
+	Waypoint[3] = marker at [2367.348, 0.157, 2402.083]
+	Waypoint[4] = marker at [1748.746, 33.144, 2173.664]
+	Waypoint[5] = marker at [1482.756, 27.695, 1894.243]
+	Waypoint[6] = marker at [1457.303, 52.543, 1673.737]
+	Waypoint[7] = marker at [1516.993, 77.72, 1210.243]
+	move Creature position to [Waypoint[0]] radius 0
+	PlayerCreature = get player 1 creature
+	begin loop
+		if get distance from [PlayerCreature] to [Creature] < 50 and get Timer time remaining <= 0 and WaypointReached > 1
+			if not Creature affected by spell CREATURE_SPELL_FREEZE
+				run background script FreezeCreature(MyCreature)
+				Creature play ANM_SWALLOW_FLAP loop 1
+				wait until 6 seconds
+				set Creature focus to [Waypoint[TWaypointReached]]
+				move Creature position to [Waypoint[TWaypointReached]] radius 0
+				SPEED of Creature = 10
+				Timer = create timer for 60 seconds
+			end if
+		end if
+		if TWaypointReached != 7
+			if get distance from [Creature] to [Waypoint[TWaypointReached]] < 25
+				TWaypointReached++
+				set Creature focus to [Waypoint[TWaypointReached]]
+				move Creature position to [Waypoint[TWaypointReached]] radius 0
+				SPEED of Creature = 10
+			end if
+		else
+			TortoiseFinished = 1
+		end if
+		if number from 0 to 250 == 50
+			run background script SpeedUpCreature(Creature)
+			set Creature focus to [Waypoint[TWaypointReached]]
+			move Creature position to [Waypoint[TWaypointReached]] radius 0
+			SPEED of Creature = 10
+		end if
+		if get distance from [Creature] to [Waypoint[1]] < 10 and ShrinkSpellCast == 0 and WaypointReached > 1
+			ShrinkSpellCast = 1
+			ShrinkSpell = cast CREATURE_SPELL_SMALL spell on Creature from [Creature] + [0, 5, 0] radius 0 time -1 curl 0
+			Creature play ANM_SWALLOW_FLAP loop 1
+			wait until 6 seconds
+			set Creature focus to [1851.366, 60.891, 1917.466]
+			move Creature position to [1851.366, 60.891, 1917.466] radius 0
+			wait until get distance from [Creature] to [1851.366, 60.891, 1917.466] == 0
+			set Creature focus to [1780.955, 42.21, 2183.511]
+			move Creature position to [1780.955, 42.21, 2183.511] radius 0
+			wait until get distance from [Creature] to [1780.955, 42.21, 2183.511] == 0
+			delete ShrinkSpell
+			Creature play ANM_SWALLOW_FLAP loop 1
+			wait until 6 seconds
+			TWaypointReached = 4
+			set Creature focus to [Waypoint[TWaypointReached]]
+			move Creature position to [Waypoint[TWaypointReached]] radius 0
+			SPEED of Creature = 10
+		end if
+		if Creature on fire
+			move Creature position to [Creature] radius 0
+			wait until 0.2 seconds
+			ENERGY of Creature = 1
+			EXHAUSTION of Creature = 0
+			force Creature CREATURE_PUT_OUT_FIRE_WITH_MAGIC_WATER Creature
+			wait until Creature played or 20 seconds
+			delete fire at [Creature] radius 20
+			wait until 2 seconds
+			set Creature focus to [Waypoint[TWaypointReached]]
+			move Creature position to [Waypoint[TWaypointReached]] radius 0
+			SPEED of Creature = 10
+		end if
+	end loop
+end script MakeCreatureRunAroundRaceTrack
+
+begin script RaceWinScene(Tortoise, Stadium)
+	TickerTape1 = 0
+	TickerTape2 = 0
+	Speech = 0
+start
+	begin known cinema
+		set fade red 0 green 0 blue 0 time 1
+		wait until fade ready
+		disable Tortoise navigation
+		disable MyCreature navigation
+		wait until widescreen transition complete
+		MyCreature = get player 1 creature
+		detach sound tag LH_SAMPLE_HUGECROWD_01 from Stadium
+		attach 3d sound tag LH_SAMPLE_HUGECROWD_02 to Stadium
+		set Tortoise position to [1452.383, 82.543, 1190.416]
+		set MyCreature position to [1460.673, 82.546, 1197.995]
+		move MyCreature position to [1599.867, 77.72, 1216.583] radius 0
+		set camera position to [1614.192, 93.349, 1157.527]
+		set camera focus to [1598.126, 93.346, 1191.794]
+		run script CreatePeople
+		disable villager sound
+		enable Crowd1 high graphics detail
+		enable Crowd2 high graphics detail
+		enable Crowd3 high graphics detail
+		enable Crowd4 high graphics detail
+		enable Crowd5 high graphics detail
+		enable Crowd6 high graphics detail
+		enable Crowd7 high graphics detail
+		enable Crowd8 high graphics detail
+		TickerTape1 = create special effect SPOT_VISUAL_TICKER_TAPE at [1602.643, 77.72, 1181.68] + [0, 30, 0] time 100000
+		TickerTape2 = create special effect SPOT_VISUAL_TICKER_TAPE at [1545.913, 77.72, 1298.569] + [0, 30, 0] time 100000
+		Crowd7 play ANM_P_CROWD_MEXICAN_WAVE loop 2000
+		Crowd6 play ANM_P_CROWD_MEXICAN_WAVE loop 2000
+		wait until 0.1 seconds
+		Crowd2 play ANM_P_CROWD_MEXICAN_WAVE loop 2000
+		wait until 0.1 seconds
+		Crowd4 play ANM_P_CROWD_MEXICAN_WAVE loop 2000
+		wait until 0.1 seconds
+		Crowd1 play ANM_P_CROWD_MEXICAN_WAVE loop 2000
+		wait until 0.1 seconds
+		Crowd3 play ANM_P_CROWD_MEXICAN_WAVE loop 2000
+		wait until 0.1 seconds
+		Crowd5 play ANM_P_CROWD_MEXICAN_WAVE loop 2000
+		Crowd8 play ANM_P_CROWD_MEXICAN_WAVE loop 2000
+		set fade in time 1
+		wait until fade ready
+		wait until get distance from [MyCreature] to [1599.867, 77.72, 1216.583] == 0
+		set MyCreature focus to [1614.192, 93.349, 1157.527]
+		wait until 1 seconds
+		MyCreature play ANM_A_COW_DEAD_ON_RHS loop 16
+		wait until 1 seconds
+		move Tortoise position to [1547.455, 77.72, 1257.142] radius 0
+		MyCreature play ANM_A_COW_LANDED_RIGHT_SIDE loop 16
+		wait until get distance from [Tortoise] to [1547.455, 77.72, 1257.142] == 0
+		set camera position to [1487.76, 119.977, 1186.049]
+		set camera focus to [2724.449, -230.116, 2001.479]
+		set Tortoise focus to [MyCreature]
+		wait until 1 seconds
+		MyCreature play ANM_A_COW_DEAD_ON_RHS loop 16
+		Tortoise play ANM_A_COW_DEAD loop 16
+		wait until 3 seconds
+		Speech = (variable HELP_TEXT_RACE_TORTOISE_LOSES_01) + (number from 0 to 3)
+		if RaceTrialComplete == 0
+			say constant Speech by Tortoise
+		else
+			say single line constant Speech by Tortoise
+		end if
+		wait until read
+		set MyCreature focus to [Tortoise]
+		if RaceTrialComplete == 0
+			say HELP_TEXT_RACE_TORTOISE_LOSES_05 by Tortoise
+			wait until read
+		end if
+		clear dialogue
+		disable Crowd1 high graphics detail
+		disable Crowd2 high graphics detail
+		disable Crowd3 high graphics detail
+		disable Crowd4 high graphics detail
+		disable Crowd5 high graphics detail
+		disable Crowd6 high graphics detail
+		disable Crowd7 high graphics detail
+		disable Crowd8 high graphics detail
+		run script DeletePeople
+		delete TickerTape1
+		delete TickerTape2
+		enable Tortoise navigation
+		enable MyCreature navigation
+		move camera position to [983.128, 283.306, 927.655] time 4
+		move camera focus to [1356.05, 64.974, 1112.567] time 4
+		wait until camera ready
+	end known cinema
+end script RaceWinScene
+
+begin script StartTheRaces
+	IntroSeen = 0
+	ChallengeCompleted = 0
+	Tortoise = 0
+	SilverScroll = 0
+	GoldScroll = 0
+	HighlightPosition = marker at [1575.388, 77.72, 1234.37]
+	TickerTape1 = 0
+	TickerTape2 = 0
+	CreatureHeight = 0
+	Waypoint[7]
+	Speech = 0
+	FireWorks = 0
+	RandomNumber = 0
+	FinishPos = marker at [1509.459, 77.72, 1205.555]
+	RaceTrack1 = 0
+	RaceTrack2 = 0
+	StartTheRacesDYKPos = marker at [1503.919, 77.78, 1175.21]
+	Smoke1 = 0
+	Smoke2 = 0
+	VolcanoPos = marker at [2121.726, 52.961, 2068.837]
+	Stadium = get BIG_BUILDING CREATURE_ISLES_BUILDINGS_INFO_STADIUM at [1578.023, 77.72, 1236.311] radius 50
+start
+	Smoke1 = create special effect SPOT_VISUAL_SMOKE at [VolcanoPos] time 120000
+	Smoke2 = create special effect SPOT_VISUAL_BONFIRE at [VolcanoPos] time 120000
+	SCALE of Smoke1 = 26
+	SCALE of Smoke2 = 46
+	run background script LookAfterGateOpeningAndClosing
+	Waypoint[0] = marker at [1703.78, 74.702, 1321.294]
+	Waypoint[1] = marker at [1932.864, 57.581, 1694.179]
+	Waypoint[2] = marker at [1751.533, 33.189, 2170.407]
+	Waypoint[3] = marker at [1493.349, 26.784, 1893.58]
+	Waypoint[4] = marker at [1458.986, 51.757, 1678.384]
+	Waypoint[5] = marker at [1421.218, 98.712, 1248.919]
+	Waypoint[6] = marker at [1511.565, 77.72, 1208.965]
+	DojoReminderTheRaces = 1
+	begin loop
+		if ChallengeCompleted == 0
+			GoldScroll = create highlight CHALLENGE_THE_RACES HIGHLIGHT_TRIAL at [HighlightPosition]
+			ALTITUDE of GoldScroll = 6
+			run script TrialNotifyWithScriptLockedCreature(GoldScroll)
+		else
+			SilverScroll = create highlight CHALLENGE_THE_RACES HIGHLIGHT_CHALLENGE at [HighlightPosition]
+			ALTITUDE of SilverScroll = 6
+			run script ChallengeHighlightNotifyWithScriptLockedCreature(SilverScroll, HighlightPosition, variable HELP_TEXT_GENERAL_CHALLENGE_START_06)
+		end if
+		if IntroSeen == 0
+			begin cinema
+				set fade red 0 green 0 blue 0 time 1
+				wait until fade ready
+				RaceTrack1 = create special effect from file "racetrack1.exc"
+				RaceTrack2 = create special effect from file "racetrack2.exc"
+				MyCreature = get player 1 creature
+				set MyCreature position to [1663.727, 77.72, 1263.847]
+				set MyCreature focus to [1599.867, 77.72, 1216.583]
+				Tortoise = create dumb creature from creature MyCreature 1 at [1272.902, 129.98, 1373.306] CREATURE_TYPE_TORTOISE
+				ALIGNMENT of Tortoise = -0.25
+				ACTUAL_HEIGHT of Tortoise = ACTUAL_HEIGHT of MyCreature
+				run script SetupCreatureIsleCreature(Tortoise)
+				SPEED of Tortoise = 10
+				if SCALE of Tortoise < 0.5
+					set Tortoise position to [1421.51, 104.771, 1262.62]
+				end if
+				disable Tortoise navigation
+				disable MyCreature navigation
+				start music MUSIC_TYPE_CREATURE_FIGHT
+				attach 3d sound tag LH_SAMPLE_HUGECROWD_01 to Stadium
+				set camera position to [1614.192, 93.349, 1157.527]
+				set camera focus to [1598.126, 93.346, 1191.794]
+				run script CreatePeople
+				disable villager sound
+				enable Crowd1 high graphics detail
+				enable Crowd2 high graphics detail
+				enable Crowd3 high graphics detail
+				enable Crowd4 high graphics detail
+				enable Crowd5 high graphics detail
+				enable Crowd6 high graphics detail
+				enable Crowd7 high graphics detail
+				enable Crowd8 high graphics detail
+				wait until widescreen transition complete
+				set fade in time 1
+				wait until fade ready
+				wait until 4 seconds
+				set Tortoise position to [1479.723, 79.62, 1192.602]
+				move Tortoise position to [1599.867, 77.72, 1216.583] radius 0
+				wait until get distance from [Tortoise] to [1599.867, 77.72, 1216.583] == 0
+				set Tortoise focus to [1614.192, 93.349, 1157.527]
+				wait until 1 seconds
+				Tortoise play ANM_A_COW_DEAD_ON_RHS loop 10
+				MyCreature = get player 1 creature
+				set MyCreature position to [1663.727, 77.72, 1263.847]
+				set MyCreature focus to [1599.867, 77.72, 1216.583]
+				MyCreature = get player 1 creature
+				set MyCreature focus to [1599.867, 77.72, 1216.583]
+				wait until 5 seconds
+				CreatureHeight = HEIGHT of MyCreature
+				set camera position to [1648.968, 78.72, 1252.798] + [0, CreatureHeight * 0.8, 0]
+				set camera focus to [1663.727, 77.72, 1263.847] + [0, CreatureHeight * 0.8, 0]
+				wait until 0.5 seconds
+				MyCreature play ANM_A_COW_IN_HAND loop 1
+				wait until MyCreature played
+				set camera position to [1665.283, 78.788, 1286.609] + [0, CreatureHeight * 0.9, 0]
+				set camera focus to [1634.24, 77.72, 1245.93] + [0, CreatureHeight * 0.7, 0]
+				move camera position to [1671.522, 93.697, 1280.204] time 60
+				wait until 1 seconds
+				move Tortoise position to [1634.24, 77.72, 1245.93] radius 0
+				wait until 3 seconds
+				set Tortoise focus to [MyCreature]
+				snapshot CHALLENGE_THE_RACES quest success 0 alignment 0 HELP_TEXT_CREATURE_ISLE_TITLE_02 StandardReminder (variable HELP_TEXT_CI_REMINDER_01)
+				say HELP_TEXT_RACE_10 by Tortoise
+				wait until read
+				say HELP_TEXT_RACE_20 by Tortoise
+				wait until read
+				say HELP_TEXT_RACE_30 by Tortoise
+				wait until read
+				say HELP_TEXT_RACE_40 with interaction by Tortoise
+				wait until read
+				say HELP_TEXT_RACE_50 by Tortoise
+				wait until read
+				say HELP_TEXT_RACE_70 with interaction by Tortoise
+				wait until read
+				set camera position to [1675.323, 89.415, 1284.436]
+				set camera focus to [1694.414, 79.245, 1315.492]
+				move camera position to [1700.453, 89.415, 1276.486] time 30
+				move camera focus to [1701.649, 79.245, 1312.92] time 30
+				say HELP_TEXT_RACE_80 by Tortoise
+				wait until read
+				say HELP_TEXT_RACE_90 with interaction by Tortoise
+				wait until read
+				set camera position to [1665.283, 78.788, 1286.609] + [0, CreatureHeight * 0.9, 0]
+				set camera focus to [1634.24, 77.72, 1245.93] + [0, CreatureHeight * 0.7, 0]
+				say HELP_TEXT_RACE_100 by Tortoise
+				wait until read
+				say HELP_TEXT_RACE_110 by Tortoise
+				wait until read
+				disable Crowd1 high graphics detail
+				disable Crowd2 high graphics detail
+				disable Crowd3 high graphics detail
+				disable Crowd4 high graphics detail
+				disable Crowd5 high graphics detail
+				disable Crowd6 high graphics detail
+				disable Crowd7 high graphics detail
+				disable Crowd8 high graphics detail
+				run script DeletePeople
+				set fade red 0 green 0 blue 0 time 2
+				wait until fade ready
+				close dialogue
+				set Tortoise position to [1568.374, 77.72, 1200.621]
+				set MyCreature position to [1538.591, 77.72, 1268.204]
+				set Tortoise focus to [MyCreature]
+				set MyCreature focus to [Tortoise]
+				wait until 1 seconds
+				MyCreature play ANM_A_COW_WALK loop 6
+				Tortoise play ANM_SWALLOW_FLAP loop 6
+				set camera lens 100 time 0
+				camera path ZOOM_TO_CREATURETRACK01 ZOOM_TO_CREATURETRACK01
+				set fade in time 2
+				wait until fade ready
+				start sound LH_SAMPLE_FANFARE
+				wait until 5 seconds
+				set MyCreature focus to [1655.438, 77.72, 1275.172]
+				set Tortoise focus to [1655.438, 77.72, 1275.172]
+				wait until camera ready
+				set camera lens 70 time 3
+				set draw text colour red 255 green 255 blue 255
+				draw text "3" across 0.4 down 0.4 width 0.2 height 0.5 size 0.15 fade in time 0.5 seconds
+				set draw text colour red 0 green 0 blue 0
+				draw text "3" across 0.395 down 0.405 width 0.2 height 0.5 size 0.15 fade in time 0.5 seconds
+				start sound LH_SAMPLE_RACECOUNT_01
+				wait until 1 seconds
+				fade all draw text time 0.5 seconds
+				set draw text colour red 255 green 255 blue 255
+				draw text "2" across 0.4 down 0.4 width 0.2 height 0.5 size 0.15 fade in time 0.5 seconds
+				set draw text colour red 0 green 0 blue 0
+				draw text "2" across 0.395 down 0.405 width 0.2 height 0.5 size 0.15 fade in time 0.5 seconds
+				start sound LH_SAMPLE_RACECOUNT_01
+				wait until 1 seconds
+				fade all draw text time 0.5 seconds
+				set draw text colour red 255 green 255 blue 255
+				draw text "1" across 0.4 down 0.4 width 0.2 height 0.5 size 0.15 fade in time 0.5 seconds
+				set draw text colour red 0 green 0 blue 0
+				draw text "1" across 0.395 down 0.405 width 0.2 height 0.5 size 0.15 fade in time 0.5 seconds
+				start sound LH_SAMPLE_RACECOUNT_01
+				wait until 1 seconds
+				fade all draw text time 0.5 seconds
+				set draw text colour red 0 green 255 blue 0
+				draw text HELP_TEXT_RACE_120 across 0.4 down 0.4 width 0.2 height 0.5 size 0.15 fade in time 0.5 seconds
+				set draw text colour red 0 green 0 blue 0
+				draw text HELP_TEXT_RACE_120 across 0.395 down 0.405 width 0.2 height 0.5 size 0.15 fade in time 0.5 seconds
+				start sound LH_SAMPLE_RACEGO_01
+				run background script DidYouKnow(StartTheRacesDYKPos, variable HELP_TEXT_RACING_DYK, variable DYK_MISC)
+				enable Tortoise navigation
+				enable MyCreature navigation
+			end cinema
+			wait until 1 seconds
+			fade all draw text time 0.5 seconds
+			IntroSeen = 1
+		else
+			begin cinema
+				set fade red 0 green 0 blue 0 time 1
+				wait until fade ready
+				RaceTrack1 = create special effect from file "racetrack1.exc"
+				RaceTrack2 = create special effect from file "racetrack2.exc"
+				attach 3d sound tag LH_SAMPLE_HUGECROWD_01 to Stadium
+				disable Tortoise navigation
+				disable MyCreature navigation
+				MyCreature = get player 1 creature
+				wait until widescreen transition complete
+				set Tortoise position to [1568.374, 77.72, 1200.621]
+				set MyCreature position to [1538.591, 77.72, 1268.204]
+				set Tortoise focus to [MyCreature]
+				set MyCreature focus to [Tortoise]
+				wait until 1 seconds
+				MyCreature play ANM_A_COW_WALK loop 6
+				Tortoise play ANM_SWALLOW_FLAP loop 6
+				set camera lens 100 time 0
+				camera path ZOOM_TO_CREATURETRACK01 ZOOM_TO_CREATURETRACK01
+				set fade in time 2
+				wait until fade ready
+				start sound LH_SAMPLE_FANFARE
+				wait until 5 seconds
+				set MyCreature focus to [1655.438, 77.72, 1275.172]
+				set Tortoise focus to [1655.438, 77.72, 1275.172]
+				wait until camera ready
+				set camera lens 70 time 3
+				set draw text colour red 255 green 255 blue 255
+				draw text "3" across 0.4 down 0.4 width 0.2 height 0.5 size 0.15 fade in time 0.5 seconds
+				set draw text colour red 0 green 0 blue 0
+				draw text "3" across 0.395 down 0.405 width 0.2 height 0.5 size 0.15 fade in time 0.5 seconds
+				start sound LH_SAMPLE_RACECOUNT_01
+				wait until 1 seconds
+				fade all draw text time 0.5 seconds
+				set draw text colour red 255 green 255 blue 255
+				draw text "2" across 0.4 down 0.4 width 0.2 height 0.5 size 0.15 fade in time 0.5 seconds
+				set draw text colour red 0 green 0 blue 0
+				draw text "2" across 0.395 down 0.405 width 0.2 height 0.5 size 0.15 fade in time 0.5 seconds
+				start sound LH_SAMPLE_RACECOUNT_01
+				wait until 1 seconds
+				fade all draw text time 0.5 seconds
+				set draw text colour red 255 green 255 blue 255
+				draw text "1" across 0.4 down 0.4 width 0.2 height 0.5 size 0.15 fade in time 0.5 seconds
+				set draw text colour red 0 green 0 blue 0
+				draw text "1" across 0.395 down 0.405 width 0.2 height 0.5 size 0.15 fade in time 0.5 seconds
+				start sound LH_SAMPLE_RACECOUNT_01
+				wait until 1 seconds
+				fade all draw text time 0.5 seconds
+				set draw text colour red 0 green 255 blue 0
+				draw text HELP_TEXT_RACE_120 across 0.4 down 0.4 width 0.2 height 0.5 size 0.15 fade in time 0.5 seconds
+				set draw text colour red 0 green 0 blue 0
+				draw text HELP_TEXT_RACE_120 across 0.395 down 0.405 width 0.2 height 0.5 size 0.15 fade in time 0.5 seconds
+				enable Tortoise navigation
+				enable MyCreature navigation
+				start sound LH_SAMPLE_RACEGO_01
+			end cinema
+			wait until 1 seconds
+			fade all draw text time 0.5 seconds
+		end if
+		stop music
+		attach MyCreature leash to hand
+		release MyCreature
+		MyCreature = get player 1 creature
+		WaypointReached = 0
+		set countdown timer draw SCRIPT_COUNTDOWN_DRAW_TOP_RIGHT
+		enable countdown timer up with 0 seconds
+		run background script MakeCreatureRunAroundRaceTrack(Tortoise)
+		run background script CreateFireBallShooter(marker at [1972.619, 88.385, 1926.133], 5)
+		run background script CreateFireBallShooter(marker at [2028.878, 83.504, 1993.701], 2)
+		run background script CreateFireBallShooter(marker at [2102.883, 75.04, 1993.847], 4)
+		run background script CreateFireBallShooter(marker at [1785.972, 43.948, 2211.589], 5)
+		run background script CreateFireBallShooter(marker at [1857.085, 33.764, 2211.036], 6)
+		run background script CreateFireBallShooter(marker at [1904.652, 26.489, 2196.308], 7)
+		begin loop
+			if get distance from [MyCreature] to [Waypoint[WaypointReached]] < 20
+				FireWorks = create special effect SPOT_VISUAL_TOWN_FIREWORKS at [Waypoint[WaypointReached]] time 12
+				WaypointReached++
+			end if
+			until WaypointReached >= 7 or get distance from [Tortoise] to [FinishPos] < 20 and TortoiseFinished == 1 or in widescreen
+		end loop
+		disable countdown timer
+		stop script "MakeCreatureRunAroundRaceTrack"
+		stop script "CreateFireBallShooter"
+		stop script "OgreThrowRocks"
+		delete ShrinkSpell
+		if in widescreen
+			set Tortoise position to [1611.509, 77.72, 1210.883]
+			set Tortoise focus to [1614.192, 93.349, 1157.527]
+			Tortoise play ANM_A_COW_DEAD_ON_RHS loop 12
+			detach sound tag LH_SAMPLE_HUGECROWD_01 from Stadium
+			detach sound tag LH_SAMPLE_HUGECROWD_02 from Stadium
+		elsif WaypointReached >= 7
+			if RaceTrialComplete == 0
+				begin cinema
+					run script RaceWinScene(Tortoise, Stadium)
+				end cinema with widescreen
+			else
+				begin cinema
+					run script RaceWinScene(Tortoise, Stadium)
+				end cinema
+			end if
+			detach sound tag LH_SAMPLE_HUGECROWD_01 from Stadium
+			detach sound tag LH_SAMPLE_HUGECROWD_02 from Stadium
+			if RaceTrialComplete == 0
+				set Tortoise position to [200, 0, 200]
+				run script Dojo(Tortoise)
+				delete GoldScroll
+				set Tortoise position to [1611.509, 77.72, 1210.883]
+				set Tortoise focus to [1614.192, 93.349, 1157.527]
+			end if
+			ChallengeCompleted = 1
+			release MyCreature
+			DojoReminderTheRaces = 0
+			RaceTrialComplete = 1
+			DojoReminderSoccerSkills = 0
+		else
+			begin cinema
+				set fade red 0 green 0 blue 0 time 1
+				wait until fade ready
+				disable Tortoise navigation
+				disable MyCreature navigation
+				wait until widescreen transition complete
+				MyCreature = get player 1 creature
+				set MyCreature position to [1452.383, 82.543, 1190.416]
+				set Tortoise position to [1460.673, 82.546, 1197.995]
+				move Tortoise position to [1599.867, 77.72, 1216.583] radius 0
+				set camera position to [1614.192, 93.349, 1157.527]
+				set camera focus to [1598.126, 93.346, 1191.794]
+				run script CreatePeople
+				disable villager sound
+				detach sound tag LH_SAMPLE_HUGECROWD_01 from Stadium
+				attach 3d sound tag LH_SAMPLE_HUGECROWD_02 to Stadium
+				enable Crowd1 high graphics detail
+				enable Crowd2 high graphics detail
+				enable Crowd3 high graphics detail
+				enable Crowd4 high graphics detail
+				enable Crowd5 high graphics detail
+				enable Crowd6 high graphics detail
+				enable Crowd7 high graphics detail
+				enable Crowd8 high graphics detail
+				set fade in time 1
+				wait until fade ready
+				wait until get distance from [Tortoise] to [1599.867, 77.72, 1216.583] == 0
+				set Tortoise focus to [1614.192, 93.349, 1157.527]
+				wait until 1 seconds
+				Tortoise play ANM_A_COW_DEAD_ON_RHS loop 16
+				wait until 1 seconds
+				move MyCreature position to [1547.455, 77.72, 1257.142] radius 0
+				wait until get distance from [MyCreature] to [1547.455, 77.72, 1257.142] == 0
+				set MyCreature focus to [Tortoise]
+				wait until 1 seconds
+				MyCreature play ANM_A_COW_DEAD loop 16
+				wait until 6 seconds
+				set MyCreature focus to [Tortoise]
+				set Tortoise focus to [MyCreature]
+				CreatureHeight = HEIGHT of Tortoise
+				set camera focus to [MyCreature]
+				set camera position to [1606.427, 78.4638, 1195.552] + [0, CreatureHeight * 0.9, 0]
+				move camera position to [1623.246, 78.464, 1218.104] + [0, CreatureHeight * 0.9, 0] time 14
+				RandomNumber = number from 0 to 3
+				if RandomNumber == 0
+					say HELP_TEXT_RACE_TORTOISE_WINS_01 by Tortoise
+				elsif RandomNumber == 1
+					say HELP_TEXT_RACE_TORTOISE_WINS_02 by Tortoise
+				elsif RandomNumber == 2
+					say HELP_TEXT_RACE_TORTOISE_WINS_03 by Tortoise
+				else
+					say HELP_TEXT_RACE_TORTOISE_WINS_04 by Tortoise
+				end if
+				wait until read
+				say HELP_TEXT_RACE_TORTOISE_WINS_05 by Tortoise
+				wait until read
+				set fade red 0 green 0 blue 0 time 1
+				wait until fade ready
+				detach sound tag LH_SAMPLE_HUGECROWD_01 from Stadium
+				detach sound tag LH_SAMPLE_HUGECROWD_02 from Stadium
+				set Tortoise focus to [1614.192, 93.349, 1157.527]
+				Tortoise play ANM_A_COW_DEAD_ON_RHS loop 12
+				set MyCreature position to [1467.381, 82.894, 1192.714]
+				release MyCreature
+				set camera position to [1420.601, 175.78, 1097.271]
+				set camera focus to [1481.168, 135.68, 1149.368]
+				disable Crowd1 high graphics detail
+				disable Crowd2 high graphics detail
+				disable Crowd3 high graphics detail
+				disable Crowd4 high graphics detail
+				disable Crowd5 high graphics detail
+				disable Crowd6 high graphics detail
+				disable Crowd7 high graphics detail
+				disable Crowd8 high graphics detail
+				run script DeletePeople
+				enable Tortoise navigation
+				enable MyCreature navigation
+			end cinema
+			wait until widescreen transition complete
+			set fade in time 1
+			wait until fade ready
+		end if
+		delete RaceTrack1
+		delete RaceTrack2
+		detach sound tag LH_SAMPLE_HUGECROWD_01 from Stadium
+		detach sound tag LH_SAMPLE_HUGECROWD_02 from Stadium
+	end loop
+	run background script DeleteDYK(StartTheRacesDYKPos)
+end script StartTheRaces
+

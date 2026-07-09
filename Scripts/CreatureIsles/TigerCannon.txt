@@ -1,0 +1,568 @@
+//LHVM Challenge source version 8
+//Decompiled with CHLASM tool by Daniels118
+
+global LastMarkerPassed
+global TrialAttemptComplete
+global Quitter
+global MarauderHit
+global B1Hidden
+global B2Hidden
+global B3Hidden
+global B4Hidden
+global KillPosse
+
+begin script TigerWaiting(Highlight, Tiger)
+	AnimNum = 0
+	CampfirePos = marker at [1279.67, 129.98, 1394.97]
+start
+	begin loop
+		if Tiger played
+			if AnimNum == 0
+				Tiger play ANM_A_COW_WALK loop 1
+				AnimNum = 1
+			elsif AnimNum == 1
+				force Tiger POINT_AT Highlight
+				AnimNum = 2
+			elsif AnimNum == 2
+				set Tiger focus to [CampfirePos]
+				wait until 1 seconds
+				Tiger play ANM_A_COW_DEAD loop 1
+				AnimNum = 0
+			end if
+		end if
+		until Highlight clicked and ScriptLockedCreature == 0
+	end loop
+end script TigerWaiting
+
+begin script DeleteMarauder(Marauder)
+start
+	wait until KillPosse == 3
+	delete Marauder with fade
+end script DeleteMarauder
+
+begin script MarauderDance
+	Marauder = 0
+	MarauderPosse = 0
+	FSize = 0.5
+	CampfirePos = marker at [1279.67, 129.98, 1394.97]
+	Campfire = create OBJECT MOBILE_STATIC_INFO_COUNTRY_LANTERN at [CampfirePos]
+	Barrel1 = 0
+	Barrel1Pos = marker at [1287.82, 129.98, 1400.23]
+	Barrel2 = 0
+	Barrel2Pos = marker at [1290.46, 129.98, 1391.4]
+	Barrel3 = 0
+	Barrel3Pos = marker at [1287.34, 129.98, 1395.18]
+	Barrel4 = 0
+	Barrel4Pos = marker at [1287.18, 129.98, 1391.68]
+	Fireball = 0
+	Reward = 0
+	BarrelPos = 0
+	ParallelToFire = marker at [1294.17, 129.98, 1390.31]
+	RandomAngle = 0
+	MoveMarker = 0
+	Leader = 0
+start
+	KillPosse = 0
+	enable Campfire indestructible
+	disable Campfire moveable
+	disable Campfire hurt by fire
+	disable Campfire pickup
+	if B1Hidden == 0
+		Barrel1 = create MOBILE_OBJECT MOBILE_OBJECT_INFO_EGPT_BARREL at [Barrel1Pos]
+		disable Barrel1 moveable
+		disable Barrel1 pickup
+		disable Barrel1 hurt by fire
+		enable Barrel1 indestructible
+	end if
+	if B2Hidden == 0
+		Barrel2 = create MOBILE_OBJECT MOBILE_OBJECT_INFO_EGPT_BARREL at [Barrel2Pos]
+		disable Barrel2 moveable
+		disable Barrel2 pickup
+		disable Barrel2 hurt by fire
+		enable Barrel2 indestructible
+	end if
+	if B3Hidden == 0
+		Barrel3 = create MOBILE_OBJECT MOBILE_OBJECT_INFO_EGPT_BARREL at [Barrel3Pos]
+		disable Barrel3 moveable
+		disable Barrel3 pickup
+		disable Barrel3 hurt by fire
+		enable Barrel3 indestructible
+	end if
+	if B4Hidden == 0
+		Barrel4 = create MOBILE_OBJECT MOBILE_OBJECT_INFO_EGPT_BARREL at [Barrel4Pos]
+		disable Barrel4 moveable
+		disable Barrel4 pickup
+		disable Barrel4 hurt by fire
+		enable Barrel4 indestructible
+	end if
+	Marauder = create VILLAGER MARAUDER at [CampfirePos] + ([number from -10 to 10, number from -10 to 10])
+	enable Marauder indestructible
+	disable Marauder pickup
+	disable Marauder hurt by fire
+	disable Marauder set on fire
+	MarauderPosse = make Marauder dance DANCE_INFO_NEW_DANCE_AROUND_PERSON around [CampfirePos] time -1
+	attach Marauder to MarauderPosse
+	Leader = Marauder
+	attach music MUSIC_TYPE_SCRIPT_MARAUDER_CHANT to Leader
+	while size of MarauderPosse < 10
+		Marauder = create VILLAGER MARAUDER at [CampfirePos] + ([number from -10 to 10, number from -10 to 10])
+		enable Marauder indestructible
+		disable Marauder pickup
+		disable Marauder hurt by fire
+		disable Marauder set on fire
+		attach Marauder to MarauderPosse
+	end while
+	begin loop
+		if KillPosse == 1
+			while size of MarauderPosse > 0
+				Marauder = get VILLAGER MARAUDER in MarauderPosse
+				detach Marauder from MarauderPosse
+				RandomAngle = number from 180 to 359
+				MoveMarker = marker at (get target from [CampfirePos] to [ParallelToFire] distance 100 angle RandomAngle)
+				move Marauder position to [MoveMarker] radius 0
+				SPEED of Marauder = number from 0.2 to 0.6
+				run background script DeleteMarauder(Marauder)
+			end while
+			delete MarauderPosse
+			KillPosse = 2
+		elsif KillPosse == 0
+			if Barrel1 on fire and B1Hidden == 0
+				wait until 1 seconds
+				BarrelPos = marker at [Barrel1]
+				delete Barrel1 with explosion
+				Fireball = cast SPELL_FIREBALL_LEVEL_1 spell at [BarrelPos] from [BarrelPos] radius 1 time 3 curl 0
+				Reward = create ONE_SHOT SPELL_SEED_TYPE_WATER at [BarrelPos]
+				B1Hidden = 1
+			end if
+			if Barrel2 on fire and B2Hidden == 0
+				wait until 1 seconds
+				BarrelPos = marker at [Barrel2]
+				delete Barrel2 with explosion
+				Fireball = cast SPELL_FIREBALL_LEVEL_1 spell at [BarrelPos] from [BarrelPos] radius 1 time 3 curl 0
+				Reward = create ONE_SHOT SPELL_SEED_TYPE_WATER at [BarrelPos]
+				B2Hidden = 1
+			end if
+			if Barrel3 on fire and B3Hidden == 0
+				wait until 1 seconds
+				BarrelPos = marker at [Barrel3]
+				delete Barrel3 with explosion
+				Fireball = cast SPELL_FIREBALL_LEVEL_1 spell at [BarrelPos] from [BarrelPos] radius 1 time 3 curl 0
+				Reward = create ONE_SHOT SPELL_SEED_TYPE_WATER at [BarrelPos]
+				B3Hidden = 1
+			end if
+			if Barrel4 on fire and B4Hidden == 0
+				wait until 1 seconds
+				BarrelPos = marker at [Barrel4]
+				delete Barrel4 with explosion
+				Fireball = cast SPELL_FIREBALL_LEVEL_1 spell at [BarrelPos] from [BarrelPos] radius 1 time 3 curl 0
+				Reward = create ONE_SHOT SPELL_SEED_TYPE_WATER at [BarrelPos]
+				B4Hidden = 1
+			end if
+		end if
+		until KillPosse == 3
+	end loop
+	detach music from Leader
+	if Barrel1 exists
+		delete Barrel1
+	end if
+	if Barrel2 exists
+		delete Barrel2
+	end if
+	if Barrel3 exists
+		delete Barrel3
+	end if
+	if Barrel4 exists
+		delete Barrel4
+	end if
+	delete Campfire
+end script MarauderDance
+
+begin script Marauding(MarauderPos, MarauderOtherPos)
+	Marauder = 0
+	Spangles = 0
+	Destination = 0
+	Switch = 0
+start
+	Marauder = create VILLAGER MARAUDER at [MarauderPos]
+	Spangles = create special effect SPOT_VISUAL_HIGHLIGHT_ON_OBJECT on Marauder time -1
+	Destination = marker at [MarauderOtherPos]
+	move Marauder position to [Destination] radius 0
+	begin loop
+		if get distance from [Marauder] to [Destination] < 2
+			if Switch == 0
+				Switch = 1
+				Destination = marker at [MarauderPos]
+			else
+				Destination = marker at [MarauderOtherPos]
+				Switch = 0
+			end if
+			move Marauder position to [Destination] radius 0
+		end if
+		until Quitter == 1 or TrialAttemptComplete > 0 or HEALTH of Marauder <= 0 or Marauder is FLYING
+	end loop
+	if HEALTH of Marauder <= 0 or Marauder is FLYING
+		HEALTH of Marauder = 0
+		MarauderHit++
+		delete Spangles
+	end if
+	wait until 5 seconds
+	delete Marauder
+end script Marauding
+
+begin script MaraudersAttack
+	Delay = 8
+	Total = 0
+	Reduction = 0
+	MarauderPos[20]
+	MarauderOtherPos[20]
+	Count = 0
+start
+	MarauderHit = 0
+	MarauderPos[0] = marker at [1261.32, 68.8189, 1618.07]
+	MarauderPos[1] = marker at [1432.96, 83.1585, 1462.41]
+	MarauderPos[2] = marker at [1482.53, 56.5548, 1654.1]
+	MarauderPos[3] = marker at [1402.89, 59.2714, 1526.61]
+	MarauderPos[4] = marker at [1536.16, 80.1357, 1641.7]
+	MarauderPos[5] = marker at [1507.34, 117.703, 1487.07]
+	MarauderPos[6] = marker at [1644.74, 61.3233, 1569.11]
+	MarauderPos[7] = marker at [1656.35, 89.0969, 1591.79]
+	MarauderPos[8] = marker at [1600.96, 98.9088, 1525.17]
+	MarauderPos[9] = marker at [1348.47, 59.1694, 1569.17]
+	MarauderPos[10] = marker at [1320.67, 58.6407, 1624.2]
+	MarauderPos[11] = marker at [1450.05, 86.1814, 1434.6]
+	MarauderPos[12] = marker at [1498.36, 57.2222, 1625.73]
+	MarauderPos[13] = marker at [1406.72, 54.1339, 1640.57]
+	MarauderPos[14] = marker at [1502.3, 57.4944, 1625.88]
+	MarauderPos[15] = marker at [1543.65, 57.7352, 1574.68]
+	MarauderPos[16] = marker at [1302.81, 75.3017, 1535.13]
+	MarauderPos[17] = marker at [1480.19, 56.95, 1619.72]
+	MarauderPos[18] = marker at [1491.68, 58.57, 1531.44]
+	MarauderPos[19] = marker at [1671.48, 60.2424, 1574.59]
+	MarauderOtherPos[0] = marker at [1334.37, 64.0426, 1605.19]
+	MarauderOtherPos[1] = marker at [1474.12, 80.913, 1456.3]
+	MarauderOtherPos[2] = marker at [1428.23, 52.2312, 1676.87]
+	MarauderOtherPos[3] = marker at [1406.8, 55.4163, 1634.87]
+	MarauderOtherPos[4] = marker at [1562.68, 76.9479, 1616.94]
+	MarauderOtherPos[5] = marker at [1510.19, 133.631, 1452.34]
+	MarauderOtherPos[6] = marker at [1656.01, 59.4651, 1539.3]
+	MarauderOtherPos[7] = marker at [1641.34, 90.7588, 1594.17]
+	MarauderOtherPos[8] = marker at [1643.43, 101.845, 1513.31]
+	MarauderOtherPos[9] = marker at [1545.26, 57.62, 1574.88]
+	MarauderOtherPos[10] = marker at [1339.75, 60.4204, 1549.68]
+	MarauderOtherPos[11] = marker at [1434.4, 64.3357, 1503.69]
+	MarauderOtherPos[12] = marker at [1499.74, 59.2662, 1544.92]
+	MarauderOtherPos[13] = marker at [1329.89, 65.6757, 1598.32]
+	MarauderOtherPos[14] = marker at [1408.06, 55.008, 1638.31]
+	MarauderOtherPos[15] = marker at [1318.77, 64.7518, 1572.72]
+	MarauderOtherPos[16] = marker at [1246.77, 83.7657, 1570.3]
+	MarauderOtherPos[17] = marker at [1395.47, 58.8579, 1544.07]
+	MarauderOtherPos[18] = marker at [1371.16, 56.0183, 1623.03]
+	MarauderOtherPos[19] = marker at [1701.5, 57.6017, 1539.74]
+	begin loop
+		run background script Marauding(MarauderPos[Total], MarauderOtherPos[Total])
+		Total++
+		until Quitter == 1 or TrialAttemptComplete > 0 or Total > 19
+	end loop
+end script MaraudersAttack
+
+begin script TigerExplodingBarrel(Barrel)
+	NearbyMarauder = 0
+	BarrelActive = 0
+	FireBall = 0
+	FlingAim = 0
+	Sample = 0
+start
+	start immersion IMMERSION_EFFECT_TYPE_CANNON_FIRE
+	while BarrelActive == 0
+		if ALTITUDE of Barrel <= 1
+			NearbyMarauder = get VILLAGER MARAUDER at [Barrel] radius 15
+			if NearbyMarauder exists
+				FlingAim = marker at (get target from [Barrel] to [NearbyMarauder] distance 0.6 angle 0)
+				set NearbyMarauder velocity heading [FlingAim] speed 20 angular x 0 y 0 z 0
+				HEALTH of NearbyMarauder = 0
+				Sample = number from 626 to 633
+				start sound constant Sample AUDIO_SFX_BANK_TYPE_EDITOR at [NearbyMarauder]
+			end if
+			FireBall = cast SPELL_FIREBALL_LEVEL_1 spell at [Barrel] from [Barrel] radius 1 time 3 curl 0
+			delete Barrel with explosion
+			Sample = number from 464 to 467
+			start sound constant Sample AUDIO_SFX_BANK_TYPE_EDITOR
+			BarrelActive = 1
+		end if
+	end while
+	wait until 0.5 seconds
+	delete FireBall
+end script TigerExplodingBarrel
+
+begin script MoveWagon
+	Count = 0
+	Markers[6]
+start
+	begin known cinema
+		Markers[0] = marker at [1288.97, 83.3388, 1578.79]
+		Markers[1] = marker at [1357.03, 71.2396, 1585.52]
+		Markers[2] = marker at [1429.18, 67.0076, 1580.01]
+		Markers[3] = marker at [1489.28, 66.9003, 1574.15]
+		Markers[4] = marker at [1613.56, 71.4882, 1565.86]
+		Markers[5] = marker at [1673.12, 69.63, 1555.94]
+		begin loop
+			move camera position to [Markers[Count]] time 30
+			wait until camera ready or Quitter == 1 or TrialAttemptComplete > 0 or get distance from (camera position) to [Markers[Count]] < 10
+			Count++
+			until Quitter == 1 or TrialAttemptComplete > 0 or Count == 6
+		end loop
+		if Count == 6
+			TrialAttemptComplete = 2
+		end if
+	end known cinema
+end script MoveWagon
+
+begin script EscapeToQuit
+start
+	begin loop
+		if key KB_ESC down
+			Quitter = 1
+		end if
+		until Quitter == 1 or TrialAttemptComplete > 0
+	end loop
+end script EscapeToQuit
+
+begin script TigerCannon
+	Tiger = 0
+	TigerPos = marker at [1280.81, 129.98, 1414.29]
+	CameraFocus = 0
+	Restarted = 0
+	Barrel = 0
+	Velocity = 0
+	PowerUp = 0
+	Highlight = 0
+	HighlightPos = marker at [1265.44, 129.441, 1419.47]
+	TigerCannonDYKPos = marker at [1294.036, 129.98, 1397.38]
+	CannonStartPos = marker at [1229.98, 136.189, 1444.23]
+	CannonStartFoc = marker at [1290.59, 73.8995, 1574.54]
+	SeeTigerPos = marker at [1275.63, 142.007, 1398.71]
+	SeeTigerFoc = marker at [1522.09, 57.6562, 2276.07]
+	SeeTiger2Pos = marker at [1276.85, 132.98, 1376.8]
+	SeeTiger2Foc = marker at [1277.62, 133.144, 1390.4]
+	EndSeeTigerPos = marker at [1284.99, 145.985, 1458.33]
+	EndSeeTigerFoc = marker at [1277.18, 130.192, 1386.05]
+	EndSeeTiger2Pos = marker at [1284.48, 142.546, 1442.46]
+	EndSeeTiger2Foc = marker at [1279.55, 130.239, 1396.82]
+	CamPos = 0
+	CannonCompleted = 0
+	DojoDone = 0
+	Highscore = 15
+	HighscoreBoardPos = marker at [1272.31, 129.703, 1422.09]
+	HighscoreBoard = 0
+	LastscoreBoardPos = marker at [1291.03, 129.666, 1422.36]
+	LastscoreBoard = 0
+	CannonEternity = 0
+	SeeHiScorePos = marker at [1269.57, 140.187, 1397.12]
+	SeeHiScoreFoc = marker at [1274.98, 124.204, 1448.01]
+	FirstTime = 1
+	CampfirePos = marker at [1279.67, 129.98, 1394.97]
+	AndyPos1 = marker at [1280.29, 131.308, 1377.89]
+	AndyFoc1 = marker at [1280.25, 134.71, 1405.65]
+	AndyPos2 = marker at [1281.47, 133.619, 1396.75]
+	AndyFoc2 = marker at [1281.42, 137.022, 1424.51]
+	AndyFoc3 = marker at [1281.43, 141.401, 1423.62]
+start
+	Tiger = create DUMB_CREATURE CREATURE_TYPE_TIGER at [TigerPos]
+	SCALE of Tiger = 1
+	ALIGNMENT of Tiger = -0.26
+	STRENGTH of Tiger = 1
+	FATNESS of Tiger = 0.51
+	run script SetupCreatureIsleCreature(Tiger)
+	Highlight = create highlight CHALLENGE_TIGER_CANNON HIGHLIGHT_TRIAL at [HighlightPos]
+	ALTITUDE of Highlight = 15
+	LastscoreBoard = create highlight CHALLENGE_NONE SCRIPT_HIGHLIGHT_INFO_SCOREBOARD_BIG at [LastscoreBoardPos]
+	set LastscoreBoard score 0
+	HighscoreBoard = create highlight CHALLENGE_NONE SCRIPT_HIGHLIGHT_INFO_SCOREBOARD_BIG at [HighscoreBoardPos]
+	set HighscoreBoard score 15
+	DojoReminderPigEating = 1
+	run background script MarauderDance
+	begin loop
+		run background script TigerWaiting(Highlight, Tiger)
+		if DojoReminderPigEating == 0
+			run script ChallengeHighlightNotifyWithScriptLockedCreature(Highlight, HighlightPos, variable HELP_TEXT_GENERAL_CHALLENGE_START_06)
+		else
+			run script TrialNotifyWithScriptLockedCreature(Highlight)
+		end if
+		MarauderHit = 0
+		TrialAttemptComplete = 0
+		Quitter = 0
+		begin cinema
+			move camera position to [SeeTigerPos] time 3
+			move camera focus to [SeeTigerFoc] time 3
+			wait until Tiger played
+			set Tiger focus to [SeeTigerPos]
+			wait until 1 seconds
+			wait until camera ready
+			snapshot CHALLENGE_TIGER_CANNON quest success 0 alignment 0 HELP_TEXT_CREATURE_ISLE_TITLE_22 StandardReminder (variable HELP_TEXT_CI_REMINDER_03)
+			if CannonCompleted == 0
+				if FirstTime == 1
+					move camera position to [SeeTiger2Pos] time 30
+					move camera focus to [SeeTiger2Foc] time 30
+					disable creature sound
+					say HELP_TEXT_TIGER_CANNON_10 by Tiger
+					Tiger play ANM_A_HORSE_DEADRHS loop 1
+					wait until read
+					say HELP_TEXT_TIGER_CANNON_20 by Tiger
+					wait until read
+					say HELP_TEXT_TIGER_CANNON_30 by Tiger
+					wait until read
+					say HELP_TEXT_TIGER_CANNON_40 with interaction by Tiger
+					wait until read
+					force Tiger POINT_AT CampfirePos
+					say HELP_TEXT_TIGER_CANNON_50 by Tiger
+					wait until read
+					say HELP_TEXT_TIGER_CANNON_60 with interaction by Tiger
+					run background script DidYouKnow(TigerCannonDYKPos, variable HELP_TEXT_TIGER_CANNON_DYK, variable DYK_MISC)
+					wait until read
+				else
+					move camera position to [SeeTiger2Pos] time 10
+					move camera focus to [SeeTiger2Foc] time 10
+					say HELP_TEXT_TIGER_CANNON_210 by Tiger
+					disable creature sound
+					Tiger play ANM_A_HORSE_DEADRHS loop 1
+					wait until read
+					set camera position to [SeeHiScorePos]
+					set camera focus to [SeeHiScoreFoc]
+					say HELP_TEXT_TIGER_CANNON_220 by Tiger
+					wait until read
+					say HELP_TEXT_TIGER_CANNON_230 by Tiger
+					wait until read
+				end if
+			elsif CannonCompleted == 1
+				move camera position to [SeeTiger2Pos] time 10
+				move camera focus to [SeeTiger2Foc] time 10
+				disable creature sound
+				say single line HELP_TEXT_TIGER_CANNON_90 by Tiger
+				Tiger play ANM_A_HORSE_DEADRHS loop 1
+				wait until read
+			end if
+			Restarted = 0
+			if FirstTime == 1
+				say HELP_TEXT_TIGER_CANNON_70 by Tiger
+				wait until read
+			end if
+			KillPosse = 1
+			if CannonCompleted == 0 and FirstTime == 1
+				set camera position to [SeeHiScorePos]
+				set camera focus to [SeeHiScoreFoc]
+				say HELP_TEXT_TIGER_CANNON_80 with interaction by Tiger
+				wait until read
+			end if
+			set fade red 0 green 0 blue 0 time 2
+			clear dialogue
+			wait until 2 seconds
+			KillPosse = 3
+			set camera position to [CannonStartPos]
+			set camera focus to [CannonStartFoc]
+			begin cannon
+				set fade in time 2
+				if FirstTime == 1
+					FirstTime = 0
+					say HELP_TEXT_TIGER_CANNON_170
+					wait until read
+					say HELP_TEXT_TIGER_CANNON_180
+					wait until read
+				end if
+				say HELP_TEXT_TIGER_CANNON_190
+				wait until read
+				say HELP_TEXT_TIGER_CANNON_200
+				wait until read
+				close dialogue
+				run background script MaraudersAttack
+				run background script EscapeToQuit
+				run background script MoveWagon
+				clear dialogue
+				while Quitter == 0 and TrialAttemptComplete == 0
+					PowerUp = 0
+					wait until mouse left button down or Quitter == 1 or TrialAttemptComplete > 0
+					if Quitter == 0 and TrialAttemptComplete == 0
+						start sound LH_SAMPLE_BALLISTATURNED
+						while mouse left button down and PowerUp < 1
+							PowerUp += 0.035
+							set cannon strength PowerUp
+							if PowerUp > 1
+								stop sound LH_SAMPLE_BALLISTATURNED
+							end if
+						end while
+						while mouse left button down
+						end while
+						stop sound LH_SAMPLE_BALLISTATURNED
+						Velocity = PowerUp * 150
+						CameraFocus = marker at (camera focus)
+						CamPos = marker at (camera position)
+						Barrel = create MOBILE_OBJECT MOBILE_OBJECT_INFO_EGPT_BARREL at [CamPos]
+						ALTITUDE of Barrel = ALTITUDE of CamPos
+						set Barrel velocity heading [CameraFocus] speed Velocity angular x 0 y 0 z 0
+						start sound LH_SAMPLE_BARRELFIRED
+						start sound constant (number from 89 to 90) AUDIO_SFX_BANK_TYPE_SPELL
+						run background script TigerExplodingBarrel(Barrel)
+					end if
+				end while
+			end cannon
+			set fade red 0 green 0 blue 0 time 2
+			wait until 2 seconds
+			set camera position to [AndyPos1]
+			set camera focus to [AndyFoc1]
+			set Tiger focus to [AndyPos2]
+			move camera position to [AndyPos2] time 8
+			move camera focus to [AndyFoc2] time 8
+			if MarauderHit > Highscore
+				set HighscoreBoard score MarauderHit
+			end if
+			set LastscoreBoard score MarauderHit
+			run background script MarauderDance
+			set fade in time 2
+			wait until 2 seconds
+			wait until 2 seconds
+			move camera focus to [AndyFoc3] time 3
+			wait until 2 seconds
+			if Quitter == 1
+				say HELP_TEXT_TIGER_CANNON_100 by Tiger
+				wait until read
+				say HELP_TEXT_TIGER_CANNON_110 with interaction by Tiger
+				wait until read
+			elsif MarauderHit >= 16 and CannonCompleted == 0
+				say HELP_TEXT_TIGER_CANNON_120 by Tiger
+				wait until read
+				say HELP_TEXT_TIGER_CANNON_130 with interaction by Tiger
+				wait until read
+				CannonCompleted = 1
+			elsif MarauderHit == 20
+				say single line HELP_TEXT_TIGER_CANNON_140 with interaction by Tiger
+				wait until read
+			elsif MarauderHit > Highscore
+				say single line HELP_TEXT_TIGER_CANNON_150 with interaction by Tiger
+				wait until read
+			else
+				say HELP_TEXT_TIGER_CANNON_160 by Tiger
+				wait until read
+				say HELP_TEXT_TIGER_CANNON_110 with interaction by Tiger
+				wait until read
+			end if
+			if MarauderHit > Highscore
+				Highscore = MarauderHit
+			end if
+		end cinema with widescreen
+		if CannonCompleted == 1 and DojoDone == 0
+			run script Dojo(Tiger)
+			DojoDone = 1
+			DojoReminderPigEating = 0
+			delete Highlight
+			Highlight = create highlight CHALLENGE_TIGER_CANNON HIGHLIGHT_CHALLENGE at [HighlightPos]
+			ALTITUDE of Highlight = 15
+		else
+			begin cinema
+			end cinema
+		end if
+		until CannonEternity == 1
+	end loop
+	DojoReminderPigEating = 0
+	delete Tiger with fade
+	run background script DeleteDYK(TigerCannonDYKPos)
+end script TigerCannon
+

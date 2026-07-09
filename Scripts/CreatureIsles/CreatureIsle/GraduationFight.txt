@@ -1,0 +1,1457 @@
+//LHVM Challenge source version 8
+//Decompiled with CHLASM tool by Daniels118
+
+global CrocFightTrialCompleted
+global CrocFightArenaPos
+global CrocFightPos
+global CrocArenaRadius = 40
+global CrocCreaturesFighting
+global CrocEffectDone
+global GCroc
+global CrocRocks[18]
+global PlayerWonCrocFight
+global CrocStartingAlignment
+global CrocGoodOrEvilPower
+global CrocEvil
+global CrocGood = 1
+global CrocMorphDone
+global CrocLantern[9]
+global CrocLanternPos[9]
+global CrocKeepEffectAlive
+
+define script CrocSendCreaturesToArena
+define script CrocCheckForSpells
+define script CrocControlForceThrowRock
+define script CrocMorphBackToOriginalAlignment
+define script CrocMorphToGood
+define script CrocCreateHighlight
+define script CrocForcePush
+define script CrocPutOutCreatureOnFire
+define script CrocControlForceFlameRock(RockPos)
+define script CrocPlaceLanterns
+define script CrocStartFight
+define script CrocSlowMoDeathHit(Creature, WhoWon)
+define script CrocCreate
+define script CrocFightAI
+define script CrocMorphToEvil
+define script CrocPlayerLostFight
+define script CrocPlayerWonFight
+define script CrocRepositionThrownRock(RockNo)
+define script CrocGiveFightReward
+define script CrocFindWinner
+
+begin script GraduationFight
+	CrocIntroPlayed = 0
+	FirstFight = 1
+	GraduationFightDYKPos = marker at [4377.259, 73.216, 4018.518]
+start
+	CrocFightArenaPos = marker at [4450.4033, 66.33, 4080.3687]
+	MyCreature = get player 1 creature
+	wait until 1 seconds
+	run script CrocCreate
+	run script CrocPlaceLanterns
+	run script CrocSendCreaturesToArena
+	DojoReminderGraduationBody = 1
+	while CrocFightTrialCompleted == 0
+		if FirstFight == 0
+			run background script DidYouKnow(GraduationFightDYKPos, variable HELP_TEXT_BODY_DYK, variable DYK_MISC)
+			run script CrocCreateHighlight
+		end if
+		ScriptLockedCreature = 1
+		MyCreatureInFight = 1
+		run script CrocStartFight
+		run script CrocFindWinner
+		if PlayerWonCrocFight == 1
+			run script CrocPlayerWonFight
+			CrocFightTrialCompleted = 1
+		else
+			run script CrocPlayerLostFight
+			CrocFightTrialCompleted = 0
+		end if
+		FirstFight = 0
+		release MyCreature
+		ScriptLockedCreature = 0
+		MyCreatureInFight = 0
+	end while
+	run script CrocGiveFightReward
+	DojoReminderGraduationBody = 0
+	KensFightComplete = 1
+	delete GCroc with fade
+	run background script DeleteDYK(GraduationFightDYKPos)
+end script GraduationFight
+
+begin script CrocCreate
+	Marker = marker at [4435.561, 66.6205, 4065.6653]
+start
+	CrocFightPos = marker at (get target from [Marker] to [CrocFightArenaPos] distance 30 angle 0)
+	GCroc = create dumb creature from creature MyCreature 1 at [CrocFightPos] CREATURE_TYPE_CROCODILE
+	set GCroc DEVELOPMENT_PHASE_FULLY_MATURE development
+	teach GCroc MAGICAL SPELL_FIREBALL_LEVEL_1 TRUE percentage 1
+	teach GCroc MAGICAL SPELL_FIREBALL_LEVEL_2 TRUE percentage 1
+	teach GCroc MAGICAL SPELL_FIREBALL_LEVEL_3 TRUE percentage 1
+	teach GCroc MAGICAL SPELL_LIGHTNING_LEVEL_1 TRUE percentage 1
+	teach GCroc MAGICAL SPELL_LIGHTNING_LEVEL_2 TRUE percentage 1
+	teach GCroc MAGICAL SPELL_LIGHTNING_LEVEL_3 TRUE percentage 1
+	teach GCroc MAGICAL SPELL_EXPLOSION_LEVEL_1 TRUE percentage 1
+	teach GCroc MAGICAL SPELL_EXPLOSION_LEVEL_2 TRUE percentage 1
+	teach GCroc MAGICAL MAGIC_TYPE_EXPLOSION_ONE_PU_TWO TRUE percentage 1
+	teach GCroc MAGICAL SPELL_HEAL_LEVEL_1 TRUE percentage 1
+	teach GCroc MAGICAL SPELL_HEAL_LEVEL_2 TRUE percentage 1
+	teach GCroc MAGICAL SPELL_TELEPORT TRUE percentage 1
+	teach GCroc MAGICAL SPELL_FOREST TRUE percentage 1
+	teach GCroc MAGICAL SPELL_FOOD TRUE percentage 1
+	teach GCroc MAGICAL MAGIC_TYPE_FOOD_PU_ONE TRUE percentage 1
+	teach GCroc MAGICAL SPELL_STORM_LEVEL_1 TRUE percentage 1
+	teach GCroc MAGICAL SPELL_STORM_LEVEL_2 TRUE percentage 1
+	teach GCroc MAGICAL SPELL_TORNADO TRUE percentage 1
+	teach GCroc MAGICAL SPELL_SHIELD TRUE percentage 1
+	teach GCroc MAGICAL SPELL_PHYSICAL_SHIELD TRUE percentage 1
+	teach GCroc MAGICAL SPELL_WOOD TRUE percentage 1
+	teach GCroc MAGICAL SPELL_WATER_LEVEL_1 TRUE percentage 1
+	teach GCroc MAGICAL SPELL_WATER_LEVEL_2 TRUE percentage 1
+	teach GCroc MAGICAL SPELL_FLOCK_FLYING TRUE percentage 1
+	teach GCroc MAGICAL MAGIC_TYPE_FLOCK_GROUND TRUE percentage 1
+	teach GCroc MAGICAL CREATURE_SPELL_FREEZE TRUE percentage 1
+	teach GCroc MAGICAL CREATURE_SPELL_SMALL TRUE percentage 1
+	teach GCroc MAGICAL CREATURE_SPELL_BIG TRUE percentage 1
+	teach GCroc MAGICAL CREATURE_SPELL_WEAK TRUE percentage 1
+	teach GCroc MAGICAL CREATURE_SPELL_STRONG TRUE percentage 1
+	teach GCroc MAGICAL MAGIC_TYPE_CREATURE_SPELL_FAT TRUE percentage 1
+	teach GCroc MAGICAL MAGIC_TYPE_CREATURE_SPELL_THIN TRUE percentage 1
+	teach GCroc MAGICAL CREATURE_SPELL_INVISIBLE TRUE percentage 1
+	teach GCroc MAGICAL CREATURE_SPELL_COMPASSION TRUE percentage 1
+	teach GCroc MAGICAL CREATURE_SPELL_ANGRY TRUE percentage 1
+	teach GCroc MAGICAL MAGIC_TYPE_CREATURE_SPELL_HUNGRY TRUE percentage 1
+	teach GCroc MAGICAL MAGIC_TYPE_CREATURE_SPELL_FRIGHTENE TRUE percentage 1
+	teach GCroc MAGICAL MAGIC_TYPE_CREATURE_SPELL_TIRED TRUE percentage 1
+	teach GCroc MAGICAL MAGIC_TYPE_CREATURE_SPELL_ILL TRUE percentage 1
+	teach GCroc MAGICAL MAGIC_TYPE_CREATURE_SPELL_THIRSTY TRUE percentage 1
+	teach GCroc MAGICAL CREATURE_SPELL_ITCHY TRUE percentage 1
+	teach GCroc MAGICAL MAGIC_TYPE_CREATURE_SPELL_ANTI_SPELL TRUE percentage 1
+	STRENGTH of GCroc = 1
+	ALIGNMENT of GCroc = -0.5
+	CrocStartingAlignment = ALIGNMENT of GCroc
+	enable GCroc auto scale 1
+	enable GCroc tattoo CREATURE_TATTOO_TYPE_FIGHTER
+	set GCroc name HELP_TEXT_NAME_CROCODILE_01
+	set GCroc focus to [CrocFightArenaPos]
+	run script SetupCreatureIsleCreature(GCroc)
+	disable GCroc set on fire
+end script CrocCreate
+
+begin script CrocStartFight
+	ChooseForcePower = 0
+	HealAgain = 0
+start
+	begin cinema
+		detach MyCreature leash
+		CrocCreaturesFighting = 1
+		run background script CrocCheckForSpells
+		force GCroc CREATURE_FIGHT MyCreature
+		force MyCreature CREATURE_FIGHT GCroc
+		HEALTH of GCroc = 1
+		FIGHTHEALTH of GCroc = 1
+		wait until MyCreature fighting
+		wait until GCroc fighting
+	end cinema
+	run background script CrocPutOutCreatureOnFire
+	run script CrocFightAI
+	CrocCreaturesFighting = 0
+end script CrocStartFight
+
+begin script CrocFindWinner
+start
+	wait until not MyCreature fighting
+	wait until not GCroc fighting
+	if FIGHTHEALTH of MyCreature > FIGHTHEALTH of GCroc
+		PlayerWonCrocFight = 1
+	else
+		PlayerWonCrocFight = 0
+	end if
+end script CrocFindWinner
+
+begin script CrocForceThrow
+	DoneForcePower = 0
+	AmountOfRocksToThrow = 0
+	CrocHealth = 0
+	MyCreatureHealth = 0
+	Counter = 0
+	ForcePowerDone = 0
+start
+	if FIGHTHEALTH of MyCreature > 0.2
+		while ForcePowerDone == 0 and CrocCreaturesFighting == 1
+			CrocEffectDone = 0
+			run script CrocForcePush
+			CrocGoodOrEvilPower = CrocEvil
+			if CrocGoodOrEvilPower == CrocGood
+				run background script CrocMorphToGood
+			else
+				run background script CrocMorphToEvil
+			end if
+			if CrocHealth > MyCreatureHealth
+				AmountOfRocksToThrow = number from 2 to 3
+			else
+				AmountOfRocksToThrow = number from 3 to 5
+			end if
+			while Counter < AmountOfRocksToThrow
+				run background script CrocControlForceThrowRock
+				Counter++
+			end while
+			wait until CrocEffectDone == AmountOfRocksToThrow
+			run background script CrocMorphBackToOriginalAlignment
+			ForcePowerDone = 1
+			until CrocCreaturesFighting == 0
+		end while
+	end if
+end script CrocForceThrow
+
+begin script CrocControlForceThrowRock
+	RockToThrow = 0
+	AltitudeOfRock = 0
+	DesiredAltitude = 15
+	Velocity = 0
+	ObjectThatHit = 0
+	ScaleOfRock = 0
+	ReadyToCheckForHit = 0
+	OldDistance = 0
+	DistanceCreatureFromRock = 0
+	RadiusCheck = 0
+	DidHit = 0
+	RockHit = 0
+	SFX = 0
+start
+	RockToThrow = number from 0 to 17
+	if CrocRocks[RockToThrow] exists
+		while AltitudeOfRock < DesiredAltitude and CrocCreaturesFighting == 1
+			AltitudeOfRock = ALTITUDE of CrocRocks[RockToThrow]
+			if AltitudeOfRock < DesiredAltitude
+				ALTITUDE of CrocRocks[RockToThrow]++
+				SFX = create special effect SPOT_VISUAL_OBJECT_APPEAR at [CrocRocks[RockToThrow]] time 1
+			end if
+			until CrocCreaturesFighting == 0
+		end while
+		Velocity = number from 150 to 300
+		set CrocRocks[RockToThrow] velocity heading [MyCreature] speed Velocity angular x 0 y 0 z 0
+		DistanceCreatureFromRock = get distance from [CrocRocks[RockToThrow]] to [MyCreature]
+		RadiusCheck = (RADIUS of CrocRocks[RockToThrow]) + (RADIUS of MyCreature)
+		while ReadyToCheckForHit == 0
+			OldDistance = DistanceCreatureFromRock
+			DistanceCreatureFromRock = get distance from [CrocRocks[RockToThrow]] to [MyCreature]
+			if DistanceCreatureFromRock < RadiusCheck
+				DidHit = 1
+			end if
+			if DistanceCreatureFromRock > OldDistance
+				ReadyToCheckForHit = 1
+			end if
+		end while
+		if DidHit == 1
+			if SCALE of CrocRocks[RockToThrow] >= 2
+				FIGHTHEALTH of MyCreature -= 0.1
+			elsif SCALE of CrocRocks[RockToThrow] >= 1.5
+				FIGHTHEALTH of MyCreature -= 0.05
+			else
+				FIGHTHEALTH of MyCreature -= 0.01
+			end if
+		end if
+	end if
+	run background script CrocRepositionThrownRock(RockToThrow)
+	CrocEffectDone++
+end script CrocControlForceThrowRock
+
+begin script CrocForceHeal
+	HealSpell = 0
+	SpellDuration = 3
+	SpellBeenCast = 0
+start
+	run script CrocForcePush
+	CrocGoodOrEvilPower = CrocGood
+	if CrocGoodOrEvilPower == CrocGood
+		run background script CrocMorphToGood
+	else
+		run background script CrocMorphToEvil
+	end if
+	FIGHT_SPELL_POWER of GCroc = 1
+	queue GCroc fight move C_MOVE_R_SPIN_0 strength 0
+	queue GCroc fight spell SPELL_HEAL_LEVEL_2
+	FIGHTHEALTH of GCroc = 1
+	HEALTH of GCroc = 1
+	wait until 5 seconds
+	run background script CrocMorphBackToOriginalAlignment
+end script CrocForceHeal
+
+begin script CrocForceFlame
+	MarkerPos[8]
+	FlameDone[1]
+	Radius = 20
+	DoneForcePower = 0
+start
+	if FIGHTHEALTH of MyCreature > 0.2
+		while DoneForcePower == 0 and CrocCreaturesFighting == 1
+			CrocEffectDone = 0
+			run script CrocForcePush
+			CrocGoodOrEvilPower = CrocEvil
+			if CrocGoodOrEvilPower == CrocGood
+				run background script CrocMorphToGood
+			else
+				run background script CrocMorphToEvil
+			end if
+			MarkerPos[0] = marker at (get target from [GCroc] to [MyCreature] distance Radius angle 0)
+			MarkerPos[1] = marker at (get target from [GCroc] to [MyCreature] distance Radius angle 45)
+			MarkerPos[2] = marker at (get target from [GCroc] to [MyCreature] distance Radius angle 90)
+			MarkerPos[3] = marker at (get target from [GCroc] to [MyCreature] distance Radius angle 135)
+			MarkerPos[4] = marker at (get target from [GCroc] to [MyCreature] distance Radius angle 180)
+			MarkerPos[5] = marker at (get target from [GCroc] to [MyCreature] distance Radius angle 225)
+			MarkerPos[6] = marker at (get target from [GCroc] to [MyCreature] distance Radius angle 270)
+			MarkerPos[7] = marker at (get target from [GCroc] to [MyCreature] distance Radius angle 315)
+			run background script CrocControlForceFlameRock(MarkerPos[0])
+			run background script CrocControlForceFlameRock(MarkerPos[1])
+			run background script CrocControlForceFlameRock(MarkerPos[2])
+			run background script CrocControlForceFlameRock(MarkerPos[3])
+			run background script CrocControlForceFlameRock(MarkerPos[4])
+			run background script CrocControlForceFlameRock(MarkerPos[5])
+			run background script CrocControlForceFlameRock(MarkerPos[6])
+			run background script CrocControlForceFlameRock(MarkerPos[7])
+			wait until CrocEffectDone == 8
+			run background script CrocMorphBackToOriginalAlignment
+			DoneForcePower = 1
+			until CrocCreaturesFighting == 0
+		end while
+	end if
+end script CrocForceFlame
+
+begin script CrocControlForceFlameRock(RockPos)
+	Rock = 0
+	SFX = 0
+	BangFx = 0
+	BeamFX = 0
+	CreatureHeight = 0
+	AltitudeOfRock = 0
+	ObjectThatHit = 0
+	Fireball = 0
+	ImpactPoint = 0
+	DoneHit = 0
+	RockHitGround = 0
+	RockHitCreature = 0
+	DidHit = 0
+	RadiusCheck = 0
+	Velocity = 150
+	DistanceRockFromCreature = 0
+start
+	CreatureHeight = HEIGHT of MyCreature
+	CreatureHeight = CreatureHeight * 0.8
+	SFX = create special effect SPOT_VISUAL_OBJECT_APPEAR at [RockPos] time 5
+	ALTITUDE of SFX = CreatureHeight + 20
+	Rock = create with angle 0 and scale 1 ROCK_OBJECT ROCK at [RockPos]
+	ALTITUDE of Rock = CreatureHeight + 20
+	enable Rock on fire 1
+	set Rock temperature 2000
+	BeamFX = create special effect SPOT_VISUAL_MAGIC_BEAM on Rock time 0.2
+	ALTITUDE of BeamFX = ALTITUDE of Rock
+	add BeamFX target on GCroc
+	BangFx = create special effect SPOT_VISUAL_BANG on SFX time 3
+	ALTITUDE of BangFx = CreatureHeight + 20
+	ImpactPoint = marker at [MyCreature]
+	wait until 1.5 seconds
+	set Rock velocity heading [ImpactPoint] speed Velocity angular x 0 y 0 z 0
+	while RockHitGround == 0 and RockHitCreature == 0
+		RadiusCheck = (RADIUS of Rock) + (RADIUS of MyCreature)
+		DistanceRockFromCreature = get distance from [Rock] to [MyCreature]
+		if DistanceRockFromCreature < RadiusCheck
+			DidHit = 1
+		end if
+		if DidHit == 1
+			DoneHit = 1
+			Fireball = cast SPELL_FIREBALL_LEVEL_1 spell at [Rock] from [Rock] radius 1 time 30 curl 0
+			delete Rock with explosion
+			FIGHTHEALTH of MyCreature -= 0.0625
+			RockHitCreature = 1
+		else
+			AltitudeOfRock = ALTITUDE of Rock
+			if AltitudeOfRock <= 3
+				Fireball = cast SPELL_FIREBALL_LEVEL_1 spell at [Rock] from [Rock] radius 1 time 30 curl 0
+				delete Rock with explosion
+				RockHitGround = 1
+			end if
+		end if
+	end while
+	if Rock exists
+		Fireball = cast SPELL_FIREBALL_LEVEL_1 spell at [Rock] from [Rock] radius 1 time 30 curl 0
+		delete Rock with explosion
+	end if
+	CrocEffectDone++
+end script CrocControlForceFlameRock
+
+begin script CrocForceInvisible
+	Invisible = 0
+	InvisibleCast = 0
+	InitialFightHealth = 0
+	Time = 5
+	EffectDuration = create timer for 19 seconds
+start
+	while get EffectDuration time remaining > 0 and CrocCreaturesFighting == 1
+		if InvisibleCast == 0
+			ENERGY of GCroc = 1
+			Invisible = cast CREATURE_SPELL_INVISIBLE spell on GCroc from [GCroc] radius 0 time Time curl 0
+			InitialFightHealth = FIGHTHEALTH of GCroc
+			clear MyCreature fight queue
+			InvisibleCast = 1
+		end if
+		if FIGHTHEALTH of GCroc < InitialFightHealth
+			FIGHTHEALTH of GCroc = InitialFightHealth
+		end if
+		until CrocCreaturesFighting == 0
+	end while
+end script CrocForceInvisible
+
+begin script CrocForceBolt
+	ForcePowerDone = 0
+	SpellCast = 0
+start
+	if FIGHTHEALTH of MyCreature > 0.2
+		while ForcePowerDone == 0 and CrocCreaturesFighting == 1
+			run script CrocForcePush
+			CrocGoodOrEvilPower = CrocEvil
+			if CrocGoodOrEvilPower == CrocGood
+				run background script CrocMorphToGood
+			else
+				run background script CrocMorphToEvil
+			end if
+			while SpellCast < 4
+				ENERGY of GCroc = 1
+				FIGHT_SPELL_POWER of GCroc = 1
+				queue GCroc fight spell SPELL_LIGHTNING_LEVEL_3
+				wait until 2 seconds
+				FIGHTHEALTH of MyCreature -= 0.01
+				SpellCast++
+			end while
+			run background script CrocMorphBackToOriginalAlignment
+			ForcePowerDone = 1
+			until CrocCreaturesFighting == 0
+		end while
+	end if
+end script CrocForceBolt
+
+begin script CrocForcePush
+	PushedAway = 0
+	CrocDistanceFromCentre = 0
+	CentreOfFightArena = 0
+	BeamFX[2]
+	BangFX = 0
+	CrocHeight = 0
+	MyCreatureHeight = 0
+start
+	CentreOfFightArena = CrocFightArenaPos
+	CrocHeight = HEIGHT of GCroc
+	CrocHeight = CrocHeight * 0.8
+	MyCreatureHeight = HEIGHT of MyCreature
+	MyCreatureHeight = MyCreatureHeight * 0.8
+	while PushedAway == 0 and CrocCreaturesFighting == 1
+		clear MyCreature fight queue
+		BeamFX[0] = create special effect SPOT_VISUAL_MAGIC_BEAM on GCroc time 0.2
+		BeamFX[1] = create special effect SPOT_VISUAL_MAGIC_BEAM on GCroc time 0.2
+		ALTITUDE of BeamFX[1] = CrocHeight
+		add BeamFX[0] target on MyCreature
+		add BeamFX[1] target on MyCreature
+		BangFX = create special effect SPOT_VISUAL_OBJECT_APPEAR on MyCreature time 1
+		ALTITUDE of BangFX = MyCreatureHeight
+		queue MyCreature fight step C_RECOIL_HI
+		wait until 0.1 seconds
+		wait until 1.5 seconds
+		BeamFX[0] = create special effect SPOT_VISUAL_MAGIC_BEAM on GCroc time 0.2
+		BeamFX[1] = create special effect SPOT_VISUAL_MAGIC_BEAM on GCroc time 0.2
+		ALTITUDE of BeamFX[1] = CrocHeight
+		add BeamFX[0] target on MyCreature
+		add BeamFX[1] target on MyCreature
+		BangFX = create special effect SPOT_VISUAL_OBJECT_APPEAR on MyCreature time 1
+		ALTITUDE of BangFX = MyCreatureHeight
+		queue MyCreature fight step C_RECOIL_HI_L
+		wait until 0.1 seconds
+		wait until 2 seconds
+		BeamFX[0] = create special effect SPOT_VISUAL_MAGIC_BEAM on GCroc time 0.2
+		BeamFX[1] = create special effect SPOT_VISUAL_MAGIC_BEAM on GCroc time 0.2
+		ALTITUDE of BeamFX[1] = CrocHeight
+		add BeamFX[0] target on MyCreature
+		add BeamFX[1] target on MyCreature
+		BangFX = create special effect SPOT_VISUAL_OBJECT_APPEAR on MyCreature time 1
+		queue MyCreature fight step C_PUNISH_FEET_SLAP_R
+		while CrocDistanceFromCentre > CrocArenaRadius and CrocCreaturesFighting == 1
+			queue GCroc fight step C_FIGHT_STEP_FORWARD
+			CrocDistanceFromCentre = get distance from [GCroc] to [CentreOfFightArena]
+			until CrocCreaturesFighting == 0
+		end while
+		PushedAway = 1
+		until CrocCreaturesFighting == 0
+	end while
+	if CrocCreaturesFighting == 1
+		wait until 2.5 seconds
+	end if
+end script CrocForcePush
+
+begin script CrocPutOutCreatureOnFire
+start
+	while CrocCreaturesFighting == 1
+		if MyCreature on fire
+			wait until 5 seconds
+			delete fire at [MyCreature] radius 10
+		end if
+	end while
+end script CrocPutOutCreatureOnFire
+
+begin script CrocGiveFightReward
+start
+end script CrocGiveFightReward
+
+begin script CrocFightAI
+	CrocHeight = HEIGHT of GCroc
+	CrocHealth = 0
+	MyCreatureHealth = 0
+	CrocWinning = 0
+	MyCreatureWinning = 0
+	NextMoveForMyCreature = 0
+	NextFightMoveForCroc = 0
+	NextStepMoveForCroc = 0
+	NextSpellMoveForCroc = 0
+	AmountOfQueuedHits = 0
+	CentreOfFightArena = 0
+	DistanceBetweenCreatures = 0
+	DoBlock = 0
+	DoHighHit = 0
+	DoMidHit = 0
+	DoLowHit = 0
+	DoSpecialMove = 0
+	DoForcePower = 0
+	DoSpellCast = 0
+	DoAdvance = 0
+	DoRetreat = 0
+	DoSideLeft = 0
+	DoSideRight = 0
+	PlayerAttacking = 0
+	PlayerDefending = 0
+	PlayerMoving = 0
+	PlayerCasting = 0
+	PlayerRecoiling = 0
+	CrocShouldAttack = 0
+	CrocShouldMove = 0
+	CrocShouldDefend = 0
+	Attack = 0
+	Defend = 0
+	Step = 0
+	Special = 0
+	ForcePower = 0
+	Spell = 0
+	True = 1
+	False = 0
+	OutOfRangeAttackTimer = create timer for 15 seconds
+	ForceAttackTimer = create timer for 45 seconds
+	WinLoseTimer = create timer for 0 seconds
+	WinLose = 0
+	ShortAttackRange = CrocHeight
+	LongAttackRange = CrocHeight + CrocHeight / 3
+	OutOfAttackRange = CrocHeight + CrocHeight / 1.5
+	SideStep = 0
+	RandomHit = 0
+	RandomSpell = 0
+	RandomForcePower = 0
+	HealSpell = 0
+	DoHeal = 0
+	AllHealsDone = 0
+	ThreeQuartersHealDone = 0
+	HalfHealDone = 0
+	OneQuarterHealDone = 0
+	DontUseForcePowerAnyMore = 0
+	FightFinished = 0
+	CanDoSpecial = create timer for 0 seconds
+start
+	disable fight camera exit
+	enable fight lock
+	disable GCroc auto fighting
+	CentreOfFightArena = CrocFightArenaPos
+	CrocHealth = FIGHTHEALTH of GCroc
+	MyCreatureHealth = FIGHTHEALTH of MyCreature
+	while FightFinished == False
+		CrocHealth = FIGHTHEALTH of GCroc
+		MyCreatureHealth = FIGHTHEALTH of MyCreature
+		DistanceBetweenCreatures = get distance from [GCroc] to [MyCreature]
+		NextMoveForMyCreature = variable get MyCreature fight action
+		AmountOfQueuedHits = get MyCreature fight queue hits
+		if CrocHealth <= 0 or MyCreatureHealth <= 0
+			if CrocHealth <= 0
+				run script CrocSlowMoDeathHit(GCroc, 1)
+			else
+				run script CrocSlowMoDeathHit(MyCreature, 0)
+			end if
+			FightFinished = True
+		end if
+		if FightFinished == False
+			if MyCreatureHealth <= 0.25
+				DontUseForcePowerAnyMore = True
+			else
+				DontUseForcePowerAnyMore = False
+			end if
+			DoHighHit = False
+			DoMidHit = False
+			DoLowHit = False
+			DoSpecialMove = False
+			DoBlock = False
+			DoAdvance = False
+			DoRetreat = False
+			DoSideLeft = False
+			DoSideRight = False
+			DoForcePower = False
+			DoSpellCast = False
+			Attack = False
+			Defend = False
+			Step = False
+			ForcePower = False
+			Spell = False
+			if CrocHealth > MyCreatureHealth
+				CrocWinning = True
+				MyCreatureWinning = False
+			elsif CrocHealth < MyCreatureHealth
+				CrocWinning = False
+				MyCreatureWinning = True
+			else
+				CrocWinning = False
+				MyCreatureWinning = False
+			end if
+			if NextMoveForMyCreature == variable CTR_FIGHT_HITTING or NextMoveForMyCreature == variable CTR_FIGHT_SPECIAL_MOVE
+				PlayerAttacking = True
+				PlayerDefending = False
+				PlayerMoving = False
+				PlayerCasting = False
+				PlayerRecoiling = False
+			elsif NextMoveForMyCreature == variable CTR_FIGHT_BLOCKING
+				PlayerAttacking = False
+				PlayerDefending = True
+				PlayerMoving = False
+				PlayerCasting = False
+				PlayerRecoiling = False
+			elsif NextMoveForMyCreature == variable CTR_FIGHT_STEPPING
+				PlayerAttacking = False
+				PlayerDefending = False
+				PlayerMoving = True
+				PlayerCasting = False
+				PlayerRecoiling = False
+			elsif NextMoveForMyCreature == variable CTR_FIGHT_CASTING
+				PlayerAttacking = False
+				PlayerDefending = False
+				PlayerMoving = False
+				PlayerCasting = True
+				PlayerRecoiling = False
+			elsif NextMoveForMyCreature == variable CTR_FIGHT_RECOIL_HIGH or NextMoveForMyCreature == variable CTR_FIGHT_RECOIL_MIDDLE or NextMoveForMyCreature == variable CTR_FIGHT_RECOIL_LOW
+				PlayerAttacking = False
+				PlayerDefending = False
+				PlayerMoving = False
+				PlayerCasting = False
+				PlayerRecoiling = True
+			else
+				PlayerAttacking = False
+				PlayerDefending = False
+				PlayerMoving = False
+				PlayerCasting = False
+				PlayerRecoiling = False
+			end if
+			if PlayerAttacking == True
+				CrocShouldAttack = False
+				CrocShouldMove = False
+				CrocShouldDefend = True
+			elsif PlayerDefending == True
+				CrocShouldAttack = False
+				CrocShouldMove = True
+				CrocShouldDefend = False
+			elsif PlayerMoving == True
+				CrocShouldAttack = True
+				CrocShouldMove = False
+				CrocShouldDefend = False
+			elsif PlayerCasting == True
+				CrocShouldAttack = False
+				CrocShouldMove = False
+				CrocShouldDefend = True
+			elsif PlayerRecoiling == True
+				CrocShouldAttack = True
+				CrocShouldMove = False
+				CrocShouldDefend = False
+			else
+				CrocShouldAttack = True
+				CrocShouldMove = False
+				CrocShouldDefend = False
+			end if
+			if CrocShouldAttack == True
+				if get ForceAttackTimer time remaining <= 0
+					set ForceAttackTimer time to 45 seconds
+					if number from 1 to 2 == 1
+						DistanceBetweenCreatures = OutOfAttackRange + 1
+					end if
+				end if
+				if DistanceBetweenCreatures > OutOfAttackRange
+					if get OutOfRangeAttackTimer time remaining == 0
+						if DontUseForcePowerAnyMore == False
+							set ForceAttackTimer time to 45 seconds
+							DoForcePower = True
+							set OutOfRangeAttackTimer time to 15 seconds
+						end if
+					else
+					end if
+				elsif DistanceBetweenCreatures > LongAttackRange
+					RandomHit = number from 1 to 4
+					if RandomHit == 1
+						DoHighHit = True
+					elsif RandomHit == 2
+						DoMidHit = True
+					elsif RandomHit == 3
+						DoLowHit = True
+					else
+						if get CanDoSpecial time remaining <= 0
+							DoSpecialMove = True
+							set CanDoSpecial time to 10 seconds
+						else
+							DoHighHit = True
+						end if
+					end if
+				elsif DistanceBetweenCreatures > ShortAttackRange
+					RandomHit = number from 1 to 3
+					if RandomHit == 1
+						DoHighHit = True
+					elsif RandomHit == 2
+						DoMidHit = True
+					else
+						DoLowHit = True
+					end if
+				else
+					RandomHit = number from 1 to 2
+					if RandomHit == 1
+						DoHighHit = True
+					else
+						DoMidHit = True
+					end if
+				end if
+			elsif CrocShouldDefend == True
+				DoBlock = True
+			elsif CrocShouldMove == True
+				if DistanceBetweenCreatures <= ShortAttackRange
+					DoRetreat = True
+				else
+					SideStep = number from 1 to 2
+					if SideStep == 1
+						DoSideLeft = True
+					else
+						DoSideRight = True
+					end if
+				end if
+			end if
+			if AllHealsDone == False
+				if CrocHealth <= 0.75 or CrocHealth <= 0.5 or CrocHealth <= 0.25
+					if ThreeQuartersHealDone == False and CrocHealth <= 0.75
+						DoHeal = True
+						ThreeQuartersHealDone = True
+					elsif HalfHealDone == False and CrocHealth <= 0.5
+						DoHeal = True
+						HalfHealDone = True
+					elsif OneQuarterHealDone == False and CrocHealth <= 0.25
+						DoHeal = True
+						AllHealsDone = True
+					end if
+					if DoHeal == True
+						run script CrocForceHeal
+						DoHeal = False
+					end if
+				end if
+			end if
+			if DoHighHit == True
+				NextFightMoveForCroc = variable C_MOVE_STAND
+				Attack = True
+			elsif DoMidHit == True
+				NextFightMoveForCroc = variable C_MOVE_WALK
+				Attack = True
+			elsif DoLowHit == True
+				NextFightMoveForCroc = variable C_MOVE_RUN
+				Attack = True
+			elsif DoSpecialMove == True
+				NextFightMoveForCroc = variable C_MOVE_R_SPIN_90
+				Special = True
+			elsif DoBlock == True
+				NextFightMoveForCroc = variable C_MOVE_R_SPIN_0
+				Defend = True
+			elsif DoAdvance == True
+				NextStepMoveForCroc = variable C_FIGHT_STEP_FORWARD
+				Step = True
+			elsif DoRetreat == True
+				NextStepMoveForCroc = variable C_FIGHT_STEP_BACK
+				Step = True
+			elsif DoSideLeft == True
+				NextStepMoveForCroc = variable C_FIGHT_STEP_LEFT
+				Step = True
+			elsif DoSideRight == True
+				NextStepMoveForCroc = variable C_FIGHT_STEP_RIGHT
+				Step = True
+			elsif DoForcePower == True
+				RandomForcePower = number from 1 to 4
+				if RandomForcePower == 1
+					run script CrocForceFlame
+				elsif RandomForcePower == 2
+					run background script CrocForceInvisible
+				elsif RandomForcePower == 3
+					run script CrocForceBolt
+				elsif RandomForcePower == 4
+					run script CrocForceFlame
+				end if
+			elsif DoSpellCast == True
+				NextSpellMoveForCroc = variable SPELL_FIREBALL_LEVEL_1
+				Spell = True
+			end if
+			if Step == True
+				queue GCroc fight step constant NextStepMoveForCroc
+			elsif Attack == True
+				queue GCroc fight move constant NextFightMoveForCroc strength 1
+			elsif Defend == True
+				queue GCroc fight move constant NextFightMoveForCroc strength 0
+			elsif Special == True
+				queue GCroc fight move constant NextFightMoveForCroc strength 1
+			elsif Spell == True
+				queue GCroc fight spell constant NextSpellMoveForCroc
+			end if
+			if CrocWinning == True
+				if MyCreatureHealth < 0.8 and MyCreatureHealth > 0.2
+					if get WinLoseTimer time remaining <= 0
+						WinLose = variable constant from HELP_TEXT_CROC_FIGHT_CROC_WINNING_01 to HELP_TEXT_CROC_FIGHT_CROC_WINNING_03
+						begin dialogue
+							queue GCroc fight move C_MOVE_R_SPIN_0 strength 0
+							start say sound constant WinLose
+							wait until not say sound constant WinLose playing
+						end dialogue
+						set WinLoseTimer time to 20 seconds
+					end if
+				end if
+			else
+				if CrocHealth < 0.8 and CrocHealth > 0.2
+					if get WinLoseTimer time remaining <= 0
+						WinLose = variable constant from HELP_TEXT_CROC_FIGHT_CROC_LOSING_01 to HELP_TEXT_CROC_FIGHT_CROC_LOSING_03
+						begin dialogue
+							queue GCroc fight move C_MOVE_R_SPIN_0 strength 0
+							start say sound constant WinLose
+							wait until not say sound constant WinLose playing
+						end dialogue
+						set WinLoseTimer time to 20 seconds
+					end if
+				end if
+			end if
+		end if
+	end while
+	clear GCroc fight queue
+	clear MyCreature fight queue
+	enable GCroc auto fighting
+	enable MyCreature auto fighting
+end script CrocFightAI
+
+begin script CrocMorphToEvil
+	CurrentAlignment = 0
+start
+	CrocMorphDone = 0
+	while CrocMorphDone == 0 and CrocCreaturesFighting == 1
+		CurrentAlignment = ALIGNMENT of GCroc
+		if CurrentAlignment > -1
+			ALIGNMENT of GCroc -= 0.1
+		elsif CurrentAlignment < -1
+			ALIGNMENT of GCroc = -1
+		else
+			CrocMorphDone = 1
+		end if
+		until CrocCreaturesFighting == 0
+	end while
+end script CrocMorphToEvil
+
+begin script CrocMorphToGood
+	CurrentAlignment = 0
+start
+	CrocMorphDone = 0
+	while CrocMorphDone == 0 and CrocCreaturesFighting == 1
+		CurrentAlignment = ALIGNMENT of GCroc
+		if CurrentAlignment < 1
+			ALIGNMENT of GCroc += 0.1
+		elsif CurrentAlignment > 1
+			ALIGNMENT of GCroc = 1
+		else
+			CrocMorphDone = 1
+		end if
+		until CrocCreaturesFighting == 0
+	end while
+end script CrocMorphToGood
+
+begin script CrocMorphBackToOriginalAlignment
+	CurrentAlignment = 0
+	PositiveAlignment = 0
+	NegativeAlignment = 0
+start
+	CrocMorphDone = 0
+	while CrocMorphDone == 0
+		CurrentAlignment = ALIGNMENT of GCroc
+		if CurrentAlignment < CrocStartingAlignment
+			if NegativeAlignment == 0
+				ALIGNMENT of GCroc += 0.1
+				PositiveAlignment = 1
+			else
+				ALIGNMENT of GCroc = CrocStartingAlignment
+			end if
+		elsif CurrentAlignment > CrocStartingAlignment
+			if PositiveAlignment == 0
+				ALIGNMENT of GCroc -= 0.1
+				NegativeAlignment = 1
+			else
+				ALIGNMENT of GCroc = CrocStartingAlignment
+			end if
+		else
+			CrocMorphDone = 1
+		end if
+	end while
+end script CrocMorphBackToOriginalAlignment
+
+begin script CrocSlowMoDeathHit(Creature, WhoWon)
+	CreatureHeight = 0
+	AnimPlayed = 0
+	Recoil = 0
+	CrocFinishPos = 0
+	MyCreatureFinishPos = 0
+	MidPoint = 0
+	FirstCamPos = 0
+	Dist = 0
+	CloseUpOfCollapse = 0
+	MyCreatureOutOfWayPos = 0
+start
+	CreatureHeight = HEIGHT of Creature
+	CreatureHeight = CreatureHeight * 0.8
+	begin cinema
+		set game speed to 0.25
+		start sound LH_SAMPLE_FIGHTOVER_02
+		disable GCroc auto fighting
+		disable MyCreature auto fighting
+		clear GCroc fight queue
+		clear MyCreature fight queue
+		enable fight queue only
+		wait until GCroc played or 5 seconds
+		wait until MyCreature played or 5 seconds
+		CrocFinishPos = marker at (get target from [CrocFightArenaPos] to [CrocFightPos] distance 20 angle 180)
+		MyCreatureFinishPos = marker at (get target from [CrocFightArenaPos] to [CrocFinishPos] distance CreatureHeight + CreatureHeight / 3 angle 180)
+		Dist = get distance from [MyCreatureFinishPos] to [CrocFinishPos]
+		MidPoint = marker at (get target from [CrocFinishPos] to [MyCreatureFinishPos] distance Dist / 2 angle 180)
+		FirstCamPos = marker at (get target from [CrocFinishPos] to [MidPoint] distance Dist * 5 angle 90)
+		ALTITUDE of FirstCamPos = CreatureHeight + (land height at [Creature])
+		ALTITUDE of MidPoint = CreatureHeight
+		set camera position to [FirstCamPos]
+		set camera focus to [MidPoint]
+		set GCroc position to [CrocFinishPos]
+		set MyCreature position to [MyCreatureFinishPos]
+		wait until 0.5 seconds
+		if Creature == GCroc
+			queue GCroc fight move C_FIGHT_STANCE strength 0
+			disable GCroc auto fighting
+			clear GCroc fight queue
+			queue MyCreature fight move C_MOVE_R_SPIN_90 strength 1
+			wait until 0.2 seconds
+			while AnimPlayed == 0 and not MyCreature played
+				Recoil = variable get GCroc fight action
+				if Recoil == variable CTR_FIGHT_RECOIL_HIGH or Recoil == variable CTR_FIGHT_RECOIL_MIDDLE or Recoil == variable CTR_FIGHT_RECOIL_LOW
+					AnimPlayed = 1
+				end if
+			end while
+			snapshot CHALLENGE_GRADUATION_FIGHT quest success 1 alignment 0 HELP_TEXT_CREATURE_ISLE_TITLE_19 StandardReminder (variable HELP_TEXT_CI_REMINDER_19)
+			start sound LH_SAMPLE_FIGHTOVER_01
+		else
+			queue MyCreature fight move C_FIGHT_STANCE strength 0
+			disable MyCreature auto fighting
+			clear MyCreature fight queue
+			queue GCroc fight move C_MOVE_R_SPIN_90 strength 1
+			wait until 0.2 seconds
+			while AnimPlayed == 0 and not GCroc played
+				Recoil = variable get MyCreature fight action
+				if Recoil == variable CTR_FIGHT_RECOIL_HIGH or Recoil == variable CTR_FIGHT_RECOIL_MIDDLE or Recoil == variable CTR_FIGHT_RECOIL_LOW
+					AnimPlayed = 1
+				end if
+			end while
+			start sound LH_SAMPLE_FIGHTOVER_01
+		end if
+		if Creature == GCroc
+			wait until MyCreature played or 5 seconds
+			force GCroc CREATURE_DEAD_FOREVER GCroc
+			MyCreatureOutOfWayPos = marker at (get target from [GCroc] to [CrocFightArenaPos] distance CreatureHeight / 2 angle 45)
+			set MyCreature position to [MyCreatureOutOfWayPos]
+			CloseUpOfCollapse = marker at (get target from [CrocFightArenaPos] to [GCroc] distance CreatureHeight * 2 angle 180)
+			set camera position to [CloseUpOfCollapse] + [0, CreatureHeight / 3, 0]
+			set camera focus to [GCroc] + [0, CreatureHeight / 2, 0]
+			HEALTH of GCroc = 0
+			FIGHTHEALTH of GCroc = 0
+			HEALTH of MyCreature = 1
+			FIGHTHEALTH of MyCreature = 1
+		else
+			wait until GCroc played or 5 seconds
+			force MyCreature CREATURE_DEAD_FOREVER MyCreature
+			HEALTH of GCroc = 1
+			FIGHTHEALTH of GCroc = 1
+			HEALTH of MyCreature = 0
+			FIGHTHEALTH of MyCreature = 0
+		end if
+		disable fight queue only
+		enable fight camera exit
+		disable fight lock
+		wait until 1.5 seconds
+		set game speed to 1
+	end cinema with widescreen
+end script CrocSlowMoDeathHit
+
+begin script CrocCreateFightHighlightWithReminder
+	Highlight = 0
+	HighlightPos = marker at [CrocFightArenaPos]
+	PlayerCreatureReady = 0
+	RemindPlayerTimer = create timer for 0 seconds
+	OrigPos = 0
+	OrigFoc = 0
+	CrocHeight = 0
+	FirstTimeReminderPos = 0
+	FirstReminderDone = 0
+start
+	CrocHeight = HEIGHT of GCroc
+	CrocHeight = CrocHeight * 0.7
+	FirstTimeReminderPos = marker at (get target from [CrocFightArenaPos] to [CrocFightPos] distance CrocHeight angle 180)
+	Highlight = create highlight CHALLENGE_GRADUATION_FIGHT HIGHLIGHT_TRIAL at [HighlightPos]
+	while PlayerCreatureReady == 0
+		if get distance from (camera position) to [Highlight] < 100 and Highlight viewed
+			if get RemindPlayerTimer time remaining == 0
+				begin dialogue
+					if good spirit speaks HELP_TEXT_GENERAL_CHALLENGE_START_04
+						eject good spirit
+						make good spirit point at [Highlight] in world
+					else
+						eject evil spirit
+						make evil spirit point at [Highlight] in world
+					end if
+					say single line HELP_TEXT_GENERAL_CHALLENGE_START_04
+					wait until (read or Highlight clicked) and ScriptLockedCreature == 0
+				end dialogue
+				set RemindPlayerTimer time to 30 seconds
+			end if
+		end if
+		if Highlight clicked and ScriptLockedCreature == 0
+			clear clicked object
+			if get distance from [MyCreature] to [CrocFightArenaPos] < 100
+				PlayerCreatureReady = 1
+			else
+				if FirstReminderDone == 0
+					set GCroc focus to (camera position)
+					begin cinema
+						OrigPos = marker at (camera position)
+						OrigFoc = marker at (camera focus)
+						move camera position to [FirstTimeReminderPos] + [0, CrocHeight, 0] time 2
+						move camera focus to [GCroc] + [0, CrocHeight, 0] time 2
+						wait until camera ready
+						set GCroc focus to (camera position)
+						wait until read
+						wait until read
+						set GCroc focus to [CrocFightArenaPos]
+						move camera position to [OrigPos] time 2
+						move camera focus to [OrigFoc] time 2
+						wait until camera ready
+						FirstReminderDone = 1
+					end cinema
+				else
+					begin dialogue
+						set GCroc focus to (camera position)
+						wait until read
+						wait until read
+						set GCroc focus to [CrocFightArenaPos]
+					end dialogue
+				end if
+			end if
+		end if
+		wait until 0.1 seconds
+	end while
+	delete Highlight
+end script CrocCreateFightHighlightWithReminder
+
+begin script CrocCreateHighlight
+	Highlight = 0
+	HighlightPos = marker at [CrocFightArenaPos]
+	HighlightClicked = 0
+	RemindPlayerTimer = create timer for 0 seconds
+	CamPos = 0
+	Height = 0
+	MyCreatureArenaPos = marker at (get target from [CrocFightPos] to [CrocFightArenaPos] distance 30 angle 0)
+	ViewFightArenaPos = marker at [4391.7485, 119.4562, 3986.4055]
+	ViewFightArenaFoc = marker at [4449.9243, 66.765, 4079.6008]
+	LookingThroughTeethPos = marker at [4435.688, 98.5812, 3997.2852]
+	LookingThroughTeethFoc = marker at [4445.158, 66.6797, 4082.7134]
+start
+	Height = HEIGHT of MyCreature
+	Height = Height * 0.8
+	Highlight = create highlight CHALLENGE_GRADUATION_FIGHT HIGHLIGHT_TRIAL at [HighlightPos]
+	run script TrialNotifyWithScriptLockedCreature(Highlight)
+	begin cinema
+		set fade red 0 green 0 blue 0 time 1
+		wait until fade ready
+		wait until widescreen transition complete
+		set MyCreature position to [MyCreatureArenaPos]
+		set GCroc position to [CrocFightPos]
+		set MyCreature focus to [GCroc]
+		set GCroc focus to [MyCreature]
+		CamPos = marker at (get target from [GCroc] to [MyCreature] distance Height angle 30)
+		set camera position to [LookingThroughTeethPos]
+		set camera focus to [LookingThroughTeethFoc]
+		set fade in time 1
+		wait until fade ready
+		say single line HELP_TEXT_CROC_FIGHT_40 by GCroc
+		wait until read
+	end cinema with widescreen
+end script CrocCreateHighlight
+
+begin script CrocMoveCreaturesIntoFightPosition
+	Marker = 0
+	MyCreaturesFightPos = 0
+	GCrocsFightPos = 0
+start
+	Marker = marker at [CrocFightArenaPos] + ([10, 10])
+	MyCreaturesFightPos = marker at (get target from [Marker] to [CrocFightArenaPos] distance 30 angle 0)
+	GCrocsFightPos = marker at (get target from [Marker] to [CrocFightArenaPos] distance 30 angle 180)
+	move MyCreature position to [MyCreaturesFightPos] radius 0
+	move GCroc position to [GCrocsFightPos] radius 0
+	wait until get distance from [MyCreature] to [MyCreaturesFightPos] < 5 or 30 seconds
+	wait until get distance from [GCroc] to [GCrocsFightPos] < 5 or 30 seconds
+	set MyCreature focus to [GCroc]
+	set GCroc focus to [MyCreature]
+end script CrocMoveCreaturesIntoFightPosition
+
+begin script CrocIntro(IntroPlayed)
+	CrocHeight = 0
+	CrocHeightPlusThird = 0
+	EffectsPos = 0
+start
+	CrocHeight = HEIGHT of GCroc
+	CrocHeight = CrocHeight * 0.7
+	CrocHeightPlusThird = CrocHeight + CrocHeight / 3
+	if IntroPlayed == 0
+		begin cinema
+			wait until 1 seconds
+			move camera position to [GCroc] + [-20, CrocHeight, -20] time 2
+			move camera focus to [GCroc] + [0, CrocHeight, 0] time 2
+			wait until camera ready
+			say HELP_TEXT_CROC_FIGHT_30 by GCroc
+			wait until read
+			say HELP_TEXT_CROC_FIGHT_40 by GCroc
+			wait until read
+			say HELP_TEXT_CROC_FIGHT_50 by GCroc
+			wait until read
+			clear dialogue
+			say HELP_TEXT_CROC_FIGHT_80 by GCroc
+			wait until read
+			move camera position to [MyCreature] + [-20, CrocHeightPlusThird, -20] time 2
+			move camera focus to [GCroc] time 2
+		end cinema
+	else
+		begin cinema
+			wait until 1 seconds
+			move camera position to [GCroc] + [-12, CrocHeight, -12] time 2
+			move camera focus to [GCroc] + [0, CrocHeight, 0] time 2
+			wait until camera ready
+			say HELP_TEXT_CROC_FIGHT_90 by GCroc
+			wait until read
+			say HELP_TEXT_CROC_FIGHT_110 by GCroc
+			wait until read
+			clear dialogue
+			move camera position to [MyCreature] + [-20, CrocHeightPlusThird, -20] time 2
+			move camera focus to [GCroc] time 2
+		end cinema
+	end if
+end script CrocIntro
+
+begin script CrocPlayerWonFight
+	CrocWalksTowardsDojo = marker at [4429.4453, 16.0721, 3906.2341]
+	CrocHeight = 0
+	MyCreaturesFightPos = 0
+	Marker = 0
+	WonMessage = 0
+	MyCreaturePos = marker at [4426.5254, 66.5629, 4112.402]
+	WonFightPos = marker at [4475.7417, 66.33, 4054.191]
+	ViewBothCreaturesPos = 0
+	PanToViewBothCreatures = 0
+	CloseUpOfCroc = 0
+start
+	Marker = marker at [CrocFightArenaPos] + ([10, 10])
+	MyCreaturesFightPos = marker at (get target from [Marker] to [CrocFightArenaPos] distance 70 angle 0)
+	CrocHeight = HEIGHT of GCroc
+	CrocHeight = CrocHeight * 0.8
+	move MyCreature position to [WonFightPos] radius 0
+	begin cinema
+		set camera focus follow MyCreature
+		ViewBothCreaturesPos = marker at (get target from [WonFightPos] to [GCroc] distance 50 angle 90)
+		PanToViewBothCreatures = marker at (get target from [WonFightPos] to [GCroc] distance 20 angle 180)
+		CloseUpOfCroc = marker at (get target from [WonFightPos] to [GCroc] distance 20 angle 180)
+		move camera position to [ViewBothCreaturesPos] + [0, CrocHeight, 0] time 2
+		move camera focus to [CrocFightArenaPos] + [0, CrocHeight / 1.5, 0] time 2
+		wait until camera ready
+		move camera focus to [PanToViewBothCreatures] + [0, CrocHeight / 1.5, 0] time 30
+		wait until get distance from [MyCreature] to [WonFightPos] < 1 or 10 seconds
+		set MyCreature focus to (camera position)
+		wait until 0.5 seconds
+		MyCreature play ANM_A_COW_LANDED_RIGHT_SIDE loop 1
+		wait until 1 seconds
+		set GCroc focus to [MyCreature]
+		wait until 3 seconds
+		disable creature sound
+		say HELP_TEXT_CROC_FIGHT_CROC_LOST_10 by GCroc
+		wait until 1 seconds
+		wait until read
+		wait until MyCreature played
+		MyCreature play ANM_A_HORSE_EAT2 loop 2
+		set camera position to [CloseUpOfCroc] + [0, CrocHeight, 0]
+		set camera focus to [GCroc] + [0, CrocHeight - CrocHeight / 5, 0]
+		say HELP_TEXT_CROC_FIGHT_CROC_LOST_20 by GCroc
+		GCroc play ANM_A_COW_DEAD_ON_RHS loop 1
+		wait until read
+		set camera position to [ViewBothCreaturesPos] + [0, CrocHeight, 0]
+		set camera focus to [PanToViewBothCreatures] + [0, CrocHeight / 1.5, 0]
+		say HELP_TEXT_CROC_FIGHT_CROC_LOST_30 by GCroc
+		wait until read
+		say HELP_TEXT_CROC_FIGHT_CROC_LOST_40 with interaction by GCroc
+		wait until 1 seconds
+		MyCreature play ANM_A_COW_DOWNED_ON_RHS loop 1
+		wait until read
+		enable creature sound
+		set MyCreature focus on GCroc
+		set GCroc focus to [CrocWalksTowardsDojo]
+		move GCroc position to [CrocWalksTowardsDojo] radius 0
+		move camera position to (camera position) + [0, CrocHeight, 0] time 4
+		set camera focus follow GCroc
+		move GCroc position to [CrocWalksTowardsDojo] radius 0
+		wait until get distance from [GCroc] to [CrocWalksTowardsDojo] < 20 or 30 seconds
+	end cinema
+end script CrocPlayerWonFight
+
+begin script CrocPlayerLostFight
+	CrocHeight = 0
+	GCrocsFightPos = 0
+	Marker = 0
+	EndOfFightMarker = 0
+	EndOfFightCameraPos = 0
+	CloseUpOfCroc = 0
+	LostMessage = 0
+	WatchCrocMoveBackPos = marker at [4369.9116, 98.1312, 4053.2627]
+	WatchCrocMoveBackFoc = marker at [4481.4556, 66.5884, 4089.108]
+	GoHomeLoserPos = marker at [1277.784, 167.5, 1264.31]
+	LeftEdgeCamPos = 0
+	RightEdgeCamPos = 0
+	HideFallenCreaturePos = marker at [4472.075, 70.074, 4051.24]
+	HideFallenCreatureFoc = marker at [4459.0244, 80.6602, 4144.8936]
+start
+	Marker = marker at [CrocFightArenaPos] + ([10, 10])
+	GCrocsFightPos = marker at (get target from [Marker] to [CrocFightArenaPos] distance 30 angle 180)
+	EndOfFightMarker = marker at [GCroc]
+	EndOfFightCameraPos = marker at (camera position)
+	CloseUpOfCroc = marker at (get target from [EndOfFightCameraPos] to [EndOfFightMarker] distance 30 angle 180)
+	CrocHeight = HEIGHT of GCroc
+	CrocHeight = CrocHeight * 0.8
+	begin cinema
+		set GCroc focus to [MyCreature]
+		LeftEdgeCamPos = marker at (get target from [GCroc] to [MyCreature] distance CrocHeight * 1.5 angle -30)
+		RightEdgeCamPos = marker at (get target from [GCroc] to [MyCreature] distance CrocHeight * 1.5 angle 30)
+		set camera position to [LeftEdgeCamPos] + [0, CrocHeight, 0]
+		set camera focus to [MyCreature] + [0, CrocHeight - CrocHeight / 3, 0]
+		move camera position to [RightEdgeCamPos] + [0, CrocHeight, 0] time 12
+		disable creature sound
+		say single line HELP_TEXT_CROC_FIGHT_CROC_WON_10 by GCroc
+		wait until 1 seconds
+		GCroc play ANM_A_COW_WALK loop 1
+		wait until read
+		LostMessage = variable constant from HELP_TEXT_CROC_FIGHT_CROC_WON_01 to HELP_TEXT_CROC_FIGHT_CROC_WON_03
+		say single line constant LostMessage by GCroc
+		wait until GCroc played
+		GCroc play ANM_A_COW_DOWNED_ON_LHS loop 1
+		wait until read
+		enable creature sound
+		set camera position to [HideFallenCreaturePos]
+		set camera focus to [HideFallenCreatureFoc]
+	end cinema
+	set GCroc focus to [GCrocsFightPos]
+	move GCroc position to [GCrocsFightPos] radius 0
+	wait until get distance from [GCroc] to [GCrocsFightPos] < 5 or 30 seconds
+	if not get distance from [GCroc] to [GCrocsFightPos] < 7
+		set GCroc position to [GCrocsFightPos]
+	end if
+	set GCroc focus to [CrocFightArenaPos]
+	set MyCreature position to [GoHomeLoserPos]
+end script CrocPlayerLostFight
+
+begin script CrocRepositionThrownRock(RockNo)
+	Scale = 0
+	Angle = 0
+	CreateRock = 0
+	SFX = 0
+	Smoke = 0
+	PilePos = marker at [CrocFightArenaPos] + ([40, 40])
+start
+	wait until not CrocRocks[RockNo] exists or not CrocRocks[RockNo] is FLYING or not get distance from [CrocRocks[RockNo]] to [CrocFightArenaPos] < 150
+	if CrocRocks[RockNo] exists
+		if CrocRocks[RockNo] is FLYING
+			CreateRock = 1
+		else
+			CreateRock = 0
+		end if
+	else
+		CreateRock = 1
+	end if
+	if CreateRock == 1
+		if CrocRocks[RockNo] exists
+			delete CrocRocks[RockNo]
+		end if
+		Scale = number from 1.1 to 2.4
+		Angle = number from 0 to 360
+		CrocRocks[RockNo] = create with angle Angle and scale Scale ROCK_OBJECT ROCK at [PilePos] + [number from -10 to 10, 0, number from -10 to 10]
+	else
+		set CrocRocks[RockNo] position to [PilePos] + [number from -10 to 10, 0, number from -10 to 10]
+	end if
+	enable CrocRocks[RockNo] indestructible
+	disable CrocRocks[RockNo] pickup
+	SFX = create special effect SPOT_VISUAL_OBJECT_APPEAR at [CrocRocks[RockNo]] time 2
+	Smoke = create special effect SPOT_VISUAL_BANG at [CrocRocks[RockNo]] time 2
+end script CrocRepositionThrownRock
+
+begin script CrocSendCreaturesToArena
+	ArriveAtIslePos = marker at [4360.0166, 46.9012, 3886.2185]
+	ArriveAtIsleFoc = marker at [4449.6533, 23.6862, 3915.3364]
+	EnterArenaPos = marker at [4353.4775, 119.9783, 4072.0483]
+	EnterArenaFoc = marker at [4469.294, 66.7446, 4076.1223]
+	MyCreaturePos = marker at [4430.4463, 10.843, 3890.2202]
+	CrocPos = marker at [4429.399, 18.1737, 3912.5208]
+	MyCreatureArenaPos = 0
+	Waypoint = 0
+	CrocHeight = 0
+	CrocHeightPlusThird = 0
+	Dist = 0
+	CamPanFinishPos = 0
+start
+	Waypoint = marker at [4452.3857, 37.431, 3960.7944]
+	CrocHeight = HEIGHT of GCroc
+	CrocHeight = CrocHeight * 0.7
+	CrocHeightPlusThird = CrocHeight + CrocHeight / 1.5
+	MyCreatureArenaPos = marker at (get target from [CrocFightPos] to [CrocFightArenaPos] distance 30 angle 0)
+	set GCroc position to [CrocPos]
+	set GCroc focus to [CrocFightArenaPos]
+	set MyCreature position to [MyCreaturePos]
+	set MyCreature focus to [CrocFightArenaPos]
+	begin cinema
+		set camera position to [ArriveAtIslePos] - [0, 25, 0]
+		set camera focus to [ArriveAtIsleFoc]
+		move camera position to [ArriveAtIslePos] + [0, 10, 0] time 12
+		set camera focus follow GCroc
+		move GCroc position to [Waypoint] radius 0
+		wait until 0.5 seconds
+		set fade in time 2
+		wait until fade ready
+		wait until get distance from [GCroc] to [Waypoint] < 3 or 5 seconds
+		move GCroc position to [CrocFightPos] radius 0
+		wait until 1 seconds
+		move MyCreature position to [MyCreatureArenaPos] radius 0
+		wait until 5 seconds
+		set camera position to [EnterArenaPos]
+		set camera focus follow GCroc
+		wait until get distance from [GCroc] to [CrocFightPos] < 10 or 20 seconds
+		wait until 1 seconds
+		set GCroc focus to [MyCreatureArenaPos]
+		move camera position to [GCroc] + [-20, CrocHeight, -20] time 2
+		move camera focus to [GCroc] + [0, CrocHeight, 0] time 2
+		wait until camera ready
+		snapshot CHALLENGE_GRADUATION_FIGHT quest success 0 alignment 0 HELP_TEXT_CREATURE_ISLE_TITLE_19 StandardReminder (variable HELP_TEXT_CI_REMINDER_19)
+		CrocKeepEffectAlive = 1
+		Dist = get distance from [GCroc] to [MyCreature]
+		CamPanFinishPos = marker at (get target from [GCroc] to [CrocFightArenaPos] distance 55 angle 90)
+		if not get distance from [MyCreature] to [MyCreatureArenaPos] < 20
+			set MyCreature position to [MyCreatureArenaPos]
+			set MyCreature focus to [GCroc]
+		end if
+		disable creature sound
+		say HELP_TEXT_CROC_FIGHT_30 by GCroc
+		GCroc play ANM_A_COW_LANDED_LEFT_SIDE loop 1
+		wait until 1 seconds
+		move camera position to [CamPanFinishPos] + [0, CrocHeight * 2, 0] time 10
+		move camera focus to [CrocFightArenaPos] + [0, CrocHeight / 1.5, 0] time 10
+		wait until read
+		wait until GCroc played
+		say HELP_TEXT_CROC_FIGHT_40 by GCroc
+		wait until 2 seconds
+		GCroc play ANM_A_COW_DEAD loop 1
+		wait until read
+		say HELP_TEXT_CROC_FIGHT_50 by GCroc
+		MyCreature play ANM_A_COW_EAT_2 loop 1
+		wait until read
+		clear dialogue
+		CrocKeepEffectAlive = 0
+	end cinema with widescreen
+end script CrocSendCreaturesToArena
+
+begin script CrocCheckForSpells
+	ObjectInHand = 0
+	TempType = 0
+start
+	begin loop
+		ObjectInHand = get object held
+		TempType = variable get ObjectInHand type
+		if TempType == variable ONE_SHOT or TempType == variable SPELL_SEED
+			delete ObjectInHand
+		end if
+		wait until 0.1 seconds
+		until CrocCreaturesFighting == 0
+	end loop
+end script CrocCheckForSpells
+
+begin script CrocPlaceLanterns
+	Count = 0
+start
+	CrocLanternPos[0] = marker at [4512.717, 85.9039, 4127.1704]
+	CrocLanternPos[1] = marker at [4413.6094, 88.16, 4148.6533]
+	CrocLanternPos[2] = marker at [4534.77, 87.3565, 4068.1187]
+	CrocLanternPos[3] = marker at [4420.7666, 81.1302, 4021.9822]
+	CrocLanternPos[4] = marker at [4378.41, 93.7948, 4066.6003]
+	CrocLanternPos[5] = marker at [4441.2544, 23.9263, 3924.9438]
+	CrocLanternPos[6] = marker at [4456.0557, 35.2143, 3951.5005]
+	CrocLanternPos[7] = marker at [4465.084, 60.4989, 3981.9614]
+	while Count < 8
+		CrocLantern[Count] = create with angle 0 and scale 1 OBJECT MOBILE_STATIC_INFO_STREET_LANTERN at [CrocLanternPos[Count]]
+		ALTITUDE of CrocLantern[Count] = 0
+		enable CrocLantern[Count] indestructible
+		Count++
+	end while
+end script CrocPlaceLanterns
+
+begin script CrocCreateCrocEffects
+	BangFX = 0
+	Smoke = 0
+	EffectsPos = 0
+	CrocHeight = 0
+start
+	CrocHeight = HEIGHT of GCroc
+	CrocHeight = CrocHeight * 0.7
+	EffectsPos = marker at (get target from [CrocFightArenaPos] to [GCroc] distance 20 angle 0)
+	while CrocKeepEffectAlive == 1
+		BangFX = create special effect SPOT_VISUAL_OBJECT_APPEAR at [EffectsPos] + [0, CrocHeight, 0] time 1
+		SCALE of BangFX = 20
+		BangFX = create special effect SPOT_VISUAL_OBJECT_APPEAR at [EffectsPos] + [-1, CrocHeight - CrocHeight / 10, -1] time 1
+		SCALE of BangFX = 20
+		BangFX = create special effect SPOT_VISUAL_OBJECT_APPEAR at [EffectsPos] + [-2, CrocHeight - CrocHeight / 7, -2] time 1
+		SCALE of BangFX = 20
+		BangFX = create special effect SPOT_VISUAL_OBJECT_APPEAR at [EffectsPos] + [-10, CrocHeight - CrocHeight / 5, -10] time 1
+		SCALE of BangFX = 20
+		BangFX = create special effect SPOT_VISUAL_OBJECT_APPEAR at [EffectsPos] + [-15, CrocHeight - CrocHeight / 4, -15] time 1
+		SCALE of BangFX = 20
+		BangFX = create special effect SPOT_VISUAL_OBJECT_APPEAR at [EffectsPos] + [-20, CrocHeight - CrocHeight / 2, -20] time 1
+		SCALE of BangFX = 20
+	end while
+	BangFX = create special effect SPOT_VISUAL_OBJECT_APPEAR at [EffectsPos] + [0, CrocHeight, 0] time 3
+	BangFX = create special effect SPOT_VISUAL_OBJECT_APPEAR at [EffectsPos] + [-1, CrocHeight - CrocHeight / 10, -1] time 3
+	BangFX = create special effect SPOT_VISUAL_OBJECT_APPEAR at [EffectsPos] + [-2, CrocHeight - CrocHeight / 7, -2] time 3
+	BangFX = create special effect SPOT_VISUAL_OBJECT_APPEAR at [EffectsPos] + [-5, CrocHeight - CrocHeight / 5, -5] time 3
+	BangFX = create special effect SPOT_VISUAL_OBJECT_APPEAR at [EffectsPos] + [-5, CrocHeight - CrocHeight / 4, -5] time 3
+	BangFX = create special effect SPOT_VISUAL_OBJECT_APPEAR at [EffectsPos] + [-5, CrocHeight - CrocHeight / 2, -5] time 3
+	Smoke = create special effect SPOT_VISUAL_BANG at [EffectsPos] + [0, CrocHeight, 0] time 1
+	Smoke = create special effect SPOT_VISUAL_BANG at [EffectsPos] + [-1, CrocHeight - CrocHeight / 10, -1] time 1
+	Smoke = create special effect SPOT_VISUAL_BANG at [EffectsPos] + [-2, CrocHeight - CrocHeight / 7, -2] time 1
+	Smoke = create special effect SPOT_VISUAL_BANG at [EffectsPos] + [-5, CrocHeight - CrocHeight / 5, -5] time 1
+	Smoke = create special effect SPOT_VISUAL_BANG at [EffectsPos] + [-5, CrocHeight - CrocHeight / 4, -5] time 1
+	Smoke = create special effect SPOT_VISUAL_BANG at [EffectsPos] + [-5, CrocHeight - CrocHeight / 2, -5] time 1
+end script CrocCreateCrocEffects
+

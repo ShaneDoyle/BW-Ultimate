@@ -1,0 +1,429 @@
+
+global ArmyAction = 0
+global AttackTarget = 0
+global Units[10000]
+global UnitFlags[100] // Up to 100 flags. Each flag can have up to 100 units
+global ArmyCreatures[100]
+global CreatureThrowPos[3]
+global Units_X[9]
+global Units_Z[9]
+
+
+
+// Init Army Related Stuff...
+begin script InitArmyGlobals
+start
+	CreatureThrowPos[0] = marker at [0,-50,0]
+	CreatureThrowPos[1] = marker at [9999,-50,0]
+	CreatureThrowPos[2] = marker at [0,-50,9999]
+	CreatureThrowPos[3] = marker at [9999,-50,9999]
+end script InitArmyGlobals
+
+
+begin script DebugCamera(Creature)
+	ThrowPos = 0
+	
+	CreatureRotation = 0.0
+	Rock = create OBJECT ROCK at [Creature] + [100,0,100]
+	DebugNums = create highlight CHALLENGE_NONE SCRIPT_HIGHLIGHT_INFO_SCOREBOARD_BIG at [1244.26, 100, 1248.53]
+start
+	while 1 == 1
+		Creature = get player 1 creature
+		CreatureRotation = SCRIPT_OBJECT_PROPERTY_TYPE_CREATURE_AMOUNT_OF_POO of Creature
+		//SCRIPT_OBJECT_PROPERTY_TYPE_CREATURE_AMOUNT_OF_POO of Creature = 1
+		//set Creature position to (hand position)
+	//	ANGLE of Creature = 5
+		//PITCH of Creature = 5
+		//ZANGLE of Creature = 5
+		//XANGLE of Creature = 5
+		
+		
+		//ThrowPos = marker at [(get XPOS of Creature)-(10*(cos (CreatureRotation))/57.296), 0 ,(get ZPOS of Creature)-(10*(sin (CreatureRotation))/57.296)]
+		//ThrowPos = CreatureThrowPos[number from 0 to 3]
+		
+		//set Rock position to [ThrowPos]
+		// Debug nums
+		set DebugNums position to [Creature]
+		ALTITUDE of DebugNums = CreatureRotation + 5
+		
+		set DebugNums score CreatureRotation
+	end while
+end script DebugCamera
+
+
+begin script OgreAlignment(Creature)
+start
+	while 1 == 1
+		ALIGNMENT of Creature = HEALTH of Creature * -1
+	end while
+	
+end script OgreAlignment
+
+begin script KillOgre(Creature)
+start
+	while 1 == 1
+		wait until HEALTH of Creature <= 0
+		force Creature CREATURE_DIE_PERMANENTLY Creature
+		wait until Creature played
+	end while
+	
+end script KillOgre
+
+begin script CreateArmyFlag(ArmyFlag, Unit_Action)
+	FlagSelected = 0
+	Building = 0
+	Sparkle = 0 //When selected, do a Sparkle.
+	Mist = 0
+start
+
+	UnitFlags[0] = ArmyFlag //TODO: Make this scale with ArmyFlag size?
+	
+	while 1 == 1
+		//if Mist == 0
+		
+		//else
+		//	set Mist position to [Building]
+		//end if
+		
+		
+		if FlagSelected == 0
+			if ArmyFlag clicked
+				AttackTarget = 0
+				FlagSelected = 1
+				start sound LH_SAMPLE_SKITTLECOLLIDE_01
+			end if
+		else
+			if mouse right button down
+				ArmyAction = 0
+				clear clicked object
+				Building = get HOUSE at (hand position) radius 10
+				Building = get CREATURE CREATURE_TYPE_UNDEAD_APE at (hand position) radius 100
+				set ArmyFlag position to (hand position)
+				
+				if Building != 0
+					set ArmyFlag position to [Building]
+					ALTITUDE of ArmyFlag = 	SCRIPT_OBJECT_PROPERTY_TYPE_HEIGHT of Building + 5
+					AttackTarget = Building
+					ArmyAction = 1
+					
+				end if
+				start sound LH_SAMPLE_SKITTLECOLLIDE_03
+				
+				
+				FlagSelected = 0
+				Building = 0
+			end if
+			Sparkle = create special effect SPOT_VISUAL_COMMAND_SUCCEED at [ArmyFlag] time 0.1
+			
+			
+		end if
+	end while
+	
+end script CreateArmyFlag
+
+begin script KeepRockNextToCreature
+	Dist = -5
+	Ref = 0
+	Rock = create OBJECT ROCK at [1071.06, 132.618, 1207.3]
+	CX = 0
+	CY = 0
+	CZ = 0
+	RX = 0
+	RZ = 0
+	DX = 0
+	DZ = 0
+	L = 0
+	Creature = get player 1 creature
+	TykeHeight = SCRIPT_OBJECT_PROPERTY_TYPE_HEIGHT of Creature
+start
+	SCALE of Rock = 0
+	begin loop
+		Dist = -20
+		Ref = marker at belly position of MyCreature
+		Creature = get player 1 creature
+		TykeHeight = SCRIPT_OBJECT_PROPERTY_TYPE_HEIGHT of Creature
+		CX = XPOS of Creature
+		CY = ALTITUDE of Creature
+		CZ = ZPOS of Creature
+		RX = XPOS of Ref
+		RZ = ZPOS of Ref
+		DX = RX - CX
+		DZ = RZ - CZ
+		L = sqrt(DX * DX + DZ * DZ)
+		DX = DX / L * Dist
+		DZ = DZ / L * Dist
+		set Rock position to [CX + DX, TykeHeight + 10, CZ + DZ]
+		ALTITUDE of Rock = TykeHeight + 4
+		//move camera position [CX + DX, 0, CZ + DZ] time 3
+		begin cinema
+			move camera position to [Rock] time 8
+			move camera focus to [Creature] + [0, 5, 0] time 8
+		end cinema
+	end loop
+end script KeepRockNextToCreature
+
+begin script CreatureStomp(Creature, Unit, Action)
+	ThrowPos = marker at [0,0,0]
+	XThrow = 0
+	XBuffer = 0
+	ZThrow = 0
+	ZBuffer = 0
+	Buff = 0
+	CreatureRotation = 0
+start
+
+	//start sound constant from LH_SAMPLE_G_SQUASHANIMAL_01 to LH_SAMPLE_G_SQUASHANIMAL_04 AUDIO_SFX_BANK_TYPE_SCRIPT_SFX at [Creature]
+	
+	//start sound LH_SAMPLE_SKITTLECOLLIDE_01
+	if ArmyCreatures[0] != Creature and HEALTH of Creature > 0.1
+		ArmyCreatures[0] = Creature
+		
+		// Stomp
+		if Action == 1
+			force Creature CREATURE_STOMP Unit
+			HEALTH of Unit = 0
+		elsif Action == 2
+			force Creature CREATURE_STOMP Unit
+			HEALTH of Unit = 0
+		//Throw!
+		/*
+		elsif Action == 0
+			wait until Creature played 
+			force Creature CREATURE_IDLE Creature
+			wait 1.5 second
+			release Creature
+			Creature play C_INDIVIDUAL_SUMMON
+			wait 1.5 second
+			Buff = cast MAGIC_TYPE_EXPLOSION_ONE spell on Creature from [Creature] radius 0 time 15 curl 0
+		*/
+		//Throw!
+		elsif Action == 3 or Action == 4
+			//force Creature CREATURE_KICK_TREE Unit
+			//queue Creature fight move CTR_HIT_BLOCK
+			ThrowPos = marker at [Unit] + [50,-100,50]
+			//ThrowPos = marker at [(get XPOS of Creature)-(10(cos (EpicBuildingRotation))/57.296), -50 ,(get ZPOS of Creature)-(10(sin (EpicBuildingRotation))/57.296)]
+			CreatureRotation = get ANGLE of Creature
+			
+			XThrow = number from -50 to 50
+			if XThrow < 20
+				XThrow = 20
+			end if
+			if XThrow > -20
+				XThrow = -20
+			end if
+			
+			if ZThrow < 25
+				XThrow = 25
+			end if
+			if ZThrow > -25
+				XThrow = -25
+			end if
+			
+			ZThrow = number from -50 to 50
+			
+			ThrowPos = marker at [XPOS of Unit + XThrow, -50, ZPOS of Unit +ZThrow]
+			force Creature CREATURE_HOLD_OBJECT Unit
+			wait until Unit in Creature hand or 5 seconds
+			force Creature CREATURE_HURL_OBJECT_IN_HAND ThrowPos with Unit
+			wait until Creature played or Unit not in Creature hand or 5 seconds
+			
+			/*
+			
+					force MyCreature CREATURE_HOLD_OBJECT Marble
+					wait until Marble in MyCreature hand
+					force MyCreature CREATURE_HURL_OBJECT_IN_HAND AimingPoint with Marble
+					*/
+		// Kick
+		elsif Action == 5
+			//force Creature CREATURE_CAST_FIREBALL Unit
+			force Creature CREATURE_KICK Unit
+		
+		end if
+		wait until Creature played or 5 seconds
+		release Creature
+		ArmyCreatures[0] = -1
+	end if
+end script CreatureStomp
+
+
+begin script NomanFollow(Unit, Target, x_adjust, z_adjust, i)
+	NewScore = 0
+	j = i
+	TargetIsFriendly = 0 //0 Enemy, 1 Friend.
+	Mist = 0
+	DeathTimer = 60
+	IntoPositionDelay = 10
+start
+	z_adjust = -2
+	x_adjust = (i % 10) - 5
+	while j >= 10
+		j-=10
+		z_adjust++
+	end while
+	
+	set Unit position to [Target] + [x_adjust, z_adjust]
+	SCALE of Unit = 1.5
+	HEALTH of Unit = 0.25
+	
+	//set Unit anim ANM_P_ON_FIRE_RUN
+	while HEALTH of Unit > 0
+		SPEED of Unit = 0.75
+		delete Mist
+		Mist = create mist at [Unit] scale 0.1 red 240 green 0 blue 0 transparency 0.2 height ratio 1 
+		if ArmyAction == 1
+			if get distance from [AttackTarget] to [Unit] >= 6
+				move Unit position to [(get XPOS of AttackTarget)-(4*(cos (i*18))/57.296), 0 ,(get ZPOS of AttackTarget)-(4*(sin (i*18))/57.296)]
+			elsif IntoPositionDelay > 0
+				move Unit position to [(get XPOS of AttackTarget)-(4*(cos (i*18))/57.296), 0 ,(get ZPOS of AttackTarget)-(4*(sin (i*18))/57.296)]
+				IntoPositionDelay-= 1
+			else
+				if TargetIsFriendly == 1
+					SPEED of Unit = 3
+				else
+					start music MUSIC_TYPE_SCRIPT_NEMESIS
+					disable alignment music
+					HEALTH of AttackTarget -=0.0004 
+					run background script CreatureStomp(AttackTarget, Unit, number from 4 to 5)
+					
+					set Unit focus to [AttackTarget]
+					wait number from 0.1 to 1.5 seconds
+					Unit play ANM_P_SLEDGEHAMMER
+					wait number from 1.2 to 2 seconds
+					
+				end if
+			end if
+		else
+			move Unit position to [Target] + [x_adjust, z_adjust]
+		end if
+		
+	end while
+	
+	
+	delete Mist
+	
+	
+	NewScore = get Target score 
+	set Target score NewScore - 1
+	
+	wait 15 seconds
+	
+	while DeathTimer > 0
+		SCALE of Unit-= 0.025
+		DeathTimer--
+	end while
+	delete Unit
+end script NomanFollow
+
+
+//------------------------------------------------------------------------------------------------------------------------
+begin script NomanMode
+	P1Citadel = get CITADEL at player 1 temple position radius 100
+	P1Creature = get player 1 creature
+	Unit_Action = 0 // 1 attack building
+	LittleOgre = 0
+
+	Units_Spawn_Pos = marker at [1244.26, 100, 1248.53]
+	i = 0
+	Creator = 10
+	Unit = 0
+	ArmyScoreboard = create highlight CHALLENGE_NONE SCRIPT_HIGHLIGHT_INFO_SCOREBOARD_BIG at [4603.09,4244.35]
+	
+	JapTown		= get TOWN at [1244.26, 100, 1248.53] radius 2000
+	
+start
+	
+	
+	
+	//run background script InitArmyGlobals
+	//run background script KeepRockNextToCreature
+
+	/*wait 100 seconds
+	delete P1Citadel
+	//delete P1Creature
+	set game time 06
+	ACTUAL_HEIGHT of P1Creature = 0.5
+	
+	LittleOgre = create DUMB_CREATURE CREATURE_TYPE_APE at [P1Creature]
+	ACTUAL_HEIGHT of LittleOgre = 0.5
+	
+	STRENGTH of LittleOgre = 1
+	FATNESS of LittleOgre = 1
+	HEALTH of LittleOgre = 1
+	ENERGY of LittleOgre = 1
+	HUNGER of LittleOgre = 0
+	EXHAUSTION of LittleOgre = 0
+	ALIGNMENT of LittleOgre = -0.5
+	
+	STRENGTH of P1Creature = 1
+	FATNESS of P1Creature = 1
+	HEALTH of P1Creature = 1
+	ENERGY of P1Creature = 1
+	HUNGER of P1Creature = 0
+	EXHAUSTION of P1Creature = 0
+	
+	run background script KillOgre(LittleOgre)
+	run background script OgreAlignment(LittleOgre)
+	*/
+	
+	//run background script DebugCamera(P1Creature)
+	
+	set ArmyScoreboard score Creator
+	enable ArmyScoreboard pickup
+	while Creator > 0
+		Unit = create VILLAGER VILLAGER_INFO_MARAUDER at [0,0,0]// +[Units_X[i], Units_Z[i]]
+		
+		enable Unit skeleton
+		Units[i] = Unit
+		run background script NomanFollow(Unit, ArmyScoreboard, Units_X[i], Units_Z[i], i)
+		i++
+		Creator--
+		attach Unit to JapTown
+		//wait 0.1 seconds
+	end while
+	
+	ALTITUDE of ArmyScoreboard = 5
+	
+	//while 1 == 1
+	//	set ArmyScoreboard position to (hand position)
+	//end while
+	run background script CreateArmyFlag(ArmyScoreboard, Unit_Action)
+	
+	while 1 == 1
+		if ArmyAction == 1
+			//say "Units Attacking!"
+		end if
+	end while
+	
+	
+end script NomanMode
+
+
+
+
+
+
+begin script CreatureDebugCreature
+
+	NewCreature = 0
+	P1Creature = get player 1 creature
+start
+
+	delete P1Creature
+	wait 1 second
+	NewCreature = create CREATURE CREATURE_TYPE_CROCODILE at [2219.86,0,2354.20]
+	set player 1 creature to NewCreature
+	release NewCreature
+	ACTUAL_HEIGHT of NewCreature = 0.3
+	
+	set NewCreature DEVELOPMENT_PHASE_FULLY_MATURE development
+	run SCRIPT_DEV_FUNCTION_ROPE_LEASH_ENABLED developer function
+	run SCRIPT_DEV_FUNCTION_OTHER_LEASHES_ENABLED developer function
+	disable NewCreature development script
+	release NewCreature
+
+	
+		
+end script CreatureDebugCreature
+
+
+

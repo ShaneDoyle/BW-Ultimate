@@ -1,0 +1,218 @@
+//LHVM Challenge source version 8
+//Decompiled with CHLASM tool by Daniels118
+
+begin script CreatureBuilders
+	Looping = 0
+start
+	disable MyCreature can learn PHYSICAL
+	while CreatureCanBuildFlag == 0
+		if Tyke knows action CREATURE_ACTION_KNOWN_ABOUT_BUILD
+			teach Tyke PHYSICAL CREATURE_ACTION_KNOWN_ABOUT_BUILD FALSE percentage 1
+		end if
+		if MyCreature knows action CREATURE_ACTION_KNOWN_ABOUT_BUILD
+			teach MyCreature PHYSICAL CREATURE_ACTION_KNOWN_ABOUT_BUILD FALSE percentage 1
+		end if
+	end while
+	enable MyCreature can learn PHYSICAL
+	enable Tyke can learn PHYSICAL
+	teach MyCreature PHYSICAL CREATURE_ACTION_KNOWN_ABOUT_BUILD TRUE percentage 1
+	if get distance from [Tyke] to [MyCreature] < 100
+		teach Tyke PHYSICAL CREATURE_ACTION_KNOWN_ABOUT_BUILD TRUE percentage 1
+	end if
+end script CreatureBuilders
+
+begin script TykeRestraint
+	TykeRetires = 0
+	MyMax = 0
+	CreatureSubType = 0
+start
+	wait until Tyke exists
+	begin loop
+		wait until 10 seconds
+		if NoTykeRestraint == 0
+			MyMax = ACTUAL_HEIGHT of MyCreature
+			MyMax = MyMax * 0.75
+			if ACTUAL_HEIGHT of Tyke > 0.5
+				ACTUAL_HEIGHT of Tyke = 0.45
+			elsif ACTUAL_HEIGHT of Tyke > MyMax
+				MyMax = MyMax - 0.05
+				ACTUAL_HEIGHT of Tyke = MyMax
+			end if
+			CreatureSubType = variable get Tyke sub type
+			if CreatureSubType == variable CREATURE_TYPE_CHICKEN and KensFightComplete == 0
+			else
+				TykeRetires = 1
+			end if
+		end if
+		until TykeRetires == 1
+	end loop
+end script TykeRestraint
+
+begin script MaintainPopulation(Town)
+	Villager = 0
+start
+	begin loop
+		wait until 5 seconds
+		if size of Town < 6
+			Villager = create VILLAGER VILLAGER_INFO_EGYPTIAN_FARMER_MALE at [Town] + ([number from -20 to 20, number from -20 to 20])
+			attach Villager to Town
+			release Villager
+			Villager = create VILLAGER VILLAGER_INFO_EGYPTIAN_FARMER_MALE at [Town] + ([number from -20 to 20, number from -20 to 20])
+			attach Villager to Town
+			release Villager
+			Villager = create VILLAGER VILLAGER_INFO_EGYPTIAN_FORESTER_MALE at [Town] + ([number from -20 to 20, number from -20 to 20])
+			attach Villager to Town
+			release Villager
+			Villager = create VILLAGER VILLAGER_INFO_EGYPTIAN_FARMER_MALE at [Town] + ([number from -20 to 20, number from -20 to 20])
+			attach Villager to Town
+			release Villager
+			Villager = create VILLAGER VILLAGER_INFO_EGYPTIAN_FARMER_MALE at [Town] + ([number from -20 to 20, number from -20 to 20])
+			attach Villager to Town
+			release Villager
+			Villager = create VILLAGER VILLAGER_INFO_EGYPTIAN_FORESTER_MALE at [Town] + ([number from -20 to 20, number from -20 to 20])
+			attach Villager to Town
+			release Villager
+			Villager = create VILLAGER VILLAGER_INFO_EGYPTIAN_HOUSEWIFE_FEMALE at [Town] + ([number from -20 to 20, number from -20 to 20])
+			attach Villager to Town
+			release Villager
+			Villager = create VILLAGER VILLAGER_INFO_EGYPTIAN_HOUSEWIFE_FEMALE at [Town] + ([number from -20 to 20, number from -20 to 20])
+			attach Villager to Town
+			release Villager
+			Villager = create VILLAGER VILLAGER_INFO_EGYPTIAN_HOUSEWIFE_FEMALE at [Town] + ([number from -20 to 20, number from -20 to 20])
+			attach Villager to Town
+			release Villager
+			Villager = create VILLAGER VILLAGER_INFO_EGYPTIAN_HOUSEWIFE_FEMALE at [Town] + ([number from -20 to 20, number from -20 to 20])
+			attach Villager to Town
+			release Villager
+		end if
+	end loop
+end script MaintainPopulation
+
+begin script TriggerDolphinShoot
+start
+	wait until KCWhackingComplete == 1 and KCMissileCommandComplete == 1
+	run background script DolphinShoot
+end script TriggerDolphinShoot
+
+begin script TownsTakenOver
+	Town1 = get town with id 1
+	Town2 = get town with id 2
+	Town1TakenOver = 0
+	Town2TakenOver = 0
+	FinishedFlag = 0
+start
+	begin loop
+		if PLAYER of Town2 == 1 and Town2TakenOver == 0
+			run script TownsTakenOver2(Town1TakenOver)
+			run background script MissileCommand
+			Town2TakenOver = 1
+		end if
+		if PLAYER of Town1 == 1 and Town1TakenOver == 0
+			run script TownsTakenOver1(Town2TakenOver)
+			run background script WhackAVillager
+			Town1TakenOver = 1
+		end if
+		until Town2TakenOver == 1 and Town1TakenOver == 1
+	end loop
+end script TownsTakenOver
+
+begin script CreatureIsleControl
+	Poo = 0
+	LastChallengeTotal = 0
+	TykeTimer = create timer for 0 seconds
+	TykeFlag = 0
+	WhackAVillagerFlag = 0
+	InitialTown = get TOWN at [1106.41, 120.063, 1302.9] radius 300
+	LaunchSecondWave = 0
+	OldTykePos = marker at [1128.2, 123.95, 1335.19]
+	TownStorage = get HOUSE at [1113.59, 122.911, 1364.56]
+start
+	begin camera
+		set camera position to [-150.328, 6.39, 844.669]
+		set camera focus to [-528.633, 13.182, 436.043]
+	end camera
+	run background script SetupCreatureIsle
+	run background script SetupDojo
+	wait until MyCreature exists
+	ChallengeTotal = 0
+	KensFightComplete = 0
+	TriggerBuildingTrials = 0
+	RaceTrialComplete = 0
+	MarblesReadyToStart = 0
+	BowlingReadyToStart = 0
+	ZebraReadyToStart = 0
+	run background script MaintainPopulation(InitialTown)
+	run background script CreatureBuilders
+	run background script Bowling
+	run background script Marbles
+	run background script SmashingBuildings
+	run background script ZebraChallenge
+	if KCGreetinsCompleted == 0
+		run script CreatureIsleIntro
+		//run script CreatureIsleIntroSkipIntro
+		run background script GreetingsFromTheBrotherHood
+	end if
+	run background script TownsTakenOver
+	run background script TriggerDolphinShoot
+	while KCGreetinsCompleted == 0
+	end while
+	run background script SelectPlinth
+	run background script DojoReminder
+
+	set TykeTimer time to 300 seconds
+	BowlingReadyToStart = 1
+	run background script CreatureHerder
+	run background script SpecialCrops
+	run background script TykesNest
+	run background script TykeRestraint
+	begin loop
+		if ChallengeTotal == 1
+			LaunchSecondWave = 1
+		end if
+		until LaunchSecondWave == 1
+	end loop
+	run background script GreedyHermit
+	LastChallengeTotal = ChallengeTotal
+	begin loop
+		if ChallengeTotal > LastChallengeTotal
+			if ChallengeTotal == 2
+				run background script StartTheRaces
+			elsif ChallengeTotal == 3
+				ZebraReadyToStart = 1
+			elsif ChallengeTotal == 4
+				run background script ZediFight
+			elsif ChallengeTotal == 5
+				MarblesReadyToStart = 1
+			elsif ChallengeTotal == 6
+				run background script FootballSkills
+			elsif ChallengeTotal == 7
+				run background script KingOfTheCastle
+			elsif ChallengeTotal == 8
+				TriggerBuildingTrials = 1
+			elsif ChallengeTotal == 9
+				run background script TigerCannon
+			elsif ChallengeTotal == 10
+				run background script MissionariesLeave
+			end if
+			LastChallengeTotal = ChallengeTotal
+		end if
+		until ChallengeTotal >= 16
+	end loop
+	run script SpiritTrial
+	run script Graduation
+	run background script GiveFightTattoo
+	run script GraduationFight
+	while KensFightComplete == 0
+	end while
+	KillTykeHelp = 1
+	run script Outro2
+	set OldTyke position to [OldTykePos]
+	attach OldTyke leash to TownStorage
+	set OldTyke only desire CREATURE_DESIRE_COMPASSION
+	disable OldTyke follow master
+	release OldTyke
+	begin loop
+		Poo = Poo
+	end loop
+end script CreatureIsleControl
+

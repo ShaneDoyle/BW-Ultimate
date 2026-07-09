@@ -1,0 +1,726 @@
+//LHVM Challenge source version 8
+//Decompiled with CHLASM tool by Daniels118
+
+global SparklePos
+
+begin script DoFunkyGlowyStrand(Position, Radius, Degrees, Height, HeightDegrees)
+	Sparkle = 0
+	Smoke = 0
+start
+	SparklePos = marker at [Position] + [(sin Degrees) * Radius, Height + (sin HeightDegrees) / 4, (cos Degrees) * Radius]
+	Sparkle = create special effect SPOT_VISUAL_DUST at [SparklePos] time 2
+	Smoke = create special effect SPOT_VISUAL_OBJECT_APPEAR at [SparklePos] time 2
+end script DoFunkyGlowyStrand
+
+begin script DoFunkyGlowyStuff
+	Sparkle = 0
+	Degrees1 = 0
+	Degrees2 = 120
+	Degrees3 = 240
+	Degrees4 = 20
+	Degrees5 = 300
+	HeightDegrees1 = 0
+	HeightDegrees2 = 0
+	HeightDegrees3 = 0
+	HeightDegrees4 = 0
+	HeightDegrees5 = 0
+	Centre = marker at [1319.526, 62.033, 1072.952]
+	StartPos = marker at [1174.64, 60.661, 960.788]
+	EndPos = marker at [1327.405, 62.98, 1085.513]
+	Height = -20
+start
+	begin loop
+		Height += 0.3
+		run background script DoFunkyGlowyStrand(Centre, 0.1, Degrees1, Height, HeightDegrees1)
+		run background script DoFunkyGlowyStrand(Centre, 0.2, Degrees2, Height, HeightDegrees2)
+		run background script DoFunkyGlowyStrand(Centre, 0.25, Degrees3, Height, HeightDegrees3)
+		run background script DoFunkyGlowyStrand(Centre, 0.05, Degrees4, Height, HeightDegrees4)
+		run background script DoFunkyGlowyStrand(Centre, 0.15, Degrees5, Height, HeightDegrees5)
+		Degrees1 += 10
+		Degrees2 += 4
+		Degrees3 += 11
+		Degrees4 += 8
+		Degrees5 += 3
+		HeightDegrees1 += 12
+		HeightDegrees2 += 6
+		HeightDegrees3 += 4
+		HeightDegrees4 += 10
+		HeightDegrees5 += 8
+		if Degrees1 > 359
+			Degrees1 = 0
+		end if
+		if Degrees2 > 359
+			Degrees2 = 0
+		end if
+		if Degrees3 > 359
+			Degrees3 = 0
+		end if
+		if HeightDegrees1 > 359
+			HeightDegrees1 = 0
+		end if
+		if HeightDegrees2 > 359
+			HeightDegrees2 = 0
+		end if
+		if HeightDegrees3 > 359
+			HeightDegrees3 = 0
+		end if
+	end loop
+end script DoFunkyGlowyStuff
+
+begin script DrawTitle(Enum, Across, Down)
+start
+	set draw text colour red 198 green 198 blue 198
+	draw text constant Enum across Across down Down width 0.5 height 0.1 size 0.054 fade in time 1 seconds
+	wait until 1 seconds
+	set draw text colour red 255 green 255 blue 255
+	fade all draw text time 1 seconds
+	draw text constant Enum across Across down Down width 0.5 height 0.1 size 0.055 fade in time 0.5 seconds
+	wait until 1 seconds
+end script DrawTitle
+
+begin script Title
+start
+	run script DrawTitle(variable HELP_TEXT_CI_CREDITS_10, 0.5, 0.2)
+end script Title
+
+begin script Programming
+start
+	run script DrawTitle(variable HELP_TEXT_CI_CREDITS_11, 0, 0.4)
+	draw text "Jonty Barnes" across 0 down 0.5 width 0.5 height 0.1 size 0.04 fade in time 1 seconds
+	draw text "Ken Malcolm" across 0 down 0.55 width 0.5 height 0.1 size 0.04 fade in time 1 seconds
+	draw text "Paul Nettleton" across 0 down 0.6 width 0.5 height 0.1 size 0.04 fade in time 1 seconds
+	draw text "Steve Lawrie" across 0 down 0.65 width 0.5 height 0.1 size 0.04 fade in time 1 seconds
+	draw text "Dan Deptford" across 0 down 0.7 width 0.5 height 0.1 size 0.04 fade in time 1 seconds
+	draw text "Matthew Wiggins" across 0 down 0.75 width 0.5 height 0.1 size 0.04 fade in time 1 seconds
+	draw text "Adam Clixby" across 0 down 0.8 width 0.5 height 0.1 size 0.04 fade in time 1 seconds
+end script Programming
+
+begin script Art
+start
+	run script DrawTitle(variable HELP_TEXT_INGAME_CREDITS_06, 0.5, 0.4)
+	draw text "Paul McLaughlin" across 0.5 down 0.5 width 0.5 height 0.1 size 0.04 fade in time 1 seconds
+	draw text "Mark Healey" across 0.5 down 0.55 width 0.5 height 0.1 size 0.04 fade in time 1 seconds
+	draw text "Andy Bass" across 0.5 down 0.6 width 0.5 height 0.1 size 0.04 fade in time 1 seconds
+	draw text "Christian Bravery" across 0.5 down 0.65 width 0.5 height 0.1 size 0.04 fade in time 1 seconds
+	draw text "Jamie Durrant" across 0.5 down 0.7 width 0.5 height 0.1 size 0.04 fade in time 1 seconds
+	draw text "Martin Johnson" across 0.5 down 0.75 width 0.5 height 0.1 size 0.04 fade in time 1 seconds
+	draw text "Francis Pang" across 0.5 down 0.8 width 0.5 height 0.1 size 0.04 fade in time 1 seconds
+end script Art
+
+begin script SoundAndMusic
+start
+	draw text HELP_TEXT_INGAME_CREDITS_09 across 0 down 0.2 width 0.5 height 0.1 size 0.055 fade in time 2 seconds
+	draw text HELP_TEXT_INGAME_CREDITS_08 across 0.5 down 0.7 width 0.5 height 0.1 size 0.055 fade in time 2 seconds
+	wait until 2 seconds
+	draw text "Russell Shaw" across 0 down 0.3 width 0.5 height 0.1 size 0.04 fade in time 1 seconds
+	draw text "James Leach" across 0.5 down 0.8 width 0.5 height 0.1 size 0.04 fade in time 1 seconds
+end script SoundAndMusic
+
+begin script Testing
+start
+	run script DrawTitle(variable HELP_TEXT_INGAME_CREDITS_15, 0, 0.55)
+	draw text "Andy Robson" across 0 down 0.65 width 0.5 height 0.1 size 0.04 fade in time 1 seconds
+	draw text "Nathan Smethurst" across 0 down 0.7 width 0.5 height 0.1 size 0.04 fade in time 1 seconds
+	draw text "Aaron Ludlow" across 0 down 0.75 width 0.5 height 0.1 size 0.04 fade in time 1 seconds
+	draw text "Joe Borthwick" across 0 down 0.8 width 0.5 height 0.1 size 0.04 fade in time 1 seconds
+end script Testing
+
+begin script AdditionalStuff
+start
+	run script DrawTitle(variable HELP_TEXT_CI_CREDITS_12, 0.5, 0.2)
+	draw text "Richard Evans" across 0.5 down 0.3 width 0.5 height 0.1 size 0.04 fade in time 1 seconds
+	draw text "Thomas Barnet-Lamb" across 0.5 down 0.35 width 0.5 height 0.1 size 0.04 fade in time 1 seconds
+	draw text "Jean-Claude Cottier" across 0.5 down 0.4 width 0.5 height 0.1 size 0.04 fade in time 1 seconds
+	draw text "Alex Evans" across 0.5 down 0.45 width 0.5 height 0.1 size 0.04 fade in time 1 seconds
+	draw text "Ollie Purkiss" across 0.5 down 0.5 width 0.5 height 0.1 size 0.04 fade in time 1 seconds
+end script AdditionalStuff
+
+begin script BasedOnBlackAndWhite
+start
+	draw text HELP_TEXT_ADMIN_REGISTRATION_TEXT_09 across 0 down 0.55 width 0.5 height 0.1 size 0.055 fade in time 2 seconds
+	draw text HELP_TEXT_INGAME_CREDITS_16 across 0.5 down 0.2 width 0.5 height 0.1 size 0.055 fade in time 2 seconds
+	wait until 2 seconds
+	draw text "Peter Molyneux" across 0 down 0.65 width 0.5 height 0.1 size 0.04 fade in time 1 seconds
+	draw text "Mark Webley" across 0 down 0.7 width 0.5 height 0.1 size 0.04 fade in time 1 seconds
+	draw text "Georg Backer" across 0 down 0.75 width 0.5 height 0.1 size 0.04 fade in time 1 seconds
+	draw text "Tim Rance" across 0 down 0.8 width 0.5 height 0.1 size 0.04 fade in time 1 seconds
+	draw text "Cathy Campos" across 0.5 down 0.3 width 0.5 height 0.1 size 0.04 fade in time 1 seconds
+end script BasedOnBlackAndWhite
+
+begin script VoicesAndMisc
+start
+	run script DrawTitle(variable HELP_TEXT_INGAME_CREDITS_13, 0.5, 0.55)
+	draw text "Marc Silk" across 0.5 down 0.65 width 0.5 height 0.1 size 0.04 fade in time 1 seconds
+	draw text "Steven Pacey" across 0.5 down 0.7 width 0.5 height 0.1 size 0.04 fade in time 1 seconds
+	draw text "Brian Bowles" across 0.5 down 0.75 width 0.5 height 0.1 size 0.04 fade in time 1 seconds
+	draw text "Claire Hedley" across 0.5 down 0.8 width 0.5 height 0.1 size 0.04 fade in time 1 seconds
+end script VoicesAndMisc
+
+begin script RestOfLionhead
+start
+	run script DrawTitle(variable HELP_TEXT_CI_CREDITS_15, 0.5, 0.2)
+	draw text "Catherine Tutton" across 0.5 down 0.3 width 0.5 height 0.1 size 0.04 fade in time 1 seconds
+	draw text "Steve Hutchings" across 0.5 down 0.35 width 0.5 height 0.1 size 0.04 fade in time 1 seconds
+	draw text "Becky Harms" across 0.5 down 0.4 width 0.5 height 0.1 size 0.04 fade in time 1 seconds
+	draw text "Andrew Lindsay" across 0.5 down 0.45 width 0.5 height 0.1 size 0.04 fade in time 1 seconds
+	draw text "Rune Vendler" across 0.5 down 0.5 width 0.5 height 0.1 size 0.04 fade in time 1 seconds
+	draw text "Tak Fung" across 0.5 down 0.55 width 0.5 height 0.1 size 0.04 fade in time 1 seconds
+	draw text "Rob Burke" across 0.5 down 0.6 width 0.5 height 0.1 size 0.04 fade in time 1 seconds
+end script RestOfLionhead
+
+begin script BWStudios
+start
+	run script DrawTitle(variable HELP_TEXT_INGAME_CREDITS_20, 0, 0.5)
+	draw text "Scawen Roberts" across 0 down 0.6 width 0.5 height 0.1 size 0.04 fade in time 1 seconds
+	draw text "Eric Bailey" across 0 down 0.65 width 0.5 height 0.1 size 0.04 fade in time 1 seconds
+	draw text "Ben at Vocal Point" across 0 down 0.7 width 0.5 height 0.1 size 0.04 fade in time 1 seconds
+	draw text "Stephen Rank" across 0 down 0.75 width 0.5 height 0.1 size 0.04 fade in time 1 seconds
+	draw text "Will Overgard" across 0 down 0.8 width 0.5 height 0.1 size 0.04 fade in time 1 seconds
+end script BWStudios
+
+begin script SpecialTesters
+start
+	run script DrawTitle(variable HELP_TEXT_INGAME_CREDITS_25, 0.5, 0.2)
+	draw text "Charlton Edwards" across 0.5 down 0.3 width 0.5 height 0.1 size 0.04 fade in time 1 seconds
+	draw text "Ben Sebire" across 0.5 down 0.35 width 0.5 height 0.1 size 0.04 fade in time 1 seconds
+	draw text "Tony Ciniglio" across 0.5 down 0.4 width 0.5 height 0.1 size 0.04 fade in time 1 seconds
+	draw text "Jeff Brutus" across 0.5 down 0.45 width 0.5 height 0.1 size 0.04 fade in time 1 seconds
+end script SpecialTesters
+
+begin script ForEA
+start
+	run script DrawTitle(variable HELP_TEXT_CI_CREDITS_17, 0.25, 0.2)
+	draw text "Dan Blackstone" across 0.25 down 0.35 width 0.5 height 0.1 size 0.04 fade in time 1 seconds
+	draw text "Neil McEwan" across 0 down 0.45 width 0.25 height 0.1 size 0.04 fade in time 1 seconds
+	draw text "Murray Pannell" across 0 down 0.5 width 0.25 height 0.1 size 0.04 fade in time 1 seconds
+	draw text "Steve Perkins" across 0 down 0.55 width 0.25 height 0.1 size 0.04 fade in time 1 seconds
+	draw text "Anthony Caiazzo" across 0 down 0.6 width 0.25 height 0.1 size 0.04 fade in time 1 seconds
+	draw text "Pete Samuels" across 0 down 0.65 width 0.25 height 0.1 size 0.04 fade in time 1 seconds
+	draw text "Andy Bussell" across 0 down 0.7 width 0.25 height 0.1 size 0.04 fade in time 1 seconds
+	draw text "John Brunton" across 0 down 0.75 width 0.25 height 0.1 size 0.04 fade in time 1 seconds
+	draw text "Matt Price" across 0 down 0.8 width 0.25 height 0.1 size 0.04 fade in time 1 seconds
+	draw text "Stu Williams" across 0.25 down 0.45 width 0.25 height 0.1 size 0.04 fade in time 1 seconds
+	draw text "Dan Golding" across 0.25 down 0.5 width 0.25 height 0.1 size 0.04 fade in time 1 seconds
+	draw text "Piers Langridge" across 0.25 down 0.55 width 0.25 height 0.1 size 0.04 fade in time 1 seconds
+	draw text "Barrie Tingle" across 0.25 down 0.6 width 0.25 height 0.1 size 0.04 fade in time 1 seconds
+	draw text "Ross Douglas" across 0.25 down 0.65 width 0.25 height 0.1 size 0.04 fade in time 1 seconds
+	draw text "Jamie Cawte" across 0.25 down 0.7 width 0.25 height 0.1 size 0.04 fade in time 1 seconds
+	draw text "Matt Follett" across 0.25 down 0.75 width 0.25 height 0.1 size 0.04 fade in time 1 seconds
+	draw text "Paul Dalton" across 0.25 down 0.8 width 0.25 height 0.1 size 0.04 fade in time 1 seconds
+	draw text "Darren Pinnock" across 0.5 down 0.45 width 0.25 height 0.1 size 0.04 fade in time 1 seconds
+	draw text "Adam Mason" across 0.5 down 0.5 width 0.25 height 0.1 size 0.04 fade in time 1 seconds
+	draw text "Spencer Guest" across 0.5 down 0.55 width 0.25 height 0.1 size 0.04 fade in time 1 seconds
+	draw text "Cornelius Wait" across 0.5 down 0.6 width 0.25 height 0.1 size 0.04 fade in time 1 seconds
+	draw text "Stuart Morton" across 0.5 down 0.65 width 0.25 height 0.1 size 0.04 fade in time 1 seconds
+	draw text "Giro Maioriello" across 0.5 down 0.7 width 0.25 height 0.1 size 0.04 fade in time 1 seconds
+	draw text "Sandra Picaper" across 0.5 down 0.75 width 0.25 height 0.1 size 0.04 fade in time 1 seconds
+	draw text "David Lapp" across 0.5 down 0.8 width 0.25 height 0.1 size 0.04 fade in time 1 seconds
+	draw text "Masa Nemoto" across 0.75 down 0.45 width 0.25 height 0.1 size 0.04 fade in time 1 seconds
+	draw text "Christine Kong" across 0.75 down 0.5 width 0.25 height 0.1 size 0.04 fade in time 1 seconds
+	draw text "James Lenoel" across 0.75 down 0.55 width 0.25 height 0.1 size 0.04 fade in time 1 seconds
+	draw text "Joe Grant" across 0.75 down 0.6 width 0.25 height 0.1 size 0.04 fade in time 1 seconds
+	draw text "Marcus Purvis" across 0.75 down 0.65 width 0.25 height 0.1 size 0.04 fade in time 1 seconds
+	draw text "Donna Hicks" across 0.75 down 0.7 width 0.25 height 0.1 size 0.04 fade in time 1 seconds
+	draw text "Wayne Boyce" across 0.75 down 0.75 width 0.25 height 0.1 size 0.04 fade in time 1 seconds
+	draw text "Martyn Sibley" across 0.75 down 0.8 width 0.25 height 0.1 size 0.04 fade in time 1 seconds
+end script ForEA
+
+begin script TestingForLionhead
+start
+	run script DrawTitle(variable HELP_TEXT_INGAME_CREDITS_25, 0.25, 0.2)
+	draw text "Jamie Newman" across 0.25 down 0.35 width 0.25 height 0.1 size 0.04 fade in time 1 seconds
+	draw text "Alistair Ferguson" across 0.25 down 0.4 width 0.25 height 0.1 size 0.04 fade in time 1 seconds
+	draw text "Phillip Webb" across 0.25 down 0.45 width 0.25 height 0.1 size 0.04 fade in time 1 seconds
+	draw text "Jeremy Welton" across 0.25 down 0.5 width 0.25 height 0.1 size 0.04 fade in time 1 seconds
+	draw text "Peter Bensted" across 0.25 down 0.55 width 0.25 height 0.1 size 0.04 fade in time 1 seconds
+	draw text "Alexander Mangel" across 0.25 down 0.6 width 0.25 height 0.1 size 0.04 fade in time 1 seconds
+	draw text "Daniel Moore" across 0.5 down 0.35 width 0.25 height 0.1 size 0.04 fade in time 1 seconds
+	draw text "Darryl Tse" across 0.5 down 0.4 width 0.25 height 0.1 size 0.04 fade in time 1 seconds
+	draw text "Henry Fisher" across 0.5 down 0.45 width 0.25 height 0.1 size 0.04 fade in time 1 seconds
+	draw text "Brian Frost" across 0.5 down 0.5 width 0.25 height 0.1 size 0.04 fade in time 1 seconds
+	draw text "Jon Whitby-Smith" across 0.5 down 0.55 width 0.25 height 0.1 size 0.04 fade in time 1 seconds
+	draw text "Wayne Hackney" across 0.5 down 0.6 width 0.25 height 0.1 size 0.04 fade in time 1 seconds
+end script TestingForLionhead
+
+begin script CreditsList
+start
+	run background script Title
+	wait until 10 seconds
+	fade all draw text time 3 seconds
+	wait until 7.5 seconds
+	run background script Programming
+	wait until 10 seconds
+	fade all draw text time 3 seconds
+	wait until 7.5 seconds
+	run background script Art
+	wait until 10 seconds
+	fade all draw text time 3 seconds
+	wait until 7.5 seconds
+	run background script SoundAndMusic
+	wait until 10 seconds
+	fade all draw text time 3 seconds
+	wait until 7.5 seconds
+	run background script Testing
+	wait until 10 seconds
+	fade all draw text time 3 seconds
+	wait until 7.5 seconds
+	run background script AdditionalStuff
+	wait until 10 seconds
+	fade all draw text time 3 seconds
+	wait until 7.5 seconds
+	run background script BasedOnBlackAndWhite
+	wait until 10 seconds
+	fade all draw text time 3 seconds
+	wait until 7.5 seconds
+	run background script RestOfLionhead
+	wait until 10 seconds
+	fade all draw text time 3 seconds
+	wait until 7.5 seconds
+	run background script SpecialTesters
+	wait until 10 seconds
+	fade all draw text time 3 seconds
+	wait until 7.5 seconds
+	run background script TestingForLionhead
+	wait until 10 seconds
+	fade all draw text time 3 seconds
+	wait until 7.5 seconds
+	run background script ForEA
+	wait until 10 seconds
+	fade all draw text time 3 seconds
+	wait until 7.5 seconds
+	run background script BWStudios
+	wait until 10 seconds
+	fade all draw text time 3 seconds
+	wait until 7.5 seconds
+end script CreditsList
+
+begin script TwoPeopleTalking(VillagerType1, VillagerType2, Position, SecondsBeforeDelete)
+	Bloke1 = 0
+	Bloke2 = 0
+start
+	Bloke1 = create VILLAGER constant VillagerType1 at [Position] + [-0.5, 0, -0.5]
+	Bloke2 = create VILLAGER constant VillagerType2 at [Position] + [0.5, 0, 0.5]
+	set Bloke1 focus to [Bloke2]
+	set Bloke2 focus to [Bloke1]
+	Bloke1 play ANM_P_TALK1_MALE loop -1
+	Bloke2 play ANM_P_TALK2_MALE loop -1
+	wait until SecondsBeforeDelete seconds
+	delete Bloke1
+	delete Bloke2
+end script TwoPeopleTalking
+
+begin script CreateCrowdSitting(Position, Focus, NumberInCrowd, SecondsBeforeDelete)
+	Crowd[128]
+	CrowdCounter = 0
+	VillagerType = 0
+	AnimType = 0
+	TempMan = 0
+start
+	while CrowdCounter < NumberInCrowd
+		VillagerType = (variable VILLAGER_INFO_CELTIC_HOUSEWIFE_FEMALE) + (number from 0 to (variable VILLAGER_INFO_TIBETAN_TRADER_MALE))
+		Crowd[CrowdCounter] = create VILLAGER constant VillagerType at [Position] + [number from -10 to 10, 0, number from -10 to 10]
+		TempMan = Crowd[CrowdCounter]
+		set TempMan focus to [Focus]
+		if number from 0 to 5 == 5
+			AGE of TempMan = 12
+		end if
+		AnimType = number from 0 to 2
+		if AnimType == 0
+			TempMan play ANM_P_SITTING_DOWN2_SITTING loop -1
+		elsif AnimType == 2
+			TempMan play ANM_P_SITTING_DOWN1_SITTING loop -1
+		else
+			TempMan play ANM_P_SITTING_DOWN_DANCE_SAILING1 loop -1
+		end if
+		CrowdCounter++
+		wait until 0.1 seconds
+	end while
+	wait until SecondsBeforeDelete seconds
+	CrowdCounter = 0
+	while CrowdCounter < NumberInCrowd
+		delete Crowd[CrowdCounter]
+		CrowdCounter++
+	end while
+end script CreateCrowdSitting
+
+begin script DoStuffWithPeopleAtTempleEntrance
+	Blokes[4]
+start
+	wait until 127 seconds
+	Blokes[0] = create VILLAGER SHAOLIN at [1093.072, 136.125, 1206.302]
+	ALTITUDE of Blokes[0] = 2.5
+	move Blokes[0] position to [1062.286, 129.341, 1186.837] radius 0
+	set Blokes[0] anim ANM_P_WALK_BECKON02
+	wait until 1 seconds
+	Blokes[1] = create VILLAGER SHAOLIN at [1093.072, 136.125, 1206.302]
+	move Blokes[1] position to [1068.828, 130.577, 1190.685] radius 0
+	ALTITUDE of Blokes[1] = 2.5
+	wait until 0.2 seconds
+	Blokes[2] = create VILLAGER SHAOLIN at [1093.072, 136.125, 1206.302]
+	move Blokes[2] position to [1061.39, 128.726, 1183.618] radius 0
+	ALTITUDE of Blokes[2] = 2.5
+	wait until 0.3 seconds
+	Blokes[3] = create VILLAGER SHAOLIN at [1093.072, 136.125, 1206.302]
+	move Blokes[3] position to [1060.555, 128.525, 1183.347] radius 0
+	ALTITUDE of Blokes[3] = 2.5
+	wait until 1 seconds
+	wait until 7 seconds
+	move Blokes[0] position to [1062.286, 129.341, 1186.837] radius 0
+	wait until 11 seconds
+	ALTITUDE of Blokes[0] = 0
+	ALTITUDE of Blokes[1] = 0
+	ALTITUDE of Blokes[2] = 0
+	ALTITUDE of Blokes[3] = 0
+	wait until 5 seconds
+	delete Blokes[0]
+	delete Blokes[1]
+	delete Blokes[2]
+	delete Blokes[3]
+end script DoStuffWithPeopleAtTempleEntrance
+
+begin script MakePeopleWalkAcrossTheTopOfTheWonder
+	Bloke = 0
+start
+	wait until 119 seconds
+	Bloke = create VILLAGER SHAOLIN at [1087.457, 135.903, 1207.044]
+	SPEED of Bloke = 0.3
+	ALTITUDE of Bloke = 13.7
+	move Bloke position to [1091.896, 134.529, 1199.127] radius 0
+	wait until get distance from [Bloke] to [1091.896, 134.529, 1199.127] == 0
+	ALTITUDE of Bloke = 14.7
+	Bloke play ANM_P_CLAP_1 loop -1
+	wait until 20 seconds
+	delete Bloke
+end script MakePeopleWalkAcrossTheTopOfTheWonder
+
+begin script CreateCrowdForCheering(Position, Focus, NumberInCrowd, SecondsBeforeDelete)
+	Crowd[128]
+	CrowdCounter = 0
+	VillagerType = 0
+	AnimType = 0
+	TempMan = 0
+start
+	while CrowdCounter < NumberInCrowd
+		VillagerType = (variable VILLAGER_INFO_CELTIC_HOUSEWIFE_FEMALE) + (number from 0 to (variable VILLAGER_INFO_TIBETAN_TRADER_MALE))
+		Crowd[CrowdCounter] = create VILLAGER constant VillagerType at [Position] + [number from -10 to 10, 0, number from -10 to 10]
+		TempMan = Crowd[CrowdCounter]
+		set TempMan focus to [Focus]
+		if number from 0 to 5 == 5
+			AGE of TempMan = 12
+		end if
+		AnimType = number from 0 to 5
+		if AnimType == 0
+			TempMan play ANM_P_CROWD_MEXICAN_WAVE loop -1
+		elsif AnimType == 2
+			TempMan play ANM_P_CROWD_WON loop -1
+		elsif AnimType == 3
+			TempMan play ANM_P_CROWD_WON_2 loop -1
+		elsif AnimType == 4
+			TempMan play ANM_P_CONDUCT_MEETING loop -1
+		else
+			TempMan play ANM_P_CLAP_3 loop -1
+		end if
+		CrowdCounter++
+		wait until 0.1 seconds
+	end while
+	wait until SecondsBeforeDelete seconds
+	CrowdCounter = 0
+	while CrowdCounter < NumberInCrowd
+		delete Crowd[CrowdCounter]
+		CrowdCounter++
+	end while
+end script CreateCrowdForCheering
+
+begin script CreateCrowdAndMoveFromOnePositionToAnother(StartPos, EndPos, NumberInCrowd, SecondsBeforeDelete)
+	Crowd[128]
+	CrowdCounter = 0
+	VillagerType = 0
+	TempMan = 0
+start
+	while CrowdCounter < NumberInCrowd
+		VillagerType = (variable VILLAGER_INFO_CELTIC_HOUSEWIFE_FEMALE) + (number from 0 to (variable VILLAGER_INFO_TIBETAN_TRADER_MALE))
+		Crowd[CrowdCounter] = create VILLAGER constant VillagerType at [StartPos] + [number from -10 to 10, 0, number from -10 to 10]
+		TempMan = Crowd[CrowdCounter]
+		move TempMan position to [EndPos] radius 0
+		if number from 0 to 5 == 5
+			AGE of TempMan = 12
+		end if
+		if number from 0 to 4 == 4
+			SPEED of TempMan = 0.3
+		end if
+		CrowdCounter++
+	end while
+	wait until SecondsBeforeDelete seconds
+	CrowdCounter = 0
+	while CrowdCounter < NumberInCrowd
+		delete Crowd[CrowdCounter]
+		CrowdCounter++
+	end while
+end script CreateCrowdAndMoveFromOnePositionToAnother
+
+begin script MakePeopleWalkDownHill
+start
+	wait until 92 seconds
+	run script CreateCrowdAndMoveFromOnePositionToAnother(marker at [1183.404, 165.718, 1257.853], marker at [1081.706, 134.885, 1225.224], 12, 120)
+end script MakePeopleWalkDownHill
+
+begin script DoStuffWithPeopleOnGrass
+	PeoplePos = marker at [1275.665, 129.98, 1373.504]
+	Bods[12]
+	Count = 0
+	VillagerType = 0
+start
+	while Count < 12
+		VillagerType = (variable VILLAGER_INFO_CELTIC_HOUSEWIFE_FEMALE) + (number from 0 to (variable VILLAGER_INFO_TIBETAN_TRADER_MALE))
+		Bods[Count] = create VILLAGER constant VillagerType at [PeoplePos] + [number from -10 to 10, 0, number from -10 to 10]
+		Bods[Count] play ANM_PIED_PIPER_DANCE_STAND_SPIN loop -1
+		Count++
+	end while
+	wait until 120 seconds
+	Count = 0
+	while Count < 12
+		delete Bods[Count]
+	end while
+end script DoStuffWithPeopleOnGrass
+
+begin script Graduation
+	GDojoCavei = marker at [130, 61, 100]
+	GDojoCentrei = marker at [1253.2899, 57.5075, 1021.62]
+	CrocodilePlinth = 0
+	EDist = 50
+	PDist = 65
+	Crocodile = 0
+	GLion = 0
+	CrocodileEntryPos = 0
+	BangFX = 0
+	BeamFX = 0
+	ScaleOfMyCreature = 0
+	CreatureHeight = 0
+	CreatureEntryPosi[18]
+	Creaturesi[18]
+	DojoCavei = 0
+	DojoCentrei = 0
+	Height = -20
+	Degrees1 = 0
+	Degrees2 = 120
+	Degrees3 = 240
+	Degrees4 = 20
+	Degrees5 = 300
+	HeightDegrees1 = 0
+	HeightDegrees2 = 0
+	HeightDegrees3 = 0
+	HeightDegrees4 = 0
+	HeightDegrees5 = 0
+	Finished = 0
+	CreaturePos = 0
+	EndCreature = 0
+start
+	DojoCentrei = marker at [1253.2899, 57.5075, 1021.62]
+	DojoCavei = marker at [130, 61, 100]
+	CreatureEntryPosi[0] = marker at (get target from [DojoCavei] to [DojoCentrei] distance EDist angle 90)
+	CreatureEntryPosi[1] = marker at (get target from [DojoCavei] to [DojoCentrei] distance EDist angle 110)
+	CreatureEntryPosi[2] = marker at (get target from [DojoCavei] to [DojoCentrei] distance EDist angle 130)
+	CreatureEntryPosi[3] = marker at (get target from [DojoCavei] to [DojoCentrei] distance EDist angle 150)
+	CreatureEntryPosi[4] = marker at (get target from [DojoCavei] to [DojoCentrei] distance EDist angle 170)
+	CreatureEntryPosi[5] = marker at (get target from [DojoCavei] to [DojoCentrei] distance EDist angle 190)
+	CreatureEntryPosi[6] = marker at (get target from [DojoCavei] to [DojoCentrei] distance EDist angle 210)
+	CreatureEntryPosi[7] = marker at (get target from [DojoCavei] to [DojoCentrei] distance EDist angle 230)
+	CreatureEntryPosi[8] = marker at (get target from [DojoCavei] to [DojoCentrei] distance EDist angle 250)
+	CreatureEntryPosi[9] = marker at (get target from [DojoCavei] to [DojoCentrei] distance EDist angle 270)
+	CreatureEntryPosi[10] = marker at (get target from [DojoCavei] to [DojoCentrei] distance EDist angle 290)
+	CreatureEntryPosi[11] = marker at (get target from [DojoCavei] to [DojoCentrei] distance EDist angle 310)
+	CreatureEntryPosi[12] = marker at (get target from [DojoCavei] to [DojoCentrei] distance EDist angle 330)
+	CreatureEntryPosi[13] = marker at (get target from [DojoCavei] to [DojoCentrei] distance EDist angle 350)
+	CreatureEntryPosi[14] = marker at (get target from [DojoCavei] to [DojoCentrei] distance EDist angle 10)
+	CreatureEntryPosi[15] = marker at (get target from [DojoCavei] to [DojoCentrei] distance EDist angle 30)
+	CreatureEntryPosi[16] = marker at (get target from [DojoCavei] to [DojoCentrei] distance EDist angle 50)
+	CreatureEntryPosi[17] = marker at (get target from [DojoCavei] to [DojoCentrei] distance EDist angle 70)
+	MyCreature = get player 1 creature
+	start music MUSIC_TYPE_OUTRO
+	fade all draw text time 1 seconds
+	wait until 1 seconds
+	begin cinema
+		set MyCreature position to [2712.474, 20.1, 1167.2484]
+		wait until widescreen transition complete
+		set fade in time 2
+		run background script CreditsList
+		run background script MakePeopleWalkAcrossTheTopOfTheWonder
+		run background script DoStuffWithPeopleAtTempleEntrance
+		run background script MakePeopleWalkDownHill
+		run background script CreateCrowdForCheering(marker at [1019.375, 108.974, 1055.873], marker at [1236.998, 60.97, 1014.342], 48, 200)
+		run background script CreateCrowdForCheering(marker at [1045.203, 96.48, 1013.37], marker at [1236.998, 60.97, 1014.342], 48, 200)
+		run background script DoStuffWithPeopleOnGrass
+		disable sound effects
+		set camera lens 20 time 0
+		run background script CreateCrowdForCheering(marker at [1173.688, 60.07, 1026.563], marker at [1252.882, 60.97, 1023.551], 4, 20)
+		run background script CreateCrowdForCheering(marker at [1179.974, 60.3, 1049.812], marker at [1252.882, 60.97, 1023.551], 8, 50)
+		run background script CreateCrowdForCheering(marker at [1220.046, 62.245, 1085.838], marker at [1252.882, 60.97, 1023.551], 8, 50)
+		run background script CreateCrowdForCheering(marker at [1245.156, 60.719, 1080.308], marker at [1252.882, 60.97, 1023.551], 16, 50)
+		run background script CreateCrowdForCheering(marker at [1202.201, 61.253, 1073.235], marker at [1252.882, 60.97, 1023.551], 16, 50)
+		run background script CreateCrowdForCheering(marker at [1266.095, 62.017, 1080.468], marker at [1252.882, 60.97, 1023.551], 32, 50)
+		run background script CreateCrowdForCheering(marker at [1299, 63.985, 1085.036], marker at [1252.882, 60.97, 1023.551], 32, 50)
+		camera path GRADUATIONTRACK00 GRADUATIONTRACK00
+		wait until 35 seconds
+		run background script CreateCrowdAndMoveFromOnePositionToAnother(marker at [1369.007, 66.492, 1115.18], marker at [1259.398, 60.97, 1022.397], 25, 20)
+		wait until 3 seconds
+		run background script CreateCrowdAndMoveFromOnePositionToAnother(marker at [1439.945, 81.811, 1181.239], marker at [1259.398, 60.97, 1022.397], 100, 20)
+		wait until 4 seconds
+		run background script CreateCrowdAndMoveFromOnePositionToAnother(marker at [1439.683, 85.493, 1208.583], marker at [1385.713, 70.729, 1129.995], 60, 20)
+		wait until 6 seconds
+		run background script CreateCrowdAndMoveFromOnePositionToAnother(marker at [1410.059, 110.623, 1290.423], marker at [1433.964, 84.705, 1202.758], 20, 50)
+		wait until 5 seconds
+		run background script CreateCrowdAndMoveFromOnePositionToAnother(marker at [1319.416, 129.349, 1349.636], marker at [1431.376, 98.145, 1248.72], 25, 50)
+		wait until 75 seconds
+		wait until 32 seconds
+		set camera lens 70 time 40
+		wait until camera ready
+		wait until 1 seconds
+		move camera position to [1281.127, 67.084, 1027.303] time 20
+		move camera focus to [1305.648, 67.851, 1048.359] time 20
+		CrocodilePlinth = marker at (get target from [GDojoCavei] to [GDojoCentrei] distance PDist angle 350)
+		enable jc special SJC_RAISE_TOTEM on Dojo with number 13
+		start sound LH_SCRIPT_SAMPLE_CAVEDOOR_SLIDE AUDIO_SFX_BANK_TYPE_SCRIPT_SFX at (camera position)
+		shake camera at (camera position) radius 20 amplitude 0.1 time 4
+		wait until 3 seconds
+		start sound LH_SCRIPT_SAMPLE_CAVEDOOR_SLAM AUDIO_SFX_BANK_TYPE_SCRIPT_SFX at (camera position)
+		shake camera at (camera position) radius 20 amplitude 0.5 time 0.5
+		wait until 1 seconds
+		CrocodileEntryPos = marker at (get target from [GDojoCavei] to [GDojoCentrei] distance EDist angle 350)
+		Crocodile = create dumb creature from creature MyCreature 1 at [CrocodileEntryPos] CREATURE_TYPE_CROCODILE
+		set Crocodile fade in time 2
+		SCALE of Crocodile = 0.2
+		STRENGTH of Crocodile = 1
+		ALIGNMENT of Crocodile = -0.5
+		force Crocodile CREATURE_LOOK_FOREVER Crocodile
+		wait until 1 seconds
+		set Crocodile focus to [GDojoCentrei]
+		start sound LH_SAMPLE_G_PLASMASMALL at [CrocodilePlinth]
+		BeamFX = create special effect SPOT_VISUAL_MAGIC_BEAM on CrocodilePlinth time 3
+		ALTITUDE of BeamFX = 10
+		add BeamFX target on Crocodile
+		wait until 1 seconds
+		BangFX = create special effect SPOT_VISUAL_BANG on Crocodile time 3
+		MyCreature = get player 1 creature
+		ScaleOfMyCreature = ACTUAL_HEIGHT of MyCreature
+		Crocodile play ANM_SWALLOW_FLAP loop 1
+		GLion = create DUMB_CREATURE CREATURE_TYPE_LION at [1216.536, 60.97, 1002.682]
+		SCALE of GLion = 2
+		set GLion focus to [CrocodilePlinth]
+		while SCALE of Crocodile < 2
+			SCALE of Crocodile += 0.05
+			CreatureHeight = HEIGHT of Crocodile
+			move camera focus to [Crocodile] + [0, CreatureHeight * 0.8, 0] time 1
+		end while
+		wait until 2 seconds
+		stop sound LH_SAMPLE_G_PLASMASMALL
+		set camera position to [1409.411, 172.727, 1007.406]
+		set camera focus to [1381.713, 151.825, 1009.721]
+		move camera position to [1399.303, 115.16, 841.972] time 12
+		move camera focus to [1377.594, 109.182, 868.474] time 12
+		set camera lens 20 time 16
+		move Crocodile position to [1279.107, 60.97, 1022.178] radius 0
+		move GLion position to [1231.18, 60.97, 1020.882] radius 0
+		wait until get distance from [GLion] to [1231.18, 60.97, 1020.882] == 0
+		set GLion focus to [Crocodile]
+		set Crocodile focus to [GLion]
+		wait until 2 seconds
+		GLion play ANM_PIED_PIPER_DANCE_STAND loop 1
+		wait until GLion played
+		set Crocodile focus to [1496.839, 77.72, 1207.954]
+		set GLion focus to [1496.839, 77.72, 1207.954]
+		GLion play ANM_SWALLOW_FLAP loop 10
+		MyCreature = get player 1 creature
+		set MyCreature position to [1317.35, 62.074, 1073.264]
+		set MyCreature focus to [Dojo]
+		wait until 2 seconds
+		set camera position to [1232.613, 304.397, 950.927]
+		set camera focus to [1240.239, 114.864, 997.838]
+		CreatureHeight = HEIGHT of MyCreature
+		move camera focus to [MyCreature] + [0, CreatureHeight * 0.8, 0] time 12
+		move camera position to [1264.286, 65.872, 1027.919] time 12
+		wait until camera ready
+		MyCreature play ANM_A_COW_DEAD_ON_RHS loop 4
+		wait until 3 seconds
+		set camera position to [1299.706, 84.022, 1068.119]
+		set camera focus to [1243.061, 86.09, 1027.284]
+		move camera position to [1313.224, 82.223, 1050.145] time 8
+		move camera focus to [1259.604, 84.29, 1005.411] time 8
+		wait until camera ready
+		wait until 0.5 seconds
+		say HELP_TEXT_AFTER_GRADUATION_10 by Crocodile
+		wait until read
+		say HELP_TEXT_AFTER_GRADUATION_20 with interaction by Crocodile
+		wait until read
+		say HELP_TEXT_AFTER_GRADUATION_30 by Crocodile
+		wait until read
+		clear dialogue
+		Height = 50
+		Finished = 0
+		set camera focus to [MyCreature] + [0, Height, 0]
+		set camera position to [1264.286, 65.872, 1027.919]
+		move camera position to [1226.854, 63.409, 995.931] time 30
+		while Finished == 0
+			move camera focus to [MyCreature] + [0, Height, 0] time 1
+			Height -= 0.1
+			run background script DoFunkyGlowyStrand(MyCreature, 0.1, Degrees1, Height, HeightDegrees1)
+			run background script DoFunkyGlowyStrand(MyCreature, 0.2, Degrees2, Height, HeightDegrees2)
+			run background script DoFunkyGlowyStrand(MyCreature, 0.25, Degrees3, Height, HeightDegrees3)
+			Degrees1 += 10
+			Degrees2 += 4
+			Degrees3 += 11
+			Degrees4 += 8
+			Degrees5 += 3
+			HeightDegrees1 += 12
+			HeightDegrees2 += 6
+			HeightDegrees3 += 4
+			HeightDegrees4 += 10
+			HeightDegrees5 += 8
+			if Degrees1 > 359
+				Degrees1 = 0
+			end if
+			if Degrees2 > 359
+				Degrees2 = 0
+			end if
+			if Degrees3 > 359
+				Degrees3 = 0
+			end if
+			if HeightDegrees1 > 359
+				HeightDegrees1 = 0
+			end if
+			if HeightDegrees2 > 359
+				HeightDegrees2 = 0
+			end if
+			if HeightDegrees3 > 359
+				HeightDegrees3 = 0
+			end if
+			if Height < CreatureHeight * 0.9
+				set fade red 255 green 255 blue 255 time 1
+				wait until fade ready
+				enable MyCreature tattoo CREATURE_TATTOO_TYPE_THE_BROTHERHOOD
+				wait until 1 seconds
+				set fade in time 1
+				Finished = 1
+			end if
+		end while
+		wait until 6 seconds
+		set camera position to [1313.224, 82.223, 1050.145]
+		set camera focus to [1259.604, 84.29, 1005.411]
+		say HELP_TEXT_CROC_FINAL_FIGHT_10 by Crocodile
+		wait until read
+		say HELP_TEXT_CROC_FINAL_FIGHT_20 by Crocodile
+		wait until read
+		say HELP_TEXT_CROC_FINAL_FIGHT_30 with interaction by Crocodile
+		wait until read
+		close dialogue
+		set fade red 0 green 0 blue 0 time 2
+		wait until fade ready
+		enable sound effects
+		CreatureInDojo[13] = 1
+	end cinema
+	delete GLion
+	delete Crocodile
+	wait until widescreen transition complete
+	release MyCreature
+	stop music
+end script Graduation
+

@@ -1,0 +1,324 @@
+//------------------------------------------------------------------------------------------------------------------------
+//--CustomTykeManager-------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------------------------------------
+
+begin script RestoreTykeScale(Creature, TargetScale)
+	Multiplier = 0
+start
+	// Clamp multiplier.
+	Multiplier = TargetScale * 0.05
+	if Multiplier < 0.03
+		Multiplier = 0.03
+	end if
+	
+	// Apply scaling function to Creature.
+	while SCALE of Creature < TargetScale
+		SCALE of Creature = SCALE of Creature + Multiplier
+	end while
+	
+	SCALE of Tyke = TargetScale
+end script RestoreTykeScale
+
+begin script ForceCreatureLookAtCamera(Creature)
+	
+start
+
+	while 1 == 1// and Creature exists
+		set Creature focus to camera position
+		force Creature CREATURE_LOOK_AT_CAMERA Creature
+		wait 1 second
+	end while
+	
+end script ForceCreatureLookAtCamera
+
+
+
+begin script CustomTykeManager
+	Count = time-31
+	Loop = 1
+	CustomEgg = 0
+	EggHighlight = 0
+	EggHeight = 0
+	TykeActive = 0
+	EggClicked = 0
+	
+
+	P1Creature = 0
+	P1Apprentice = 0
+	
+	TemplePos = 0
+	Temple = 0
+	CameraPos = 0
+	ZoomPos = 0
+	OriginalP1CreaturePos = 0
+	CreatureSpawnPos = 0
+	CreatureSpawnPos2 = 0
+	TykeCreatureNum = 0
+	Particle = 0
+	Spell = 0
+	SizeReducer = 0.015
+	TykeHeight = 0
+	TykeScale = 0
+	
+start
+	
+	// Create some coords based around the Player's temple.
+	TemplePos = marker at player 1 temple position
+	CameraPos= marker at player 1 temple entrance position radius -65 height 11
+	ZoomPos	= marker at player 1 temple entrance position radius -50 height 10
+	CreatureSpawnPos = marker at player 1 temple entrance position radius -30 height 10
+	CreatureSpawnPos2 = marker at player 1 temple entrance position radius 35 height 10
+	Temple = get CITADEL at [TemplePos] radius 40
+	
+	
+
+	// Create Egg.
+	if Tyke exists
+		TykeActive = 1
+		CustomEgg = create OBJECT MOBILE_STATIC_INFO_EGG at [ZoomPos]//2 pos
+	else
+		TykeActive = 0
+		CustomEgg = create OBJECT  MOBILE_STATIC_INFO_EGG at [ZoomPos]//2 pos
+	end if
+	EggHeight = SCRIPT_OBJECT_PROPERTY_TYPE_HEIGHT of CustomEgg
+	disable CustomEgg pickup
+	disable CustomEgg moveable
+	enable CustomEgg indestructible
+	
+	// Create Highlight
+	EggHighlight = create highlight CHALLENGE_SWAP_CREATURES HIGHLIGHT_CHALLENGE at [CustomEgg] 
+	clear clicked object
+	
+	while Loop == 1
+		P1Creature = get player 1 creature
+		ALTITUDE of EggHighlight = EggHeight + 1.0
+		
+		// START: Wait for a click on Highlight or NewCreature or timer to expire
+		EggClicked = 0
+		while EggClicked == 0
+		
+			// Click event.
+			if EggHighlight clicked or CustomEgg clicked
+			
+				// 1). If no Apprentice Creature exists, do not load Creature.
+				if TykeManager == -1
+					start sound LH_SAMPLE_G_SACRIFICE_01
+					begin dialogue
+						say "** Play Creature Isle or complete Hard Mode to unlock Tyke! ***"
+						wait until read
+					end dialogue
+					clear clicked object
+				
+				// 2). If no Tyke, summon him.
+				elsif Tyke not exists
+				
+					// Ensure Player Creature is beside Egg.
+					if [P1Creature] not near [CustomEgg] radius 50
+						begin dialogue
+							eject evil spirit
+							//"EA: You'll need to bring Your Creature Closer, Boss"
+							say single line HELP_TEXT_CREATURE_BREEDER_10
+							wait until read
+						end dialogue
+						clear clicked object
+					else
+						EggClicked = 1
+						run script ChallengeHighlightNotify(EggHighlight, EggHeight, variable GOOD_ADVISOR, variable HELP_TEXT_NONE)
+						delete EggHighlight
+
+						begin cinema
+							TykeManager = 1 // Also load Tyke when loading Player's Creature.
+							
+							
+							set fade red 0 green 0 blue 0 time 1
+							OriginalP1CreaturePos = marker at [P1Creature]
+							
+							wait 1.3 seconds
+							
+							
+							delete P1Creature
+							start music MUSIC_TYPE_SCRIPT_CREATURE_CHOSEN
+
+							set camera lens 50
+							set camera position to [CameraPos]
+							set camera focus to [CustomEgg]
+							set fade in time 3
+							set camera lens 70 time 3
+							wait 0.3 seconds
+							
+							
+							// Load in Creature + Tyke
+							load my_creature at [CreatureSpawnPos2] + [0,0,0]
+							P1Creature = get player 1 creature
+							set P1Creature position to [CreatureSpawnPos2] + [-10,0,0]
+							
+							// Hacky way to get pointer to Tyke.
+							while Tyke not exists and TykeCreatureNum <= 18
+									Tyke = get CREATURE constant TykeCreatureNum at [CreatureSpawnPos2] radius 10
+									TykeCreatureNum++
+							end while
+							set Tyke focus to camera position
+							
+							
+							TykeScale = SCRIPT_OBJECT_PROPERTY_TYPE_SCALE of Tyke
+							TykeHeight = SCRIPT_OBJECT_PROPERTY_TYPE_HEIGHT of Tyke
+							
+							wait 1.5 seconds
+							set Tyke focus to camera position
+										
+							wait 1 seconds
+							Particle = create special effect SPOT_VISUAL_EVIL_SMOKE at [CustomEgg] time 5
+							SCRIPT_OBJECT_PROPERTY_TYPE_SCALE of Particle = 10	
+							delete CustomEgg with explosion
+							set camera lens 80 time 1
+							start sound LH_SCRIPT_SAMPLE_GUARDIANSTONEEXPLODE AUDIO_SFX_BANK_TYPE_SCRIPT_SFX
+							
+							wait 0.1 seconds
+
+							
+							// Move Tyke to Egg location.
+							if Tyke exists
+								
+								SCALE of Tyke = 0.1
+								run background script RestoreTykeScale(Tyke, TykeScale)
+								wait 0.3 seconds
+								
+								
+								set Tyke focus to camera position
+								set Tyke position to [ZoomPos]
+										
+								move camera focus to [Tyke]+[0, TykeHeight*0.7, 0] time 2
+								CameraPos = marker at player 1 temple entrance position radius -65 -(TykeScale * 15) height 12 + (TykeScale * 5)
+								
+							
+								move camera position to [CameraPos] time 2
+								
+								Tyke play C_INDIVIDUAL_LOOK_AT_ME
+								wait until Tyke played
+								TykeActive = 1
+							end if
+							TykeCreatureNum = 0
+							release Tyke
+						end cinema
+					end if
+					
+				// If Tyke is active, give Player option to remove him.
+				elsif Tyke exists
+					//run background script ForceCreatureLookAtCamera(Tyke)
+					EggClicked = 1
+					TykeScale = SCRIPT_OBJECT_PROPERTY_TYPE_SCALE of Tyke
+					TykeHeight = SCRIPT_OBJECT_PROPERTY_TYPE_HEIGHT of Tyke
+					run script ChallengeHighlightNotify(EggHighlight, EggHeight, variable GOOD_ADVISOR, variable HELP_TEXT_NONE)
+					begin cinema
+						
+						// Fade in
+						set fade red 0 green 0 blue 0 time 2 + (SCALE of Tyke * 0.5)
+						TykeManager = 2
+						wait 2  + (SCALE of Tyke * 0.5) seconds
+						disable Tyke follow master
+						start music MUSIC_TYPE_SCRIPT_TWINKLE
+						
+						
+						CameraPos = marker at player 1 temple entrance position radius -65 -(SCALE of Tyke * 15) height 12 + (SCALE of Tyke * 5)
+						
+						if LandNumber == 99
+							//CameraPos= marker at player 1 temple entrance position radius -65 -(SCALE of Tyke * 15) height 10 + (SCALE of Tyke * 5)
+							//set camera lens 120 time 1
+						end if 
+						set Tyke position to [CustomEgg]
+						set Tyke focus to camera position
+						delete CustomEgg
+						
+						// Set Camera
+						set camera lens 50
+						set camera position to [CameraPos]// + [0,-20,0]
+						set camera focus to [Tyke]+[0, TykeHeight*0.7, 0]
+						set camera lens 70 + ((SCALE of Tyke) * 5) time 3
+						set fade in time 2
+						wait 0.3 seconds
+						
+						
+						set Tyke focus to camera position
+						wait 0.75 seconds
+						
+
+						
+						
+						// Do this twice for good measure/timings? Hmmm...
+						set Tyke focus to camera position
+						wait 0.75 seconds
+												
+						set Tyke focus to camera position
+						wait 0.75 seconds
+						
+						
+						
+						Tyke play C_INDIVIDUAL_TIRED
+						wait until Tyke played
+						
+						Spell = cast MAGIC_TYPE_CREATURE_SPELL_ANTI_SPELL spell on Tyke from [Tyke] + [0,0,0] radius 0 time 10 curl 0
+						wait 0.3 + ((SCALE of Tyke) * 0.5) seconds
+						
+						Tyke play C_INDIVIDUAL_FRIENDLY_WAVE
+						wait until Tyke played
+						
+						wait 0.5 seconds
+						
+						
+						// Adjust size reduction based on Tyke's size.
+						SizeReducer = SizeReducer * SCALE of Tyke
+						Tyke play C_INDIVIDUAL_SUMMON
+						
+						// Shrink Tyke and do some special effects.
+						while SCALE of Tyke > 0.01
+							if SCALE of Tyke - SizeReducer < 0.1
+								SCALE of Tyke = 0.01
+							else
+								SCALE of Tyke = ((SCALE of Tyke) - SizeReducer)
+							end if
+							
+							set camera lens 70 + ((SCALE of Tyke) * 5) time 1
+							
+							SizeReducer += (SizeReducer * 0.125)
+							if SizeReducer > TykeScale * 0.075 // 2 is about 0.2, 0.3 would be 0.03 etc.
+								SizeReducer = TykeScale * 0.075
+							end if
+							
+							TykeHeight = SCRIPT_OBJECT_PROPERTY_TYPE_HEIGHT of Tyke
+							move camera focus to [Tyke]+[0, TykeHeight*0.7, 0] time 2
+						end while
+						
+						
+						
+						CustomEgg = create OBJECT MOBILE_STATIC_INFO_EGG at [ZoomPos]
+						Particle = create special effect SPOT_VISUAL_EVIL_SMOKE at [CustomEgg] time 5	
+						SCRIPT_OBJECT_PROPERTY_TYPE_SCALE of Particle = 10.0
+						set camera lens 80 time 1
+						start sound LH_SCRIPT_SAMPLE_LAVABOMBTRAIL
+						wait 3 seconds
+						
+						
+						
+						//set fade red 0 green 0 blue 0 time 2
+						wait 2 seconds
+						
+											
+						// Tell .DLL to save the Player's Creature.
+						wait 1.0 second
+						delete Tyke
+						delete CustomEgg
+						delete EggHighlight
+					end cinema
+					
+					//stop script "ForceCreatureLookAtCamera
+					wait 0.3 second
+				end if
+			end if
+		end while
+		
+		wait 5 seconds
+		Loop = 0
+		run script CustomTykeManager
+	end while
+	
+end script CustomTykeManager

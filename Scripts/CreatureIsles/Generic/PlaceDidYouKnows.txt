@@ -1,0 +1,33 @@
+/*************************************************************************************************
+	Place generic DidYouKnows around map
+*************************************************************************************************/
+begin script PlaceDidYouKnows
+
+DYK14Pos = marker at [1033.359, 99.893, 1277.269] 	//Picking up rocks makes creature stronger
+DYK18Pos = marker at [1339.976, 39.972, 923.514] 	//Mouse Wheel info
+DYK20Pos = marker at [1127.809, 146.751, 1254.368] 	//Leash Info
+DYK22Pos = marker at [1286.691, 130.276, 1365.622] 	//Space bar -> view in safe pos
+DYK31Pos = marker at [1147.709, 127.146, 1324.999]	//Signposts contain important info
+DYK50Pos = marker at [2346.128, 0.000, 1558.445] 	//Put out fires using water miracle
+DYK69Pos = marker at [1286.691, 130.276, 1365.622]  //Redefine keys
+DYK70Pos = marker at [1313.630, 142.155, 1231.277] 	//Move using cursor keys
+DYK74Pos = marker at [1243.710, 145.950, 1321.938] 	//Use F1 for help
+DYK88Pos = marker at [1685.614, 82.410, 1750.472] 	//Bookmarks
+DYK89Pos = marker at [1680.310, 82.410, 1756.254] 	//Shift to follow bookmarks
+DYK93Pos = marker at [433.275, 40.412, 1213.228] 	//Ways to throw
+
+start
+	run script DidYouKnow(DYK14Pos, variable HELP_TEXT_DYK_14, variable DYK_CREATURE)
+	run script DidYouKnow(DYK18Pos, variable HELP_TEXT_DYK_18, variable DYK_NAVIGATION)
+	run script DidYouKnow(DYK20Pos, variable HELP_TEXT_DYK_20, variable DYK_CREATURE)
+	run script DidYouKnow(DYK22Pos, variable HELP_TEXT_DYK_22, variable DYK_NAVIGATION)
+	run script DidYouKnow(DYK31Pos, variable HELP_TEXT_DYK_31, variable DYK_MISC)
+	run script DidYouKnow(DYK50Pos, variable HELP_TEXT_DYK_50, variable DYK_MIRACLES)
+	run script DidYouKnow(DYK69Pos, variable HELP_TEXT_DYK_69, variable DYK_NAVIGATION)
+	run script DidYouKnow(DYK70Pos, variable HELP_TEXT_DYK_70, variable DYK_NAVIGATION)
+	run script DidYouKnow(DYK74Pos, variable HELP_TEXT_DYK_74, variable DYK_MISC)
+	run script DidYouKnow(DYK88Pos, variable HELP_TEXT_DYK_88, variable DYK_NAVIGATION)
+	run script DidYouKnow(DYK89Pos, variable HELP_TEXT_DYK_89, variable DYK_NAVIGATION)
+	run script DidYouKnow(DYK93Pos, variable HELP_TEXT_DYK_93, variable DYK_MISC)
+
+end script PlaceDidYouKnows

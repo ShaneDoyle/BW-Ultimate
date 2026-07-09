@@ -1,0 +1,1277 @@
+//LHVM Challenge source version 8
+//Decompiled with CHLASM tool by Daniels118
+
+global SwapCowArrived
+global BestDistance = 9999
+global StraySheepRequired
+global WolfyImpressed
+global UniversalSheep
+global SheepInCinema
+global PermInvis
+global OneLostComment
+global RemoveLeash
+global FocusFlag
+global WolfChargeComplete
+global WolfyTrialFlag
+
+begin script DeleteWolfy(Wolfy)
+start
+	wait until 10 seconds
+	delete Wolfy with fade
+end script DeleteWolfy
+
+begin script GetOuttaDaWay
+	WhereTheBuffaloRoam = marker at [1507.289, 28.543, 1864.018]
+start
+	move MyCreature position to [WhereTheBuffaloRoam] radius 0
+	wait until 8 seconds
+	move MyCreature position to [MyCreature] radius 0
+	release MyCreature
+end script GetOuttaDaWay
+
+begin script WolfyBookmark(Wolfy)
+	WolfyDead = 0
+start
+	begin loop
+		if Wolfy exists
+			disable bookmark on Wolfy
+		else
+			wait until 5 seconds
+			if Wolfy exists
+			else
+				WolfyDead = 1
+			end if
+		end if
+		until WolfyDead == 1
+	end loop
+end script WolfyBookmark
+
+begin script SheepAwaiting(Sheep, Highlight)
+	AnimNum = 0
+start
+	begin loop
+		if Sheep played
+			if AnimNum == 0
+				wait until 1 seconds
+				Sheep play ANM_A_HORSE_EAT2 loop 1
+				AnimNum = 1
+			else
+				Sheep play ANM_A_COW_UPFROM_EAT loop 1
+				AnimNum = 0
+			end if
+		end if
+		until Highlight clicked and ScriptLockedCreature == 0
+	end loop
+end script SheepAwaiting
+
+begin script SadButNeededScript(Wolfy)
+	Grrr = 0
+start
+	while Grrr == 0
+		if Wolfy affected by spell CREATURE_SPELL_INVISIBLE
+			PermInvis = 1
+			Grrr = 1
+		end if
+	end while
+end script SadButNeededScript
+
+begin script WolfyCharge(Wolfy, CattleStartPos, WolfyHome)
+	WolfSpookPos = marker at [1313.664, 13.643, 2365.495]
+	WolfRunAtFlockPos = marker at [1305.01, 15.745, 2315.83]
+	SeeWolfSpookPos = marker at [1297, 24.5948, 2269.01]
+	SeeWolfSpookFoc = marker at [1293.69, 0.455418, 2385.17]
+	BodgeSheep1 = 0
+	BodgeSheepPos1 = marker at [1303.865, 14.939, 2332.361]
+	BodgeSheep2 = 0
+	BodgeSheepPos2 = marker at [1317.522, 16.397, 2332.789]
+start
+	set Wolfy position to [WolfSpookPos]
+	move Wolfy position to [WolfRunAtFlockPos] radius 0
+	BodgeSheep1 = create ANIMAL SHEEP at [BodgeSheepPos1]
+	SCALE of BodgeSheep1 = 1.2
+	BodgeSheep2 = create ANIMAL SHEEP at [BodgeSheepPos2]
+	SCALE of BodgeSheep2 = 1.2
+	move BodgeSheep1 position to [CattleStartPos] radius 0
+	SPEED of BodgeSheep1 = 0.5
+	move BodgeSheep2 position to [CattleStartPos] radius 0
+	SPEED of BodgeSheep2 = 0.5
+	wait until 4 seconds
+	move Wolfy position to [Wolfy] radius 0
+	set Wolfy focus to (camera position)
+	wait until 0.5 seconds
+	force Wolfy CREATURE_POINT_AT_CAMERA Wolfy
+	wait until Wolfy played
+	if WolfChargeComplete == 0
+		Wolfy play ANM_A_HORSE_EAT1 loop 1
+		wait until Wolfy played
+		if WolfChargeComplete == 0
+			ENERGY of Wolfy = 1
+			force Wolfy CREATURE_CAST_INVSIBLE_ON_CREATURE Wolfy
+			run background script SadButNeededScript(Wolfy)
+			wait until Wolfy played
+		end if
+	end if
+	wait until WolfChargeComplete == 1
+	delete BodgeSheep1
+	delete BodgeSheep2
+	while not get distance from [Wolfy] to [WolfyHome] < 10
+		set Wolfy position to [WolfyHome]
+		PermInvis = 0
+	end while
+end script WolfyCharge
+
+begin script FocusMofo(Creature)
+start
+	begin loop
+		set Creature focus to (camera position)
+		until FocusFlag == 1
+	end loop
+end script FocusMofo
+
+begin script NoLeashingWolfy(Wolfy)
+start
+	while RemoveLeash == 1
+		if MyCreature leashed to Wolfy
+			detach MyCreature leash
+		end if
+	end while
+end script NoLeashingWolfy
+
+begin script BodgeAntiSpell
+	AntiSeed = 0
+	AntiBodgePos = marker at [1564.4, 52.1789, 2418.95]
+start
+	begin loop
+		AntiSeed = create ONE_SHOT SPELL_SEED_TYPE_CREATURE_SPELL_ANTI_SPELL at [AntiBodgePos]
+		wait until not AntiSeed exists or WolfyImpressed >= 2
+		until WolfyImpressed >= 2
+	end loop
+end script BodgeAntiSpell
+
+begin script PermInvisibility(Wolfy)
+	InvisSpell = 0
+start
+	begin loop
+		if PermInvis == 0
+			delete InvisSpell
+			PermInvis = 2
+		elsif PermInvis == 1
+			InvisSpell = cast CREATURE_SPELL_INVISIBLE spell on Wolfy from [Wolfy] radius 0 time -1 curl 0
+			PermInvis = 3
+		elsif PermInvis == 3
+			if not in widescreen
+				if not Wolfy affected by spell CREATURE_SPELL_INVISIBLE
+					InvisSpell = cast CREATURE_SPELL_INVISIBLE spell on Wolfy from [Wolfy] radius 0 time -1 curl 0
+					wait until 5 seconds
+				end if
+			end if
+		end if
+		until WolfyImpressed == 2
+	end loop
+end script PermInvisibility
+
+begin script SheepBored(Sheep)
+	AnimNum = 0
+start
+	while SheepInCinema < 2
+		if SheepInCinema == 0 and Sheep played
+			if AnimNum == 0
+				Sheep play ANM_A_COW_IN_HAND loop 1
+				AnimNum++
+			elsif AnimNum == 1
+				Sheep play ANM_A_COW_EAT_1 loop 1
+				AnimNum++
+			elsif AnimNum == 2
+				Sheep play ANM_A_COW_DIE loop 1
+				AnimNum++
+			else
+				wait until 6 seconds
+				AnimNum = 0
+			end if
+		end if
+	end while
+end script SheepBored
+
+begin script WolfyTrialNotify(WolfyHighlight)
+start
+	WolfyTrialFlag = 1
+	run script TrialNotifyWithScriptLockedCreature(WolfyHighlight)
+	WolfyTrialFlag = 2
+end script WolfyTrialNotify
+
+begin script WolfTrial(CattleOnMoveFlock, CattleEndPos, WolfyHome, Wolfy)
+	StraySheep = 0
+	StraySheepPos = 0
+	WolfRetreat = 0
+	StraySheepFound = 0
+	LocalTown = get TOWN at [1233.62, 3.35, 2008.43] radius 100
+	StartedOnVillagers = 0
+	BeginPos = 0
+	BeginFoc = 0
+	CloseTimer = create timer for 0 seconds
+	AnimNum = 0
+	LastNum = 999
+	RandomNum = 0
+	HideSpot = 0
+	SideHideSpot = 0
+	WolfyHighlight = 0
+	Restarted = 0
+	SeeksInARow = 0
+	MoveWolfyTimer = create timer for 0 seconds
+	HowlTimer = create timer for 0 seconds
+	UtilityMarker = marker at [1259.16, 57.6985, 1029.47]
+	PrimaryTime = 0
+	HideArray[6]
+	SideHideArray[6]
+	CloseComment = 0
+	DeCloaked = 0
+	TykeSeenWolf = 0
+	WolfyCloseUpPos = marker at [1562.05, 55.7367, 2416.6]
+	WolfyCloseUpFoc = marker at [1550.74, 61.5157, 2405.29]
+	WolfMoveChristiansFault = marker at [1502.94, 63.1684, 2369.35]
+	MoveMyCPos = marker at [1507.68, 19.8932, 2502.39]
+	MyCScratchPos = marker at [1512.88, 35.8996, 2473.84]
+	CamHeight = 0
+	WolfyHideSpot = marker at [1377.4, 18.0507, 2426.82]
+	Gogogo = 0
+	WolfyMark = 0
+	RandomSay = 0
+	EndOne = 0
+	EndThisGodForsakenLoop = 0
+start
+	WolfyImpressed = 0
+	HideArray[0] = marker at [1868.89, 2.29266, 2608.59]
+	HideArray[1] = marker at [1348.8, 47.3188, 2749.96]
+	HideArray[2] = marker at [985.97, 3.69809, 2255.21]
+	HideArray[3] = marker at [1100.98, 0.261719, 2024.58]
+	HideArray[4] = marker at [1440.25, 1.04688, 1873.7]
+	HideArray[5] = marker at [1728.41, 101.793, 1773.76]
+	SideHideArray[0] = marker at [1889.4, 0, 2638.99]
+	SideHideArray[1] = marker at [1358.09, 35.879, 2772.89]
+	SideHideArray[2] = marker at [947.133, 0.335, 2238.37]
+	SideHideArray[3] = marker at [1106.71, 0.732813, 1986.05]
+	SideHideArray[4] = marker at [1405.21, 0, 1896.07]
+	SideHideArray[5] = marker at [1747.38, 102.51, 1727.58]
+	release Wolfy focus
+	begin loop
+		StraySheep = 0
+		StraySheepRequired = 1
+		UniversalSheep = 0
+		while StraySheep == 0 and not get distance from [MyCreature] to [WolfyHome] < 100
+			StraySheep = UniversalSheep
+		end while
+		StraySheepRequired = 0
+		if not get distance from [MyCreature] to [WolfyHome] < 100
+			move Wolfy position to [StraySheep] radius 0
+			StraySheepPos = marker at [StraySheep]
+		else
+			StraySheep = marker at [UtilityMarker]
+			StraySheepPos = marker at [UtilityMarker]
+		end if
+		while not get distance from [Wolfy] to [StraySheep] < 50 and WolfRetreat == 0 and StraySheep exists
+			wait until 1 seconds
+			if not get distance from [StraySheep] to [StraySheepPos] < 20
+				move Wolfy position to [StraySheep] radius 0
+				StraySheepPos = marker at [StraySheep]
+			end if
+			if get distance from [MyCreature] to [Wolfy] < 100
+				if not get distance from [Wolfy] to [WolfyHome] < 50
+					move Wolfy position to [Wolfy] radius 0
+					force Wolfy POINT_AT MyCreature
+					wait until Wolfy played
+					ENERGY of Wolfy = 1
+					force Wolfy CREATURE_CAST_INVSIBLE_ON_CREATURE Wolfy
+					wait until Wolfy played
+					WolfRetreat = 1
+				else
+					WolfRetreat = 1
+				end if
+			end if
+		end while
+		if WolfRetreat == 0 and StraySheep exists
+			force Wolfy CREATURE_EXAMINE_BY_PICKING_UP StraySheep
+			wait until StraySheep in Wolfy hand or 10 seconds
+			move Wolfy position to [WolfyHideSpot] radius 0
+			wait until get distance from [Wolfy] to [WolfyHideSpot] < 10 or 60 seconds
+			force Wolfy CREATURE_PUT_DOWN StraySheep
+			wait until not StraySheep in Wolfy hand or 20 seconds
+			move Wolfy position to [WolfyHome] radius 0
+			wait until get distance from [Wolfy] to [WolfyHome] < 10 or 60 seconds
+		end if
+		if WolfRetreat == 1
+			if not get distance from [Wolfy] to [WolfyHome] < 50
+				move Wolfy position to [WolfyHome] radius 0
+				begin dialogue
+					RandomSay = variable constant from HELP_TEXT_WOLF_TRIAL_300 to HELP_TEXT_WOLF_TRIAL_302
+					start say sound constant RandomSay at [Wolfy]
+					wait until read
+				end dialogue
+				wait until get distance from [Wolfy] to [WolfyHome] < 10 or 30 seconds
+				WolfRetreat = 0
+			end if
+		end if
+		if get distance from [MyCreature] to [WolfyHome] < 100 and get distance from [Wolfy] to [WolfyHome] < 50
+			begin cinema
+				BeginPos = marker at (camera position)
+				BeginFoc = marker at (camera focus)
+				set fade red 0 green 0 blue 0 time 1.5
+				wait until 1.5 seconds
+				set Wolfy position to [Wolfy]
+				set MyCreature position to [MoveMyCPos]
+				if Tyke exists and TykeIsReady == 1 and TykeFree == 1
+					set Tyke position to [MoveMyCPos] + [3, 0, 3]
+				end if
+				set camera position to [Wolfy] + [20, 10, 20]
+				set camera focus to [Wolfy] + [0, 7, 0]
+				move camera position to [Wolfy] + [12, 6, 12] time 15
+				move camera focus to [Wolfy] + [0, 7, 0] time 15
+				set Wolfy focus to [Wolfy] + [12, 6, 12]
+				set fade in time 2
+				wait until 2 seconds
+				disable creature sound
+				Wolfy play ANM_A_COW_EAT_2 loop 1
+				say HELP_TEXT_WOLF_TRIAL_20 by Wolfy
+				wait until read
+				wait until Wolfy played
+				set MyCreature focus to [MyCScratchPos]
+				Wolfy play ANM_A_WOLF_PROWL loop 1
+				say HELP_TEXT_WOLF_TRIAL_30 by Wolfy
+				wait until Wolfy played
+				Wolfy play ANM_A_WOLF_PROWL loop 1
+				wait until read
+				say HELP_TEXT_WOLF_TRIAL_40 by Wolfy
+				wait until Wolfy played
+				Wolfy play ANM_A_WOLF_PROWL loop 1
+				wait until read
+				close dialogue
+				enable creature sound
+				wait until Wolfy played
+				set camera position to [MyCScratchPos]
+				CamHeight = (HEIGHT of MyCreature) * 0.8
+				set camera focus to [MyCreature] + [0, CamHeight, 0]
+				set MyCreature focus to [MyCreature] + [15, 6, 15]
+				wait until camera ready
+				wait until 1 seconds
+				MyCreature play ANM_A_COW_EAT_1 loop 1
+				wait until MyCreature played
+				wait until 2 seconds
+				set camera position to [Wolfy] + [12, 6, 12]
+				set camera focus to [Wolfy] + [0, 7, 0]
+				set MyCreature focus to [Wolfy]
+				move camera position to [Wolfy] + [20, 10, 20] time 15
+				move camera focus to [Wolfy] + [0, 7, 0] time 15
+				disable creature sound
+				say HELP_TEXT_WOLF_TRIAL_50 by Wolfy
+				Wolfy play ANM_A_WOLF_PROWL loop 1
+				wait until Wolfy played
+				Wolfy play ANM_A_WOLF_PROWL loop 1
+				wait until read
+				say HELP_TEXT_WOLF_TRIAL_60 with interaction by Wolfy
+				wait until Wolfy played
+				Wolfy play ANM_A_COW_DEAD loop 1
+				wait until read
+				close dialogue
+				wait until 1 seconds
+				set fade red 0 green 0 blue 0 time 1.5
+				wait until 1.5 seconds
+				set camera position to [BeginPos]
+				set camera focus to [BeginFoc]
+				set fade in time 3
+				wait until 2 seconds
+			end cinema
+			release MyCreature
+			begin dialogue
+				eject evil spirit
+				if SheepTrialComplete == 0
+					say single line HELP_TEXT_WOLF_TRIAL_70
+					wait until read
+				end if
+			end dialogue
+			WolfyImpressed = 1
+		end if
+		until WolfyImpressed == 1 or SheepTrialComplete > 0
+	end loop
+	move Wolfy position to [WolfyHome] radius 0
+	wait until get distance from [Wolfy] to [WolfyHome] < 10
+	wait until 3 seconds
+	while SheepTrialComplete == 0
+		if Wolfy played and get distance from [Wolfy] to [WolfyHome] < 15
+			if AnimNum == 0
+				if get distance from (camera position) to [Wolfy] < 200
+					force Wolfy CREATURE_CAST_INVSIBLE_ON_CREATURE Wolfy
+				else
+					force Wolfy CREATURE_SIT Wolfy
+				end if
+				AnimNum = 1
+			else
+				set Wolfy focus to (camera position)
+				wait until 1 seconds
+				force Wolfy CREATURE_WAVE_AT_PLAYER Wolfy
+				AnimNum = 0
+			end if
+		elsif Wolfy played
+			move Wolfy position to [WolfyHome] radius 0
+			wait until get distance from [Wolfy] to [WolfyHome] < 5
+			wait until 1 seconds
+		end if
+	end while
+	DojoReminderWolfTrial = 1
+	WolfyHighlight = create highlight CHALLENGE_WOLF_TRIAL HIGHLIGHT_TRIAL at [WolfyHome]
+	run background script WolfyTrialNotify(WolfyHighlight)
+	ALTITUDE of WolfyHighlight = 15
+	while Gogogo == 0
+		if Wolfy played and get distance from [Wolfy] to [WolfyHome] < 15
+			if AnimNum == 0
+				if get distance from (camera position) to [Wolfy] < 200
+					force Wolfy POINT_AT WolfyHighlight
+				else
+					force Wolfy CREATURE_SIT Wolfy
+				end if
+				AnimNum = 1
+			else
+				set Wolfy focus to (camera position)
+				wait until 1 seconds
+				force Wolfy CREATURE_WAVE_AT_PLAYER Wolfy
+				AnimNum = 0
+			end if
+		elsif Wolfy played
+			move Wolfy position to [WolfyHome] radius 0
+			wait until get distance from [Wolfy] to [WolfyHome] < 5
+			wait until 1 seconds
+		end if
+		if WolfyTrialFlag == 2
+			Gogogo = 1
+			enable WolfyHighlight active
+			clear clicked object
+		end if
+	end while
+	run background script WolfyBookmark(Wolfy)
+	begin cinema
+		BeginPos = marker at (camera position)
+		BeginFoc = marker at (camera focus)
+		move camera position to [Wolfy] + [12, 6, 12] time 3
+		move camera focus to [Wolfy] + [0, 7, 0] time 3
+		if get distance from [MyCreature] to [Wolfy] < 100
+			run background script GetOuttaDaWay
+		end if
+		set Wolfy focus to [Wolfy] + [12, 6, 12]
+		wait until 0.5 seconds
+		wait until camera ready
+		snapshot CHALLENGE_WOLF_TRIAL quest success 0 alignment 0 HELP_TEXT_CREATURE_ISLE_TITLE_10 StandardReminder (variable HELP_TEXT_CI_REMINDER_25)
+		move camera position to [WolfyCloseUpPos] time 15
+		move camera focus to [WolfyCloseUpFoc] time 15
+		disable creature sound
+		force Wolfy CREATURE_POINT_AT_CAMERA Wolfy
+		say HELP_TEXT_WOLF_TRIAL_80 by Wolfy
+		wait until read
+		say HELP_TEXT_WOLF_TRIAL_90 with interaction by Wolfy
+		wait until Wolfy played
+		Wolfy play ANM_A_COW_DEAD loop 1
+		wait until read
+		say HELP_TEXT_WOLF_TRIAL_100 by Wolfy
+		wait until Wolfy played
+		Wolfy play ANM_A_WOLF_PROWL loop 1
+		wait until read
+		Wolfy play ANM_A_WOLF_PROWL loop 1
+		wait until read
+		say HELP_TEXT_WOLF_TRIAL_110 by Wolfy
+		wait until Wolfy played
+		force Wolfy CREATURE_CAST_INVSIBLE_ON_CREATURE Wolfy
+		move camera position to [Wolfy] + [12, 6, 12] time 10
+		move camera focus to [Wolfy] + [0, 7, 0] time 10
+		run background script SadButNeededScript(Wolfy)
+		wait until read
+		say HELP_TEXT_WOLF_TRIAL_120 by Wolfy
+		wait until Wolfy played
+		wait until read
+		say HELP_TEXT_WOLF_TRIAL_130 by Wolfy
+		wait until 2 seconds
+		move Wolfy position to [WolfMoveChristiansFault] radius 0
+		wait until read
+		close dialogue
+		enable creature sound
+		wait until Wolfy played
+		RandomNum = number from 0 to 5
+		while RandomNum == LastNum
+			RandomNum = number from 0 to 5
+		end while
+		HideSpot = marker at [HideArray[RandomNum]]
+		SideHideSpot = marker at [SideHideArray[RandomNum]]
+		LastNum = RandomNum
+		CloseComment = 0
+		move Wolfy position to [HideSpot] radius 0
+		set MoveWolfyTimer time to 15 seconds
+		WolfyMark = marker at [Wolfy]
+		WolfyMark = marker at [WolfyMark] + [0, 20, 0]
+		move camera position to [WolfyMark] time 5
+		move camera focus to [Wolfy] time 1
+		move camera focus follow Wolfy
+		wait until 4 seconds
+	end cinema
+	begin loop
+		if Restarted == 1
+			set Wolfy position to [WolfyHome]
+			move Wolfy position to [WolfyHome] radius 0
+			disable WolfyHighlight active
+			while EndThisGodForsakenLoop == 0
+				if WolfyHighlight clicked and ScriptLockedCreature == 0
+					enable WolfyHighlight active
+					clear clicked object
+					EndThisGodForsakenLoop = 1
+				end if
+				if Wolfy played
+					if AnimNum == 0
+						if get distance from (camera position) to [Wolfy] < 200
+							force Wolfy POINT_AT WolfyHighlight
+						else
+							force Wolfy CREATURE_SIT Wolfy
+						end if
+						AnimNum = 1
+					else
+						set Wolfy focus to (camera position)
+						wait until 1 seconds
+						force Wolfy CREATURE_WAVE_AT_PLAYER Wolfy
+						AnimNum = 0
+					end if
+				end if
+			end while
+			EndThisGodForsakenLoop = 0
+			begin cinema
+				BeginPos = marker at (camera position)
+				BeginFoc = marker at (camera focus)
+				move Wolfy position to [Wolfy] radius 0
+				move camera position to [Wolfy] + [12, 6, 12] time 3
+				move camera focus to [Wolfy] + [0, 7, 0] time 3
+				run background script GetOuttaDaWay
+				set Wolfy focus to [Wolfy] + [12, 6, 12]
+				wait until 0.5 seconds
+				wait until camera ready
+				disable creature sound
+				force Wolfy CREATURE_POINT_AT_CAMERA Wolfy
+				say HELP_TEXT_WOLF_TRIAL_140 by Wolfy
+				wait until read
+				wait until Wolfy played
+				force Wolfy CREATURE_CAST_INVSIBLE_ON_CREATURE Wolfy
+				say HELP_TEXT_WOLF_TRIAL_150 by Wolfy
+				wait until read
+				wait until Wolfy played
+				RandomNum = number from 0 to 5
+				while RandomNum == LastNum
+					RandomNum = number from 0 to 5
+				end while
+				HideSpot = marker at [HideArray[RandomNum]]
+				SideHideSpot = marker at [SideHideArray[RandomNum]]
+				LastNum = RandomNum
+				CloseComment = 0
+				move Wolfy position to [HideSpot] radius 0
+				set MoveWolfyTimer time to 15 seconds
+				WolfyMark = marker at [Wolfy]
+				WolfyMark = marker at [WolfyMark] + [0, 20, 0]
+				move camera position to [WolfyMark] time 5
+				move camera focus to [Wolfy] time 1
+				move camera focus follow Wolfy
+				wait until 4 seconds
+			end cinema
+			SeeksInARow = 0
+		end if
+		Restarted = 0
+		PermInvis = 1
+		RemoveLeash = 1
+		run background script NoLeashingWolfy(Wolfy)
+		set countdown timer draw SCRIPT_COUNTDOWN_DRAW_BOTTOM_LEFT
+		enable countdown timer down with 300 seconds
+		begin dialogue
+			if PrimaryTime == 0
+				eject good spirit
+				say HELP_TEXT_WOLF_TRIAL_170
+				wait until read
+				say HELP_TEXT_WOLF_TRIAL_180
+				wait until read
+				PrimaryTime = 1
+			else
+				eject good spirit
+				say single line HELP_TEXT_WOLF_TRIAL_185
+				wait until read
+			end if
+		end dialogue
+		set countdown timer draw SCRIPT_COUNTDOWN_DRAW_BOTTOM_LEFT
+		enable countdown timer down with 300 seconds
+		while not get distance from [Wolfy] to [HideSpot] < 30 and EndOne == 0 and get countdown timer time > 0
+			if get MoveWolfyTimer time remaining <= 0
+				move Wolfy position to [HideSpot] radius 0
+				set MoveWolfyTimer time to 15 seconds
+				start sound constant (number from 634 to 637) AUDIO_SFX_BANK_TYPE_EDITOR at [Wolfy]
+			end if
+			if in widescreen
+				EndOne = 1
+			end if
+		end while
+		TykeSeenWolf = 0
+		while get countdown timer time > 0 and not get distance from [MyCreature] to [Wolfy] < 50 and EndOne == 0
+			if in widescreen
+				EndOne = 1
+			end if
+			if get MoveWolfyTimer time remaining <= 0
+				if not get distance from [Wolfy] to [HideSpot] < 10
+					move Wolfy position to [HideSpot] radius 0
+				else
+					move Wolfy position to [SideHideSpot] radius 0
+				end if
+				set MoveWolfyTimer time to 15 seconds
+			end if
+			if Wolfy affected by spell MAGIC_TYPE_CREATURE_SPELL_ANTI_SPELL
+				PermInvis = 0
+				wait until 2 seconds
+				begin dialogue
+					if DeCloaked == 0
+						say single line HELP_TEXT_WOLF_TRIAL_190 by Wolfy
+						wait until read
+						DeCloaked = 1
+					else
+						say single line HELP_TEXT_WOLF_TRIAL_200 by Wolfy
+						wait until read
+					end if
+				end dialogue
+				force Wolfy CREATURE_CAST_INVSIBLE_ON_CREATURE Wolfy
+				wait until Wolfy played
+				wait until 1 seconds
+				run background script SadButNeededScript(Wolfy)
+			end if
+			if get distance from [Tyke] to [Wolfy] < 100 and TykeSeenWolf == 0
+				move Tyke position to [Wolfy] radius 0
+				TykeSeenWolf = 1
+			elsif TykeSeenWolf == 1
+				if get distance from [Tyke] to [Wolfy] < 50
+					move Tyke position to [Tyke] radius 0
+					wait until 1 seconds
+					force Tyke POINT_AT Wolfy
+					TykeSeenWolf = 2
+				end if
+			elsif TykeSeenWolf == 2
+				if Tyke played
+					Tyke play ANM_A_HORSE_DEADRHS loop 1
+					TykeSeenWolf = 3
+				end if
+			elsif TykeSeenWolf == 3
+				if Tyke played
+					TykeSeenWolf = 1
+				end if
+			end if
+			if get distance from [MyCreature] to [Wolfy] < 100 and get CloseTimer time remaining <= 0
+				begin dialogue
+					eject good spirit
+					RandomSay = variable constant from HELP_TEXT_WOLF_TRIAL_211 to HELP_TEXT_WOLF_TRIAL_214
+					say constant RandomSay
+					wait until read
+				end dialogue
+				set CloseTimer time to 15 seconds
+			elsif get HowlTimer time remaining <= 0
+				if get distance from (camera position) to [Wolfy] < 100 and CloseComment == 0
+					start sound constant (number from 634 to 637) AUDIO_SFX_BANK_TYPE_EDITOR at [Wolfy]
+					begin dialogue
+						eject evil spirit
+						say single line HELP_TEXT_WOLF_TRIAL_220
+						wait until read
+						CloseComment = 1
+					end dialogue
+				else
+					start sound constant (number from 634 to 637) AUDIO_SFX_BANK_TYPE_EDITOR at [Wolfy]
+				end if
+				RandomNum = number from 6 to 10
+				set HowlTimer time to RandomNum seconds
+			end if
+		end while
+		release Tyke
+		RemoveLeash = 0
+		PermInvis = 0
+		if get countdown timer time <= 0
+			disable countdown timer
+			begin dialogue
+				update snapshot CHALLENGE_WOLF_TRIAL success 0.1 alignment 0 HELP_TEXT_CREATURE_ISLE_TITLE_10 StandardReminder (variable HELP_TEXT_CI_REMINDER_25)
+				eject good spirit
+				say HELP_TEXT_WOLF_TRIAL_230
+				wait until read
+				set Wolfy position to [WolfyHome]
+				if WolfyHighlight viewed
+					make good spirit point at [WolfyHighlight]
+				end if
+				say HELP_TEXT_WOLF_TRIAL_240
+				wait until read
+				Restarted = 1
+			end dialogue
+		elsif EndOne == 1
+			disable countdown timer
+			update snapshot CHALLENGE_WOLF_TRIAL success 0.1 alignment 0 HELP_TEXT_CREATURE_ISLE_TITLE_10 StandardReminder (variable HELP_TEXT_CI_REMINDER_25)
+			Restarted = 1
+			EndOne = 0
+		else
+			disable countdown timer
+			if SeeksInARow <= 1
+				begin cinema
+					BeginPos = marker at (camera position)
+					BeginFoc = marker at (camera focus)
+					move Wolfy position to [Wolfy] radius 0
+					if get distance from [Wolfy] to [1728.41, 101.793, 1773.76] < 100
+						move camera position to [Wolfy] + [-12, 6, -12] time 3
+						move camera focus to [Wolfy] + [0, 7, 0] time 3
+					else
+						move camera position to [Wolfy] + [12, 6, 12] time 3
+						move camera focus to [Wolfy] + [0, 7, 0] time 3
+					end if
+					run background script GetOuttaDaWay
+					wait until 2 seconds
+					if get distance from [Wolfy] to [1728.41, 101.793, 1773.76] < 100
+						set Wolfy focus to [Wolfy] + [-12, 6, -12]
+					else
+						set Wolfy focus to [Wolfy] + [12, 6, 12]
+					end if
+					wait until 2 seconds
+					wait until Wolfy played
+					wait until camera ready
+					disable creature sound
+					if SeeksInARow == 0
+						update snapshot CHALLENGE_WOLF_TRIAL success 0.3 alignment 0 HELP_TEXT_CREATURE_ISLE_TITLE_10 StandardReminder (variable HELP_TEXT_CI_REMINDER_25)
+						say HELP_TEXT_WOLF_TRIAL_250 by Wolfy
+						Wolfy play ANM_A_COW_DEAD loop 1
+						wait until read
+						say HELP_TEXT_WOLF_TRIAL_260 by Wolfy
+						wait until Wolfy played
+						force Wolfy CREATURE_CAST_INVSIBLE_ON_CREATURE Wolfy
+						wait until read
+						wait until Wolfy played
+					elsif SeeksInARow == 1
+						update snapshot CHALLENGE_WOLF_TRIAL success 0.6 alignment 0 HELP_TEXT_CREATURE_ISLE_TITLE_10 StandardReminder (variable HELP_TEXT_CI_REMINDER_25)
+						say HELP_TEXT_WOLF_TRIAL_265 by Wolfy
+						Wolfy play ANM_A_COW_DEAD loop 1
+						wait until read
+						say HELP_TEXT_WOLF_TRIAL_270 by Wolfy
+						wait until Wolfy played
+						force Wolfy CREATURE_CAST_INVSIBLE_ON_CREATURE Wolfy
+						wait until read
+						wait until Wolfy played
+					end if
+					SeeksInARow++
+					RandomNum = number from 0 to 5
+					while RandomNum == LastNum
+						RandomNum = number from 0 to 5
+					end while
+					HideSpot = marker at [HideArray[RandomNum]]
+					SideHideSpot = marker at [SideHideArray[RandomNum]]
+					LastNum = RandomNum
+					CloseComment = 0
+					move Wolfy position to [HideSpot] radius 0
+					set MoveWolfyTimer time to 15 seconds
+					WolfyMark = marker at [Wolfy]
+					WolfyMark = marker at [WolfyMark] + [0, 20, 0]
+					move camera position to [WolfyMark] time 5
+					move camera focus to [Wolfy] time 1
+					move camera focus follow Wolfy
+					wait until 4 seconds
+				end cinema
+			else
+				begin cinema
+					BeginPos = marker at (camera position)
+					BeginFoc = marker at (camera focus)
+					move Wolfy position to [Wolfy] radius 0
+					if get distance from [Wolfy] to [1728.41, 101.793, 1773.76] < 100
+						move camera position to [Wolfy] + [-12, 6, -12] time 3
+						move camera focus to [Wolfy] + [0, 7, 0] time 3
+					else
+						move camera position to [Wolfy] + [12, 6, 12] time 3
+						move camera focus to [Wolfy] + [0, 7, 0] time 3
+					end if
+					run background script GetOuttaDaWay
+					wait until 2 seconds
+					if get distance from [Wolfy] to [1728.41, 101.793, 1773.76] < 100
+						set Wolfy focus to [Wolfy] + [-12, 6, -12]
+					else
+						set Wolfy focus to [Wolfy] + [12, 6, 12]
+					end if
+					wait until 2 seconds
+					wait until Wolfy played
+					wait until camera ready
+					disable creature sound
+					say HELP_TEXT_WOLF_TRIAL_275 by Wolfy
+					Wolfy play ANM_A_COW_DEAD loop 1
+					wait until read
+					say HELP_TEXT_WOLF_TRIAL_280 by Wolfy
+					Wolfy play ANM_A_COW_DEAD_ON_RHS loop 1
+					wait until read
+					say HELP_TEXT_WOLF_TRIAL_290 with interaction by Wolfy
+					wait until read
+					SeeksInARow++
+				end cinema with widescreen
+				WolfyImpressed = 2
+			end if
+		end if
+		until WolfyImpressed == 2
+	end loop
+	run background script DeleteWolfy(Wolfy)
+	run script Dojo(Wolfy)
+	DojoReminderWolfTrial = 0
+end script WolfTrial
+
+begin script CattleReactions(Cow, CattleEndPos, CowSafeFlock, CattleOnMoveFlock, WolfyHome)
+	RetreatPos = 0
+	CowPos = 0
+	MyCreaturePos = 0
+	SpangleOnCow = 0
+	ThisPos = 0
+	AltThis = 0
+	AltRetreat = 0
+	AltDiff = 0
+	RetreatAngle = 0
+	RetreatDist = 0
+	DistanceToGo = 0
+	CowNearWolf = 0
+	CowCounter = 0
+	AttemptNumber = 0
+	AltDiffOK = 0
+	CattleProdPos = 0
+	TreesBehindPen = marker at [1160.501, 0.105, 2100.391]
+	TreesBehindPen2 = marker at [1130.557, 0.147, 2139.398]
+	WolfyHideSpot = marker at [1377.4, 18.0507, 2426.82]
+	CattleStartPos = marker at [1286.233, 13.816, 2298.991]
+start
+	disable Cow pickup
+	enable Cow indestructible
+	disable Cow hurt by fire
+	disable Cow set on fire
+	enable jc special SJC_ALWAYS_VISIBLE on Cow with number 0
+	attach Cow to CattleOnMoveFlock
+	state Cow VILLAGER_STATE_MOVE_IN_FLOCK
+	while HEALTH of Cow > 0 and not get distance from [Cow] to [CattleEndPos] < 20
+		wait until 1 seconds
+		DistanceToGo = get distance from [Cow] to [CattleEndPos]
+		if (get distance from [Cow] to [TreesBehindPen] < 30 or get distance from [Cow] to [TreesBehindPen2] < 20) and not get distance from [Cow] to [CattleEndPos] < 21
+			CattleProdPos = marker at [CattleEndPos] + ([number from -8 to 8, number from -8 to 8])
+			move Cow position to [CattleProdPos] radius 0
+			wait until get distance from [Cow] to [CattleEndPos] < 21 or 10 seconds
+		elsif get distance from [MyCreature] to [Cow] < 50 and not Cow is HELD and not Cow in MyCreature hand and DistanceToGo < 300
+			CowPos = marker at [Cow]
+			MyCreaturePos = marker at [MyCreature]
+			AltDiff = 9999
+			AttemptNumber = 0
+			while AltDiffOK == 0 and AttemptNumber < 101
+				RetreatAngle = number from -60 to 60
+				RetreatDist = number from 10 to 30
+				ThisPos = marker at (get target from [MyCreature] to [Cow] distance 0.5 angle 0)
+				RetreatPos = marker at (get target from [MyCreature] to [Cow] distance RetreatDist angle RetreatAngle)
+				AltThis = land height at [ThisPos]
+				AltRetreat = land height at [RetreatPos]
+				AltDiff = AltThis - AltRetreat
+				if AltDiff < 0
+					AltDiff = -AltDiff
+				end if
+				if AltDiff <= 10
+					if [RetreatPos] valid for creature and land height at [RetreatPos] > 0
+						AltDiffOK = 1
+					end if
+				end if
+				AttemptNumber++
+				if AttemptNumber > 99 or not get distance from [MyCreature] to [Cow] < 75
+					AttemptNumber = 102
+				end if
+			end while
+			if AttemptNumber == 102 and get distance from [MyCreature] to [Cow] < 75
+				while AltDiffOK == 0 and get distance from [MyCreature] to [Cow] < 75
+					RetreatAngle = number from -120 to 120
+					RetreatDist = number from 10 to 30
+					ThisPos = marker at (get target from [MyCreature] to [Cow] distance 0.5 angle 0)
+					RetreatPos = marker at (get target from [MyCreature] to [Cow] distance RetreatDist angle RetreatAngle)
+					AltThis = land height at [ThisPos]
+					AltRetreat = land height at [RetreatPos]
+					AltDiff = AltThis - AltRetreat
+					if AltDiff < 0
+						AltDiff = -AltDiff
+					end if
+					if AltDiff <= 10
+						if [RetreatPos] valid for creature and land height at [RetreatPos] > 0
+							AltDiffOK = 1
+						end if
+					end if
+				end while
+			end if
+			if get distance from [MyCreature] to [Cow] < 75
+				move Cow position to [RetreatPos] radius 0
+				SPEED of Cow = 0.3
+				wait until 3 seconds
+			else
+				state Cow VILLAGER_STATE_MOVE_IN_FLOCK
+			end if
+			AltDiffOK = 0
+		elsif get distance from [Cow] to [Tyke] < 50 and not Cow is HELD and not Cow in MyCreature hand and DistanceToGo < 300
+			CowPos = marker at [Cow]
+			MyCreaturePos = marker at [Tyke]
+			AltDiff = 9999
+			AttemptNumber = 0
+			while AltDiffOK == 0 and AttemptNumber < 101
+				RetreatAngle = number from -60 to 60
+				RetreatDist = number from 10 to 30
+				ThisPos = marker at (get target from [Tyke] to [Cow] distance 0.5 angle 0)
+				RetreatPos = marker at (get target from [Tyke] to [Cow] distance RetreatDist angle RetreatAngle)
+				AltThis = land height at [ThisPos]
+				AltRetreat = land height at [RetreatPos]
+				AltDiff = AltThis - AltRetreat
+				if AltDiff < 0
+					AltDiff = -AltDiff
+				end if
+				if AltDiff <= 10
+					if [RetreatPos] valid for creature and land height at [RetreatPos] > 0
+						AltDiffOK = 1
+					end if
+				end if
+				AttemptNumber++
+				if AttemptNumber > 99 or not get distance from [Tyke] to [Cow] < 75
+					AttemptNumber = 102
+				end if
+			end while
+			if AttemptNumber == 102 and get distance from [Tyke] to [Cow] < 75
+				while AltDiffOK == 0 and get distance from [Tyke] to [Cow] < 75
+					RetreatAngle = number from -120 to 120
+					RetreatDist = number from 10 to 30
+					ThisPos = marker at (get target from [Tyke] to [Cow] distance 0.5 angle 0)
+					RetreatPos = marker at (get target from [Tyke] to [Cow] distance RetreatDist angle RetreatAngle)
+					AltThis = land height at [ThisPos]
+					AltRetreat = land height at [RetreatPos]
+					AltDiff = AltThis - AltRetreat
+					if AltDiff < 0
+						AltDiff = -AltDiff
+					end if
+					if AltDiff <= 10
+						if [RetreatPos] valid for creature and land height at [RetreatPos] > 0
+							AltDiffOK = 1
+						end if
+					end if
+				end while
+			end if
+			if get distance from [Tyke] to [Cow] < 75
+				move Cow position to [RetreatPos] radius 0
+				SPEED of Cow = 0.3
+				wait until 3 seconds
+			else
+				state Cow VILLAGER_STATE_MOVE_IN_FLOCK
+			end if
+			AltDiffOK = 0
+		elsif not Cow is HELD and not Cow in MyCreature hand
+			state Cow VILLAGER_STATE_MOVE_IN_FLOCK
+			if StraySheepRequired == 1
+				if not get distance from [Cow] to [MyCreature] < 100 and not get distance from [Cow] to [CattleEndPos] < 50 and not get distance from [Cow] to [WolfyHome] < 50
+					UniversalSheep = Cow
+				end if
+			end if
+		end if
+		DistanceToGo = get distance from [Cow] to [CattleEndPos]
+		if DistanceToGo < BestDistance - 10
+			BestDistance = DistanceToGo
+			set CattleOnMoveFlock position to [Cow]
+		end if
+		if get distance from [CattleOnMoveFlock] to [WolfyHideSpot] < 100
+			set CattleOnMoveFlock position to [CattleStartPos]
+		end if
+	end while
+	if HEALTH of Cow <= 0 or not Cow exists
+	elsif get distance from [Cow] to [CattleEndPos] < 21 and not Cow is HELD and not Cow is FLYING and HEALTH of Cow > 0
+		SwapCowArrived++
+		attach Cow to CowSafeFlock
+		SpangleOnCow = create special effect SPOT_VISUAL_COMMAND_SUCCEED at [Cow] time 3
+		start sound LH_SAMPLE_GOALDISAPPEAR at [Cow]
+	end if
+	if SwapCowArrived == 9 and OneLostComment == 0
+		OneLostComment = 1
+		CowNearWolf = get first in CattleOnMoveFlock
+		while CowCounter < 10 and OneLostComment == 1
+			if get distance from [CowNearWolf] to [WolfyHideSpot] < 100
+				begin dialogue
+					eject good spirit
+					say HELP_TEXT_SHEEP_TRIAL_120
+					wait until read
+					say HELP_TEXT_SHEEP_TRIAL_130
+					wait until read
+					send good spirit home
+				end dialogue
+				OneLostComment = 2
+			else
+				CowNearWolf = get next in CattleOnMoveFlock after CowNearWolf
+				CowCounter++
+			end if
+		end while
+	end if
+end script CattleReactions
+
+begin script DeleteSheep(Sheep)
+start
+	wait until 10 seconds
+	delete Sheep with fade
+end script DeleteSheep
+
+begin script CreatureHerder
+	SheepPos = marker at [1166.54, 6.07973, 2144.26]
+	Sheep = create DUMB_CREATURE CREATURE_TYPE_SHEEP at [SheepPos]
+	HighlightPos = marker at [1158.45, 5.45945, 2143.07]
+	WolfyHome = marker at [1554.4, 52.1789, 2408.95]
+	Wolfy = 0
+	CreatureHerderDYKPos = marker at [1164.375, 6.488, 2158.174]
+	CowSafeFlock = 0
+	CattleOnMoveFlock = 0
+	Cow = 0
+	SeeWolfSpookPos = marker at [1297, 24.5948, 2269.01]
+	SeeWolfSpookFoc = marker at [1293.69, 0.455418, 2385.17]
+	CattleStartPos = marker at [1286.233, 13.816, 2298.991]
+	CattleEndPos = marker at [1166.54, 6.07973, 2144.26]
+	CinemaHighPos = marker at [1110.78, 122.015, 2338.46]
+	Highlight = 0
+	BeginPos = 0
+	BeginFoc = 0
+	FSize = 2
+	Fencing = 0
+	SeedSpangle = 0
+	RewardSeed = 0
+	DriftPos = marker at [1181.55, 12.3165, 2150.88]
+	SeeCattlePos = marker at [1247.25, 38.4168, 2235.37]
+	SeeCattleFoc = marker at [1308.09, 15.4418, 2334.65]
+	SeeSheepPos2 = marker at [1176.15, 19.6285, 2153.88]
+	SeeSheepFoc2 = marker at [1153.64, -1.84248, 2131.36]
+	SeeSheepPos3 = marker at [1184.01, 27.1198, 2161.73]
+	SeeSheepFoc3 = marker at [1163.47, 1.99124, 2141.19]
+	ZoomSheepPos = marker at [1174.99, 13.5904, 2152.71]
+	ZoomSheepFoc = marker at [1159.8, 8.61516, 2137.52]
+	LastArrived = 0
+	SheepFormula = 0
+	Gogogo = 0
+	Lantern1 = 0
+	Lantern1Pos = marker at [1179.27, 6.37023, 2133.3]
+	Lantern2 = 0
+	Lantern2Pos = marker at [1271.33, 14.9232, 2411.39]
+	Lantern3 = 0
+	Lantern3Pos = marker at [1571.501, 55.84, 2400.455]
+	MyCreatureStartPos = marker at [1190.854, 7.927, 2139.573]
+	SheepScoreboard = 0
+	SheepScoreboardPos = marker at [1182.999, 7.595, 2140.41]
+	AntiSwapCowArrived = 0
+start
+	Lantern1 = create OBJECT MOBILE_STATIC_INFO_STREET_LANTERN at [Lantern1Pos]
+	Lantern2 = create OBJECT MOBILE_STATIC_INFO_STREET_LANTERN at [Lantern2Pos]
+	Lantern3 = create OBJECT MOBILE_STATIC_INFO_STREET_LANTERN at [Lantern3Pos]
+	set Sheep name HELP_TEXT_NAME_SHEEP_01
+	ALIGNMENT of Sheep = 0.59
+	STRENGTH of Sheep = 0
+	FATNESS of Sheep = 0.25
+	run script SetupCreatureIsleCreature(Sheep)
+	SheepTrialComplete = 0
+	SCALE of Sheep = 0.5
+	Highlight = create highlight CHALLENGE_CREATURE_HERDER HIGHLIGHT_TRIAL at [HighlightPos]
+	ALTITUDE of Highlight = 15
+	DojoReminderHerding = 1
+	Fencing = create OBJECT MOBILE_STATIC_INFO_CELT_FENCE_SHORT at [CattleEndPos] + ([5 * FSize, 0])
+	set Fencing focus to [CattleEndPos]
+	ANGLE of Fencing += 90
+	enable Fencing indestructible
+	disable Fencing pickup
+	disable Fencing moveable
+	disable Fencing set on fire
+	Fencing = create OBJECT MOBILE_STATIC_INFO_CELT_FENCE_SHORT at [CattleEndPos] + ([3.5 * FSize, 3.5 * FSize])
+	set Fencing focus to [CattleEndPos]
+	ANGLE of Fencing += 90
+	enable Fencing indestructible
+	disable Fencing pickup
+	disable Fencing moveable
+	disable Fencing set on fire
+	Fencing = create OBJECT MOBILE_STATIC_INFO_CELT_FENCE_SHORT at [CattleEndPos] + ([0, 5 * FSize])
+	set Fencing focus to [CattleEndPos]
+	ANGLE of Fencing += 90
+	enable Fencing indestructible
+	disable Fencing pickup
+	disable Fencing moveable
+	disable Fencing set on fire
+	Fencing = create OBJECT MOBILE_STATIC_INFO_CELT_FENCE_SHORT at [CattleEndPos] + ([(-3.5) * FSize, 3.5 * FSize])
+	set Fencing focus to [CattleEndPos]
+	ANGLE of Fencing += 90
+	enable Fencing indestructible
+	disable Fencing pickup
+	disable Fencing moveable
+	disable Fencing set on fire
+	Fencing = create OBJECT MOBILE_STATIC_INFO_CELT_FENCE_SHORT at [CattleEndPos] + ([(-5) * FSize, 0])
+	set Fencing focus to [CattleEndPos]
+	ANGLE of Fencing += 90
+	enable Fencing indestructible
+	disable Fencing pickup
+	disable Fencing moveable
+	disable Fencing set on fire
+	Fencing = create OBJECT MOBILE_STATIC_INFO_CELT_FENCE_SHORT at [CattleEndPos] + ([(-3.5) * FSize, (-3.5) * FSize])
+	set Fencing focus to [CattleEndPos]
+	ANGLE of Fencing += 90
+	enable Fencing indestructible
+	disable Fencing pickup
+	disable Fencing moveable
+	disable Fencing set on fire
+	Fencing = create OBJECT MOBILE_STATIC_INFO_CELT_FENCE_SHORT at [CattleEndPos] + ([0, (-5) * FSize])
+	set Fencing focus to [CattleEndPos]
+	ANGLE of Fencing += 90
+	enable Fencing indestructible
+	disable Fencing pickup
+	disable Fencing moveable
+	disable Fencing set on fire
+	Fencing = create OBJECT MOBILE_STATIC_INFO_CELT_FENCE_SHORT at [CattleEndPos] + ([3.5 * FSize, (-3.5) * FSize])
+	set Fencing focus to [CattleEndPos]
+	ANGLE of Fencing += 90
+	enable Fencing indestructible
+	disable Fencing pickup
+	disable Fencing moveable
+	disable Fencing set on fire
+	SheepInCinema = 0
+	run background script SheepBored(Sheep)
+	run background script TrialNotifyWithScriptLockedCreature(Highlight)
+	while Gogogo == 0
+		if Highlight clicked and ScriptLockedCreature == 0
+			Gogogo = 1
+		end if
+	end while
+	wait until 0.5 seconds
+	enable Highlight active
+	SheepInCinema = 1
+	begin cinema
+		BeginPos = marker at (camera position)
+		BeginFoc = marker at (camera focus)
+		move camera position to [Sheep] + [10, 6, 10] time 3
+		move camera focus to [Sheep] + [0, 4, 0] time 3
+		wait until camera ready
+		wait until Sheep played
+		Wolfy = create DUMB_CREATURE CREATURE_TYPE_WOLF at [WolfyHome]
+		set Wolfy name HELP_TEXT_NAME_WOLF_01
+		ALIGNMENT of Wolfy = -0.41
+		STRENGTH of Wolfy = 0.84
+		run script SetupCreatureIsleCreature(Wolfy)
+		SCALE of Wolfy = 0.6
+		STRENGTH of Wolfy = 1
+		teach Wolfy MAGICAL CREATURE_SPELL_INVISIBLE TRUE percentage 1
+		PermInvis = 2
+		run background script PermInvisibility(Wolfy)
+		CowSafeFlock = flock at [CattleEndPos]
+		set CowSafeFlock properties inner 5 outer 10 calm 0
+		CattleOnMoveFlock = flock at [CattleStartPos]
+		set CattleOnMoveFlock properties inner 15 outer 25 calm 0
+		run background script CattleReactions(create ANIMAL SHEEP at [CattleStartPos], CattleEndPos, CowSafeFlock, CattleOnMoveFlock, WolfyHome)
+		run background script CattleReactions(create ANIMAL SHEEP at [CattleStartPos] + ([number from -15 to 15, number from -15 to 15]), CattleEndPos, CowSafeFlock, CattleOnMoveFlock, WolfyHome)
+		run background script CattleReactions(create ANIMAL SHEEP at [CattleStartPos] + ([number from -15 to 15, number from -15 to 15]), CattleEndPos, CowSafeFlock, CattleOnMoveFlock, WolfyHome)
+		run background script CattleReactions(create ANIMAL SHEEP at [CattleStartPos] + ([number from -15 to 15, number from -15 to 15]), CattleEndPos, CowSafeFlock, CattleOnMoveFlock, WolfyHome)
+		run background script CattleReactions(create ANIMAL SHEEP at [CattleStartPos] + ([number from -15 to 15, number from -15 to 15]), CattleEndPos, CowSafeFlock, CattleOnMoveFlock, WolfyHome)
+		run background script CattleReactions(create ANIMAL SHEEP at [CattleStartPos] + ([number from -15 to 15, number from -15 to 15]), CattleEndPos, CowSafeFlock, CattleOnMoveFlock, WolfyHome)
+		run background script CattleReactions(create ANIMAL SHEEP at [CattleStartPos] + ([number from -15 to 15, number from -15 to 15]), CattleEndPos, CowSafeFlock, CattleOnMoveFlock, WolfyHome)
+		run background script CattleReactions(create ANIMAL SHEEP at [CattleStartPos] + ([number from -15 to 15, number from -15 to 15]), CattleEndPos, CowSafeFlock, CattleOnMoveFlock, WolfyHome)
+		run background script CattleReactions(create ANIMAL SHEEP at [CattleStartPos] + ([number from -15 to 15, number from -15 to 15]), CattleEndPos, CowSafeFlock, CattleOnMoveFlock, WolfyHome)
+		run background script CattleReactions(create ANIMAL SHEEP at [CattleStartPos] + ([number from -15 to 15, number from -15 to 15]), CattleEndPos, CowSafeFlock, CattleOnMoveFlock, WolfyHome)
+		FocusFlag = 0
+		run background script FocusMofo(Sheep)
+		say HELP_TEXT_SHEEP_TRIAL_10 by Sheep
+		wait until 2.5 seconds
+		snapshot CHALLENGE_CREATURE_HERDER quest success 0 alignment 0 HELP_TEXT_CREATURE_ISLE_TITLE_09 StandardReminder (variable HELP_TEXT_CI_REMINDER_07)
+		FocusFlag = 1
+		Sheep play ANM_WATER_CANNON_SHOOT loop 1
+		wait until Sheep played
+		run background script FocusMofo(Sheep)
+		move camera position to [DriftPos] time 20
+		wait until 2 seconds
+		wait until read
+		set camera position to [CattleStartPos] + [-25, 20, -25]
+		set camera focus to [CattleStartPos]
+		say HELP_TEXT_SHEEP_TRIAL_20 with interaction by Sheep
+		set Sheep focus to (camera position)
+		wait until read
+		say HELP_TEXT_SHEEP_TRIAL_30 by Sheep
+		wait until read
+		set Sheep focus to [CattleEndPos] + [25, 15, 25]
+		set camera position to [SeeSheepPos2]
+		set camera focus to [SeeSheepFoc2]
+		move camera position to [SeeSheepPos3] time 6
+		move camera focus to [SeeSheepFoc3] time 6
+		say HELP_TEXT_SHEEP_TRIAL_40 by Sheep
+		wait until read
+		say HELP_TEXT_SHEEP_TRIAL_50 with interaction by Sheep
+		wait until read
+		close dialogue
+		set fade red 0 green 0 blue 0 time 1.5
+		wait until 1.5 seconds
+		set camera position to [SeeWolfSpookPos]
+		set camera focus to [SeeWolfSpookFoc]
+		WolfChargeComplete = 0
+		run background script WolfyCharge(Wolfy, CattleStartPos, WolfyHome)
+		set fade in time 2
+		wait until 2 seconds
+		say HELP_TEXT_SHEEP_TRIAL_60 by Sheep
+		wait until 2 seconds
+		wait until read
+		say HELP_TEXT_SHEEP_TRIAL_70 by Sheep
+		set MyCreature position to [MyCreatureStartPos]
+		if Tyke exists and TykeIsReady == 1 and TykeFree == 1
+			set Tyke position to [MyCreatureStartPos] + [3, 0, 3]
+		end if
+		wait until read
+		close dialogue
+		wait until camera ready
+		wait until 2 seconds
+		set fade red 0 green 0 blue 0 time 1.5
+		wait until 2 seconds
+		WolfChargeComplete = 1
+		set camera position to [CattleStartPos] + [-25, 20, -25]
+		set camera focus to [CattleStartPos]
+		wait until get distance from [Wolfy] to [WolfyHome] < 10
+		set fade in time 2
+		wait until 2 seconds
+		wait until camera ready
+		FocusFlag = 1
+		run background script DidYouKnow(CreatureHerderDYKPos, variable HELP_TEXT_SHEPHERDING_DYK, variable DYK_MISC)
+	end cinema
+	SheepInCinema = 0
+	SheepScoreboard = create highlight CHALLENGE_NONE SCRIPT_HIGHLIGHT_INFO_SCOREBOARD_BIG at [SheepScoreboardPos]
+	enable SheepScoreboard indestructible
+	set SheepScoreboard score 10
+	move Sheep position to [CattleEndPos] radius 0
+	run background script WolfTrial(CattleOnMoveFlock, CattleEndPos, WolfyHome, Wolfy)
+	while SwapCowArrived < 10
+		if SwapCowArrived > LastArrived
+			SheepFormula = SwapCowArrived / 10
+			update snapshot CHALLENGE_CREATURE_HERDER success SheepFormula alignment 0 HELP_TEXT_CREATURE_ISLE_TITLE_09 StandardReminder (variable HELP_TEXT_CI_REMINDER_07)
+			AntiSwapCowArrived = 10 - SwapCowArrived
+			set SheepScoreboard score AntiSwapCowArrived
+			LastArrived = SwapCowArrived
+		end if
+	end while
+	set SheepScoreboard score 0
+	wait until get distance from (camera position) to [Sheep] < 150 and [Sheep] viewed
+	SheepInCinema = 2
+	begin cinema
+		BeginPos = marker at (camera position)
+		BeginFoc = marker at (camera focus)
+		move camera position to [Sheep] + [15, 10, 15] time 3
+		move camera focus to [Sheep] + [0, 4, 0] time 3
+		wait until camera ready
+		wait until Sheep played
+		move camera position to [ZoomSheepPos] time 10
+		move camera focus to [ZoomSheepFoc] time 10
+		set Sheep focus to (camera position)
+		disable creature sound
+		say HELP_TEXT_SHEEP_TRIAL_90 by Sheep
+		wait until 1 seconds
+		Sheep play ANM_A_COW_DEAD_ON_RHS loop 1
+		wait until read
+		say HELP_TEXT_SHEEP_TRIAL_100 by Sheep
+		wait until Sheep played
+		Sheep play ANM_A_WOLF_GOTO_EAT loop 1
+		wait until read
+		say HELP_TEXT_SHEEP_TRIAL_110 with interaction by Sheep
+		wait until Sheep played
+		Sheep play ANM_A_WOLF_GOTO_EAT loop 1
+		wait until read
+		close dialogue
+		move camera position to [BeginPos] time 3
+		move camera focus to [BeginFoc] time 3
+		wait until camera ready
+	end cinema with widescreen
+	SheepTrialComplete = 1
+	delete Highlight with fade
+	DojoReminderHerding = 0
+	run background script DeleteSheep(Sheep)
+	run script Dojo(Sheep)
+end script CreatureHerder
+

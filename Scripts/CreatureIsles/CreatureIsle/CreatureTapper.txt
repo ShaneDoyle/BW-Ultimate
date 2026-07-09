@@ -1,0 +1,431 @@
+//LHVM Challenge source version 8
+//Decompiled with CHLASM tool by Daniels118
+
+global ChimpGameOver
+global NumberOfChimpsDestracted
+global PauseChimps
+global StopChimps
+global GoIntoWidescreen
+
+begin script MoveGorilla(StartPos, EndPos, ObjectPos, CreaturePos, FemalePos, StonePos, Building, Speed, GoBackSpeed, GoBackTime)
+	Marauder = 0
+	Fire = 0
+	Object = 0
+	Stone = 0
+	Sparkle = 0
+	OtherMarauder = 0
+start
+	Marauder = create VILLAGER VILLAGER_INFO_GIANT at [StartPos]
+	OtherMarauder = create VILLAGER VILLAGER_INFO_GIANT at [ObjectPos]
+	SCALE of OtherMarauder = 4
+	set OtherMarauder focus to [Marauder]
+	OtherMarauder play ANM_P_SITTING_DOWN1_SITTING loop -1
+	disable Marauder navigation
+	disable Marauder pickup
+	enable Marauder indestructible
+	Fire = create OBJECT MOBILE_STATIC_INFO_COUNTRY_LANTERN at [FemalePos]
+	enable Fire active
+	enable Fire indestructible
+	SCALE of Marauder = 4
+	SPEED of Marauder = Speed
+	Stone = create OBJECT ROCK at [StonePos]
+	SCALE of Stone = 0.27
+	ALTITUDE of Stone = 0
+	disable Stone pickup
+	enable Stone indestructible
+	while PauseChimps == 1
+		Sparkle = create special effect SPOT_VISUAL_COMMAND_SUCCEED at [Stone] time 1
+		wait until 0.5 seconds
+	end while
+	move Marauder position to [EndPos] radius 0
+	wait until 1 seconds
+	begin loop
+		if Stone clicked or [StonePos] clicked radius 10 or Marauder clicked or Fire clicked
+			disable MyCreature navigation
+			clear clicked position
+			clear clicked object
+			Sparkle = create special effect SPOT_VISUAL_COMMAND_SUCCEED at [Stone] time 1
+			MyCreature = get player 1 creature
+			move MyCreature position to [CreaturePos] radius 0
+		end if
+		if get distance from [MyCreature] to [CreaturePos] == 0
+			enable MyCreature navigation
+			set MyCreature focus to [Marauder]
+			wait until 0.5 seconds
+			MyCreature play ANM_A_COW_DEAD loop 400
+			move Marauder position to [StartPos] radius 0
+			SPEED of Marauder = GoBackSpeed
+			wait until not get distance from [MyCreature] to [CreaturePos] == 0 or get distance from [Marauder] to [StartPos] == 0
+			wait until GoBackTime seconds
+			move Marauder position to [EndPos] radius 0
+			SPEED of Marauder = Speed
+		end if
+		if get distance from [Marauder] to [EndPos] == 0
+			GoIntoWidescreen = 1
+			enable Stone pickup
+			Marauder play ANM_P_KICK_BALL_PASS_PT1 loop 1
+			wait until Marauder played
+			Marauder play ANM_P_KICK_BALL_PASS_PT2 loop 1
+			set Stone target [Building] time 3
+			ChimpGameOver = 1
+		end if
+		if get distance from [Marauder] to [StartPos] == 0
+			set Marauder focus to [Fire]
+			NumberOfChimpsDestracted++
+			Marauder play ANM_P_SITTING_DOWN1_INTO loop 1
+			wait until Marauder played
+			Marauder play ANM_P_SITTING_DOWN1_SITTING loop -1
+			while ChimpGameOver == 0
+			end while
+		end if
+		until ChimpGameOver == 1
+	end loop
+	wait until StopChimps == 1
+	delete Marauder
+	delete OtherMarauder
+	delete Fire
+	delete Stone
+end script MoveGorilla
+
+begin script CreatureTapper
+	BuildingPos = marker at [3088.574, 30.82, 2383.793]
+	Building = 0
+	StartRadius = 70
+	EndRadius = 33
+	CreatureRadius = 19
+	ObjectRadius = StartRadius + 8
+	FemaleGorillaRadius = StartRadius + 4
+	StoneRadius = 30
+	StartPos[4]
+	EndPos[4]
+	CreaturePos[4]
+	ObjectPos[4]
+	FemalePos[4]
+	StonePos[4]
+	Highlight = 0
+	HighlightPos = marker at [3102.771, 30.637, 2333.513]
+	IntroSeen = 0
+	Chimp = 0
+	SmallChimp1 = 0
+	Stone = 0
+	FinishWithChimp = 0
+	OuterMarker = marker at [3017.291, 30.82, 2336.786]
+	NumberOfAttempts = 0
+	CreatureTapperDYKPos = marker at [3108.059, 30.82, 2399.983]
+	Fire = 0
+	TapperCancelGameHighlight = 0
+start
+	DojoReminderCreatureTapper = 1
+	StartPos[0] = marker at (get target from [OuterMarker] to [BuildingPos] distance StartRadius angle 120)
+	StartPos[1] = marker at (get target from [OuterMarker] to [BuildingPos] distance StartRadius angle 150)
+	StartPos[2] = marker at (get target from [OuterMarker] to [BuildingPos] distance StartRadius angle 180)
+	StartPos[3] = marker at (get target from [OuterMarker] to [BuildingPos] distance StartRadius angle 210)
+	EndPos[0] = marker at (get target from [OuterMarker] to [BuildingPos] distance EndRadius angle 120)
+	EndPos[1] = marker at (get target from [OuterMarker] to [BuildingPos] distance EndRadius angle 150)
+	EndPos[2] = marker at (get target from [OuterMarker] to [BuildingPos] distance EndRadius angle 180)
+	EndPos[3] = marker at (get target from [OuterMarker] to [BuildingPos] distance EndRadius angle 210)
+	CreaturePos[0] = marker at (get target from [OuterMarker] to [BuildingPos] distance CreatureRadius angle 120)
+	CreaturePos[1] = marker at (get target from [OuterMarker] to [BuildingPos] distance CreatureRadius angle 150)
+	CreaturePos[2] = marker at (get target from [OuterMarker] to [BuildingPos] distance CreatureRadius angle 180)
+	CreaturePos[3] = marker at (get target from [OuterMarker] to [BuildingPos] distance CreatureRadius angle 210)
+	ObjectPos[0] = marker at (get target from [OuterMarker] to [BuildingPos] distance ObjectRadius angle 120)
+	ObjectPos[1] = marker at (get target from [OuterMarker] to [BuildingPos] distance ObjectRadius angle 150)
+	ObjectPos[2] = marker at (get target from [OuterMarker] to [BuildingPos] distance ObjectRadius angle 180)
+	ObjectPos[3] = marker at (get target from [OuterMarker] to [BuildingPos] distance ObjectRadius angle 210)
+	FemalePos[0] = marker at (get target from [OuterMarker] to [BuildingPos] distance FemaleGorillaRadius angle 120)
+	FemalePos[1] = marker at (get target from [OuterMarker] to [BuildingPos] distance FemaleGorillaRadius angle 150)
+	FemalePos[2] = marker at (get target from [OuterMarker] to [BuildingPos] distance FemaleGorillaRadius angle 180)
+	FemalePos[3] = marker at (get target from [OuterMarker] to [BuildingPos] distance FemaleGorillaRadius angle 210)
+	StonePos[0] = marker at (get target from [OuterMarker] to [BuildingPos] distance StoneRadius angle 120)
+	StonePos[1] = marker at (get target from [OuterMarker] to [BuildingPos] distance StoneRadius angle 150)
+	StonePos[2] = marker at (get target from [OuterMarker] to [BuildingPos] distance StoneRadius angle 180)
+	StonePos[3] = marker at (get target from [OuterMarker] to [BuildingPos] distance StoneRadius angle 210)
+	Chimp = create DUMB_CREATURE CREATURE_TYPE_CHIMP at [3103.407, 30.365, 2315.439]
+	run script SetupCreatureIsleCreature(Chimp)
+	set Chimp name HELP_TEXT_NAME_CHIMP_11
+	SCALE of Chimp = 1
+	set Chimp focus to [3088.49, 30.82, 2325.568]
+	Highlight = create highlight CHALLENGE_CREATURE_TAPPER HIGHLIGHT_TRIAL at [HighlightPos]
+	ALTITUDE of Highlight = 2
+	begin loop
+		Building = create HOUSE ABODE_INFO_JAPANESE_WONDER at [BuildingPos]
+		BUILT of Building = 1
+		run script TrialNotifyWithScriptLockedCreature(Highlight)
+		ScriptLockedCreature = 1
+		StopChimps = 0
+		if IntroSeen == 0
+			IntroSeen = 1
+			begin cinema
+				disable MyCreature navigation
+				start music MUSIC_TYPE_SCRIPT_KHAZAR
+				move camera position to [3091.351, 37.289, 2324.136] time 4
+				move camera focus to [4072.271, 555.889, 1604.933] time 4
+				wait until camera ready
+				move camera position to [3091.945, 37.603, 2323.701] time 10
+				move camera focus to [4058.981, 594.853, 1614.677] time 10
+				MyCreature = get player 1 creature
+				set MyCreature position to [3049.79, 30.82, 2389.708]
+				Fire = create OBJECT MOBILE_STATIC_INFO_COUNTRY_LANTERN at [3050.41, 30.82, 2332.286]
+				SmallChimp1 = create VILLAGER VILLAGER_INFO_GIANT at [3060.576, 30.82, 2348.19]
+				enable Fire active
+				SCALE of SmallChimp1 = 4
+				set SmallChimp1 focus to [3059.06, 34.212, 2335.236]
+				Stone = create OBJECT ROCK at [3073.596, 30.82, 2365.447]
+				SCALE of Stone = 0.27
+				ALTITUDE of Stone = 0
+				say HELP_TEXT_BUILDING_PROTECTOR_10 by Chimp
+				wait until read
+				Chimp play ANM_A_COW_EAT_1 loop 1
+				say HELP_TEXT_BUILDING_PROTECTOR_20 by Chimp
+				wait until read
+				set camera position to [3087.677, 37.703, 2340.949]
+				set camera focus to [3134.948, 52.281, 3662.293]
+				snapshot CHALLENGE_CREATURE_TAPPER quest success 0 alignment 0 HELP_TEXT_CREATURE_ISLE_TITLE_27 StandardReminder (variable HELP_TEXT_CI_REMINDER_14)
+				say HELP_TEXT_BUILDING_PROTECTOR_30 with interaction by Chimp
+				wait until read
+				say HELP_TEXT_BUILDING_PROTECTOR_40 by Chimp
+				wait until read
+				close dialogue
+				move camera position to [3058.959, 35.032, 2334.384] time 4
+				move camera focus to [3219.772, -123.638, 3622.456] time 4
+				wait until camera ready
+				Chimp play ANM_A_HORSE_EAT1 loop 1
+				say HELP_TEXT_BUILDING_PROTECTOR_50 by Chimp
+				wait until read
+				set camera position to [3077.997, 32.259, 2368.654]
+				set camera focus to [2125.693, -37.956, 1454.007]
+				move camera position to [3079.581, 32.376, 2370.176] time 20
+				move camera focus to [2127.278, -37.839, 1455.529] time 20
+				set SmallChimp1 focus to [Stone]
+				move SmallChimp1 position to [3072.704, 30.82, 2363.78] radius 0
+				say HELP_TEXT_BUILDING_PROTECTOR_60 by Chimp
+				wait until read
+				set camera position to [3073.133, 31.971, 2353.746]
+				set camera focus to [3210.675, 310.406, 3638.789]
+				move camera position to [3073.777, 32.512, 2350.555] time 10
+				move camera focus to [3116.173, 95.441, 3656.025] time 10
+				wait until 2 seconds
+				say HELP_TEXT_BUILDING_PROTECTOR_70 by Chimp
+				wait until read
+				say HELP_TEXT_BUILDING_PROTECTOR_80 by Chimp
+				wait until read
+				close dialogue
+				wait until get distance from [SmallChimp1] to [3072.704, 30.82, 2363.78] == 0 or 10 seconds
+				SmallChimp1 play ANM_P_KICK_BALL_PASS_PT1 loop 1
+				wait until SmallChimp1 played
+				SmallChimp1 play ANM_P_KICK_BALL_PASS_PT2 loop 1
+				set Stone target [BuildingPos] time 3
+				wait until 5 seconds
+				set camera position to [3091.351, 37.289, 2324.136]
+				set camera focus to [4072.271, 555.889, 1604.933]
+				move camera position to [3091.945, 37.603, 2323.701] time 10
+				move camera focus to [4058.981, 594.853, 1614.677] time 10
+				MyCreature = get player 1 creature
+				set MyCreature position to [3065.037, 30.82, 2383.472]
+				set SmallChimp1 position to [3066.201, 30.82, 2356.189]
+				say HELP_TEXT_BUILDING_PROTECTOR_90 by Chimp
+				wait until read
+				close dialogue
+				set MyCreature position to [3070.074, 30.82, 2389]
+				move MyCreature position to [3075.359, 30.82, 2366.512] radius 0
+				set camera position to [3068.515, 55.396, 2334.451]
+				set camera focus to [3343.881, -638.793, 3425.617]
+				wait until get distance from [MyCreature] to [3075.359, 30.82, 2366.512] == 0
+				set MyCreature focus to [SmallChimp1]
+				wait until MyCreature played
+				MyCreature play ANM_A_COW_DEAD loop 5
+				move camera position to [3053.569, 37.237, 2318.477] time 12
+				move camera focus to [2913.32, -347.639, 3562.94] time 12
+				wait until 2 seconds
+				move SmallChimp1 position to [3052.471, 30.82, 2334.014] radius 0
+				wait until get distance from [SmallChimp1] to [3052.471, 30.82, 2334.014] == 0
+				say HELP_TEXT_BUILDING_PROTECTOR_100 by Chimp
+				wait until read
+				say HELP_TEXT_BUILDING_PROTECTOR_110 with interaction by Chimp
+				wait until read
+				close dialogue
+				set camera position to [3059.21, 34.045, 2320.971]
+				set camera focus to [2734.795, -6.196, 2655.461]
+				delete Stone
+				delete Building
+				Building = create HOUSE ABODE_INFO_JAPANESE_WONDER at [BuildingPos]
+				BUILT of Building = 1
+				set MyCreature position to [3102.883, 30.629, 2339.067]
+				say HELP_TEXT_BUILDING_PROTECTOR_120 by Chimp
+				wait until read
+				say HELP_TEXT_BUILDING_PROTECTOR_130 by Chimp
+				wait until read
+				SmallChimp1 play ANM_P_SITTING_DOWN1_INTO loop 1
+				wait until SmallChimp1 played
+				SmallChimp1 play ANM_P_SITTING_DOWN1_SITTING loop -1
+				wait until 3 seconds
+				MyCreature = get player 1 creature
+				set MyCreature position to [3083.44, 30.82, 2411.724]
+				set camera position to [3091.351, 37.289, 2324.136]
+				set camera focus to [4072.271, 555.889, 1604.933]
+				move camera position to [3091.945, 37.603, 2323.701] time 10
+				move camera focus to [4058.981, 594.853, 1614.677] time 10
+				NumberOfChimpsDestracted = 0
+				ChimpGameOver = 0
+				PauseChimps = 1
+				GoIntoWidescreen = 0
+				Chimp play ANM_A_COW_LANDED_LEFT_SIDE loop 1
+				say HELP_TEXT_BUILDING_PROTECTOR_140 with interaction by Chimp
+				wait until read
+				say HELP_TEXT_BUILDING_PROTECTOR_150 by Chimp
+				wait until read
+				close dialogue
+				run background script MoveGorilla(StartPos[0], EndPos[0], ObjectPos[0], CreaturePos[0], FemalePos[0], StonePos[0], Building, 0.2, 0.15, 4)
+				run background script MoveGorilla(StartPos[1], EndPos[1], ObjectPos[1], CreaturePos[1], FemalePos[1], StonePos[1], Building, 0.1, 0.2, 5)
+				run background script MoveGorilla(StartPos[2], EndPos[2], ObjectPos[2], CreaturePos[2], FemalePos[2], StonePos[2], Building, 0.2, 0.2, 5)
+				run background script MoveGorilla(StartPos[3], EndPos[3], ObjectPos[3], CreaturePos[3], FemalePos[3], StonePos[3], Building, 0.1, 0.1, 3)
+				delete SmallChimp1
+				delete Fire
+				set camera position to [3046.735, 34.245, 2384.052]
+				set camera focus to [3488.24, -39.414, 2248.427]
+				eject good spirit
+				wait until 2 seconds
+				say HELP_TEXT_BUILDING_PROTECTOR_160
+				wait until read
+				say HELP_TEXT_BUILDING_PROTECTOR_170
+				wait until read
+				say HELP_TEXT_BUILDING_PROTECTOR_180 with interaction
+				wait until read
+				close dialogue
+				move camera position to [3087.648, 91.883, 2388.233] time 8
+				move camera focus to [2857.996, -303.222, 2288.744] time 8
+				wait until camera ready
+				release MyCreature
+				PauseChimps = 0
+				enable MyCreature navigation
+				stop music
+				release MyCreature
+			end cinema
+		else
+			begin cinema
+				start music MUSIC_TYPE_SCRIPT_KHAZAR
+				move camera position to [3091.351, 37.289, 2324.136] time 4
+				move camera focus to [4072.271, 555.889, 1604.933] time 4
+				wait until camera ready
+				NumberOfChimpsDestracted = 0
+				ChimpGameOver = 0
+				PauseChimps = 1
+				GoIntoWidescreen = 0
+				run background script MoveGorilla(StartPos[0], EndPos[0], ObjectPos[0], CreaturePos[0], FemalePos[0], StonePos[0], Building, 0.2, 0.15, 4)
+				run background script MoveGorilla(StartPos[1], EndPos[1], ObjectPos[1], CreaturePos[1], FemalePos[1], StonePos[1], Building, 0.1, 0.2, 5)
+				run background script MoveGorilla(StartPos[2], EndPos[2], ObjectPos[2], CreaturePos[2], FemalePos[2], StonePos[2], Building, 0.2, 0.2, 5)
+				run background script MoveGorilla(StartPos[3], EndPos[3], ObjectPos[3], CreaturePos[3], FemalePos[3], StonePos[3], Building, 0.1, 0.1, 3)
+				MyCreature = get player 1 creature
+				set MyCreature position to [3078.561, 30.82, 2344.561]
+				say HELP_TEXT_BUILDING_PROTECTOR_190 by Chimp
+				wait until read
+				Chimp play ANM_A_COW_EAT_1 loop 1
+				say HELP_TEXT_BUILDING_PROTECTOR_200 by Chimp
+				wait until read
+				set camera position to [3046.735, 34.245, 2384.052]
+				set camera focus to [3488.24, -39.414, 2248.427]
+				eject good spirit
+				wait until 2 seconds
+				say HELP_TEXT_BUILDING_PROTECTOR_210
+				wait until read
+				say HELP_TEXT_BUILDING_PROTECTOR_220
+				wait until read
+				if NumberOfAttempts == 3
+					say HELP_TEXT_BUILDING_PROTECTOR_225
+				elsif NumberOfAttempts > 20
+					say HELP_TEXT_BUILDING_PROTECTOR_227
+				end if
+				close dialogue
+				move camera position to [3087.648, 91.883, 2388.233] time 8
+				move camera focus to [2857.996, -303.222, 2288.744] time 8
+				wait until camera ready
+				PauseChimps = 0
+				stop music
+			end cinema
+		end if
+		start music MUSIC_TYPE_CREATURE_FIGHT
+		TapperCancelGameHighlight = create highlight CHALLENGE_NONE HIGHLIGHT_CANCEL_QUEST at [3047.665, 30.582, 2413.591]
+		wait until GoIntoWidescreen == 1 or NumberOfChimpsDestracted == 4 or TapperCancelGameHighlight clicked
+		clear clicked object
+		NumberOfAttempts++
+		stop music
+		if GoIntoWidescreen == 1
+			enable MyCreature navigation
+			set MyCreature position to [3116.651, 30.375, 2367.342]
+			begin cinema
+				set camera position to [3105.76, 61.047, 2389.498]
+				set camera focus to [3005.56, -18.726, 2360.725]
+				wait until 7 seconds
+				set camera position to [3094.647, 34.386, 2320.208]
+				set camera focus to [3863.079, 1045.162, 2045.716]
+				say HELP_TEXT_BUILDING_PROTECTOR_230 by Chimp
+				wait until read
+				say HELP_TEXT_BUILDING_PROTECTOR_240 by Chimp
+				wait until read
+				Chimp play ANM_A_COW_EAT_1 loop 1
+				say HELP_TEXT_BUILDING_PROTECTOR_250 by Chimp
+				wait until read
+				say HELP_TEXT_BUILDING_PROTECTOR_260 by Chimp
+				wait until read
+				close dialogue
+				set fade red 0 green 0 blue 0 time 2
+				wait until fade ready
+				set camera position to [3044.009, 88.955, 2320.936]
+				set camera focus to [3155.452, 1.638, 2317.3]
+				StopChimps = 1
+			end cinema
+			release MyCreature
+			set fade in time 2
+			wait until fade ready
+		elsif NumberOfChimpsDestracted == 4
+			enable MyCreature navigation
+			release MyCreature
+			begin cinema
+				set camera position to [3034.187, 32.977, 2421.759]
+				set camera focus to [2989.686, 29.85, 2398.399]
+				move camera position to [3065.41, 32.432, 2315.939] time 12
+				move camera focus to [3027.244, 31.317, 2348.771] time 12
+				wait until camera ready
+				snapshot CHALLENGE_CREATURE_TAPPER quest success 1 alignment 0 HELP_TEXT_CREATURE_ISLE_TITLE_27 StandardReminder (variable HELP_TEXT_CI_REMINDER_14)
+				wait until 4 seconds
+				set camera position to [3090.708, 41.253, 2325.769]
+				set camera focus to [3150.755, 46.495, 2273.129]
+				say HELP_TEXT_BUILDING_PROTECTOR_270 by Chimp
+				wait until read
+				disable creature sound
+				Chimp play ANM_A_COW_LANDED_LEFT_SIDE loop 1
+				say HELP_TEXT_BUILDING_PROTECTOR_280 by Chimp
+				wait until read
+				say HELP_TEXT_BUILDING_PROTECTOR_290 by Chimp
+				wait until read
+				close dialogue
+				StopChimps = 1
+				move camera position to [3027.332, 116.57, 2360.044] time 10
+				move camera focus to [2845.689, 87.321, 2210.85] time 10
+				wait until camera ready
+			end cinema with widescreen
+			run script Dojo(Chimp)
+			KCTapperCompleted = 1
+			ChimpGameOver = 1
+			FinishWithChimp = 1
+		else
+			begin camera
+				move camera position to [3053.735, 97.393, 2361.046] time 3
+				move camera focus to [2898.935, 45.889, 2315.059] time 3
+				wait until camera ready
+				ChimpGameOver = 1
+				StopChimps = 1
+			end camera
+			enable MyCreature navigation
+			release MyCreature
+		end if
+		ScriptLockedCreature = 0
+		delete TapperCancelGameHighlight
+		delete Building
+		until FinishWithChimp == 1
+	end loop
+	delete Chimp
+	delete Highlight
+	DojoReminderCreatureTapper = 0
+end script CreatureTapper
+

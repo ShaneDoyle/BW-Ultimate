@@ -1,0 +1,646 @@
+
+begin script Land4WeirdOgreFocus
+
+start
+	while 1 == 1
+		set WeirdOgre focus to camera position
+		force WeirdOgre CREATURE_LOOK_AT_CAMERA WeirdOgre
+		wait 1 second
+	end while
+end script Land4WeirdOgreFocus
+
+
+// Handles some behaviours.
+begin script CustomLand4WeirdOgreHandler
+
+	queue_timer = 0
+	//WeirdOgreMovePosition = marker at [2230.72, 45, 2841.06]
+
+start
+	while 1 == 1
+		if EXHAUSTION of WeirdOgre > 0.9
+			force WeirdOgre CREATURE_SLEEP WeirdOgre
+			wait until EXHAUSTION of WeirdOgre < 0.01
+		end if
+		
+		// Don't let Ogre go too far.
+		/*
+		if [WeirdOgre] near [WeirdOgreMovePosition] radius 1000
+		else
+			set WeirdOgre position to [WeirdOgreMovePosition]
+			wait until [WeirdOgre] near [WeirdOgreMovePosition] radius 10
+		end if
+		*/
+		
+		wait 1 second
+		release WeirdOgre
+		
+	end while
+
+end script CustomLand4WeirdOgreHandler
+
+begin script OrbitAroundPoint
+    FocusMarker = marker at [286.94, 20, 286.09]
+    CamMarker = marker at [286.94, 80, 286.09]
+
+    Radius = 4.0
+    OrbitSpeed = 3
+    CamHeight = 60.0
+    Angle = 0.0
+    Timer = 0.0
+
+start
+    Angle = 0.0
+    Timer = 0.0
+
+    CamMarker = marker at [FocusMarker] + [(sin Angle) * Radius, CamHeight, (cos Angle) * Radius]
+
+    begin cinema
+        set camera lens 90 time 8
+        set camera position to [CamMarker]
+        set camera focus to [FocusMarker]
+		begin loop
+			CamMarker = marker at [FocusMarker] + [(sin Angle) * Radius, CamHeight, (cos Angle) * Radius]
+
+			move camera position to [CamMarker] time 0.02
+			move camera focus to [FocusMarker] time 0.02
+
+			Angle = Angle + OrbitSpeed
+			Timer = Timer + 0.02
+
+			if Angle > 6.2832
+				//Angle = Angle - 6.2832
+			end if
+		end loop
+    end cinema
+end script OrbitAroundPoint
+
+
+
+begin script CustomLand4PillarBeams(Pillar1, Pillar2)
+	Invisible = 0
+	True = 1
+	False = 0
+	
+
+	Ray1 = 0
+	Ray2 = 0
+start
+	begin loop
+	
+		Ray1 =  create special effect SPOT_VISUAL_MAGIC_BEAM on Pillar1 time 3
+		start sound LH_SAMPLE_G_PLASMASMALL at [Pillar1]
+		add Ray1 target on Pillar2
+		
+		
+		Ray2 =  create special effect SPOT_VISUAL_MAGIC_BEAM on Pillar2 time 3
+		start sound LH_SAMPLE_G_PLASMASMALL at [Pillar2]
+		add Ray2 target on Pillar1
+		
+		wait 3 seconds
+	end loop
+end script CustomLand4PillarBeams
+
+
+begin script CustomLand4OgreTeleportToIsland(Pillar, ToIsland)
+	Invisible = 0
+	True = 1
+	False = 0
+start
+	begin loop
+		if Pillar clicked
+			clear clicked object
+			if get distance from [MyCreature] to [Pillar] < 100
+				Invisible = cast CREATURE_SPELL_INVISIBLE spell on MyCreature from [MyCreature] radius 0 time 1 curl 0
+				MyCreature play C_INDIVIDUAL_SUMMON loop 1
+				wait 5 seconds
+				
+				if ToIsland == True
+					set MyCreature position to [326.66, 399.39]
+				else
+					set MyCreature position to [1971.39, 2061.72]
+				end if
+				
+				//force MyCreature CREATURE_SPRINKLE_MAGIC_WATER_ON_CROPS MyCreature
+				release MyCreature
+			end if
+			release MyCreature
+		end if
+	end loop
+end script CustomLand4OgreTeleportToIsland
+
+begin script CustomLand4WeirdOgre
+	
+	Highlight = 0
+	StartCameraPos = marker at [1979.27,25,2046.27]
+	WeirdOgrePos = marker at [1974.35, 18, 2073.96]
+	ScrollPos = marker at [1974.35, 18, 2073.96] + [0,35,0]
+	WeirdOgreContinue = 0
+	WeirdOgrePosComplete = marker at [1948.24,2152.91]//[1972.69,10,2195.45]
+	
+	
+	CurrentMagnitude = 0 // Stroke for Ogre (yo pause?)
+	
+	WeirdOgreMovePosition = marker at [2261.30, 25, 2647.49]//marker at [2230.72, 48, 2841.06]
+	CompletedCameraPosition = marker at [1917.20,20,2118.65]//[1938.35, 10, 2142.39]
+	
+	Ogre1Pos = marker at [307.96, 304.04]//[304.52, 291.92]//[1933.46,2158.79]
+	Ogre2Pos = marker at [265.33, 27, 251.52]
+	Ogre3Pos = marker at [252.14, 16, 311.51]//[264.11, 16, 320.38]//[1946.61,2149.74]
+	Ogre4Pos = marker at [228.55, 15, 274.41]//[1952.04,2145.43]
+	
+	Ogre1 = 0
+	Ogre2 = 0
+	Ogre3 = 0
+	Ogre4 = 0
+	
+	Ogre1ClipCamPos = marker at [312.68, 18, 319.38]
+	Ogre1ClipFocusPos = marker at [296.74, 19, 297.49]
+	
+	
+	Ogre2ClipCamPos = marker at [276.00, 29, 260.76]//[284.03, 27, 265.29]
+	Ogre2ClipFocusPos = marker at [258.27, 29, 248.39]//[257.05,27, 251.55]//[255.79, 27, 253.05]
+	
+	
+	Ogre3ClipCamPos = marker at [242.66, 19, 302.63]//[249.01, 16, 308.46]//[276.00, 27, 260.76]//[284.03, 27, 265.29]
+	Ogre3ClipFocusPos = marker at [263.18, 18, 327.28]//[265.64, 28, 334.67]//[258.27, 28, 248.39]//[257.05,27, 251.55]//[255.79, 27, 253.05]
+	
+	Ogre4ClipCamPos = marker at [214.43, 18,280.77]//[217.32, 18, 281.07]//[218.55, 17, 280.69]//[242.66, 19, 302.63]//[249.01, 16, 308.46]//[276.00, 27, 260.76]//[284.03, 27, 265.29]
+	Ogre4ClipFocusPos = marker at [253.71, 18, 277.60]//[263.18, 18, 327.28]//[265.64, 28, 334.67]//[258.27, 28, 248.39]//[257.05,27, 251.55]//[255.79, 27, 253.05]
+	
+	PillarOnLand = 0
+	PillarOnOgreIsland = 0
+	PillarType = 0
+	
+	
+	SFX = 0
+	Teleport = 0
+	Teleport2 = 0
+	
+	BuildingToLeash = 0
+	
+start
+	wait until ManHasExplainedAboutNemesis == 1
+	wait 2 seconds // Wait to ensure we don't interfere with other Ogre spawning.
+	FemaleCreatureOverride = 2
+	
+	//load my_creature at [WeirdOgrePos]
+	
+	
+	WeirdOgre = create CREATURE CREATURE_TYPE_OGRE at [WeirdOgrePos]
+	wait 0.3 seconds
+	ALIGNMENT of WeirdOgre = 1.0
+	enable WeirdOgre friends with MyCreature
+	
+	// Teach Ogre some cool things he can do around the village.
+	teach WeirdOgre INTELLECTUAL CREATURE_ACTION_KNOWN_ABOUT_BUILD SCRIPT_TRUE
+	teach WeirdOgre INTELLECTUAL CREATURE_ACTION_KNOWN_ABOUT_USE_TOTEM SCRIPT_TRUE
+	teach WeirdOgre INTELLECTUAL CREATURE_ACTION_KNOWN_ABOUT_USE_STORAGE_PIT SCRIPT_TRUE
+	teach WeirdOgre INTELLECTUAL CREATURE_ACTION_KNOWN_ABOUT_DANCE SCRIPT_TRUE
+	teach WeirdOgre INTELLECTUAL CREATURE_ACTION_KNOWN_ABOUT_LAST SCRIPT_TRUE
+	
+	// Prevent Ogre from feeding self.
+	teach WeirdOgre INTELLECTUAL CREATURE_ACTION_KNOWN_ABOUT_FISH SCRIPT_FALSE
+	teach WeirdOgre INTELLECTUAL CREATURE_ACTION_KNOWN_ABOUT_USE_FIELD SCRIPT_FALSE
+	
+	// Nice stuff he can cast around the village.
+	teach WeirdOgre MAGICAL MAGIC_TYPE_TELEPORT SCRIPT_TRUE
+	teach WeirdOgre MAGICAL MAGIC_TYPE_SHIELD SCRIPT_TRUE
+	teach WeirdOgre MAGICAL MAGIC_TYPE_PHYSICAL_SHIELD SCRIPT_TRUE
+	teach WeirdOgre MAGICAL MAGIC_TYPE_FIREBALL SCRIPT_TRUE
+	teach WeirdOgre MAGICAL MAGIC_TYPE_LIGHTNING_BOLT SCRIPT_TRUE
+	teach WeirdOgre MAGICAL MAGIC_TYPE_FOOD SCRIPT_TRUE
+	teach WeirdOgre MAGICAL MAGIC_TYPE_WOOD SCRIPT_TRUE
+	
+	teach WeirdOgre MAGICAL MAGIC_TYPE_FOREST SCRIPT_TRUE
+	teach WeirdOgre MAGICAL MAGIC_TYPE_STORM_WIND_RAIN SCRIPT_TRUE
+	teach WeirdOgre MAGICAL MAGIC_TYPE_FLOCK_FLYING SCRIPT_TRUE
+	teach WeirdOgre MAGICAL MAGIC_TYPE_HEAL SCRIPT_TRUE
+	teach WeirdOgre MAGICAL MAGIC_TYPE_HEAL_PU_ONE SCRIPT_TRUE
+	
+	teach WeirdOgre MAGICAL MAGIC_TYPE_WATER SCRIPT_TRUE
+	
+	
+	SCRIPT_OBJECT_PROPERTY_TYPE_STRENGTH of WeirdOgre = 0.0
+	SCRIPT_OBJECT_PROPERTY_TYPE_CREATURE_ITCHINESS of WeirdOgre = 1.0
+	release WeirdOgre
+	
+	wait 1 second
+	
+	set WeirdOgre name HELP_TEXT_OGRE_NAME_02
+	
+	
+	
+	ACTUAL_HEIGHT of WeirdOgre = 0.75
+	set WeirdOgre DEVELOPMENT_PHASE_FULLY_MATURE development
+
+	Highlight = create highlight CHALLENGE_SWAP_CREATURES HIGHLIGHT_CHALLENGE at [WeirdOgrePos]
+	ALTITUDE of Highlight = SCRIPT_OBJECT_PROPERTY_TYPE_HEIGHT of WeirdOgre + 5.0
+	run background script ChallengeHighlightNotify(Highlight, ScrollPos, variable GOOD_ADVISOR, variable HELP_TEXT_GENERAL_CHALLENGE_START_04)
+	
+	
+	while WeirdOgreContinue == 0
+		WeirdOgre play C_INDIVIDUAL_SAD
+		if Highlight clicked
+			WeirdOgreContinue = 1
+		end if 
+
+		if HEALTH of WeirdOgre <= 0
+			WeirdOgreContinue = 2
+		end if
+	end while
+	
+	set WeirdOgre only desire CREATURE_DESIRE_SADNESS
+	
+	
+	if WeirdOgreContinue == 1
+		delete Highlight
+		set player 1 ally with player 7 percentage 1
+		set player 7 ally with player 1 percentage 1
+		set player 7 creature to WeirdOgre
+		run background script Land4WeirdOgreFocus
+		begin cinema
+			start music MUSIC_TYPE_SCRIPT_SLEG
+			move camera position to [StartCameraPos] time 3
+			move camera focus to [WeirdOgre] + [0,5,0] time 3
+			wait until camera ready
+			stop music
+			wait 1 seconds
+			say HELP_TEXT_COW_BOWLING_157 by WeirdOgre
+			wait until read
+			start music MUSIC_TYPE_SCRIPT_GENERIC_01
+			WeirdOgre play C_INDIVIDUAL_SAD
+			wait 0.5 seconds
+			say HELP_TEXT_COW_BOWLING_158 by WeirdOgre
+			wait until read
+			say HELP_TEXT_COW_BOWLING_159 by WeirdOgre
+			wait until read
+		end cinema
+		
+		begin dialogue
+			eject good spirit
+			eject evil spirit
+			say HELP_TEXT_GENERAL_TYKE_FEEDBACK_01
+			wait until read
+			say HELP_TEXT_GENERAL_TYKE_FEEDBACK_02
+			wait until read
+		end dialogue
+		
+	
+	end if
+	stop music
+	stop script "Land4WeirdOgreFocus"
+	
+	//release WeirdOgre
+	
+	run background script KeepCreatureHealthy(WeirdOgre)
+	while CurrentMagnitude <= 0
+			
+		if [WeirdOgre] not near [WeirdOgrePos] radius 5
+			move WeirdOgre position to [WeirdOgrePos]
+			wait until [WeirdOgre] near [WeirdOgrePos] radius 5
+		end if
+	
+		release WeirdOgre
+		set WeirdOgre only desire CREATURE_DESIRE_SADNESS
+		CurrentMagnitude = get WeirdOgre interaction magnitude
+	end while
+	
+	// Have to wait for the Ogre to get out of this state, it bugs out otherwise.
+	while WeirdOgre locked interaction
+		wait 1 second
+	end while
+	
+	set WeirdOgre disable only desire
+	stop script "KeepCreatureHealthy"
+	
+	
+	// Move Ogre to the town.
+	move WeirdOgre position to [WeirdOgreMovePosition]
+	wait until [WeirdOgre] near [WeirdOgreMovePosition] radius 5
+	set WeirdOgre home position [WeirdOgreMovePosition]
+	release WeirdOgre
+	
+	
+	// Notify User to let Ogre stay in village.
+	begin dialogue
+		eject good spirit
+		make good spirit point at [WeirdOgre]
+		say HELP_TEXT_GENERAL_TYKE_FEEDBACK_03
+		wait until read
+		stop good spirit pointing
+	end dialogue
+	
+	run background script CustomLand4WeirdOgreHandler
+	
+	
+	//set WeirdOgre only desire CREATURE_DESIRE_COMPASSION
+
+	
+	set WeirdOgre desire CREATURE_DESIRE_HUNGER SCRIPT_FALSE
+	set WeirdOgre desire maximum HUNGER to 0.0
+	set WeirdOgre desire CREATURE_DESIRE_HUNGER to 0.0
+	
+	set WeirdOgre desire CREATURE_DESIRE_SADNESS SCRIPT_TRUE
+	set WeirdOgre desire CREATURE_DESIRE_SADNESS to 0.05
+	
+	set WeirdOgre desire CREATURE_DESIRE_TO_REST SCRIPT_TRUE
+	set WeirdOgre desire CREATURE_DESIRE_TO_REST to 0.05
+	
+	
+	set WeirdOgre desire CREATURE_DESIRE_COMPASSION SCRIPT_TRUE
+	set WeirdOgre desire CREATURE_DESIRE_COMPASSION to 0.1
+		
+	set WeirdOgre desire CREATURE_DESIRE_TO_IMPRESS SCRIPT_TRUE
+	set WeirdOgre desire CREATURE_DESIRE_TO_IMPRESS to 0.8
+	
+	
+	//set WeirdOgre only desire CREATURE_DESIRE_TO_IMPRESS
+	
+	set countdown timer draw SCRIPT_COUNTDOWN_DRAW_BOTTOM_LEFT
+	enable countdown timer down with 60 * 30 seconds // 30 mins of Ogre chilling.
+	
+	// Chill until timer has hit 0. If Ogre dies before that, end quest.
+	while get countdown timer time > 0 and WeirdOgreContinue == 1 
+		
+		// Weird Ogre (onTick)
+		teach WeirdOgre PHYSICAL CREATURE_ACTION_KNOWN_ABOUT_FISH FALSE percentage 1
+		teach WeirdOgre PHYSICAL CREATURE_ACTION_KNOWN_ABOUT_USE_FIELD FALSE percentage 1
+		
+		
+		BuildingToLeash = get HOUSE at [2245.58, 10, 2662.99] radius 200
+		if WeirdOgre leashed to BuildingToLeash
+		else
+			attach WeirdOgre leash to BuildingToLeash
+		end if
+		
+		
+		// If WeirdOgre dies before timer, do little cutscene and end the script.
+		if HEALTH of WeirdOgre <= 0 or ENERGY of WeirdOgre <= 0 or EXHAUSTION of WeirdOgre == 1.0// or 1 == 1
+		
+			detach WeirdOgre leash
+			
+			stop script "CustomLand4WeirdOgreHandler"
+			stop script "Land4WeirdOgreFocus"
+		
+		
+			disable countdown timer
+			
+			// Edge case if Player is interacting with Ogre when it dies.
+			while WeirdOgre locked interaction
+				wait 1 second
+			end while
+			
+			// Jump into Ogre death scene.
+			begin cinema
+				start music MUSIC_TYPE_SCRIPT_FAILURE
+				set game speed to 0.75
+				eject good spirit
+				say single line HELP_TEXT_GENERAL_TYKE_FEEDBACK_04 // "GS: Oh no, the Ogre died!
+				if WeirdOgre exists
+					set camera focus follow WeirdOgre
+					set	camera position follow WeirdOgre
+					force WeirdOgre CREATURE_DEAD_FOREVER WeirdOgre
+					wait until read
+					wait 5 seconds
+				end if
+				WeirdOgreContinue = 2
+				stop music
+			end cinema
+		end if
+		wait 0.1 seconds
+	end while
+	//wait until get countdown timer time < 0
+	
+	while WeirdOgreContinue == 2
+		wait 1 second // Never break from here if Player failed.
+	end while
+	
+	
+	
+	// Edge case if Player is interacting with Ogre when it dies.
+	while WeirdOgre locked interaction
+		wait 1 second
+	end while
+	
+	disable countdown timer
+	
+		
+	// Player has successfully protected Ogre. Give them some Creatures.
+	FemaleCreatureOverride = 0
+	Ogre1 = create CREATURE CREATURE_TYPE_OGRE at [Ogre1Pos]
+	set Ogre1 focus to [Ogre1ClipCamPos]
+	wait 0.1 seconds
+	
+	FemaleCreatureOverride = 1
+	Ogre2 = create CREATURE CREATURE_TYPE_OGRE at [Ogre2Pos]
+	set Ogre2 focus to [Ogre2ClipCamPos]
+	wait 0.1 seconds
+	
+	FemaleCreatureOverride = 2
+	Ogre3 = create CREATURE CREATURE_TYPE_OGRE at [Ogre3Pos]
+	set Ogre3 focus to [Ogre3ClipCamPos]
+	wait 0.1 seconds
+	
+	FemaleCreatureOverride = 3
+	Ogre4 = create CREATURE CREATURE_TYPE_OGRE at [Ogre4Pos]
+	set Ogre4 focus to [Ogre4ClipCamPos]
+	wait 0.1 seconds
+	
+	
+	
+	
+		
+	stop script "CustomLand4WeirdOgreHandler"
+	begin cinema
+	
+		disable countdown timer
+		set game speed to 1
+		set WeirdOgre disable only desire
+		set WeirdOgre all desires SCRIPT_FALSE
+		detach WeirdOgre leash
+		start music MUSIC_TYPE_SCRIPT_GENERIC_01
+		set fade red 0 green 0 blue 0 time 1.5
+		wait 1.5 seconds
+		set camera lens  55  time 0
+		
+		set WeirdOgre position to [WeirdOgrePosComplete]
+		set WeirdOgre focus to [CompletedCameraPosition]
+		set camera position to [CompletedCameraPosition]
+		set camera focus to [WeirdOgrePosComplete] + [0,5,0]
+		wait 1 second
+		
+		//run background script Land4WeirdOgreFocus
+		
+		
+		//teach WeirdOgre MAGICAL MAGIC_TYPE_CREATURE_SPELL_ANTI_SPELL TRUE percentage 1
+		
+		teach WeirdOgre MAGICAL SPELL_TELEPORT TRUE percentage 1
+		
+		
+		set fade in time 1.5
+		wait until fade ready
+		
+		set camera lens  65  time 5
+		say HELP_TEXT_COW_BOWLING_160 by WeirdOgre
+		wait until read
+		
+		
+		
+		
+		say HELP_TEXT_COW_BOWLING_CANCEL_02 by WeirdOgre
+		wait until read
+		
+		
+		
+		
+		
+		clear dialogue
+		
+		
+		//WeirdOgre play C_INDIVIDUAL_SCRATCH loop 1
+		//wait until WeirdOgre played
+		
+		wait 0.5 seconds
+		force WeirdOgre CREATURE_CAST_TELEPORT WeirdOgre
+		wait until WeirdOgre played
+		
+		/*
+		wait 1.5 seconds
+		start sound LH_SAMPLE_HERMITCAST
+		SFX = create special effect SPOT_VISUAL_OBJECT_APPEAR at [WeirdOgre] time 3
+		move camera focus to [WeirdOgre] + [0,-3,0] time 3
+		*/
+		
+		//wait 3 seconds
+		start sound constant 45.0 AUDIO_SFX_BANK_TYPE_SPELL
+		while ACTUAL_HEIGHT of WeirdOgre > 0.1
+			WeirdOgre play C_INDIVIDUAL_SUMMON loop 1
+			ACTUAL_HEIGHT of WeirdOgre -= 0.05
+		end while
+		
+		start sound constant 39.0 AUDIO_SFX_BANK_TYPE_IN_GAME // Teleport Sound
+		SFX = create special effect SPOT_VISUAL_COMMAND_SUCCEED at [WeirdOgre] time 3
+		set WeirdOgre position to [0,0,0]
+		
+		
+		move camera position to [WeirdOgrePosComplete] + [0,50,0] time 4
+		move camera focus to [WeirdOgrePosComplete] + [0,10,0] time 4
+		
+		
+		wait 2 seconds
+		start sound LH_SAMPLE_G_WOOSH_01
+		
+		set camera lens  1  time 3
+		set fade red 0 green 0 blue 0 time 2.5
+		wait 2.5 seconds
+		set WeirdOgre position to [WeirdOgrePosComplete]
+		
+		Ogre1 play C_INDIVIDUAL_HAPPY 
+		Ogre2 play C_INDIVIDUAL_HAPPY 
+		Ogre3 play C_INDIVIDUAL_HAPPY 
+		Ogre4 play C_INDIVIDUAL_HAPPY 
+		wait 1.25 seconds
+		
+		
+		
+		set camera lens 60 time 0
+		
+		//move camera focus to [WeirdOgrePosComplete] + [0,-5,0] time 3
+		//move camera position to [1935.94, 25, 2144.56] time 3
+		//set fade in time 0
+		
+		
+		delete WeirdOgre
+		
+		
+		Teleport = cast SPELL_TELEPORT spell at [1934.38, 3, 2138.03] from [1934.38, 3, 2138.03] radius 15.0 time -1 curl 0
+		Teleport2 = cast SPELL_TELEPORT spell at [320.49, 5, 386.78] from [320.49, 5, 386.78] radius 15.0 time -1 curl 0
+		
+		
+		// Ogre 1 Snapping.
+		set camera position to [Ogre1ClipCamPos]
+		set camera focus to [Ogre1ClipFocusPos]
+		set clipping window across 0.1 down 0.1 width 0.2 height 0.8 time 0.1
+		wait 0.1 seconds
+		set fade in time 0
+		start sound LH_SAMPLE_RINGSHOT
+		
+		wait until 1.25 seconds
+		
+		
+		
+		// Ogre 2 Snapping.
+		set camera position to [Ogre2ClipCamPos]
+		set camera focus to [Ogre2ClipFocusPos]
+		set clipping window across 0.3 down 0.1 width 0.2 height 0.8 time 0.1
+		start sound LH_SAMPLE_RINGSHOT
+		wait until 1.25 seconds
+		
+		
+		
+		// Ogre 3 Snapping.
+		set camera position to [Ogre3ClipCamPos]
+		set camera focus to [Ogre3ClipFocusPos]
+		set clipping window across 0.5 down 0.1 width 0.2 height 0.8 time 0.1
+		start sound LH_SAMPLE_RINGSHOT
+		wait until 1.25 seconds
+		
+		
+		// Ogre 4 Snapping.
+		set camera position to [Ogre4ClipCamPos]
+		set camera focus to [Ogre4ClipFocusPos]
+		set clipping window across 0.7 down 0.1 width 0.2 height 0.8 time 0.1
+		start sound LH_SAMPLE_RINGSHOT
+		SFX = create special effect SPOT_VISUAL_TOWN_FIREWORKS at [287.10, 40, 284.98] time 10
+		SFX = create special effect SPOT_VISUAL_TOWN_FIREWORKS at [343.44, 80, 279.80] time 10
+		SFX = create special effect SPOT_VISUAL_TOWN_FIREWORKS at [223.28, 20, 280.54] time 10
+		wait until 1.25 seconds
+		clear clipping window time 0
+		
+		
+		
+		
+		//run script OrbitAroundPoint
+		
+		
+		// Create Teleporting Pillars
+		//PillarOnLand = create FEATURE FEATURE_INFO_PRISON_PILLAR_1 at [WeirdOgrePos]
+		//run background script CustomLand4OgreTeleportToIsland(PillarOnLand, 1)
+		//PillarOnOgreIsland = create FEATURE FEATURE_INFO_PRISON_PILLAR_1 at [320.49, 386.78]
+		//run background script CustomLand4OgreTeleportToIsland(PillarOnOgreIsland, 0)
+		
+		//run background script CustomLand4PillarBeams(PillarOnLand, PillarOnOgreIsland)
+		
+		
+		
+		//set fade red 0 green 0 blue 0 time 4
+		
+		set camera position to [243.52, 25, 277.84]
+		set camera focus to [259.49, 25, 278.24]
+		move camera position to [85.04, 120, 278.51] time 3
+		wait until camera ready
+		
+		
+		
+		
+		
+		run background script SwapCreatures(Ogre1)
+		run background script SwapCreatures(Ogre2)
+		run background script SwapCreatures(Ogre3)
+		run background script SwapCreatures(Ogre4)
+		
+		
+		
+
+		
+	end cinema
+	
+	
+	stop music
+	
+	
+
+	
+	
+end script CustomLand4WeirdOgre

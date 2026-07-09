@@ -1,0 +1,38 @@
+begin script CustomMultiplayerCOOP(FoodValue, WoodValue)
+
+	isCoop = 0 	
+
+start
+
+
+	//say "Co-op mode active"
+	
+	
+	isCoop = get HOUSE at [4500.00,4500.00] radius 0
+	WoodValue = get resource RESOURCE_TYPE_WOOD in isCoop 
+	
+	//Progression of the .chl file!
+	//load map "Ultimate/Scripts/COOP-UltimateLand2.txt"
+	//wait 5 seconds
+	
+	//Land 2
+	if FoodValue == 2
+		//LandNumber = 2
+		
+		//Adjust the player's influence
+		run background script CustomHardModePlayerInfluence
+		
+		//Let Khazar defend too. Sorta improve.
+		run background script CustomHardMode_GodAttack(3,1,0) //Itchy + FireBall
+		run background script CustomKillCreatureFix(3)
+		
+		//Improve AI (Lethys).
+		run background script CustomHardMode_ImproveAIStats(4)
+		run background script CustomHardMode_ImproveAIController(4)
+		run background script CustomHardMode_GodAttack(3,0,1) //Freeze + Lightning Bolt
+		run background script CustomKillCreatureFix(4)
+		run background script CustomHardMode_LethysKillsPlayer_Land2 
+	end if
+	
+	//say "3 Wood. Beginning 1st challenge!"
+end script CustomMultiplayerCOOP

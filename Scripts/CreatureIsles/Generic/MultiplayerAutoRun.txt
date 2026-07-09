@@ -1,0 +1,30 @@
+run script MultiplayerAutoRun
+
+//------------------------------------------------------------------------------------------------------------------------
+begin script MultiplayerAutoRun
+	BlackCloud = 0
+	Storm = 0
+	Brother = 0
+	P1Creature = 0
+	Vort = 0
+	SwapableCreature = 0
+start
+	//CitadelEntrancePos = marker at [1906.8438, 18.0900, 2514.3760]
+	//run background script 
+	
+	//Brother = create VILLAGER VILLAGER_INFO_NORSE_FARMER_MALE  at [SickBed]
+
+	Vort = create VORTEX VORTEX_TYPE_LAST at [2518.63,2763.37]
+	
+	
+	start music MUSIC_TYPE_SCRIPT_NEMESIS
+	//start music MUSIC_TYPE_SCRIPT_GENERIC_01
+	
+	set computer player 2 personality "TakeOverTownByImpressing" 1.00
+	
+	set computer player 2 speed 1000.0
+	
+	Tyke = create young creature from MyCreature with babycreature knowledge at [2518.63,2763.37]
+
+	
+end script MultiplayerAutoRun

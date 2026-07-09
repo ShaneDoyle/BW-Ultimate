@@ -1,0 +1,692 @@
+//LHVM Challenge source version 8
+//Decompiled with CHLASM tool by Daniels118
+
+begin script ReduceAltitude(Object)
+	Altitude = 0
+start
+	while ALTITUDE of Object > -1
+		ALTITUDE of Object = (ALTITUDE of Object) - 0.05
+	end while
+end script ReduceAltitude
+
+begin script TakeOverTownDelay(Town, Time)
+start
+	wait until Time seconds
+	set Town player 1 relative belief 2
+end script TakeOverTownDelay
+
+begin script HelpSystemDelay
+start
+	disable help system
+	wait until 60 seconds
+	enable help system
+end script HelpSystemDelay
+
+begin script CreatureIsleIntro
+	Ark = 0
+	BrokenArk = 0
+	MissionaryPaul = 0
+	MissionaryAndy = 0
+	MissionaryMark = 0
+	MissionaryAccordian = 0
+	EgyptianChristian = 0
+	EgyptianJamie = 0
+	EgyptianStevie = 0
+	MissionaryThrown = 0
+	MissionaryBigEyes = 0
+	AdditionalEgyptian1 = 0
+	AdditionalEgyptian2 = 0
+	AdditionalEgyptian3 = 0
+	AdditionalEgyptian4 = 0
+	Brother = 0
+	Sister = 0
+	Campfire = 0
+	VortexPosition = marker at [1302.243, 129.98, 1395.538]
+	Vortex = 0
+	NewTown = 0
+	Croc = 0
+	Smoke = 0
+	CameraPos = 0
+start
+	MyCreature = get player 1 creature
+	set MyCreature position to [236.513, 0, 380.322]
+	NewTown = get town with id 0
+	MissionaryPaul = create VILLAGER VILLAGER_INFO_NORSE_SAILOR at [1044.592, 102.866, 1260.764]
+	MissionaryAndy = create VILLAGER VILLAGER_INFO_NORSE_SAILOR at [1044.253, 103.214, 1266.315]
+	MissionaryMark = create VILLAGER VILLAGER_INFO_NORSE_SAILOR at [1046.699, 103.115, 1262.348]
+	MissionaryBigEyes = create VILLAGER VILLAGER_INFO_EGYPTIAN_BIG_EYES at [0.911, 0, 0.784]
+	EgyptianChristian = create VILLAGER VILLAGER_INFO_EGYPTIAN_FORESTER_MALE at [1116.455, 122.134, 1316.109]
+	EgyptianJamie = create VILLAGER VILLAGER_INFO_EGYPTIAN_FORESTER_MALE at [1117.986, 122.354, 1320.148]
+	EgyptianStevie = create VILLAGER VILLAGER_INFO_EGYPTIAN_FORESTER_MALE at [1120.758, 122.759, 1316.015]
+	MissionaryAccordian = create VILLAGER VILLAGER_INFO_SAILOR_ACCORDIAN at [27.055, 0, 891.684]
+	MissionaryThrown = create VILLAGER VILLAGER_INFO_NORSE_SAILOR at [27.055, 0, 891.684]
+	AdditionalEgyptian1 = create VILLAGER VILLAGER_INFO_EGYPTIAN_FORESTER_MALE at [1179.967, 123.249, 1370.485]
+	AdditionalEgyptian2 = create VILLAGER VILLAGER_INFO_EGYPTIAN_FORESTER_MALE at [1180.191, 123.28, 1368.382]
+	AdditionalEgyptian3 = create VILLAGER VILLAGER_INFO_EGYPTIAN_FORESTER_MALE at [1178.485, 123.28, 1367.668]
+	AdditionalEgyptian4 = create VILLAGER VILLAGER_INFO_EGYPTIAN_FORESTER_MALE at [1177.325, 123.28, 1369.669]
+	set AdditionalEgyptian1 focus to [1185.926, 122.88, 1375.99]
+	set AdditionalEgyptian2 focus to [1185.926, 122.88, 1375.99]
+	set AdditionalEgyptian3 focus to [1185.926, 122.88, 1375.99]
+	set AdditionalEgyptian4 focus to [1185.926, 122.88, 1375.99]
+	Ark = create FEATURE FEATURE_INFO_ARK at [-124.186, 0, 875.441]
+	attach music MUSIC_TYPE_SCRIPT_MISSIONARIES_INTRO to Ark
+	set MissionaryAccordian position to [27.055, 0, 1891.684]
+	ALTITUDE of MissionaryAccordian = 12
+	set MissionaryAccordian focus to [27.647, 0, 1903.901]
+	set MissionaryMark position to [29.329, 0, 1897.935]
+	ALTITUDE of MissionaryMark = 11.6
+	set MissionaryMark focus to [27.055, 0, 1891.684]
+	set MissionaryAndy position to [25.945, 0, 1896.628]
+	ALTITUDE of MissionaryAndy = 11.6
+	set MissionaryAndy focus to [31.795, 0, 1893.876]
+	set game time 16
+	disable game time
+	BrokenArk = create FEATURE FEATURE_INFO_ARK_WRECK at [648.136, 0, 1050.548]
+	ANGLE of BrokenArk = 110
+	begin cinema
+		start jc special SJC_SWITCH_OFF_INFLUENCE
+		enable MissionaryPaul high graphics detail
+		enable MissionaryAndy high graphics detail
+		enable MissionaryMark high graphics detail
+		enable EgyptianChristian high graphics detail
+		enable EgyptianJamie high graphics detail
+		enable EgyptianStevie high graphics detail
+		enable MissionaryAccordian high graphics detail
+		enable AdditionalEgyptian1 high graphics detail
+		enable AdditionalEgyptian2 high graphics detail
+		enable AdditionalEgyptian3 high graphics detail
+		enable AdditionalEgyptian4 high graphics detail
+		MissionaryAccordian play ANM_P_PLAY_ACCORDIAN loop -1
+		MissionaryAndy play ANM_P_SITTING_DOWN_DANCE_SAILING1 loop -1
+		MissionaryMark play ANM_P_SITTING_DOWN_DANCE_SAILING1 loop -1
+		set camera position to [-150.328, 6.39, 844.669]
+		set camera focus to [-528.633, 13.182, 436.043]
+		wait until widescreen transition complete
+		set fade in time 2
+		CameraPos = marker at (camera position)
+		move camera position to [CameraPos] + [0, 1, 0] time 4
+		wait until 4 seconds
+		start jc special SJC_CI_BOAT_ARRIVAL
+		move camera position to [CameraPos] + [0, -1, 0] time 4
+		wait until 4 seconds
+		move camera position to [CameraPos] + [0, 1, 0] time 4
+		wait until 4 seconds
+		move camera position to [CameraPos] + [0, -1, 0] time 4
+		wait until 4 seconds
+		move camera position to [CameraPos] + [0, 1, 0] time 4
+		wait until 4 seconds
+		set Ark position to [22.496, 0, 1905.444]
+		set camera position to [28.325, 13.343, 1894.825]
+		set camera focus to [19.963, 9.724, 1874.2]
+		move camera position to [27.487, 13.211, 1894.983] time 8
+		move camera focus to [23.777, 10.725, 1872.866] time 8
+		wait until camera ready
+		set camera position to [28.694, 12.852, 1893.287]
+		set camera focus to [22.513, 10.956, 1914.984]
+		move camera position to [29.656, 12.852, 1893.562] time 8
+		move camera focus to [19.203, 10.956, 1913.554] time 8
+		wait until camera ready
+		set camera position to [27.487, 13.211, 1894.983]
+		set camera focus to [23.777, 10.725, 1872.866]
+		move camera position to [28.325, 13.343, 1894.825] time 8
+		move camera focus to [19.963, 9.724, 1874.2] time 8
+		wait until camera ready
+		set camera position to [32.572, 16.02, 1890.805]
+		set camera focus to [17.567, 4.794, 1903.495]
+		move camera position to [33.566, 16.764, 1889.964] time 8
+		move camera focus to [18.561, 5.538, 1902.654] time 8
+		wait until camera ready
+		set camera position to [27.439, 16.863, 1885.064]
+		set camera focus to [26.338, 5.389, 1906.262]
+		move camera position to [27.366, 16.102, 1886.47] time 8
+		move camera focus to [26.338, 5.389, 1906.262] time 8
+		wait until camera ready
+		set camera position to [330.233, 3.515, 1181.063]
+		set camera focus to [440.231, 27.563, 1156.52]
+		start jc special SJC_CI_BOAT_CRASH
+		wait until 2 seconds
+		set camera position to [383.388, 5.422, 1166.553]
+		set camera focus to [270.108, 25.171, 1158.936]
+		move camera position to [382.087, 5.231, 1175.917] time 8
+		move camera focus to [275.215, 23.616, 1136.92] time 8
+		wait until 0.5 seconds
+		shake camera at (camera position) radius 200 amplitude 0.3 time 3
+		wait until 8 seconds
+		set fade red 0 green 0 blue 0 time 2
+		wait until fade ready
+		wait until 2 seconds
+		set camera position to [651.331, 6.367, 1035.216]
+		set camera focus to [478.346, 10.771, 1002.008]
+		move camera position to [649.86, 6.367, 1042.876] time 8
+		move camera focus to [476.876, 10.771, 1009.668] time 8
+		set fade in time 1
+		wait until camera ready
+		set fade red 0 green 0 blue 0 time 1
+		wait until fade ready
+		set camera position to [663.889, 7.088, 1066.359]
+		set camera focus to [601.204, -42.452, 909.318]
+		move camera position to [670.229, 7.088, 1063.666] time 8
+		move camera focus to [582.043, -42.452, 919.393] time 8
+		set fade in time 1
+		wait until fade ready
+		wait until camera ready
+		set fade red 0 green 0 blue 0 time 1
+		wait until fade ready
+		set camera position to [657.597, 3.779, 1043.233]
+		set camera focus to [813.615, -37.59, 1113.89]
+		move camera position to [658.794, 9.223, 1043.775] time 8
+		move camera focus to [811.101, -46.371, 1112.751] time 8
+		set fade in time 1
+		
+		delete MissionaryPaul
+		MissionaryPaul = create VILLAGER VILLAGER_INFO_SAILOR_ACCORDIAN at [1044.592, 102.866, 1260.764]
+		set MissionaryPaul position to [667.506, 9.128, 1046.692]
+		set MissionaryAndy position to [684.05, 2.68, 1042.269]
+		set MissionaryMark position to [683.817, 2.68, 1043.394]
+		ALTITUDE of MissionaryPaul = 5.2
+		set MissionaryPaul focus to [MissionaryAndy]
+		set MissionaryAndy focus to [MissionaryPaul]
+		set MissionaryMark focus to [MissionaryPaul]
+		MissionaryPaul play ANM_P_INSPECT_OBJECT_2 loop -1
+		MissionaryAndy play ANM_P_ATTRACT_YOUR_ATTENTION loop -1
+		MissionaryMark play ANM_P_BECKON loop -1
+		wait until 5 seconds
+		start say sound HELP_TEXT_CI_INTRO_10 at [MissionaryAndy]
+		wait until 1 seconds
+		start say extra sound HELP_TEXT_CI_INTRO_20 at [MissionaryAndy]
+		wait until not say sound HELP_TEXT_CI_INTRO_20 playing
+		wait until 1 seconds
+		start say extra sound HELP_TEXT_CI_INTRO_30 at [MissionaryAndy]
+		wait until not say sound HELP_TEXT_CI_INTRO_30 playing
+		wait until 2 seconds
+		start say extra sound HELP_TEXT_CI_INTRO_40 at [MissionaryAndy]
+		wait until not say sound HELP_TEXT_CI_INTRO_40 playing
+		wait until fade ready
+		wait until camera ready
+		set camera position to [685.846, 3.518, 1042.521]
+		set camera focus to [516.696, 42.141, 1073.218]
+		start say extra sound HELP_TEXT_CI_INTRO_50
+		wait until 1 seconds
+		start say extra sound HELP_TEXT_CI_INTRO_60
+		wait until 2 seconds
+		set camera position to [663.173, 10.339, 1046.723]
+		set camera focus to [819.434, -68.988, 1028.404]
+		start say extra sound HELP_TEXT_CI_INTRO_20
+		wait until 1 seconds
+		start say extra sound HELP_TEXT_CI_INTRO_10
+		wait until 2 seconds
+		shake camera at (camera position) radius 10 amplitude 0.2 time 10
+		start sound LH_SAMPLE_G_VOLCANO_02 at [BrokenArk]
+		MissionaryPaul play ANM_P_CROWD_WON loop 3
+		wait until 5 seconds
+		MissionaryPaul play ANM_P_JUMP_A loop 1
+		wait until 1.5 seconds
+		set MissionaryPaul target [678.502, 2.68, 1044.228] time 1
+		set camera position to [673.272, 6.032, 1040.004]
+		set camera focus to [739.194, -0.486, 1203.276]
+		wait until 1 seconds
+		ALTITUDE of MissionaryPaul = 0
+		set MissionaryPaul position to [682.12, 2.68, 1043.193]
+		set MissionaryPaul focus to [MissionaryMark]
+		MissionaryPaul play ANM_P_LANDED loop 1
+		set camera position to [684.92, 3.162, 1042.488]
+		set camera focus to [512.094, 0.166, 1076.668]
+		MissionaryAndy play ANM_P_AMBIENT2 loop -1
+		MissionaryMark play ANM_P_AMBIENT1 loop -1
+		Smoke = create special effect SPOT_VISUAL_SMOKE at [669.526, 2.544, 1047.516] time 3
+		SCALE of Smoke = 10
+		Smoke = create special effect SPOT_VISUAL_SMOKE at [664.044, 1.078, 1045.581] time 3
+		SCALE of Smoke = 10
+		Smoke = create special effect SPOT_VISUAL_SMOKE at [648.412, 0, 1036.894] time 3
+		SCALE of Smoke = 10
+		run background script ReduceAltitude(BrokenArk)
+		wait until 2 seconds
+		move camera position to [684.905, 4.061, 1042.491] time 10
+		move camera focus to [512.078, 1.066, 1076.671] time 10
+		wait until MissionaryPaul played
+		move camera position to [694.172, 4.582, 1040.752] time 10
+		move camera focus to [522.19, -1.103, 1075.49] time 10
+		start say sound HELP_TEXT_CI_INTRO_70
+		MissionaryPaul play ANM_P_SHRUG_SHOULDERS loop 1
+		wait until MissionaryPaul played
+		wait until not say sound HELP_TEXT_CI_INTRO_70 playing
+		start say sound HELP_TEXT_CI_INTRO_80
+		move MissionaryMark position to [740.012, 2.68, 1031.846] radius 0
+		wait until 0.5 seconds
+		move MissionaryAndy position to [740.012, 2.68, 1031.846] radius 0
+		wait until 1 seconds
+		move MissionaryPaul position to [740.012, 2.68, 1031.846] radius 0
+		wait until camera ready
+		wait until not say sound HELP_TEXT_CI_INTRO_80 playing
+		Smoke = create special effect SPOT_VISUAL_SMOKE at [669.526, 2.544, 1047.516] time 3
+		SCALE of Smoke = 10
+		Smoke = create special effect SPOT_VISUAL_SMOKE at [664.044, 1.078, 1045.581] time 3
+		SCALE of Smoke = 10
+		Smoke = create special effect SPOT_VISUAL_SMOKE at [648.412, 0, 1036.894] time 3
+		SCALE of Smoke = 10
+		stop sound LH_SAMPLE_G_VOLCANO_02
+		start sound LH_SCRIPT_SAMPLE_SCREENRUMBLE AUDIO_SFX_BANK_TYPE_SCRIPT_SFX at (camera position)
+		ALTITUDE of BrokenArk = -1.3
+		wait until 5 seconds
+		start jc special SJC_CI_BOAT_ARRIVAL_END
+		delete Ark
+		delete MissionaryAccordian
+		set fade red 0 green 0 blue 0 time 1
+		wait until fade ready
+		start music MUSIC_TYPE_SCRIPT_KHAZAR
+		
+		
+		delete MissionaryPaul
+		MissionaryPaul = create VILLAGER VILLAGER_INFO_NORSE_SAILOR at [1044.592, 102.866, 1260.764]
+		
+		delete MissionaryAndy
+		MissionaryAndy = create VILLAGER VILLAGER_INFO_SAILOR_ACCORDIAN at [1044.253, 103.214, 1266.315]
+		set MissionaryMark position to [1046.699, 103.115, 1262.348]
+		set game time 16
+		set camera position to [1076.205, 121.071, 1344.792]
+		Brother = create VILLAGER VILLAGER_INFO_EGYPTIAN_FORESTER_MALE at [1080.01, 120.891, 1344.35]
+		Sister = create VILLAGER VILLAGER_INFO_EGYPTIAN_HOUSEWIFE_FEMALE at [0.753, 120.972, 1342.111]
+		set Sister position to [1078.883, 120.647, 1342.995]
+		enable Brother high graphics detail
+		enable Sister high graphics detail
+		set Sister focus to [1105.18, 119.626, 1298.415]
+		AGE of Brother = 8
+		AGE of Sister = 8
+		move MissionaryPaul position to [1104.583, 119.509, 1296.758] radius 0
+		move MissionaryAndy position to [1101.284, 118.65, 1295.925] radius 0
+		move MissionaryMark position to [1103.476, 119.093, 1293.753] radius 0
+		set camera focus follow MissionaryPaul
+		set Brother focus to [1044.592, 102.866, 1260.764]
+		wait until 1 seconds
+		set fade in time 1
+		wait until 10 seconds
+		move camera focus to [1078.169, 121.287, 1344.483] time 4
+		wait until 2 seconds
+		move EgyptianChristian position to [1105.776, 119.744, 1296.973] radius 0
+		move EgyptianJamie position to [1105.835, 119.768, 1300.125] radius 0
+		move EgyptianStevie position to [1108.38, 120.27, 1297.577] radius 0
+		wait until camera ready
+		set Brother focus to [Sister]
+		wait until 1 seconds
+		move camera position to [1078.08, 122.065, 1347.017] time 10
+		move camera focus to [1078.986, 121.866, 1345.245] time 10
+		Brother play ANM_P_SHRUG_SHOULDERS loop 1
+		wait until Brother played
+		set Brother focus to [1105.18, 119.626, 1298.415]
+		wait until 1 seconds
+		Brother play ANM_P_INTO_POINTING loop 1
+		wait until Brother played
+		wait until camera ready
+		wait until 2 seconds
+		move Brother position to [1100.483, 119.401, 1310.597] radius 0
+		set Brother anim ANM_P_WALK_BECKON02
+		wait until 3 seconds
+		move Brother position to [1100.483, 119.401, 1310.597] radius 0
+		SPEED of Brother = 0.5
+		set Brother anim ANM_P_RUN_MAN
+		wait until 1 seconds
+		SPEED of Sister = 0.5
+		move Sister position to [1098.679, 118.81, 1310.875] radius 0
+		wait until 1 seconds
+		set camera position to [1107.831, 128.959, 1277.411]
+		set camera focus to [1096.06, 107.588, 1330.105]
+		wait until get distance from [EgyptianJamie] to [1105.835, 119.768, 1300.125] == 0
+		EgyptianJamie play ANM_P_WAITING_IMPATEINTLY loop -1
+		EgyptianStevie play ANM_P_AMBIENT1 loop -1
+		wait until get distance from [MissionaryMark] to [1103.476, 119.093, 1293.753] == 0
+		MissionaryAndy play ANM_P_AMBIENT1 loop -1
+		MissionaryMark play ANM_P_AMBIENT2 loop -1
+		wait until get distance from [MissionaryPaul] to [1104.583, 119.509, 1296.758] == 0
+		set MissionaryPaul focus to [EgyptianChristian]
+		set EgyptianChristian focus to [MissionaryPaul]
+		MissionaryPaul play ANM_P_TALK1_MALE loop -1
+		EgyptianChristian play ANM_P_GOSSIP_MAN loop -1
+		wait until 4 seconds
+		move EgyptianChristian position to [1103.365, 122.254, 1331.353] radius 0
+		move EgyptianJamie position to [1103.365, 122.254, 1331.353] radius 0
+		wait until 0.5 seconds
+		move EgyptianStevie position to [1103.365, 122.254, 1331.353] radius 0
+		move MissionaryPaul position to [1103.365, 122.254, 1331.353] radius 0
+		wait until 1 seconds
+		move MissionaryAndy position to [1103.365, 122.254, 1331.353] radius 0
+		wait until 0.5 seconds
+		move MissionaryMark position to [1103.365, 122.254, 1331.353] radius 0
+		wait until 2 seconds
+		set Brother focus to [Sister]
+		set Sister focus to [Brother]
+		wait until 2 seconds
+		move Brother position to [1114.616, 123.272, 1335.279] radius 0
+		wait until 0.5 seconds
+		move Sister position to [1114.616, 123.272, 1335.279] radius 0
+		stop music
+		set fade red 0 green 0 blue 0 time 5
+		wait until fade ready
+		start music MUSIC_TYPE_SCRIPT_MISSIONARIES_CAMP_FIRE
+		set game time 22
+		Campfire = create OBJECT MOBILE_STATIC_INFO_COUNTRY_LANTERN at [1183.529, 123.065, 1373.225]
+		set EgyptianChristian position to [1181.868, 123.207, 1371.12]
+		set EgyptianJamie position to [1184.124, 123.201, 1371.184]
+		set EgyptianStevie position to [1181.007, 123.099, 1372.733]
+		set MissionaryPaul position to [1185.926, 122.88, 1375.99]
+		set MissionaryMark position to [1187.485, 122.859, 1376.325]
+		set MissionaryAndy position to [1185.283, 122.738, 1378.099]
+		set EgyptianChristian focus to [MissionaryPaul]
+		set EgyptianJamie focus to [MissionaryPaul]
+		set EgyptianStevie focus to [MissionaryPaul]
+		set MissionaryPaul focus to [EgyptianChristian]
+		set MissionaryAndy focus to [EgyptianChristian]
+		set MissionaryMark focus to [EgyptianChristian]
+		MissionaryPaul play ANM_P_TALK1_MALE loop -1
+		EgyptianChristian play ANM_P_SITTING_DOWN1_SITTING loop -1
+		EgyptianStevie play ANM_P_SITTING_DOWN2_SITTING loop -1
+		MissionaryAndy play ANM_P_SITTING_DOWN2_SITTING loop -1
+		MissionaryMark play ANM_P_SITTING_DOWN1_SITTING loop -1
+		enable clipping distance 1
+		set fade in time 1
+		set camera position to [1165.717, 142.805, 1425.859]
+		set camera focus to [1171.795, 136.581, 1409.04]
+		move camera position to [1173.101, 135.245, 1405.431] time 20
+		move camera focus to [1179.179, 129.021, 1388.612] time 20
+		wait until 5 seconds
+		set camera position to [1185.566, 124.672, 1374.722]
+		set camera focus to [1169.99, 122.185, 1357.989]
+		wait until 4 seconds
+		disable clipping distance 1
+		set camera position to [1180.068, 125.448, 1371.105]
+		set camera focus to [1196.515, 121.506, 1386.686]
+		wait until 1 seconds
+		start say sound HELP_TEXT_CI_INTRO_110
+		wait until not say sound HELP_TEXT_CI_INTRO_110 playing
+		set camera position to [1185.566, 124.672, 1374.722]
+		set camera focus to [1169.99, 122.185, 1357.989]
+		wait until 4 seconds
+		set camera position to [1180.068, 125.448, 1371.105]
+		set camera focus to [1196.515, 121.506, 1386.686]
+		MissionaryPaul play ANM_P_MISSIONARY_MONKEY_MIMIC loop 2
+		wait until 1 seconds
+		start say sound HELP_TEXT_CI_INTRO_120
+		AdditionalEgyptian1 play ANM_P_CONFUSED_MALE4 loop -1
+		AdditionalEgyptian2 play ANM_P_CONFUSED_MALE3 loop -1
+		AdditionalEgyptian3 play ANM_P_CONFUSED_MALE2 loop -1
+		AdditionalEgyptian4 play ANM_P_CONFUSED_MALE1 loop -1
+		wait until not say sound HELP_TEXT_CI_INTRO_120 playing
+		set camera position to [1185.566, 124.672, 1374.722]
+		set camera focus to [1169.99, 122.185, 1357.989]
+		wait until 4 seconds
+		set camera position to [1180.068, 125.448, 1371.105]
+		set camera focus to [1196.515, 121.506, 1386.686]
+		wait until 1 seconds
+		start say sound HELP_TEXT_CI_INTRO_130
+		wait until MissionaryPaul played
+		MissionaryPaul play ANM_P_PUZZLED loop 1
+		wait until MissionaryPaul played
+		MissionaryPaul play ANM_P_MISSIONARY_IT_S_VERY_BIG loop -1
+		wait until not say sound HELP_TEXT_CI_INTRO_130 playing
+		start say sound HELP_TEXT_CI_INTRO_140
+		wait until not say sound HELP_TEXT_CI_INTRO_140 playing
+		set camera position to [1185.566, 124.672, 1374.722]
+		set camera focus to [1169.99, 122.185, 1357.989]
+		start say sound HELP_TEXT_CI_INTRO_150
+		move camera position to [1184.851, 124.195, 1373.953] time 20
+		move camera focus to [1175.185, 126.116, 1353.176] time 20
+		wait until 6 seconds
+		Vortex = create VORTEX VORTEX_TYPE_IN at [VortexPosition]
+		MyCreature = get player 1 creature
+		set MyCreature fade in time 3
+		wait until 0.5 seconds
+		set MyCreature position to [1244.116, 128.828, 1392.366]
+		set MyCreature focus to [1184.47, 156.787, 1374.3]
+		set camera position to [1180.068, 125.448, 1371.105]
+		set camera focus to [1196.515, 121.506, 1386.686]
+		wait until 1 seconds
+		start say sound HELP_TEXT_CI_INTRO_160
+		wait until not say sound HELP_TEXT_CI_INTRO_160 playing
+		set MissionaryBigEyes position to [1184.124, 123.201, 1371.184]
+		set MissionaryBigEyes focus to [VortexPosition]
+		set EgyptianJamie position to [100, 0, 100]
+		set AdditionalEgyptian1 focus to [VortexPosition]
+		set AdditionalEgyptian2 focus to [VortexPosition]
+		set AdditionalEgyptian3 focus to [VortexPosition]
+		set AdditionalEgyptian4 focus to [VortexPosition]
+		set camera position to [1185.749, 123.939, 1373]
+		set camera focus to [1176.817, 127.866, 1353.478]
+		move camera position to [1181.279, 123.736, 1371.834] time 5
+		move camera focus to [1202.995, 128.727, 1377.035] time 5
+		wait until 3 seconds
+		MyCreature play ANM_A_COW_DEAD_ON_RHS loop 3
+		wait until 3 seconds
+		set camera position to [1180.068, 125.448, 1371.105]
+		set camera focus to [1196.515, 121.506, 1386.686]
+		wait until 1 seconds
+		start say sound HELP_TEXT_CI_INTRO_170
+		wait until not say sound HELP_TEXT_CI_INTRO_170 playing
+		set camera position to [1310.361, 132.391, 1397.185]
+		set camera focus to [1288.31, 127.778, 1393.742]
+		start jc special SJC_END_EYE
+		set EgyptianJamie position to [1184.124, 123.201, 1371.184]
+		set EgyptianJamie focus to [1184.124, 123.201, 1371.184]
+		set MissionaryBigEyes position to [100, 0, 100]
+		move camera position to [1303.827, 154.51, 1396.164] time 5
+		move camera focus to [1281.776, 149.896, 1392.721] time 5
+		wait until camera ready
+		eject good spirit
+		eject evil spirit
+		delete Vortex
+		say HELP_TEXT_ADVISORS_INTRODUCTION_10
+		start music MUSIC_TYPE_EGYPTIAN_TOWN_NEUTRAL
+		wait until read
+		move camera position to [1208.388, 136.085, 1378.648] time 50
+		move camera focus to [1152.471, 110.616, 1368.654] time 50
+		set EgyptianChristian focus to [1297.904, 168.314, 1396.356]
+		set EgyptianJamie focus to [1297.904, 168.314, 1396.356]
+		set EgyptianStevie focus to [1297.904, 168.314, 1396.356]
+		set MissionaryPaul focus to [1297.904, 168.314, 1396.356]
+		set MissionaryAndy focus to [1297.904, 168.314, 1396.356]
+		set MissionaryMark focus to [1297.904, 168.314, 1396.356]
+		EgyptianChristian play ANM_P_PRAY loop -1
+		EgyptianJamie play ANM_P_PRAY loop -1
+		EgyptianStevie play ANM_P_PRAY loop -1
+		MissionaryPaul play ANM_P_PRAY loop -1
+		MissionaryAndy play ANM_P_PRAY loop -1
+		MissionaryMark play ANM_P_PRAY loop -1
+		set AdditionalEgyptian1 focus to [1297.904, 168.314, 1396.356]
+		set AdditionalEgyptian2 focus to [1297.904, 168.314, 1396.356]
+		set AdditionalEgyptian3 focus to [1297.904, 168.314, 1396.356]
+		set AdditionalEgyptian4 focus to [1297.904, 168.314, 1396.356]
+		AdditionalEgyptian1 play ANM_P_PRAY loop -1
+		AdditionalEgyptian2 play ANM_P_PRAY loop -1
+		AdditionalEgyptian3 play ANM_P_PRAY loop -1
+		AdditionalEgyptian4 play ANM_P_PRAY loop -1
+		move game time 10 time 100
+		say HELP_TEXT_ADVISORS_INTRODUCTION_20
+		wait until read
+		say HELP_TEXT_ADVISORS_INTRODUCTION_30
+		wait until read
+		say HELP_TEXT_ADVISORS_INTRODUCTION_40
+		wait until read
+		say HELP_TEXT_ADVISORS_INTRODUCTION_50
+		wait until read
+		say HELP_TEXT_ADVISORS_INTRODUCTION_60
+		wait until read
+		say HELP_TEXT_ADVISORS_INTRODUCTION_70
+		wait until read
+		say HELP_TEXT_ADVISORS_INTRODUCTION_80
+		wait until read
+		say HELP_TEXT_ADVISORS_INTRODUCTION_90
+		wait until read
+		clear dialogue
+		send good spirit home
+		send evil spirit home
+		set EgyptianJamie focus to [1187.743, 124.907, 1372.302]
+		EgyptianJamie play ANM_P_TALK1_MALE loop -1
+		move camera position to [1187.743, 124.907, 1372.302] time 5
+		move camera focus to [1166.749, 117.828, 1366.961] time 5
+		wait until camera ready
+		say HELP_TEXT_CREATURE_ISLE_INTRO_10
+		wait until read
+		say HELP_TEXT_CREATURE_ISLE_INTRO_20
+		wait until read
+		clear dialogue
+		set camera position to [1201.757, 9.16, 2009.011]
+		set camera focus to [1222.927, 7.872, 2010.384]
+		move camera position to [1153.189, 57.965, 2042.616] time 8
+		move camera focus to [1167.784, 43.503, 2032.752] time 8
+		say single line HELP_TEXT_CREATURE_ISLE_INTRO_30
+		wait until read
+		wait until camera ready
+		set camera position to [836.751, 62.216, 2026.167]
+		set camera focus to [981.91, 59.918, 1770.361]
+		move camera position to [835.764, 62.232, 2027.906] time 20
+		move camera focus to [980.923, 59.934, 1772.1] time 20
+		say single line HELP_TEXT_CREATURE_ISLE_INTRO_60
+		wait until read
+		set camera position to [1187.743, 124.907, 1372.302]
+		set camera focus to [1166.749, 117.828, 1366.961]
+		say single line HELP_TEXT_CREATURE_ISLE_INTRO_70
+		wait until read
+		clear dialogue
+		move camera position to [1136.691, 219.908, 1314.419] time 6
+		move camera focus to [1228.47, 55.377, 1707.168] time 6
+		wait until camera ready
+		eject good spirit
+		eject evil spirit
+		say HELP_TEXT_CREATURE_ISLE_INTRO_90
+		wait until read
+		say HELP_TEXT_CREATURE_ISLE_INTRO_100
+		wait until read
+		say HELP_TEXT_CREATURE_ISLE_INTRO_110
+		wait until read
+		say HELP_TEXT_CREATURE_ISLE_INTRO_120
+		wait until read
+		say HELP_TEXT_CREATURE_ISLE_INTRO_130
+		wait until read
+		send good spirit home
+		send evil spirit home
+		clear dialogue
+		disable MissionaryPaul high graphics detail
+		disable MissionaryAndy high graphics detail
+		disable MissionaryMark high graphics detail
+		disable EgyptianChristian high graphics detail
+		disable EgyptianJamie high graphics detail
+		disable EgyptianStevie high graphics detail
+		disable MissionaryBigEyes high graphics detail
+		disable AdditionalEgyptian1 high graphics detail
+		disable AdditionalEgyptian2 high graphics detail
+		disable AdditionalEgyptian3 high graphics detail
+		disable AdditionalEgyptian4 high graphics detail
+		stop music
+		start jc special SJC_SWITCH_ON_INFLUENCE
+	end cinema
+	delete MissionaryBigEyes
+	delete MissionaryThrown
+	delete Brother
+	delete Sister
+	attach MissionaryPaul to NewTown
+	attach MissionaryAndy to NewTown
+	attach MissionaryMark to NewTown
+	attach EgyptianChristian to NewTown
+	attach EgyptianJamie to NewTown
+	attach EgyptianStevie to NewTown
+	attach AdditionalEgyptian1 to NewTown
+	attach AdditionalEgyptian2 to NewTown
+	attach AdditionalEgyptian3 to NewTown
+	attach AdditionalEgyptian4 to NewTown
+	enable game time
+	set MyCreature position to [1278.805, 129.98, 1390.911]
+	release MyCreature
+	run background script TakeOverTownDelay(NewTown, 20)
+	save game in slot 20
+	run background script HelpSystemDelay
+end script CreatureIsleIntro
+
+begin script SkipIntros
+	NewTown = get town with id 0
+start
+	set NewTown player 1 relative belief 2
+	KCGreetinsCompleted = 1
+	set fade in time 1
+end script SkipIntros
+
+begin script CreatureIsleIntroSkipIntro
+	Ark = 0
+	BrokenArk = 0
+	MissionaryPaul = 0
+	MissionaryAndy = 0
+	MissionaryMark = 0
+	MissionaryAccordian = 0
+	EgyptianChristian = 0
+	EgyptianJamie = 0
+	EgyptianStevie = 0
+	MissionaryThrown = 0
+	MissionaryBigEyes = 0
+	AdditionalEgyptian1 = 0
+	AdditionalEgyptian2 = 0
+	AdditionalEgyptian3 = 0
+	AdditionalEgyptian4 = 0
+	Brother = 0
+	Sister = 0
+	Campfire = 0
+	VortexPosition = marker at [1302.243, 129.98, 1395.538]
+	Vortex = 0
+	NewTown = 0
+	Croc = 0
+	Smoke = 0
+	CameraPos = 0
+start
+	MyCreature = get player 1 creature
+	set MyCreature position to [236.513, 0, 380.322]
+	NewTown = get town with id 0
+	MissionaryPaul = create VILLAGER VILLAGER_INFO_SAILOR_ACCORDIAN at [1044.592, 102.866, 1260.764]
+	MissionaryAndy = create VILLAGER VILLAGER_INFO_NORSE_SAILOR at [1044.253, 103.214, 1266.315]
+	MissionaryMark = create VILLAGER VILLAGER_INFO_NORSE_SAILOR at [1046.699, 103.115, 1262.348]
+	MissionaryBigEyes = create VILLAGER VILLAGER_INFO_EGYPTIAN_BIG_EYES at [0.911, 0, 0.784]
+	EgyptianChristian = create VILLAGER VILLAGER_INFO_EGYPTIAN_FORESTER_MALE at [1116.455, 122.134, 1316.109]
+	EgyptianJamie = create VILLAGER VILLAGER_INFO_EGYPTIAN_FORESTER_MALE at [1117.986, 122.354, 1320.148]
+	EgyptianStevie = create VILLAGER VILLAGER_INFO_EGYPTIAN_FORESTER_MALE at [1120.758, 122.759, 1316.015]
+	MissionaryAccordian = create VILLAGER VILLAGER_INFO_SAILOR_ACCORDIAN at [27.055, 0, 891.684]
+	MissionaryThrown = create VILLAGER VILLAGER_INFO_NORSE_SAILOR at [27.055, 0, 891.684]
+	AdditionalEgyptian1 = create VILLAGER VILLAGER_INFO_EGYPTIAN_FORESTER_MALE at [1179.967, 123.249, 1370.485]
+	AdditionalEgyptian2 = create VILLAGER VILLAGER_INFO_EGYPTIAN_FORESTER_MALE at [1180.191, 123.28, 1368.382]
+	AdditionalEgyptian3 = create VILLAGER VILLAGER_INFO_EGYPTIAN_FORESTER_MALE at [1178.485, 123.28, 1367.668]
+	AdditionalEgyptian4 = create VILLAGER VILLAGER_INFO_EGYPTIAN_FORESTER_MALE at [1177.325, 123.28, 1369.669]
+	set AdditionalEgyptian1 focus to [1185.926, 122.88, 1375.99]
+	set AdditionalEgyptian2 focus to [1185.926, 122.88, 1375.99]
+	set AdditionalEgyptian3 focus to [1185.926, 122.88, 1375.99]
+	set AdditionalEgyptian4 focus to [1185.926, 122.88, 1375.99]
+	set EgyptianChristian position to [1181.868, 123.207, 1371.12]
+	set EgyptianJamie position to [1184.124, 123.201, 1371.184]
+	set EgyptianStevie position to [1181.007, 123.099, 1372.733]
+	set MissionaryPaul position to [1185.926, 122.88, 1375.99]
+	set MissionaryMark position to [1187.485, 122.859, 1376.325]
+	set MissionaryAndy position to [1185.283, 122.738, 1378.099]
+	
+	delete MissionaryAccordian
+	delete MissionaryBigEyes
+	delete MissionaryThrown
+	attach MissionaryPaul to NewTown
+	attach MissionaryAndy to NewTown
+	attach MissionaryMark to NewTown
+	attach EgyptianChristian to NewTown
+	attach EgyptianJamie to NewTown
+	attach EgyptianStevie to NewTown
+	attach AdditionalEgyptian1 to NewTown
+	attach AdditionalEgyptian2 to NewTown
+	attach AdditionalEgyptian3 to NewTown
+	attach AdditionalEgyptian4 to NewTown
+	
+	enable game time
+	set MyCreature position to [1278.805, 129.98, 1390.911]
+	release MyCreature
+	run background script TakeOverTownDelay(NewTown, 20)
+	save game in slot 20
+	run background script HelpSystemDelay
+	
+	
+	begin camera
+		set camera position to [1136.691, 219.908, 1314.419]
+		set camera focus to [1228.47, 55.377, 1707.168]
+	end camera
+	set fade in time 3
+		
+end script CreatureIsleIntroSkipIntro
+

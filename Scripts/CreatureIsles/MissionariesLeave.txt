@@ -1,0 +1,545 @@
+//LHVM Challenge source version 8
+//Decompiled with CHLASM tool by Daniels118
+
+global ArkInTornado
+global CheckPointReachedSpeech
+
+begin help script ArkReminder(AdvisorSpeak, Ark)
+start
+	begin camera
+		move camera position to [Ark] + [20, 50, 20] time 3
+		move camera focus to [Ark] time 3
+		if good spirit speaks constant AdvisorSpeak
+			eject good spirit
+		elsif evil spirit speaks constant AdvisorSpeak
+			eject evil spirit
+		end if
+		say single line constant AdvisorSpeak
+		wait until read
+		wait until camera ready
+	end camera
+end script ArkReminder
+
+begin script CreateTornadoForMissionaries(TornadoPos, Ark)
+	Tornado = 0
+start
+	wait until get distance from [Ark] to [TornadoPos] < 50
+	Tornado = cast SPELL_TORNADO spell at [TornadoPos] from [TornadoPos] radius 100 time 300 curl 0
+	SCALE of Tornado = 20
+	begin loop
+		if get distance from [Ark] to [Tornado] < 20
+			set Ark position to [Ark] + [1, 0, -1]
+		end if
+	end loop
+end script CreateTornadoForMissionaries
+
+begin script MoveAdvisorToHandPos(Ark)
+	Distance = 0
+	HandPosition = 0
+start
+	begin known dialogue
+		begin loop
+			HandPosition = marker at (hand position)
+			Distance = get distance from [Ark] to [HandPosition]
+			if Distance < 150
+				make good spirit play ANIM_BLOW at (hand position) in world speed 1
+			else
+				send good spirit home
+			end if
+			wait until 0.5 seconds
+			if in widescreen
+				send good spirit home
+				wait until not in widescreen
+			end if
+		end loop
+	end known dialogue
+end script MoveAdvisorToHandPos
+
+begin script ArkGameOver(Ark, NewArkPos, NewPosition, NewFocus)
+	Smoke = 0
+	Speech = 0
+start
+	begin cinema
+		set fade red 0 green 0 blue 0 time 0.1
+		wait until fade ready
+		set camera position to [368.893, 3.019, 1192.147]
+		set camera focus to [484.249, 25.007, 907.529]
+		start jc special SJC_CI_BOAT_CRASH2
+		set fade in time 0.1
+		wait until 4 seconds
+		set fade red 0 green 0 blue 0 time 3
+		Speech = (variable HELP_TEXT_MISSIONARIES_LEAVE_200) + (number from 0 to 4)
+		start say sound constant Speech
+		wait until fade ready
+		wait until read
+		set Ark position to [NewArkPos]
+		set camera position to [NewPosition]
+		set camera focus to [NewFocus]
+	end cinema
+	wait until widescreen transition complete
+	start jc special SJC_CI_BOAT_CRASH_END
+	set fade in time 1
+	wait until fade ready
+end script ArkGameOver
+
+begin script CheckPointReached(StartPos, StartFoc, EndPos, EndFoc, Ark, ArkPos, Bloke, BlokeNextPos, BlokeNextFoc)
+	Speech = 0
+start
+	begin cinema
+		set fade red 0 green 0 blue 0 time 1
+		wait until fade ready
+		enable Bloke high graphics detail
+		wait until widescreen transition complete
+		wait until 2 seconds
+		set camera position to [StartPos]
+		set camera focus to [StartFoc]
+		set Ark position to [ArkPos]
+		ANGLE of Ark = 270
+		set fade in time 1
+		wait until fade ready
+		Bloke play ANM_P_TALK2_MALE loop -1
+		Speech = (variable HELP_TEXT_MISSIONARIES_LEAVE_190) + CheckPointReachedSpeech
+		say single line constant Speech
+		CheckPointReachedSpeech++
+		if CheckPointReachedSpeech > 3
+			CheckPointReachedSpeech = 0
+		end if
+		wait until read
+		set fade red 0 green 0 blue 0 time 1
+		wait until fade ready
+		disable Bloke high graphics detail
+		set Bloke position to [BlokeNextPos]
+		set Bloke focus to [BlokeNextFoc]
+		ALTITUDE of Bloke = 1.3
+		Bloke play ANM_P_ATTRACT_YOUR_ATTENTION loop -1
+		set camera position to [EndPos]
+		set camera focus to [EndFoc]
+	end cinema
+	wait until widescreen transition complete
+	set fade in time 1
+	wait until fade ready
+end script CheckPointReached
+
+begin script MoveArk(Ark, T1, T2, T3)
+	HandPosition = 0
+	HandArkVector = 0
+	ActualArkVector = marker at [0, 0, 0]
+	ActualArkFocus = marker at [0, 0, 0]
+	Distance = 0
+	NewArkPosition = 0
+	NewX = 0
+	NewZ = 0
+	ActualX = 0
+	ActualZ = 0
+	ArcFocus = 0
+	TAngle = 0
+	TooFar = 0
+	DX = 0
+	DZ = 0
+	Value = 0
+	Multiplier = 0
+start
+	run background script MoveAdvisorToHandPos(Ark)
+	begin loop
+		ArkInTornado = 0
+		if get distance from [Ark] to [T1] < 100 or get distance from [Ark] to [T2] < 100 or get distance from [Ark] to [T3] < 100
+			ArkInTornado = 1
+		end if
+		HandPosition = marker at (hand position)
+		Distance = get distance from [Ark] to [HandPosition]
+		TooFar = 1
+		if Distance < 150
+			HandArkVector = marker at [Ark] - [HandPosition]
+			Multiplier = Distance / 150
+			Multiplier = 1 - Multiplier
+			Multiplier *= 2
+			if Multiplier > 1
+				Multiplier = 1
+			end if
+			TooFar = 0
+		else
+			HandArkVector = marker at [0, 0, 0]
+			Multiplier = 0
+			XPOS of ActualArkVector = (XPOS of ActualArkVector) * 0.9
+			ZPOS of ActualArkVector = (ZPOS of ActualArkVector) * 0.9
+		end if
+		if XPOS of Ark < 10 and XPOS of ActualArkVector < 0 or XPOS of Ark > 6000 and XPOS of ActualArkVector > 0 or ZPOS of Ark < 10 and ZPOS of ActualArkVector < 0 or ZPOS of Ark > 6000 and ZPOS of ActualArkVector > 0
+			HandArkVector = marker at [0, 0, 0]
+			Multiplier = 0
+			XPOS of ActualArkVector = (XPOS of ActualArkVector) * 0.9
+			ZPOS of ActualArkVector = (ZPOS of ActualArkVector) * 0.9
+		end if
+		if XPOS of ActualArkVector < XPOS of HandArkVector
+			if ArkInTornado == 1
+				XPOS of ActualArkVector -= 0.05 * Multiplier
+			else
+				XPOS of ActualArkVector += 0.05 * Multiplier
+			end if
+		elsif XPOS of ActualArkVector > XPOS of HandArkVector
+			if ArkInTornado == 1
+				XPOS of ActualArkVector += 0.05 * Multiplier
+			else
+				XPOS of ActualArkVector -= 0.05 * Multiplier
+			end if
+		end if
+		if ZPOS of ActualArkVector < ZPOS of HandArkVector
+			if ArkInTornado == 1
+				ZPOS of ActualArkVector -= 0.05 * Multiplier
+			else
+				ZPOS of ActualArkVector += 0.05 * Multiplier
+			end if
+		elsif ZPOS of ActualArkVector > ZPOS of HandArkVector
+			if ArkInTornado == 1
+				ZPOS of ActualArkVector += 0.05 * Multiplier
+			else
+				ZPOS of ActualArkVector -= 0.05 * Multiplier
+			end if
+		end if
+		NewArkPosition = marker at [Ark]
+		XPOS of NewArkPosition += XPOS of ActualArkVector
+		ZPOS of NewArkPosition += ZPOS of ActualArkVector
+		if TooFar == 0
+			DX = XPOS of HandArkVector
+			DZ = ZPOS of HandArkVector
+			if DX != 0
+				Value = DX / DZ
+				Value = arctan Value
+				if DX < 0
+					if DZ < 0
+						Value += 180
+					else
+						Value += 270
+					end if
+				else
+					if DZ < 0
+						Value += 90
+					else
+					end if
+				end if
+			end if
+			Value += 90
+			if ANGLE of Ark < Value
+				ANGLE of Ark++
+			elsif ANGLE of Ark > Value
+				ANGLE of Ark--
+			end if
+		end if
+		if XPOS of NewArkPosition >= -900 and XPOS of NewArkPosition <= 5000
+			if ZPOS of NewArkPosition >= -500 and ZPOS of NewArkPosition <= 5000
+				set Ark position to [NewArkPosition]
+			else
+				ZPOS of ActualArkVector = 0
+			end if
+		else
+			XPOS of ActualArkVector = 0
+		end if
+	end loop
+end script MoveArk
+
+begin script MissionariesLeave
+	IntroSeen = 0
+	Waypoint = 0
+	MLWaypointReached = 0
+	Ark = 0
+	MissionaryPaul = 0
+	MissionaryAndy = 0
+	MissionaryMark = 0
+	Tree = 0
+	Waypoint1 = marker at [479.652, 0, 1618.291]
+	Waypoint2 = marker at [1078.677, 0, 2002.047]
+	Waypoint3 = marker at [947.718, 0, 2804.107]
+	Waypoint4 = marker at [3131.726, 0, 2838.224]
+	Waypoint5 = marker at [3209.654, 0, 1912.113]
+	LanternPos1 = marker at [501.783, 0.345, 1619.542]
+	LanternPos2 = marker at [1101.913, 0.502, 2001.83]
+	LanternPos3 = marker at [929.087, 0, 2790.437]
+	LanternPos4 = marker at [3130.581, 1.665, 2813.247]
+	LanternPos5 = marker at [3232.956, 0.785, 1908.604]
+	Bloke1 = 0
+	ShipWaypoint[5]
+	ShipPos[5]
+	ShipFoc[5]
+	PolarBear = 0
+	GoldScroll = 0
+	HighlightPosition = marker at [707.733, 11.39, 1120.992]
+	MissionariesLeaveDYKPos = marker at [703.474, 11.79, 1136.007]
+	Lantern1 = 0
+	Lantern2 = 0
+	Lantern3 = 0
+	Lantern4 = 0
+	Lantern5 = 0
+	T = 0
+	Rock = 0
+	C = marker at [866.288, 8.71, 1739.922]
+	H = 0
+	Tornado1 = 0
+	Tornado2 = 0
+	Tornado3 = 0
+	BrokenArk = 0
+start
+	BrokenArk = get FEATURE FEATURE_INFO_ARK_WRECK at [648.136, 0, 1050.548] radius 10
+	PolarBear = create DUMB_CREATURE CREATURE_TYPE_POLAR_BEAR at [705.831, 11.39, 1127.937]
+	set PolarBear focus to [680.194, 3.737, 1127.983]
+	SCALE of PolarBear = 0.5
+	run script SetupCreatureIsleCreature(PolarBear)
+	set PolarBear name HELP_TEXT_NAME_POLAR_BEAR_01
+	ShipWaypoint[0] = marker at [567.426, 0, 1049.521]
+	ShipWaypoint[1] = marker at [426.902, 0, 1624.455]
+	ShipWaypoint[2] = marker at [1051.223, 0, 2001.436]
+	ShipWaypoint[3] = marker at [973.961, 0, 2846.193]
+	ShipWaypoint[4] = marker at [3128.105, 0, 2915.771]
+	ShipPos[0] = marker at [703.749, 148.715, 1193.48]
+	ShipPos[1] = marker at [413.788, 148.714, 1775.185]
+	ShipPos[2] = marker at [934.698, 193.938, 2007.041]
+	ShipPos[3] = marker at [934.418, 119.636, 2681.98]
+	ShipPos[4] = marker at [3017.167, 156.55, 2901.733]
+	ShipFoc[0] = marker at [577.525, 0.619, 1053.73]
+	ShipFoc[1] = marker at [508.168, 2.258, 1614.64]
+	ShipFoc[2] = marker at [1093.601, 1.409, 2011.43]
+	ShipFoc[3] = marker at [959.134, 0.726, 2808.635]
+	ShipFoc[4] = marker at [3124.759, 1.083, 2838.405]
+	Lantern1 = create OBJECT MOBILE_STATIC_INFO_COUNTRY_LANTERN at [LanternPos1]
+	Lantern2 = create OBJECT MOBILE_STATIC_INFO_COUNTRY_LANTERN at [LanternPos2]
+	Lantern3 = create OBJECT MOBILE_STATIC_INFO_COUNTRY_LANTERN at [LanternPos3]
+	Lantern4 = create OBJECT MOBILE_STATIC_INFO_COUNTRY_LANTERN at [LanternPos4]
+	Lantern5 = create OBJECT MOBILE_STATIC_INFO_COUNTRY_LANTERN at [LanternPos5]
+	Ark = create FEATURE FEATURE_INFO_ARK at [677.092, 2.68, 1090.131]
+	enable jc special SJC_ALWAYS_VISIBLE on Ark with number 0
+	delete BrokenArk
+	ANGLE of Ark = 180
+	enable Ark indestructible
+	GoldScroll = create highlight CHALLENGE_MISSIONARIES_LEAVE HIGHLIGHT_TRIAL at [HighlightPosition]
+	DojoReminderMissionariesLeave = 1
+	run script TrialNotify(GoldScroll)
+	Bloke1 = create VILLAGER VILLAGER_INFO_NORSE_SAILOR at [Waypoint1]
+	ALTITUDE of Bloke1 = 1.3
+	set Bloke1 focus to [476.502, 0, 1618.354]
+	Bloke1 play ANM_P_ATTRACT_YOUR_ATTENTION loop -1
+	disable Bloke1 moveable
+	enable Bloke1 indestructible
+	disable Bloke1 pickup
+	Tornado1 = cast SPELL_TORNADO spell at [712.567, 0, 2647.866] from [712.567, 0, 2647.866] radius 100 time 3000 curl 0
+	Tornado2 = cast SPELL_TORNADO spell at [1888.15, 0, 2936.781] from [1888.15, 0, 2936.781] radius 100 time 3000 curl 0
+	Tornado3 = cast SPELL_TORNADO spell at [3155.221, 0, 3002.904] from [3155.221, 0, 3002.904] radius 100 time 3000 curl 0
+	begin cinema
+		start music MUSIC_TYPE_SCRIPT_GENERIC_01
+		move camera position to [691.394, 14.089, 1128.486] time 5
+		move camera focus to [783.284, 16.854, 1125.421] time 5
+		wait until camera ready
+		set PolarBear focus to (camera position)
+		wait until 1 seconds
+		say HELP_TEXT_MISSIONARIES_LEAVE_10 by PolarBear
+		wait until read
+		say HELP_TEXT_MISSIONARIES_LEAVE_20 by PolarBear
+		wait until read
+		say HELP_TEXT_MISSIONARIES_LEAVE_30 by PolarBear
+		wait until read
+		clear dialogue
+		set fade red 0 green 0 blue 0 time 1
+		wait until fade ready
+		MissionaryPaul = create VILLAGER VILLAGER_INFO_NORSE_SAILOR at [669.756, 2.68, 1163.616]
+		MissionaryAndy = create VILLAGER VILLAGER_INFO_NORSE_SAILOR at [676.254, 2.68, 1089.292]
+		MissionaryMark = create VILLAGER VILLAGER_INFO_NORSE_SAILOR at [644.699, 0, 1121.858]
+		enable MissionaryPaul high graphics detail
+		enable MissionaryAndy high graphics detail
+		enable MissionaryMark high graphics detail
+		Tree = create TREE TREE_INFO_PALM at [668.392, 2.68, 1164.652]
+		set MissionaryPaul focus to [669.664, 2.68, 1165.466]
+		ALTITUDE of MissionaryAndy = 11
+		ALTITUDE of MissionaryMark = 1.3
+		set MissionaryPaul carrying CARRIED_OBJECT_AXE
+		set MissionaryMark carrying CARRIED_OBJECT_SAW
+		set MissionaryAndy carrying CARRIED_OBJECT_HAMMER
+		MissionaryPaul play ANM_P_CHOPPING_TREE loop -1
+		MissionaryMark play ANM_P_SAW_WOOD loop -1
+		MissionaryAndy play ANM_P_HAMMERING loop -1
+		wait until 1 seconds
+		set camera position to [666.874, 3.738, 1160.104]
+		set camera focus to [669.786, 3.846, 1167.532]
+		set fade in time 1
+		wait until fade ready
+		say single line HELP_TEXT_MISSIONARIES_LEAVE_40 by PolarBear
+		wait until 2 seconds
+		wait until read
+		clear dialogue
+		set camera position to [678.031, 15.155, 1092.301]
+		set camera focus to [665.492, 9.065, 1071.627]
+		wait until 2 seconds
+		set camera position to [647.89, 4.41, 1117.994]
+		set camera focus to [640.12, -4.039, 1130.602]
+		set MissionaryAndy carrying CARRIED_OBJECT_NONE
+		MissionaryAndy play ANM_P_PUZZLED loop -1
+		wait until 2 seconds
+		set camera position to [678.031, 15.155, 1092.301]
+		set camera focus to [665.492, 9.065, 1071.627]
+		wait until 2 seconds
+		set camera position to [666.874, 3.738, 1160.104]
+		set camera focus to [669.786, 3.846, 1167.532]
+		wait until 2 seconds
+		set camera position to [647.89, 4.41, 1117.994]
+		set camera focus to [640.12, -4.039, 1130.602]
+		set MissionaryAndy carrying CARRIED_OBJECT_MALLET_HEAVY
+		MissionaryAndy play ANM_P_SLEDGEHAMMER loop -1
+		wait until 2 seconds
+		set camera position to [678.031, 15.155, 1092.301]
+		set camera focus to [665.492, 9.065, 1071.627]
+		wait until 2 seconds
+		set fade red 0 green 0 blue 0 time 1
+		wait until fade ready
+		set camera position to [475.393, 5.516, 1617.629]
+		set camera focus to [480.211, 1.048, 1618.871]
+		move camera position to [465.379, 3.206, 1615.045] time 8
+		move camera focus to [473.139, 2.534, 1617.047] time 8
+		set fade in time 1
+		wait until fade ready
+		say HELP_TEXT_MISSIONARIES_LEAVE_60 by PolarBear
+		wait until read
+		say HELP_TEXT_MISSIONARIES_LEAVE_70 with interaction by PolarBear
+		wait until read
+		clear dialogue
+		set fade red 0 green 0 blue 0 time 1
+		wait until fade ready
+		delete PolarBear
+		run background script DidYouKnow(MissionariesLeaveDYKPos, variable HELP_TEXT_MISSIONARY_LEAVING_DYK, variable DYK_MISC)
+		set camera position to [662.16, 100.865, 1090.282]
+		set camera focus to [684.219, 6.307, 1089.824]
+		set MissionaryPaul carrying CARRIED_OBJECT_NONE
+		set MissionaryAndy carrying CARRIED_OBJECT_NONE
+		set MissionaryMark carrying CARRIED_OBJECT_NONE
+		disable MissionaryPaul high graphics detail
+		disable MissionaryAndy high graphics detail
+		disable MissionaryMark high graphics detail
+		delete MissionaryPaul
+		delete MissionaryAndy
+		delete MissionaryMark
+		wait until 1 seconds
+		set Ark position to [100, 0, 100]
+		start jc special SJC_CI_BOAT_LAUNCH
+		set fade in time 1
+		wait until fade ready
+		wait until 3 seconds
+		move camera position to [582.988, 11.064, 1084.707] time 9
+		move camera focus to [640.054, -17.706, 1080.071] time 9
+		wait until 12 seconds
+		say HELP_TEXT_MISSIONARIES_LEAVE_80
+		wait until read
+		say HELP_TEXT_MISSIONARIES_LEAVE_100
+		wait until read
+		move camera position to [588.997, 50, 1084.22] time 5
+		move camera focus to [652.11, 40.194, 1079.093] time 5
+		eject good spirit
+		say HELP_TEXT_MISSIONARIES_LEAVE_110
+		wait until read
+		say HELP_TEXT_MISSIONARIES_LEAVE_120
+		wait until read
+		say HELP_TEXT_MISSIONARIES_LEAVE_130 with interaction
+		wait until read
+		clear dialogue
+		wait until camera ready
+		start jc special SJC_CI_BOAT_LAUNCH_END
+		set Ark position to [599.836, 0, 1077.739]
+		set Ark focus to [601.616, 0, 1018.438]
+		move camera position to [605.548, 101.032, 977.774] time 4
+		move camera focus to [599.069, 0.672, 1088.208] time 8
+		wait until camera ready
+		snapshot CHALLENGE_MISSIONARIES_LEAVE quest success 0 alignment 0 HELP_TEXT_CREATURE_ISLE_TITLE_18 ArkReminder (variable HELP_TEXT_CI_REMINDER_20, Ark)
+		stop music
+	end cinema
+	attach music MUSIC_TYPE_SCRIPT_MISSIONARIES_BLOW_SCRIPT to Ark
+	set Ark focus to [0, 0, 0]
+	enable Lantern1 active
+	run background script MoveArk(Ark, Tornado1, Tornado2, Tornado3)
+	MLWaypointReached = 0
+	while MLWaypointReached != 5
+		if MLWaypointReached == 0
+			if get distance from [Ark] to [Waypoint1] < 30
+				disable Lantern1 active
+				enable Lantern2 active
+				stop script "MoveArk"
+				run script CheckPointReached(marker at [472.373, 4.211, 1617.926], marker at [508.327, -5.606, 1620.403], marker at [594.941, 66.757, 1702.355], marker at [451.147, 1.57, 1587.793], Ark, marker at [478.586, 0, 1603.57], Bloke1, Waypoint2, marker at [1073.404, 0, 2003.625])
+				update snapshot CHALLENGE_MISSIONARIES_LEAVE success 0.2 alignment 0 HELP_TEXT_CREATURE_ISLE_TITLE_18 ArkReminder (variable HELP_TEXT_CI_REMINDER_20, Ark)
+				run background script MoveArk(Ark, Tornado1, Tornado2, Tornado3)
+				MLWaypointReached = 1
+			end if
+		elsif MLWaypointReached == 1
+			if get distance from [Ark] to [Waypoint2] < 30
+				disable Lantern2 active
+				enable Lantern3 active
+				stop script "MoveArk"
+				run script CheckPointReached(marker at [1064.332, 5.146, 2006.594], marker at [1099.2, -1.937, 1995.23], marker at [1122.626, 25.911, 1940.005], marker at [1096.988, 17.076, 1965.691], Ark, marker at [1069.541, 0, 1972.45], Bloke1, Waypoint3, marker at [951.633, 0, 2808.174])
+				update snapshot CHALLENGE_MISSIONARIES_LEAVE success 0.4 alignment 0 HELP_TEXT_CREATURE_ISLE_TITLE_18 ArkReminder (variable HELP_TEXT_CI_REMINDER_20, Ark)
+				run background script MoveArk(Ark, Tornado1, Tornado2, Tornado3)
+				MLWaypointReached = 2
+			end if
+		elsif MLWaypointReached == 2
+			if get distance from [Ark] to [Waypoint3] < 30
+				disable Lantern3 active
+				enable Lantern4 active
+				stop script "MoveArk"
+				run script CheckPointReached(marker at [957.941, 6.795, 2814.273], marker at [947.205, 0.954, 2803.488], marker at [897.434, 17.136, 2806.713], marker at [951.462, 0.901, 2804.499], Ark, marker at [953.506, 0, 2839.915], Bloke1, Waypoint4, marker at [3130.946, 0, 2845.39])
+				update snapshot CHALLENGE_MISSIONARIES_LEAVE success 0.6 alignment 0 HELP_TEXT_CREATURE_ISLE_TITLE_18 ArkReminder (variable HELP_TEXT_CI_REMINDER_20, Ark)
+				run background script MoveArk(Ark, Tornado1, Tornado2, Tornado3)
+				MLWaypointReached = 3
+			end if
+		elsif MLWaypointReached == 3
+			if get distance from [Ark] to [Waypoint4] < 30
+				disable Lantern4 active
+				enable Lantern5 active
+				stop script "MoveArk"
+				update snapshot CHALLENGE_MISSIONARIES_LEAVE success 0.8 alignment 0 HELP_TEXT_CREATURE_ISLE_TITLE_18 ArkReminder (variable HELP_TEXT_CI_REMINDER_20, Ark)
+				run script CheckPointReached(marker at [3128.946, 5.456, 2855.889], marker at [3135.236, -1.393, 2819.903], marker at [3084.382, 24.005, 2825.469], marker at [3116.518, 13.972, 2841.222], Ark, marker at [3163.719, 0, 2878.1], Bloke1, Waypoint5, marker at [3202.389, 0, 1913.028])
+				run background script MoveArk(Ark, Tornado1, Tornado2, Tornado3)
+				MLWaypointReached = 4
+				PolarBear = create DUMB_CREATURE CREATURE_TYPE_POLAR_BEAR at [3231.746, 0.461, 1921.462]
+				set PolarBear name HELP_TEXT_NAME_POLAR_BEAR_01
+				run script SetupCreatureIsleCreature(PolarBear)
+				SCALE of PolarBear = 0.5
+				set PolarBear focus to [3207.609, 0, 1911.78]
+			end if
+		elsif MLWaypointReached == 4
+			if get distance from [Ark] to [Waypoint5] < 30
+				disable Lantern5 active
+				stop script "MoveArk"
+				MLWaypointReached = 5
+				begin cinema
+					set fade red 0 green 0 blue 0 time 1
+					wait until fade ready
+					delete Ark
+					stop script "MoveAdvisorToHandPos"
+					set camera position to [3198.624, 4.516, 1910.164]
+					set camera focus to [3326.134, -24.603, 1932.35]
+					wait until widescreen transition complete
+					set fade in time 1
+					wait until fade ready
+					say single line HELP_TEXT_MISSIONARIES_LEAVE_140
+					wait until read
+					set camera position to [3218.232, 2.914, 1914.126]
+					set camera focus to [3347.181, 14.929, 1942.879]
+					set PolarBear focus to (camera position)
+					say HELP_TEXT_MISSIONARIES_LEAVE_160 by PolarBear
+					wait until read
+					say HELP_TEXT_MISSIONARIES_LEAVE_170 by PolarBear
+					wait until read
+					say HELP_TEXT_MISSIONARIES_LEAVE_180 by PolarBear
+					wait until read
+					clear dialogue
+				end cinema with widescreen
+				run script Dojo(PolarBear)
+				delete PolarBear
+				delete Bloke1
+				DojoReminderMissionariesLeave = 0
+			end if
+		end if
+		if land height at [Ark] > 0
+			stop script "MoveArk"
+			run script ArkGameOver(Ark, ShipWaypoint[MLWaypointReached], ShipPos[MLWaypointReached], ShipFoc[MLWaypointReached])
+			wait until 5 seconds
+			run background script MoveArk(Ark, Tornado1, Tornado2, Tornado3)
+		end if
+	end while
+	delete Tornado1
+	delete Tornado2
+	delete Tornado3
+	run script DeleteDYK(MissionariesLeaveDYKPos)
+end script MissionariesLeave
+

@@ -1,0 +1,328 @@
+//LHVM Challenge source version 8
+//Decompiled with CHLASM tool by Daniels118
+
+global BabyEternity
+
+begin script TykeInChains(SitterHut, TykePenPos)
+	AnimNum = 0
+start
+	begin loop
+		if not get distance from [Tyke] to [SitterHut] < 30
+			wait until 1 seconds
+			if TykeFree != 1
+				set Tyke position to [TykePenPos]
+				wait until 1 seconds
+			end if
+		elsif Tyke played
+			if get distance from [MyCreature] to [SitterHut] < 75
+				set Tyke focus to [MyCreature]
+				wait until 0.5 seconds
+				Tyke play ANM_A_HORSE_DEADRHS loop 1
+			elsif AnimNum == 0
+				force Tyke CREATURE_SIT Tyke
+				AnimNum = 1
+			elsif AnimNum == 1
+				force Tyke CREATURE_SHIVER Tyke
+				AnimNum = 2
+			elsif AnimNum == 2
+				Tyke play ANM_A_COW_DEAD loop 1
+				AnimNum = 3
+			elsif AnimNum == 3
+				force Tyke CREATURE_RAISE_TOTEM_POLE Tyke
+				AnimNum = 0
+			end if
+		end if
+		until TykeFree == 1
+	end loop
+end script TykeInChains
+
+begin script BabySitter
+	Sitter = 0
+	SitterHutPos = marker at [1126.945, 145.513, 1233.951]
+	SitterHut = get HOUSE at [SitterHutPos]
+	SitterPos = marker at [1123.692, 145.804, 1235.391]
+	Status = 0
+	FirstSit = 0
+	TykePos = marker at [1119.179, 146.193, 1242.011]
+	TykePenPos = marker at [1141.812, 144.72, 1228.823]
+	MyCreaturePos = marker at [1112.561, 141.54, 1226.461]
+	NapTimer = create timer for 0 seconds
+	StartCamPos = marker at [1142.29, 149.479, 1228.83]
+	StartCamFoc = marker at [1154.13, 145.047, 1223.98]
+	MoveCamPos = marker at [1080.82, 154.779, 1252.62]
+	MoveCamFoc = marker at [1119.57, 146.408, 1236.79]
+	MoveCamPos2 = marker at [1101.15, 150.473, 1231.66]
+	MoveCamFoc2 = marker at [1162.88, 148.206, 1237.79]
+	MoveCamPos3 = marker at [1119.63, 148.638, 1234.57]
+	MoveCamFoc3 = marker at [1123.59, 146.329, 1235.37]
+	BeginPos = 0
+	BeginFoc = 0
+	SitterHighlight = 0
+	TykeLefftTimer = create timer for 0 seconds
+	TykeStayDuration = create timer for 0 seconds
+	Speech = 0
+	Toy1Pos = marker at [1160.312, 144.793, 1227.578]
+	Toy1 = 0
+	ToyInf1 = 0
+	Toy2Pos = marker at [1153.375, 144.72, 1224.651]
+	Toy2 = 0
+	ToyInf2 = 0
+	Toy3Pos = marker at [1138.589, 145.131, 1236.169]
+	Toy3 = 0
+	ToyInf3 = 0
+	RetreatPos = marker at [1125.692, 145.804, 1235.391]
+	Teddy = 0
+start
+	SitterHighlight = create highlight CHALLENGE_BABY_SITTER HIGHLIGHT_CHALLENGE at [SitterHutPos]
+	ALTITUDE of SitterHighlight = 15
+	Toy1 = create with angle 300 and scale 1 OBJECT MOBILE_STATIC_INFO_TOY_CUDDLY at [Toy1Pos]
+	ToyInf1 = create anti influence on Toy1 radius 2
+	Toy2 = create with angle 300 and scale 1 OBJECT MOBILE_STATIC_INFO_TOY_BALL at [Toy2Pos]
+	ToyInf2 = create anti influence on Toy2 radius 2
+	Toy3 = create with angle 40 and scale 1 OBJECT MOBILE_STATIC_INFO_TOY_DIE at [Toy3Pos]
+	ToyInf3 = create anti influence on Toy3 radius 2
+	begin loop
+		if Status == 0
+			if HEALTH of SitterHut < 0.8
+				Status = 2
+			elsif (SitterHut clicked or SitterHighlight clicked) and ScriptLockedCreature == 0
+				clear clicked object
+				if FirstSit == 0
+					begin cinema
+						enable highlight draw
+						start music MUSIC_TYPE_SCRIPT_GENERIC_01
+						set fade red 0 green 0 blue 0 time 1
+						wait until fade ready
+						wait until widescreen transition complete
+						set camera lens 43 time 0
+						Teddy = create with angle 250 and scale 1 OBJECT MOBILE_STATIC_INFO_TOY_CUDDLY at [1122.369, 144.539, 1224.989]
+						Sitter = create VILLAGER FEMALE at [1123.238, 144.72, 1235.436]
+						enable Sitter high graphics detail
+						set Sitter focus to [1118.366, 144.28, 1234.202]
+						set camera position to [1117.483, 146.711, 1220.156]
+						set camera focus to [1185.867, 148.931, 1226.974]
+						move camera position to [1121.379, 145.848, 1234.96] time 8
+						move camera focus to [1186.739, 151.911, 1255.434] time 8
+						set camera lens 35 time 20
+						set fade in time 1
+						wait until fade ready
+						wait until camera ready
+						Sitter play ANM_P_TALK1_FEMALE loop -1
+						say HELP_TEXT_BABYSITTER_10
+						wait until read
+						say HELP_TEXT_BABYSITTER_20
+						wait until read
+						set Tyke position to [1139.01, 144.72, 1227.7]
+						set Tyke focus to [1132.657, 144.72, 1231.65]
+						set camera lens 70 time 0
+						set camera position to [1119.925, 150.2, 1234.461]
+						set camera focus to [1184.806, 136.241, 1216.477]
+						move camera position to [1119.402, 150.2, 1227.92] time 6
+						move camera focus to [1186.717, 136.241, 1226.636] time 6
+						say HELP_TEXT_BABYSITTER_30 with interaction
+						wait until read
+						TykeFree = 0
+						attach Tyke leash to SitterHut
+						enable Tyke indestructible
+						disable Tyke set on fire
+						run background script TykeInChains(SitterHut, TykePenPos)
+						delete Sitter
+						set TykeLefftTimer time to 1200 seconds
+						stop music
+					end cinema
+					FirstSit = 1
+				else
+					begin cinema
+						enable highlight draw
+						start music MUSIC_TYPE_SCRIPT_GENERIC_01
+						set fade red 0 green 0 blue 0 time 1
+						wait until fade ready
+						wait until widescreen transition complete
+						set camera lens 43 time 0
+						set camera position to [1121.379, 145.848, 1234.96]
+						set camera focus to [1186.739, 151.911, 1255.434]
+						Sitter = create VILLAGER FEMALE at [1123.238, 144.72, 1235.436]
+						enable Sitter high graphics detail
+						set Sitter focus to [1118.366, 144.28, 1234.202]
+						set camera lens 35 time 20
+						set fade in time 1
+						wait until fade ready
+						wait until 1 seconds
+						Sitter play ANM_P_TALK1_FEMALE loop -1
+						say HELP_TEXT_BABYSITTER_40
+						wait until read
+						say HELP_TEXT_BABYSITTER_50 with interaction
+						wait until read
+						clear dialogue
+						set fade red 0 green 0 blue 0 time 1
+						wait until fade ready
+						delete Sitter
+						set camera position to [1181.686, 187.899, 1186.502]
+						set camera focus to [1132.012, 145.29, 1222.82]
+						set camera lens 70 time 0
+						set Tyke position to [1139.01, 144.72, 1227.7]
+						set Tyke focus to [1132.657, 144.72, 1231.65]
+						TykeFree = 0
+						attach Tyke leash to SitterHut
+						enable Tyke indestructible
+						disable Tyke set on fire
+						run background script TykeInChains(SitterHut, TykePenPos)
+						delete Sitter
+						set TykeLefftTimer time to 1200 seconds
+						set fade in time 1
+						wait until fade ready
+					end cinema
+				end if
+				set TykeStayDuration time to 1200 seconds
+				Status = 1
+			elsif (SitterHut clicked or SitterHighlight clicked) and ScriptLockedCreature == 1
+				run script ScriptLockedHighlight(SitterHighlight)
+			end if
+		elsif Status == 1
+			if (SitterHut clicked or SitterHighlight clicked) and ScriptLockedCreature == 0
+				clear clicked object
+				begin cinema
+					enable highlight draw
+					start music MUSIC_TYPE_SCRIPT_GENERIC_01
+					set fade red 0 green 0 blue 0 time 1
+					wait until fade ready
+					wait until widescreen transition complete
+					set camera lens 43 time 0
+					set camera position to [1121.379, 145.848, 1234.96]
+					set camera focus to [1186.739, 151.911, 1255.434]
+					Sitter = create VILLAGER FEMALE at [1123.238, 144.72, 1235.436]
+					enable Sitter high graphics detail
+					set Sitter focus to [1118.366, 144.28, 1234.202]
+					TykeFree = 1
+					set camera lens 35 time 20
+					set fade in time 1
+					wait until fade ready
+					wait until 1 seconds
+					Sitter play ANM_P_TALK1_FEMALE loop -1
+					if get TykeLefftTimer time remaining <= 0
+						say HELP_TEXT_BABYSITTER_60
+						wait until read
+						say HELP_TEXT_BABYSITTER_70 with interaction
+						wait until read
+						set NapTimer time to 600 seconds
+					else
+						say HELP_TEXT_BABYSITTER_80
+						wait until read
+						say HELP_TEXT_BABYSITTER_90 with interaction
+						wait until read
+						set NapTimer time to 180 seconds
+					end if
+					clear dialogue
+					set fade red 0 green 0 blue 0 time 1
+					wait until fade ready
+					delete Sitter
+					set camera position to [1181.686, 187.899, 1186.502]
+					set camera focus to [1132.012, 145.29, 1222.82]
+					Status = 2
+					detach Tyke leash
+					set camera position to [1081.164, 176.942, 1230.722]
+					set camera focus to [1146.745, 145.156, 1233.04]
+					set camera lens 70 time 0
+					set Tyke position to [TykePos]
+					set Tyke focus to [SitterPos]
+					disable Tyke indestructible
+					enable Tyke set on fire
+					release Tyke
+					set fade in time 2
+					stop music
+				end cinema
+			elsif TykeFree == 3
+				TykeFree = 1
+				Status = 0
+			elsif TykeFree == 4
+				set Tyke position to [TykePos]
+				release Tyke
+				TykeFree = 1
+				Status = 0
+			elsif get TykeStayDuration time remaining <= 0 and EveWatching < 2
+				begin dialogue
+					Speech = variable constant from HELP_TEXT_TYKE_BABYSITTER_FEEDBACK_01 to HELP_TEXT_TYKE_BABYSITTER_FEEDBACK_02
+					if good spirit speaks constant Speech
+						eject good spirit
+					else
+						eject evil spirit
+					end if
+					say single line constant Speech
+					wait until read
+				end dialogue
+				set TykeStayDuration time to 600 seconds
+			elsif (SitterHut clicked or SitterHighlight clicked) and ScriptLockedCreature == 1
+				run script ScriptLockedHighlight(SitterHighlight)
+			end if
+		elsif Status == 2
+			if HEALTH of SitterHut >= 0.8
+				Status = 0
+			elsif SitterHut clicked or SitterHighlight clicked
+				clear clicked object
+				if HEALTH of SitterHut < 0.8
+					begin cinema
+						enable highlight draw
+						start music MUSIC_TYPE_SCRIPT_GENERIC_02
+						set fade red 0 green 0 blue 0 time 1
+						wait until fade ready
+						wait until widescreen transition complete
+						set camera lens 43 time 0
+						set camera position to [1121.379, 145.848, 1234.96]
+						set camera focus to [1186.739, 151.911, 1255.434]
+						Sitter = create VILLAGER FEMALE at [1123.238, 144.72, 1235.436]
+						enable Sitter high graphics detail
+						set Sitter focus to [1118.366, 144.28, 1234.202]
+						TykeFree = 1
+						set camera lens 35 time 20
+						set fade in time 1
+						wait until fade ready
+						wait until 1 seconds
+						Sitter play ANM_P_TALK1_FEMALE loop -1
+						say single line HELP_TEXT_BABYSITTER_100 with interaction
+						wait until read
+						clear dialogue
+						set fade red 0 green 0 blue 0 time 1
+						wait until fade ready
+						delete Sitter
+						set camera position to [1181.686, 187.899, 1186.502]
+						set camera focus to [1132.012, 145.29, 1222.82]
+						set fade in time 2
+						stop music
+					end cinema
+				elsif get NapTimer time remaining > 0
+					begin cinema
+						enable highlight draw
+						start music MUSIC_TYPE_SCRIPT_GENERIC_02
+						set fade red 0 green 0 blue 0 time 1
+						wait until fade ready
+						wait until widescreen transition complete
+						set camera lens 43 time 0
+						set camera position to [1121.379, 145.848, 1234.96]
+						set camera focus to [1186.739, 151.911, 1255.434]
+						Sitter = create VILLAGER FEMALE at [1123.238, 144.72, 1235.436]
+						enable Sitter high graphics detail
+						set Sitter focus to [1118.366, 144.28, 1234.202]
+						TykeFree = 1
+						set camera lens 35 time 20
+						set fade in time 1
+						wait until fade ready
+						wait until 1 seconds
+						Sitter play ANM_P_TALK1_FEMALE loop -1
+						say single line HELP_TEXT_BABYSITTER_110 with interaction
+						wait until read
+						clear dialogue
+						set fade red 0 green 0 blue 0 time 1
+						wait until fade ready
+						delete Sitter
+						set camera position to [1181.686, 187.899, 1186.502]
+						set camera focus to [1132.012, 145.29, 1222.82]
+						set fade in time 2
+						stop music
+					end cinema
+				end if
+			end if
+		end if
+		until BabyEternity == 1
+	end loop
+end script BabySitter
+

@@ -2,7 +2,7 @@
 <Project>
   <ProjectOutputs>
     <ProjectOutput>
-      <FullPath>C:\Games\Black &amp; White\Tools\NewDLL\Debug\ddraw.dll</FullPath>
+      <FullPath>C:\Hacks\Black &amp; White\NewDLL\Debug\ddraw.dll</FullPath>
     </ProjectOutput>
   </ProjectOutputs>
   <ContentFiles />

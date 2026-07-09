@@ -1,0 +1,589 @@
+//LHVM Challenge source version 8
+//Decompiled with CHLASM tool by Daniels118
+
+global Egg
+
+begin script MoveTykeAndBeHappy(TykeCreature)
+	Markers[3]
+start
+	Markers[0] = marker at [611.166, 48.91, 1446.367]
+	Markers[1] = marker at [616.609, 48.91, 1432.363]
+	Markers[2] = marker at [608.876, 48.986, 1429.053]
+	begin loop
+		move TykeCreature position to [Markers[0]] radius 0
+		wait until get distance from [TykeCreature] to [Markers[0]] == 0
+		TykeCreature play ANM_A_COW_DEAD_ON_RHS loop 1
+		wait until TykeCreature played
+		move TykeCreature position to [Markers[1]] radius 0
+		wait until get distance from [TykeCreature] to [Markers[1]] == 0
+		TykeCreature play ANM_A_COW_DEAD_ON_RHS loop 1
+		wait until TykeCreature played
+		move TykeCreature position to [Markers[2]] radius 0
+		wait until get distance from [TykeCreature] to [Markers[2]] == 0
+		TykeCreature play ANM_A_COW_DEAD_ON_RHS loop 1
+		wait until TykeCreature played
+	end loop
+end script MoveTykeAndBeHappy
+
+begin script TykeIntro
+	CreatePos = marker at [1140.715, 127.923, 1295.494]
+	WalkToPos = marker at [1139.71, 127.97, 1298.379]
+	CamPos = marker at [1139.158, 129.001, 1300.212]
+	CamFocus = marker at [1143.295, 129.875, 1285.211]
+	WiseMan = 0
+	BeginPos = 0
+	BeginFoc = 0
+	TykesNestDYKPos = marker at [208.469, 0, 400.094]
+start
+	begin cinema
+		start music MUSIC_TYPE_SCRIPT_KHAZAR
+		BeginPos = marker at (camera position)
+		BeginFoc = marker at (camera focus)
+		WiseMan = create VILLAGER NOMADE at [CreatePos]
+		move WiseMan position to [WalkToPos] radius 0
+		move camera position to [CamPos] time 3
+		move camera focus to [CamFocus] time 3
+		wait until get distance from [WiseMan] to [WalkToPos] < 3 and camera ready
+		set WiseMan focus to [CamPos]
+		WiseMan play ANM_P_TALK1_FEMALE loop -11
+		wait until 1 seconds
+		move camera position to [1139.356, 129.063, 1299.494] time 60
+		move camera focus to [1143.41, 132.283, 1284.794] time 60
+		say HELP_TEXT_TYKE_TREE_10
+		wait until read
+		say HELP_TEXT_TYKE_TREE_30 with interaction
+		wait until read
+		say HELP_TEXT_TYKE_TREE_40
+		wait until read
+		set camera position to [440.515, 52.993, 458.32]
+		set camera focus to [256.139, 2.344, 407.533]
+		move camera position to [256.957, 13.878, 431.498] time 12
+		move camera focus to [113.983, -16.53, 300.782] time 12
+		say HELP_TEXT_TYKE_TREE_50
+		wait until read
+		say HELP_TEXT_TYKE_TREE_60
+		wait until read
+		say HELP_TEXT_TYKE_TREE_70 with interaction
+		wait until read
+		clear dialogue
+		wait until camera ready
+		snapshot CHALLENGE_TYKE_TREE quest success 0 alignment 0 HELP_TEXT_CREATURE_ISLE_TITLE_05 StandardReminder (variable HELP_TEXT_CI_REMINDER_04)
+		wait until 1 seconds
+		WiseMan play ANM_P_GOSSIP_MAN loop -1
+		set camera lens 70 time 0
+		set camera position to [1139.465, 128.956, 1299.751]
+		set camera focus to [1142.573, 132.54, 1284.907]
+		say single line HELP_TEXT_TYKE_TREE_80
+		wait until read
+		clear dialogue
+		stop music
+		move camera position to [1197.428, 203.489, 1361.471] time 6
+		move camera focus to [638.065, 1.005, 579.886] time 6
+		wait until camera ready
+		run background script DidYouKnow(TykesNestDYKPos, variable HELP_TEXT_THROW_DYK_11, variable DYK_MISC)
+	end cinema
+	delete WiseMan
+	enable Egg moveable
+	enable Egg pickup
+end script TykeIntro
+
+begin help script ViewEgg
+start
+	wait until Egg viewed and dialogue ready and get distance from (camera position) to [Egg] < 200
+	begin dialogue
+		eject evil spirit
+		make evil spirit point to Egg
+		say HELP_TEXT_TYKE_TREE_120
+		wait until read
+		say HELP_TEXT_TYKE_TREE_130
+		wait until read
+		say HELP_TEXT_TYKE_TREE_140
+		wait until read
+		say HELP_TEXT_TYKE_TREE_150
+		wait until read
+	end dialogue
+end script ViewEgg
+
+begin script BlowAndShrinkAndBlowUpTheEgg
+	Timer = 0
+start
+	wait until 5 seconds
+	Timer = create timer for 5 seconds
+	begin loop
+		set Egg target [610.912, 48.551, 1431.582] + [number from -8 to 8, 0, number from -8 to 8] time 1
+		wait until 1 seconds
+		set Egg target [610.893, 49.632, 1424.619] + [number from -8 to 8, 0, number from -8 to 8] time 0.5
+		wait until 0.5 seconds
+		set Egg target [621.588, 52.396, 1428.289] + [number from -8 to 8, 0, number from -8 to 8] time 0.5
+		wait until 0.5 seconds
+		start sound constant from LH_SAMPLE_BIRDCHEEP_01 to LH_SAMPLE_BIRDCHEEP_03 at [Egg]
+		if not get Timer time remaining > 0
+			wait until not Egg is FLYING
+			SCALE of Egg = (SCALE of Egg) + 0.1
+			start sound constant from LH_SAMPLE_EGGIMPACT_01 to LH_SAMPLE_EGGIMPACT_02 at [Egg]
+			set Egg target [Egg] + [0, 3, 0] time 3
+			wait until 5 seconds
+			Timer = create timer for 5 seconds
+		end if
+	end loop
+end script BlowAndShrinkAndBlowUpTheEgg
+
+begin script MoveEggToPosition(StartPos, EndPos, Stages, DistanceAccumalate)
+	NewPos = 0
+	Distance = 0
+start
+	while Stages > 0
+		NewPos = marker at (get target from [EndPos] to [StartPos] distance Distance angle 180)
+		Distance += DistanceAccumalate
+		set Egg position to [NewPos]
+		ALTITUDE of Egg = 0.5
+		Stages--
+	end while
+end script MoveEggToPosition
+
+begin script HippyByTree(EggPos, HatchPos)
+	HippyCreateAndSitPos = marker at [245.332, 0, 420.719]
+	TykeHippy = 0
+	Fire = 0
+	CreatureGreetPos = marker at [254.785, 0, 414.15]
+	Exit = 0
+	EggTimer = 0
+	EggAlone = 0
+	EggHatched = 0
+	Smoke = 0
+	ExitEgg = 0
+	CameraPos = 0
+	CreatureHeight = 0
+	HippyCraterPos = marker at [655.615, 86.139, 1465.545]
+	TykeReminderTimer = create timer for 0 seconds
+	ToldAboutHotPlaceCount = 0
+	TempTyke = 0
+	EggTimerStarted = 0
+	WiseMan = 0
+	WiseManAtWonderPos = marker at [1084.226, 134, 1200.813]
+	HippyAtWondetPos = marker at [1085.568, 134.084, 1200.08]
+	ETen = 0
+	TykeStatsDYKPos = marker at [607.016, 55.869, 1459.554]
+start
+	Fire = create OBJECT MOBILE_STATIC_INFO_COUNTRY_LANTERN at [EggPos]
+	enable Fire active
+	TykeHippy = create VILLAGER HIPPY at [HippyCreateAndSitPos]
+	TykeHippy play ANM_P_WHITTLING_AT_STICK loop -1
+	disable TykeHippy moveable
+	disable TykeHippy pickup
+	enable TykeHippy indestructible
+	while Exit == 0
+		if ALTITUDE of Egg != ALTITUDE of EggPos
+			Exit = 1
+		end if
+	end while
+	begin cinema
+		start music MUSIC_TYPE_SCRIPT_KHAZAR
+		enable TykeHippy high graphics detail
+		move camera position to [248.683, 0.78, 420.765] time 4
+		move camera focus to [245.591, 0.532, 420.558] time 4
+		wait until camera ready
+		TykeHippy play ANM_P_SITTING_DOWN1_OUT_OF loop 1
+		wait until TykeHippy played
+		TykeHippy play ANM_P_TALK2_MALE loop -1
+		move camera position to [248.462, 1.191, 420.75] time 20
+		move camera focus to [245.408, 0.648, 420.546] time 20
+		say HELP_TEXT_TYKE_TREE_170
+		wait until read
+		say HELP_TEXT_TYKE_TREE_180
+		wait until read
+		say HELP_TEXT_TYKE_TREE_190
+		wait until read
+		say HELP_TEXT_TYKE_TREE_210
+		wait until read
+		set camera position to [241.805, 4.534, 416.692]
+		set camera focus to [239.921, 2.375, 415.486]
+		move camera position to [240.835, 4.534, 418.208] time 18
+		move camera focus to [239.556, 2.375, 416.373] time 18
+		say HELP_TEXT_TYKE_TREE_220
+		wait until read
+		set camera position to [248.462, 1.191, 420.75]
+		set camera focus to [245.408, 0.648, 420.546]
+		say HELP_TEXT_TYKE_TREE_230
+		wait until read
+		say HELP_TEXT_TYKE_TREE_240 with interaction
+		wait until read
+		clear dialogue
+		TykeHippy play ANM_P_SITTING_DOWN1_INTO loop 1
+		wait until TykeHippy played
+		TykeHippy play ANM_P_WHITTLING_AT_STICK loop -1
+		wait until 2 seconds
+		disable TykeHippy high graphics detail
+		stop music
+	end cinema
+	update snapshot CHALLENGE_TYKE_TREE success 0 alignment 0 HELP_TEXT_CREATURE_ISLE_TITLE_05 StandardReminder (variable HELP_TEXT_CI_REMINDER_04)
+	while EggHatched == 0
+		MyCreature = get player 1 creature
+		if ALTITUDE of Egg != ALTITUDE of EggPos and not get distance from [Egg] to [EggPos] == 0
+			if Egg != get object held and not Egg in MyCreature hand
+				if get distance from [Egg] to [EggPos] < 40
+					if EggTimerStarted == 1
+						if get EggTimer time remaining <= 0
+							EggAlone = 1
+							EggTimerStarted = 0
+							delete EggTimer
+						end if
+					else
+						EggTimer = create timer for 60 seconds
+						EggTimerStarted = 1
+					end if
+				else
+					if EggAlone == 0
+						EggAlone = 1
+						ETen = create timer for 10 seconds
+					end if
+				end if
+			else
+				if EggAlone == 1
+					EggAlone = 0
+					delete EggTimer
+					delete ETen
+				end if
+			end if
+		end if
+		update snapshot CHALLENGE_TYKE_TREE success 0.25 alignment 0 HELP_TEXT_CREATURE_ISLE_TITLE_05 StandardReminder (variable HELP_TEXT_CI_REMINDER_04)
+		if EggAlone == 1 and not get distance from [Egg] to [HatchPos] < 15 and get ETen time remaining <= 0
+			delete EggTimer
+			delete ETen
+			EggTimerStarted = 0
+			EggAlone = 0
+			begin cinema
+				set fade red 0 green 0 blue 0 time 1
+				wait until fade ready
+				delete Egg
+				start music MUSIC_TYPE_SCRIPT_KHAZAR
+				wait until widescreen transition complete
+				enable TykeHippy high graphics detail
+				Egg = create OBJECT MOBILE_STATIC_INFO_EGG at [193.435, 0, 408.328]
+				enable Egg indestructible
+				set camera position to [257.492, 5.306, 393.859]
+				set camera focus to [283.559, 2.135, 386.884]
+				move camera focus to [279.732, 2.533, 409.191] time 5
+				set TykeHippy position to [282.133, 2.68, 405.507]
+				move TykeHippy position to [265.635, 2.68, 400.834] radius 0
+				run background script MoveEggToPosition(marker at [281.106, 2.68, 404.743], marker at [264.966, 2.68, 400.41], 75, 0.23)
+				set fade in time 1
+				wait until 5 seconds
+				set fade red 0 green 0 blue 0 time 1
+				wait until fade ready
+				stop script "MoveEggToPosition"
+				set Egg position to [EggPos]
+				ALTITUDE of Egg = ALTITUDE of EggPos
+				set camera position to [245.516, 18.196, 417.574]
+				set camera focus to [215.658, 16.475, 401.951]
+				set Egg position to [EggPos]
+				ALTITUDE of Egg = ALTITUDE of EggPos
+				set TykeHippy position to [HippyCreateAndSitPos]
+				set TykeHippy focus to [248.356, 1.611, 419.704]
+				move camera position to [248.356, 1.611, 419.704] time 8
+				move camera focus to [245.42, 0.838, 420.748] time 8
+				set fade in time 1
+				wait until camera ready
+				TykeHippy play ANM_P_TALK2_MALE loop -1
+				say HELP_TEXT_TYKE_TREE_250
+				wait until read
+				if ToldAboutHotPlaceCount == 0
+					say HELP_TEXT_TYKE_TREE_260
+					wait until read
+				elsif ToldAboutHotPlaceCount == 1
+					say HELP_TEXT_TYKE_TREE_241
+					wait until read
+				else
+					say HELP_TEXT_TYKE_TREE_242
+					wait until read
+				end if
+				ToldAboutHotPlaceCount++
+				clear dialogue
+				TykeHippy play ANM_P_SITTING_DOWN1_INTO loop 1
+				wait until TykeHippy played
+				TykeHippy play ANM_P_WHITTLING_AT_STICK loop -1
+				wait until 2 seconds
+				disable TykeHippy high graphics detail
+				EggAlone = 0
+				stop music
+			end cinema
+		end if
+		if not Egg exists
+			delete EggTimer
+			delete ETen
+			EggTimerStarted = 0
+			EggAlone = 0
+			wait until get distance from (camera position) to [EggPos] < 200
+			begin cinema
+				set fade red 0 green 0 blue 0 time 1
+				wait until fade ready
+				start music MUSIC_TYPE_SCRIPT_KHAZAR
+				wait until widescreen transition complete
+				enable TykeHippy high graphics detail
+				Egg = create OBJECT MOBILE_STATIC_INFO_EGG at [193.435, 0, 408.328]
+				enable Egg indestructible
+				ALTITUDE of Egg = -0.6
+				ALTITUDE of TykeHippy = -0.3
+				set TykeHippy position to [203.798, 0, 410.231]
+				move TykeHippy position to [194.858, 0, 407.681] radius 0
+				set camera position to [187.383, 2.744, 410.998]
+				set camera focus to [223.302, -4.695, 406.718]
+				move camera position to [190.499, 2.744, 416.306] time 5
+				move camera focus to [207.091, -5.273, 384.303] time 5
+				set fade in time 1
+				wait until get distance from [TykeHippy] to [194.858, 0, 407.681] == 0
+				TykeHippy play ANM_P_PICK_UP_STICKS loop 1
+				wait until 1 seconds
+				set TykeHippy position to [205.013, 0, 423.893]
+				move TykeHippy position to [222.384, 0, 420.521] radius 0
+				set camera position to [232.496, 7.046, 420.16]
+				set camera focus to [219.736, -5.156, 433.776]
+				move camera position to [231.717, 2.607, 417.468] time 4
+				move camera focus to [210.056, 1.824, 422.691] time 4
+				run background script MoveEggToPosition(marker at [205.893, 0, 423.911], marker at [222.855, 0, 420.303], 75, 0.23)
+				wait until 6 seconds
+				set fade red 0 green 0 blue 0 time 1
+				wait until fade ready
+				stop script "MoveEggToPosition"
+				set camera position to [245.516, 18.196, 417.574]
+				set camera focus to [215.658, 16.475, 401.951]
+				set Egg position to [EggPos]
+				ALTITUDE of Egg = ALTITUDE of EggPos
+				set TykeHippy position to [HippyCreateAndSitPos]
+				set TykeHippy focus to [248.356, 1.611, 419.704]
+				move camera position to [248.356, 1.611, 419.704] time 8
+				move camera focus to [245.42, 0.838, 420.748] time 8
+				set fade in time 1
+				wait until camera ready
+				TykeHippy play ANM_P_TALK2_MALE loop -1
+				say HELP_TEXT_TYKE_TREE_270
+				wait until read
+				if ToldAboutHotPlaceCount == 0
+					say HELP_TEXT_TYKE_TREE_260
+					wait until read
+				elsif ToldAboutHotPlaceCount == 1
+					say HELP_TEXT_TYKE_TREE_241
+					wait until read
+				else
+					say HELP_TEXT_TYKE_TREE_242
+					wait until read
+				end if
+				ToldAboutHotPlaceCount++
+				clear dialogue
+				TykeHippy play ANM_P_SITTING_DOWN1_INTO loop 1
+				wait until TykeHippy played
+				TykeHippy play ANM_P_WHITTLING_AT_STICK loop -1
+				wait until 2 seconds
+				disable TykeHippy high graphics detail
+				EggAlone = 0
+				stop music
+			end cinema
+		end if
+		SCALE of Egg = 0.5
+		if get distance from [Egg] to [HatchPos] < 15 and Egg != get object held and not Egg in MyCreature hand and not Egg is FLYING
+			update snapshot CHALLENGE_TYKE_TREE success 0.5 alignment 0 HELP_TEXT_CREATURE_ISLE_TITLE_05 StandardReminder (variable HELP_TEXT_CI_REMINDER_04)
+			begin cinema
+				start music MUSIC_TYPE_SCRIPT_KHAZAR
+				move camera position to [532.481, 102.197, 1438.068] time 4
+				move camera focus to [610.519, 49.599, 1429.555] time 4
+				wait until camera ready
+				say HELP_TEXT_TYKE_TREE_290
+				wait until read
+				say HELP_TEXT_TYKE_TREE_300
+				wait until read
+				stop music
+			end cinema
+			run background script BlowAndShrinkAndBlowUpTheEgg
+			ExitEgg = 0
+			while SCALE of Egg < 2 and ExitEgg == 0
+				if Egg == get object held or Egg in MyCreature hand
+					stop script "BlowAndShrinkAndBlowUpTheEgg"
+					ExitEgg = 1
+				end if
+			end while
+			stop script "BlowAndShrinkAndBlowUpTheEgg"
+			if ExitEgg == 1
+				SCALE of Egg = 1
+				begin dialogue
+					say HELP_TEXT_TYKE_TREE_310
+					wait until read
+					say HELP_TEXT_TYKE_TREE_320
+					wait until read
+					say HELP_TEXT_TYKE_TREE_330
+					wait until read
+				end dialogue
+			else
+				disable Egg pickup
+				wait until ScriptLockedCreature == 0 and get distance from (camera position) to [HatchPos] < 200
+				ScriptLockedCreature = 1
+				update snapshot CHALLENGE_TYKE_TREE success 0.75 alignment 0 HELP_TEXT_CREATURE_ISLE_TITLE_05 StandardReminder (variable HELP_TEXT_CI_REMINDER_04)
+				begin cinema
+					start music MUSIC_TYPE_SCRIPT_EPIC_02
+					move camera position to [532.481, 102.197, 1438.068] time 4
+					move camera focus to [Egg] time 4
+					wait until camera ready
+					move camera focus follow Egg
+					Smoke = create special effect SPOT_VISUAL_SMOKE at [Egg] time 12
+					SCALE of Smoke = 10
+					eject evil spirit
+					make evil spirit point at [Egg]
+					say single line HELP_TEXT_TYKE_TREE_340
+					wait until read
+					clear dialogue
+					send evil spirit home
+					TempTyke = create CREATURE CREATURE_TYPE_CHICKEN at [Egg]
+					ALIGNMENT of TempTyke = 1
+					set TempTyke name HELP_TEXT_NAME_CHICKEN_01
+					set TempTyke home position [1276.12, 167.5, 1264.176]
+					if CreatureCanBuildFlag == 0
+						disable TempTyke can learn PHYSICAL
+					end if
+					SCALE of TempTyke = 0.3
+					set TempTyke focus to [600.221, 49.203, 1435.436]
+					delete Egg with explosion
+					move camera position to [574.822, 83.666, 1444.63] time 8
+					move camera focus to [613.105, 50.447, 1434.631] time 8
+					wait until 2 seconds
+					TempTyke play ANM_A_HORSE_DEADRHS loop 10
+					wait until 4 seconds
+					eject good spirit
+					make good spirit point at [TempTyke]
+					say single line HELP_TEXT_TYKE_TREE_350
+					wait until read
+					clear dialogue
+					send good spirit home
+					set TykeHippy position to [HippyCraterPos]
+					set TykeHippy focus to [665.451, 95.374, 1465.201]
+					move camera position to [658.62, 87.514, 1465.503] time 8
+					move camera focus to [471.102, 48.677, 1468.569] time 8
+					wait until camera ready
+					say HELP_TEXT_TYKE_TREE_360
+					wait until read
+					say HELP_TEXT_TYKE_TREE_370
+					wait until read
+					wait until read
+					run background script DidYouKnow(TykeStatsDYKPos, variable HELP_TEXT_TYKESTATS_DYK_10, variable DYK_MISC)
+					clear dialogue
+					stop music
+					set fade red 0 green 0 blue 0 time 1
+					wait until fade ready
+					MyCreature = get player 1 creature
+					start music MUSIC_TYPE_SCRIPT_KHAZAR
+					set TykeHippy position to [HippyCraterPos]
+					set TykeHippy focus to [665.451, 95.374, 1465.201]
+					set camera position to [647.581, 105.261, 1492.444]
+					set camera focus to [563.986, -6.051, 1360.906]
+					set TempTyke position to [613.175, 48.91, 1428.828]
+					set MyCreature position to [593.411, 50.206, 1444.073]
+					Tyke = TempTyke
+					TempTyke = 0
+					if CreatureCanBuildFlag == 0
+						disable Tyke can learn PHYSICAL
+					end if
+					set MyCreature focus to [Tyke]
+					set Tyke focus to [MyCreature]
+					set Tyke master MyCreature
+					enable Tyke follow master
+					TykeIsReady = 1
+					wait until widescreen transition complete
+					set fade in time 1
+					wait until 4 seconds
+					force MyCreature CREATURE_WAVE_AT_FRIEND Tyke
+					wait until 3 seconds
+					say HELP_TEXT_TYKE_TREE_390
+					wait until read
+					say HELP_TEXT_TYKE_TREE_400
+					wait until read
+					clear dialogue
+					release Tyke
+					release MyCreature
+					set fade red 0 green 0 blue 0 time 1
+					wait until fade ready
+					wait until 6 seconds
+					WiseMan = create VILLAGER NOMADE at [WiseManAtWonderPos]
+					set TykeHippy position to [HippyAtWondetPos]
+					set WiseMan focus to [1081.292, 137.171, 1199.391]
+					set TykeHippy focus to [1081.292, 137.171, 1199.391]
+					ALTITUDE of WiseMan = 2.4
+					ALTITUDE of TykeHippy = 2.4
+					set camera position to [1081.292, 137.171, 1199.391]
+					set camera focus to [1136.607, 135.877, 1226.891]
+					wait until camera ready
+					set fade in time 2
+					wait until fade ready
+					say HELP_TEXT_TYKE_EDUCATION_10
+					wait until read
+					run background script TykesComingOfAge
+					say HELP_TEXT_TYKE_EDUCATION_20
+					wait until read
+					say HELP_TEXT_TYKE_EDUCATION_25
+					wait until read
+					enable highlight draw
+					set camera position to [1088.508, 170.772, 1181.741]
+					set camera focus to [1105.542, 119.873, 1289.887]
+					say HELP_TEXT_TYKE_EDUCATION_26
+					wait until read
+					close dialogue
+					delete TykeHippy
+					delete WiseMan
+					stop music
+					wait until camera ready
+				end cinema with dialogue
+					eject good spirit
+					eject evil spirit
+					say HELP_TEXT_TYKE_EDUCATION_27
+					wait until read
+					say HELP_TEXT_TYKE_EDUCATION_28
+					wait until read
+				end dialogue
+				EggHatched = 1
+				release TykeHippy
+				update snapshot CHALLENGE_TYKE_TREE success 1 alignment 0 HELP_TEXT_CREATURE_ISLE_TITLE_05 StandardReminder (variable HELP_TEXT_CI_REMINDER_04)
+				ScriptLockedCreature = 0
+			end if
+		end if
+	end while
+	DojoReminderTykesNest = 0
+end script HippyByTree
+
+begin script TykesNest
+	EggPos = 0
+	EggTree = 0
+	Highlight = 0
+	EggTreePos = marker at [235.802, 2.68, 402.458]
+	IntroHousePos = marker at [1140.394, 127.944, 1291.224]
+	House = 0
+	HatchPos = marker at [613.718, 48.08, 1434.036]
+	Steam1 = 0
+	Steam2 = 0
+	Steam3 = 0
+start
+	Steam1 = create special effect SPOT_VISUAL_STEAM at [614.96, 48.583, 1449.974] time 120000
+	Steam2 = create special effect SPOT_VISUAL_STEAM at [619.274, 48.91, 1431.055] time 120000
+	Steam3 = create special effect SPOT_VISUAL_STEAM at [606.069, 49.742, 1422.753] time 120000
+	SCALE of Steam1 = 20
+	SCALE of Steam2 = 20
+	SCALE of Steam3 = 20
+	ALTITUDE of Steam1 = -20
+	ALTITUDE of Steam2 = -20
+	ALTITUDE of Steam3 = -20
+	Highlight = create highlight CHALLENGE_TYKE_TREE HIGHLIGHT_TRIAL at [IntroHousePos]
+	ALTITUDE of Highlight = 3
+	EggTree = get FEATURE FEATURE_INFO_EGG_TREE at [EggTreePos] radius 5
+	EggPos = marker at (extra position 0 of EggTree)
+	Egg = create OBJECT MOBILE_STATIC_INFO_EGG at [EggPos]
+	enable Egg indestructible
+	ALTITUDE of Egg = ALTITUDE of EggPos
+	SCALE of Egg = 0.5
+	disable Egg moveable
+	disable Egg pickup
+	House = get HOUSE at [IntroHousePos] radius 5
+	DojoReminderTykesNest = 1
+	run script ChallengeHighlightNotifyCI(Highlight, House, variable HELP_TEXT_GENERAL_VILLAGE_WANTS_TO_TALK_01)
+	run background script HippyByTree(EggPos, HatchPos)
+	run script TykeIntro
+	run background script ViewEgg
+	while not Tyke exists
+	end while
+end script TykesNest
+

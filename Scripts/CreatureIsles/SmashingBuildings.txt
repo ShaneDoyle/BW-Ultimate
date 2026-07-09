@@ -1,0 +1,1498 @@
+//LHVM Challenge source version 8
+//Decompiled with CHLASM tool by Daniels118
+
+global RepairTowerNeeded
+global RepairCourseNeeded
+global GorillaTrialActive
+global ChimpFillingWood
+global CreatureWonder
+global Eternity
+global Gorilla
+global RefreshAllHuts
+global IntroCinemaActive
+global HolyExplosionsBatman
+global GSmashHutTotal
+global Chimp1Building
+global Chimp2Building
+global ChimpCompleteTotal
+global GorillaGone
+global ChimpsGone
+global GorillaWinsSmash
+global PlayerWinsSmash
+global PHut1
+global PHut2
+global PHut3
+global PHut4
+global PHut5
+global GHut1
+global GHut2
+global GHut3
+global GHut4
+global GHut5
+
+begin script MaintainYouth(Creature)
+start
+	begin loop
+		if ACTUAL_HEIGHT of Creature > 0.5
+			ACTUAL_HEIGHT of Creature = 0.5
+		end if
+		if ALIGNMENT of Creature > 0.5
+			ALIGNMENT of Creature = 0.5
+		elsif ALIGNMENT of Creature < -0.5
+			ALIGNMENT of Creature = -0.5
+		end if
+		until Eternity == 1
+	end loop
+end script MaintainYouth
+
+begin script NoMessingWithHealthOrAnythingElse(Chimp1, Chimp2, Chimp3)
+start
+	begin loop
+		wait until 1 seconds
+		HEALTH of Chimp1 = 1
+		HEALTH of Chimp2 = 1
+		HEALTH of Chimp3 = 1
+		HEALTH of Gorilla = 1
+		ENERGY of Chimp1 = 1
+		ENERGY of Chimp2 = 1
+		ENERGY of Chimp3 = 1
+		ENERGY of Gorilla = 1
+		EXHAUSTION of Chimp1 = 0
+		EXHAUSTION of Chimp2 = 0
+		EXHAUSTION of Chimp3 = 0
+		EXHAUSTION of Gorilla = 0
+		ITCHINESS of Chimp1 = 0
+		ITCHINESS of Chimp2 = 0
+		ITCHINESS of Chimp3 = 0
+		ITCHINESS of Gorilla = 0
+		DEHYDRATION of Chimp1 = 0
+		DEHYDRATION of Chimp2 = 0
+		DEHYDRATION of Chimp3 = 0
+		DEHYDRATION of Gorilla = 0
+		until Eternity == 1
+	end loop
+end script NoMessingWithHealthOrAnythingElse
+
+begin script BizarreReminder
+	SeeCreatureTapperTrialPos = marker at [3082.595, 42.262, 2299.16]
+	SeeCreatureTapperTrialFoc = marker at [3196.064, 11.467, 2528.898]
+start
+	begin camera
+		eject good spirit
+		move camera position to [SeeCreatureTapperTrialPos] time 3
+		move camera focus to [SeeCreatureTapperTrialFoc] time 3
+		say single line HELP_TEXT_CI_REMINDER_14
+		wait until read
+		wait until camera ready
+		send good spirit home
+	end camera
+end script BizarreReminder
+
+begin script ChimpIntroHighlight(Chimp1, Chimp2, Chimp3, WonderPos)
+	ViewChimpsPos = marker at [2941.92, 34.3184, 2065.93]
+	ViewChimpsFoc = marker at [2907.73, 28.7542, 2068.92]
+	Chimp1Pos = marker at [2902.64, 28.0615, 2084.67]
+	Chimp2Pos = marker at [2913.54, 23.7327, 2070.66]
+	Chimp3Pos = marker at [2913.27, 22.5575, 2059.91]
+	BeginPos = 0
+	BeginFoc = 0
+	ChimpHighlight = 0
+	AnotherBodgeRock = create OBJECT ROCK at [2832.35, 77.474, 1881.66]
+	BuildAction = 0
+	MyCreatureCanBuild = 0
+	LearnLoop = 0
+	HalfWayComment = 0
+	KCReminderTimer = create timer for 0 seconds
+	SeeCreatureTapperTrialPos = marker at [3082.595, 42.262, 2299.16]
+	SeeCreatureTapperTrialFoc = marker at [3196.064, 11.467, 2528.898]
+	TotalPercentage = 0.1
+	LeashedObject = 0
+start
+	DojoReminderBuildBuildings = 1
+	ChimpHighlight = create highlight CHALLENGE_BUILD_BUILDINGS HIGHLIGHT_TRIAL at [WonderPos]
+	ALTITUDE of ChimpHighlight = 15
+	run background script TrialNotifyWithScriptLockedCreature(ChimpHighlight)
+	begin loop
+		wait until 1 seconds
+		if MyCreature knows action CREATURE_ACTION_KNOWN_ABOUT_BUILD and MyCreatureCanBuild == 0
+			MyCreatureCanBuild = 1
+		end if
+		if ChimpHighlight clicked and IntroCinemaActive == 0 and ScriptLockedCreature == 0
+			IntroCinemaActive = 1
+			KCTapperCompleted = 0
+			run background script CreatureTapper
+			begin cinema
+				disable creature sound
+				BeginPos = marker at (camera position)
+				BeginFoc = marker at (camera focus)
+				set fade red 0 green 0 blue 0 time 1.5
+				wait until 1.5 seconds
+				set camera focus to [ViewChimpsFoc]
+				set camera position to [ViewChimpsPos]
+				move camera focus to [ViewChimpsFoc] + [0, 5, 0] time 25
+				move camera position to [ViewChimpsPos] - [0, 15, 0] time 25
+				set Chimp1 position to [Chimp1Pos]
+				set Chimp2 position to [Chimp2Pos]
+				set Chimp3 position to [Chimp3Pos]
+				wait until 0.5 seconds
+				set Chimp1 focus to (camera position)
+				set Chimp2 focus to (camera position)
+				set Chimp3 focus to (camera position)
+				set fade in time 2
+				wait until 2 seconds
+				snapshot CHALLENGE_BUILD_BUILDINGS quest success 0 alignment 0 HELP_TEXT_CREATURE_ISLE_TITLE_16 BizarreReminder
+				Chimp2 play ANM_A_HORSE_DEADRHS loop 1
+				say HELP_TEXT_SMASH_BUILDINGS_10 by Chimp2
+				wait until read
+				set Chimp1 focus to (camera position)
+				set Chimp2 focus to (camera position)
+				set Chimp3 focus to (camera position)
+				Chimp1 play ANM_A_COW_DEAD_ON_RHS loop 1
+				say HELP_TEXT_SMASH_BUILDINGS_20 by Chimp2
+				wait until read
+				set Chimp1 focus to (camera position)
+				set Chimp2 focus to (camera position)
+				set Chimp3 focus to (camera position)
+				say HELP_TEXT_SMASH_BUILDINGS_30 by Chimp2
+				wait until read
+				set Chimp1 focus to (camera position)
+				set Chimp2 focus to (camera position)
+				set Chimp3 focus to (camera position)
+				say HELP_TEXT_SMASH_BUILDINGS_35 by Chimp2
+				wait until read
+				say HELP_TEXT_SMASH_BUILDINGS_37 by Chimp2
+				wait until read
+				set camera position to [SeeCreatureTapperTrialPos]
+				set camera focus to [SeeCreatureTapperTrialFoc]
+				say HELP_TEXT_SMASH_BUILDINGS_40 with interaction by Chimp2
+				wait until read
+				wait until 1 seconds
+				IntroCinemaActive = 2
+			end cinema
+			release Chimp3
+		end if
+		if IntroCinemaActive == 2 and KCTapperCompleted > 0
+			if KCTapperCompleted == 1
+				update snapshot CHALLENGE_BUILD_BUILDINGS success 0.5 alignment 0 HELP_TEXT_CREATURE_ISLE_TITLE_16 StandardReminder (variable HELP_TEXT_CI_REMINDER_26)
+				disable ChimpHighlight active
+				while KCTapperCompleted == 1
+					if ChimpHighlight clicked and ScriptLockedCreature == 0
+						enable ChimpHighlight active
+						KCTapperCompleted = 2
+					elsif get KCReminderTimer time remaining <= 0 and get distance from (camera position) to [CreatureWonder] < 300 and [CreatureWonder] viewed
+						begin dialogue
+							eject good spirit
+							make good spirit point at [ChimpHighlight]
+							say single line HELP_TEXT_SMASH_BUILDINGS_310
+							wait until read
+							stop good spirit pointing
+						end dialogue
+						set KCReminderTimer time to 180 seconds
+					end if
+				end while
+			elsif KCTapperCompleted == 2
+				begin cinema
+					disable creature sound
+					IntroCinemaActive = 3
+					BeginPos = marker at (camera position)
+					BeginFoc = marker at (camera focus)
+					set fade red 0 green 0 blue 0 time 1.5
+					wait until 1.5 seconds
+					set camera focus to [ViewChimpsFoc]
+					set camera position to [ViewChimpsPos]
+					move camera focus to [ViewChimpsFoc] + [0, 5, 0] time 25
+					move camera position to [ViewChimpsPos] - [0, 15, 0] time 25
+					set Chimp1 position to [Chimp1Pos]
+					set Chimp2 position to [Chimp2Pos]
+					set Chimp3 position to [Chimp3Pos]
+					wait until 0.5 seconds
+					set Chimp1 focus to (camera position)
+					set Chimp2 focus to (camera position)
+					set Chimp3 focus to (camera position)
+					set fade in time 2
+					wait until 2 seconds
+					Chimp2 play ANM_A_HORSE_DEADRHS loop 1
+					say HELP_TEXT_SMASH_BUILDINGS_320 by Chimp2
+					wait until read
+					say HELP_TEXT_SMASH_BUILDINGS_330 with interaction by Chimp2
+					wait until read
+					wait until 1 seconds
+					set fade red 0 green 0 blue 0 time 1.5
+					wait until 1.5 seconds
+					set camera position to [BeginPos]
+					set camera focus to [BeginFoc]
+					set fade in time 2
+					wait until 2 seconds
+					IntroCinemaActive = 2
+				end cinema
+				release Chimp3
+				KCTapperCompleted = 3
+			elsif KCTapperCompleted == 3 and get distance from [MyCreature] to [WonderPos] < 100
+				LeashedObject = get object MyCreature leashed to
+				if LeashedObject exists and LeashedObject != CreatureWonder and not LeashedObject is HELD_ANY
+					if get distance from [LeashedObject] to [CreatureWonder] < 15
+						attach MyCreature leash to CreatureWonder
+					end if
+				end if
+				if MyCreature leashed to CreatureWonder
+					if LearnLoop < 8
+						if LearnLoop > 1 and HalfWayComment == 0
+							update snapshot CHALLENGE_BUILD_BUILDINGS success 0.6 alignment 0 HELP_TEXT_CREATURE_ISLE_TITLE_16 StandardReminder (variable HELP_TEXT_CI_REMINDER_26)
+							begin dialogue
+								eject good spirit
+								say single line HELP_TEXT_SMASH_BUILDINGS_290
+								wait until read
+								send good spirit home
+							end dialogue
+							HalfWayComment = 1
+						elsif LearnLoop > 5 and HalfWayComment == 1
+							update snapshot CHALLENGE_BUILD_BUILDINGS success 0.8 alignment 0 HELP_TEXT_CREATURE_ISLE_TITLE_16 StandardReminder (variable HELP_TEXT_CI_REMINDER_26)
+							begin dialogue
+								eject good spirit
+								say single line HELP_TEXT_SMASH_BUILDINGS_300
+								wait until read
+								send good spirit home
+							end dialogue
+							HalfWayComment = 2
+						end if
+						if Chimp1Building == 1
+							wait until MyCreature played
+							force MyCreature POINT_AT Chimp1
+							TotalPercentage = TotalPercentage + 0.1
+							draw MyCreature lightbulb TotalPercentage
+							wait until MyCreature played
+							release MyCreature
+							LearnLoop++
+							Chimp1Building = 0
+						elsif Chimp2Building == 1
+							wait until MyCreature played
+							force MyCreature POINT_AT Chimp2
+							TotalPercentage = TotalPercentage + 0.1
+							draw MyCreature lightbulb TotalPercentage
+							wait until MyCreature played
+							release MyCreature
+							LearnLoop++
+							Chimp2Building = 0
+						end if
+					else
+						CreatureCanBuildFlag = 1
+						force MyCreature CREATURE_HELP_BUILD_HOUSE CreatureWonder
+						wait until MyCreature played
+						release MyCreature
+						IntroCinemaActive = 3
+						begin cinema
+							disable creature sound
+							BeginPos = marker at (camera position)
+							BeginFoc = marker at (camera focus)
+							set fade red 0 green 0 blue 0 time 1.5
+							wait until 1.5 seconds
+							set camera position to [ViewChimpsPos]
+							set camera focus to [ViewChimpsFoc]
+							move camera focus to [ViewChimpsFoc] + [0, 5, 0] time 25
+							move camera position to [ViewChimpsPos] - [0, 15, 0] time 25
+							set Chimp1 position to [Chimp1Pos]
+							set Chimp2 position to [Chimp2Pos]
+							set Chimp3 position to [Chimp3Pos]
+							wait until 0.5 seconds
+							set Chimp1 focus to (camera position)
+							set Chimp2 focus to (camera position)
+							set Chimp3 focus to (camera position)
+							set fade in time 2
+							wait until 2 seconds
+							Chimp1 play ANM_A_COW_DEAD_ON_RHS loop 1
+							say single line HELP_TEXT_SMASH_BUILDINGS_50 with interaction by Chimp2
+							wait until read
+							close dialogue
+							set Chimp1 focus to (camera position)
+							set Chimp2 focus to (camera position)
+							set Chimp3 focus to (camera position)
+							wait until 1 seconds
+							set fade red 0 green 0 blue 0 time 1.5
+							wait until 1.5 seconds
+							set camera position to [BeginPos]
+							set camera focus to [BeginFoc]
+							set fade in time 2
+						end cinema
+						update snapshot CHALLENGE_BUILD_BUILDINGS success 1 alignment 0 HELP_TEXT_CREATURE_ISLE_TITLE_16 StandardReminder (variable HELP_TEXT_CI_REMINDER_26)
+						ChimpsGone = 1
+						release Chimp3
+						disable ChimpHighlight active
+						IntroCinemaActive = 4
+						DojoReminderBuildBuildings = 0
+					end if
+				end if
+			end if
+		end if
+		until IntroCinemaActive == 4
+	end loop
+end script ChimpIntroHighlight
+
+begin script BuildDecisions(Chimp, Hut)
+	WoodStore = 0
+	WoodSupply = 0
+	HutFixed = 0
+start
+	WoodStore = get building woodpile in Hut
+	begin loop
+		if Hut exists
+			if get distance from [Chimp] to [Hut] < 50
+				if Hut on fire
+					ENERGY of Chimp = 1
+					EXHAUSTION of Chimp = 0
+					force Chimp CREATURE_PUT_OUT_FIRE_WITH_MAGIC_WATER Hut
+					wait until Chimp played or 20 seconds
+				elsif HEALTH of Hut < 1
+					if not WoodStore exists
+						ENERGY of Chimp = 1
+						EXHAUSTION of Chimp = 0
+						force Chimp CREATURE_CAST_MAGIC_WOOD_BY_BUILDING_SITE Hut
+						wait until Chimp played or 20 seconds or RefreshAllHuts == 1
+						WoodStore = get building woodpile in Hut
+					end if
+					WoodSupply = get resource WOOD in WoodStore
+					if WoodSupply < 400
+						ENERGY of Chimp = 1
+						EXHAUSTION of Chimp = 0
+						force Chimp CREATURE_CAST_MAGIC_WOOD_BY_BUILDING_SITE Hut
+						wait until Chimp played or 20 seconds or RefreshAllHuts == 1
+					elsif get distance from [Chimp] to [Hut] < 40
+						force Chimp CREATURE_HELP_BUILD_HOUSE Hut
+						wait until Chimp played or 20 seconds
+					else
+						move Chimp position to [Hut] radius 0
+						wait until get distance from [Chimp] to [Hut] < 40 or 20 seconds
+						move Chimp position to [Chimp] radius 0
+					end if
+				else
+					HutFixed = 1
+				end if
+			else
+				move Chimp position to [Hut] radius 0
+				wait until get distance from [Chimp] to [Hut] < 40 or 20 seconds
+				move Chimp position to [Chimp] radius 0
+			end if
+		else
+			wait until 2 seconds
+		end if
+		until HutFixed == 1
+		until GorillaTrialActive != 2
+		until RefreshAllHuts == 1
+	end loop
+end script BuildDecisions
+
+begin script RepairGorillaHuts(Chimp, ChimpNumber)
+	HutFixed = 0
+	EndWierdLoop = 0
+start
+	if ChimpNumber == 1
+		begin loop
+			run script BuildDecisions(Chimp, PHut1)
+			run script BuildDecisions(Chimp, PHut2)
+			run script BuildDecisions(Chimp, PHut3)
+			run script BuildDecisions(Chimp, PHut4)
+			run script BuildDecisions(Chimp, PHut5)
+			EndWierdLoop = 1
+			until RefreshAllHuts == 1 or EndWierdLoop == 1
+		end loop
+	else
+		begin loop
+			run script BuildDecisions(Chimp, GHut1)
+			run script BuildDecisions(Chimp, GHut2)
+			run script BuildDecisions(Chimp, GHut3)
+			run script BuildDecisions(Chimp, GHut4)
+			run script BuildDecisions(Chimp, GHut5)
+			EndWierdLoop = 1
+			until RefreshAllHuts == 1 or EndWierdLoop == 1
+		end loop
+	end if
+	ChimpCompleteTotal++
+end script RepairGorillaHuts
+
+begin script ImmortalHuts(PHut1Pos, PHut2Pos, PHut3Pos, PHut4Pos, PHut5Pos, GHut1Pos, GHut2Pos, GHut3Pos, GHut4Pos, GHut5Pos, SmashTown)
+	UnwantedWood = 0
+start
+	PHut1 = get HOUSE at [PHut1Pos] radius 10
+	attach PHut1 to SmashTown
+	PHut2 = get HOUSE at [PHut2Pos] radius 10
+	attach PHut2 to SmashTown
+	PHut3 = get HOUSE at [PHut3Pos] radius 10
+	attach PHut3 to SmashTown
+	PHut4 = get HOUSE ABODE_INFO_JAPANESE_WONDER at [PHut4Pos] radius 10
+	attach PHut4 to SmashTown
+	PHut5 = get HOUSE at [PHut5Pos] radius 10
+	attach PHut5 to SmashTown
+	GHut1 = get HOUSE at [GHut1Pos] radius 10
+	attach GHut1 to SmashTown
+	GHut2 = get HOUSE at [GHut2Pos] radius 10
+	attach GHut2 to SmashTown
+	GHut3 = get HOUSE at [GHut3Pos] radius 10
+	attach GHut3 to SmashTown
+	GHut4 = get HOUSE ABODE_INFO_JAPANESE_WONDER at [GHut4Pos] radius 10
+	attach GHut4 to SmashTown
+	GHut5 = get HOUSE at [GHut5Pos] radius 10
+	attach GHut5 to SmashTown
+	begin loop
+		//wait until 0.1 seconds
+		if PHut1 exists
+			if HEALTH of PHut1 < 0.9 // Used to be 0.1 but this felt inconsistent and bad.
+				disable PHut1 set on fire
+				delete fire at [PHut1] radius 3
+				set PHut1 temperature 0
+				HEALTH of PHut1 = 0.8
+			end if
+		else
+			PHut1 = create HOUSE ABODE_INFO_EGYPTIAN_TEMPLE_X at [PHut1Pos]
+			HEALTH of PHut1 = 0.8
+			attach PHut1 to SmashTown
+		end if
+		if PHut2 exists
+			if HEALTH of PHut2 < 0.9 // Used to be 0.1 but this felt bad...
+				disable PHut2 set on fire
+				delete fire at [PHut2] radius 3
+				set PHut2 temperature 0
+				HEALTH of PHut2 = 0.8
+			end if
+		else
+			PHut2 = create HOUSE ABODE_INFO_EGYPTIAN_SHACK_Y at [PHut2Pos]
+			HEALTH of PHut2 = 0.8
+			attach PHut2 to SmashTown
+		end if
+		if PHut3 exists
+			if HEALTH of PHut3 < 0.9 // Used to be 0.1 but this felt bad...
+				disable PHut3 set on fire
+				delete fire at [PHut3] radius 3
+				set PHut3 temperature 0
+				HEALTH of PHut3 = 0.8
+			end if
+		else
+			PHut3 = create HOUSE ABODE_INFO_EGYPTIAN_TEMPLE_X at [PHut3Pos]
+			HEALTH of PHut3 = 0.8
+			attach PHut3 to SmashTown
+		end if
+		if PHut4 exists
+			if HEALTH of PHut4 < 0.9 // Used to be 0.1 but this felt bad...
+				disable PHut4 set on fire
+				delete fire at [PHut4] radius 3
+				set PHut4 temperature 0
+				HEALTH of PHut4 = 0.8
+			end if
+		else
+			PHut4 = create HOUSE ABODE_INFO_JAPANESE_WONDER at [PHut4Pos]
+			HEALTH of PHut4 = 0.8
+			attach PHut4 to SmashTown
+		end if
+		if PHut5 exists
+			if HEALTH of PHut5 < 0.9 // Used to be 0.1 but this felt bad...
+				disable PHut5 set on fire
+				delete fire at [PHut5] radius 3
+				set PHut5 temperature 0
+				HEALTH of PHut5 = 0.8
+			end if
+		else
+			PHut5 = create HOUSE ABODE_INFO_EGYPTIAN_SHACK_Y at [PHut5Pos]
+			HEALTH of PHut5 = 0.8
+			attach PHut5 to SmashTown
+		end if
+		if GHut1 exists
+			if HEALTH of GHut1 < 0.1
+				disable GHut1 set on fire
+				delete fire at [GHut1] radius 3
+				set GHut1 temperature 0
+				HEALTH of GHut1 = 0.1
+			end if
+		else
+			GHut1 = create HOUSE ABODE_INFO_EGYPTIAN_CRECHE at [GHut1Pos]
+			HEALTH of GHut1 = 0.1
+			attach GHut1 to SmashTown
+		end if
+		if GHut2 exists
+			if HEALTH of GHut2 < 0.1
+				disable GHut2 set on fire
+				delete fire at [GHut2] radius 3
+				set GHut2 temperature 0
+				HEALTH of GHut2 = 0.1
+			end if
+		else
+			GHut2 = create HOUSE ABODE_INFO_EGYPTIAN_SHACK_Y at [GHut2Pos]
+			HEALTH of GHut2 = 0.1
+			attach GHut2 to SmashTown
+		end if
+		if GHut3 exists
+			if HEALTH of GHut3 < 0.1
+				disable GHut3 set on fire
+				delete fire at [GHut3] radius 3
+				set GHut3 temperature 0
+				HEALTH of GHut3 = 0.1
+			end if
+		else
+			GHut3 = create HOUSE ABODE_INFO_EGYPTIAN_TEMPLE_Y at [GHut3Pos]
+			HEALTH of GHut3 = 0.1
+			attach GHut3 to SmashTown
+		end if
+		if GHut4 exists
+			if HEALTH of GHut4 < 0.1
+				disable GHut4 set on fire
+				delete fire at [GHut4] radius 3
+				set GHut4 temperature 0
+				HEALTH of GHut4 = 0.1
+			end if
+		else
+			GHut4 = create HOUSE ABODE_INFO_JAPANESE_WONDER at [GHut4Pos]
+			HEALTH of GHut4 = 0.1
+			attach GHut4 to SmashTown
+		end if
+		if GHut5 exists
+			if HEALTH of GHut5 < 0.1
+				disable GHut5 set on fire
+				delete fire at [GHut5] radius 3
+				set GHut5 temperature 0
+				HEALTH of GHut5 = 0.1
+			end if
+		else
+			GHut5 = create HOUSE ABODE_INFO_EGYPTIAN_TENT at [GHut5Pos]
+			HEALTH of GHut5 = 0.1
+			attach GHut5 to SmashTown
+		end if
+		if RefreshAllHuts == 1
+			delete fire at [PHut1] radius 20
+			delete fragments at [PHut3] radius 200
+			UnwantedWood = get STORE at [PHut3] radius 100
+			while UnwantedWood exists
+				delete UnwantedWood
+				UnwantedWood = get STORE at [PHut3] radius 100
+			end while
+			HEALTH of PHut1 = 1
+			enable PHut1 set on fire
+			delete fire at [PHut2] radius 20
+			HEALTH of PHut2 = 1
+			enable PHut2 set on fire
+			delete fire at [PHut3] radius 20
+			HEALTH of PHut3 = 1
+			enable PHut3 set on fire
+			delete fire at [PHut4] radius 20
+			HEALTH of PHut4 = 1
+			enable PHut4 set on fire
+			delete fire at [PHut5] radius 20
+			HEALTH of PHut5 = 1
+			enable PHut5 set on fire
+			delete fire at [GHut1] radius 20
+			HEALTH of GHut1 = 1
+			enable GHut1 set on fire
+			delete fire at [GHut2] radius 20
+			HEALTH of GHut2 = 1
+			enable GHut2 set on fire
+			delete fire at [GHut3] radius 20
+			HEALTH of GHut3 = 1
+			enable GHut3 set on fire
+			delete fire at [GHut4] radius 20
+			HEALTH of GHut4 = 1
+			enable GHut4 set on fire
+			delete fire at [GHut5] radius 20
+			HEALTH of GHut5 = 1
+			enable GHut5 set on fire
+			RefreshAllHuts = 0
+		end if
+		until PlayerWinsSmash == 1
+	end loop
+end script ImmortalHuts
+
+begin script ImmortalWonder(WonderPos, WonderTown)
+start
+	begin loop
+		if CreatureWonder exists
+			if HEALTH of CreatureWonder < 0.3
+				HEALTH of CreatureWonder = 0.3
+			end if
+		else
+			CreatureWonder = create HOUSE ABODE_INFO_AZTEC_WONDER at [WonderPos]
+			HEALTH of CreatureWonder = 0.3
+			attach CreatureWonder to WonderTown
+		end if
+		wait until 1 seconds
+		until Eternity == 1
+	end loop
+end script ImmortalWonder
+
+begin script ChimpBuilder(Chimp, ChimpPos, ChimpNumber)
+	WoodStore = 0
+	AnimNum = 0
+	TinyRock = 0
+	WoodSupply = 0
+	WonderHealth = 0
+	RandomAnim = 0
+	AllFixed = 0
+start
+	begin loop
+		if IntroCinemaActive == 1 or IntroCinemaActive == 3
+		elsif GorillaTrialActive == 0
+			AllFixed = 0
+			WonderHealth = HEALTH of CreatureWonder
+			WoodStore = get building woodpile in CreatureWonder
+			if WoodStore exists
+				WoodSupply = get resource WOOD in WoodStore
+			else
+				WoodSupply = 0
+			end if
+			if Chimp on fire
+				ENERGY of Chimp = 1
+				EXHAUSTION of Chimp = 0
+				force Chimp CREATURE_PUT_OUT_FIRE_WITH_MAGIC_WATER Chimp
+				wait until Chimp played or 20 seconds
+				wait until 5 seconds
+			elsif CreatureWonder on fire
+				ENERGY of Chimp = 1
+				EXHAUSTION of Chimp = 0
+				force Chimp CREATURE_PUT_OUT_FIRE_WITH_MAGIC_WATER CreatureWonder
+				wait until Chimp played or 20 seconds
+				wait until 5 seconds
+			elsif WoodStore on fire
+				ENERGY of Chimp = 1
+				EXHAUSTION of Chimp = 0
+				force Chimp CREATURE_PUT_OUT_FIRE_WITH_MAGIC_WATER WoodStore
+				wait until Chimp played or 20 seconds
+				wait until 5 seconds
+			elsif not WoodStore exists and ChimpFillingWood == 0
+				ChimpFillingWood = 1
+				ENERGY of Chimp = 1
+				EXHAUSTION of Chimp = 0
+				force Chimp CREATURE_CAST_MAGIC_WOOD_BY_BUILDING_SITE CreatureWonder
+				wait until Chimp played or 20 seconds
+				WoodStore = get building woodpile in CreatureWonder
+				ChimpFillingWood = 0
+				wait until 5 seconds
+			elsif WoodSupply < 400 and WoodSupply >= 0 and ChimpFillingWood == 0
+				ChimpFillingWood = 1
+				ENERGY of Chimp = 1
+				EXHAUSTION of Chimp = 0
+				force Chimp CREATURE_CAST_MAGIC_WOOD_BY_BUILDING_SITE CreatureWonder
+				wait until Chimp played or 20 seconds
+				wait until 5 seconds
+				ChimpFillingWood = 0
+			elsif ChimpFillingWood == 1 and WoodSupply < 100 and get distance from [Chimp] to [CreatureWonder] < 100
+				force Chimp CREATURE_SCRATCH Chimp
+				wait until Chimp played or 20 seconds
+			elsif ChimpFillingWood == 1 and WoodSupply < 100 and not get distance from [Chimp] to [CreatureWonder] < 100
+				move Chimp position to [ChimpPos] radius 0
+				wait until get distance from [Chimp] to [ChimpPos] < 40 or 30 seconds
+				move Chimp position to [Chimp] radius 0
+			elsif AnimNum == 0 and HEALTH of CreatureWonder < 1
+				if not get distance from [Chimp] to [CreatureWonder] < 75
+					move Chimp position to [CreatureWonder] radius 0
+					wait until get distance from [Chimp] to [CreatureWonder] < 50 or 30 seconds
+					move Chimp position to [Chimp] radius 0
+				end if
+				if SCALE of Chimp >= 1
+					Chimp2Building = 1
+				else
+					Chimp1Building = 1
+				end if
+				force Chimp CREATURE_HELP_BUILD_HOUSE CreatureWonder
+				wait until Chimp played or 20 seconds
+				AnimNum++
+			elsif AnimNum == 1 and HEALTH of CreatureWonder < 1
+				Chimp play ANM_A_COW_DOWNED_ON_RHS loop 1
+				wait until Chimp played or 20 seconds
+				AnimNum++
+			elsif AnimNum == 2 and HEALTH of CreatureWonder < 1
+				if not get distance from [Chimp] to [CreatureWonder] < 75
+					move Chimp position to [CreatureWonder] radius 0
+					wait until get distance from [Chimp] to [CreatureWonder] < 50 or 30 seconds
+					move Chimp position to [Chimp] radius 0
+				end if
+				force Chimp CREATURE_HELP_BUILD_HOUSE CreatureWonder
+				wait until Chimp played or 20 seconds
+				AnimNum++
+			elsif AnimNum == 3 and HEALTH of CreatureWonder < 1
+				Chimp play ANM_A_COW_DOWNED_ON_LHS loop 1
+				wait until Chimp played or 20 seconds
+				AnimNum = 0
+			elsif HEALTH of CreatureWonder >= 1
+				if get distance from [Gorilla] to [CreatureWonder] < 100
+					if AnimNum == 0
+						force Chimp POINT_AT Gorilla
+						wait until Chimp played or 20 seconds
+						AnimNum = 1
+					else
+						force Chimp CREATURE_RUN_AWAY_FROM_PLAYER Gorilla
+						wait until Chimp played or 20 seconds
+						AnimNum = 0
+					end if
+				else
+					if AnimNum == 0
+						force Chimp POINT_AT CreatureWonder
+						wait until Chimp played or 20 seconds
+						AnimNum = 1
+					elsif AnimNum == 1
+						Chimp play ANM_A_COW_DEAD_ON_RHS loop 1
+						wait until Chimp played or 20 seconds
+						AnimNum = 2
+					else
+						RandomAnim = number from 0 to 2
+						if RandomAnim == 0
+							Chimp play ANM_A_COW_LANDED_RIGHT_SIDE loop 1
+							wait until Chimp played or 20 seconds
+						elsif RandomAnim == 1
+							Chimp play ANM_A_PIG_LAND_GET_UPLHS loop 1
+							wait until Chimp played or 20 seconds
+						else
+							Chimp play ANM_A_PIG_LAND_GET_UPRHS loop 1
+							wait until Chimp played or 20 seconds
+						end if
+						AnimNum = 0
+					end if
+				end if
+			end if
+		elsif GorillaTrialActive == 1
+			AllFixed = 0
+			if not get distance from [Chimp] to [ChimpPos] < 100
+				move Chimp position to [ChimpPos] radius 0
+				wait until 10 seconds
+			elsif Chimp played
+				force Chimp CREATURE_SCRATCH Chimp
+			end if
+		elsif GorillaTrialActive == 2 and AllFixed == 0
+			run script RepairGorillaHuts(Chimp, ChimpNumber)
+			AllFixed = 1
+			if GorillaTrialActive == 2 and ChimpCompleteTotal > 1
+				GorillaTrialActive = 0
+				ChimpCompleteTotal = 0
+			end if
+		end if
+		until Eternity == 1
+	end loop
+end script ChimpBuilder
+
+begin script GorillaPractise(GorillaPos)
+	AnimNum = 0
+	PlayedTimer = create timer for 0 seconds
+	GiveItARest = create timer for 0 seconds
+start
+	begin loop
+		if Gorilla on fire
+			ENERGY of Gorilla = 1
+			EXHAUSTION of Gorilla = 0
+			force Gorilla CREATURE_PUT_OUT_FIRE_WITH_MAGIC_WATER Gorilla
+			wait until Gorilla played or 20 seconds
+			wait until 5 seconds
+		elsif HEALTH of CreatureWonder > 0.5 and get GiveItARest time remaining <= 0
+			if Gorilla played or get PlayedTimer time remaining <= 0
+				if AnimNum == 0
+					force Gorilla CREATURE_KICK CreatureWonder
+					AnimNum = 1
+					set PlayedTimer time to 60 seconds
+				elsif AnimNum == 1
+					force Gorilla CREATURE_STOMP CreatureWonder
+					AnimNum = 2
+					set PlayedTimer time to 60 seconds
+				elsif AnimNum == 2
+					Gorilla play ANM_A_COW_WALK loop 1
+					AnimNum = 3
+					set PlayedTimer time to 30 seconds
+				elsif AnimNum == 3
+					ENERGY of Gorilla = 1
+					EXHAUSTION of Gorilla = 0
+					force Gorilla CREATURE_CAST_FIREBALL CreatureWonder
+					AnimNum = 4
+					set PlayedTimer time to 30 seconds
+				else
+					ENERGY of Gorilla = 1
+					EXHAUSTION of Gorilla = 0
+					force Gorilla CREATURE_CAST_LIGHTNING_BOLT CreatureWonder
+					AnimNum = 0
+					set PlayedTimer time to 30 seconds
+					set GiveItARest time to 60 seconds
+				end if
+			end if
+		else
+			if Gorilla played or get PlayedTimer time remaining <= 0
+				if not get distance from [Gorilla] to [GorillaPos] < 5
+					move Gorilla position to [GorillaPos] radius 0
+					wait until get distance from [Gorilla] to [GorillaPos] < 5 or 30 seconds
+				elsif AnimNum == 0
+					force Gorilla POINT_AT CreatureWonder
+					AnimNum = 1
+					set PlayedTimer time to 20 seconds
+				elsif AnimNum == 1
+					Gorilla play ANM_A_COW_DEAD loop 1
+					AnimNum = 0
+					set PlayedTimer time to 20 seconds
+				end if
+			end if
+		end if
+		until GorillaTrialActive == 1
+	end loop
+end script GorillaPractise
+
+begin script RampagingPlayer
+	Hut1Toast = 0
+	Hut2Toast = 0
+	Hut3Toast = 0
+	Hut4Toast = 0
+	Hut5Toast = 0
+	TykeTimer = create timer for 0 seconds
+	TykeBusy = 0
+	TykeBig = 0
+	TykeStrong = 0
+	TykeWeak = 0
+	TykeFreeze = 0
+	TykeSmall = 0
+	RandomNum = 0
+	MyCAction = 0
+	PSmashHutTotal = 0
+	GorillaComment = 1
+	AntiInf = 0
+	AntiInfPos = marker at [2812.59, 63.4877, 2321.11]
+	Spark1 = 0
+	Spark2 = 0
+	Spark3 = 0
+	Spark4 = 0
+	Spark5 = 0
+start
+	RandomNum = number from 10 to 30
+	set TykeTimer time to RandomNum seconds
+	PSmashHutTotal = 0
+	GorillaComment = 1
+	AntiInf = create anti influence at position [AntiInfPos] radius 300
+	Spark1 = create special effect SPOT_VISUAL_HIGHLIGHT_ON_OBJECT on PHut1 time -1
+	Spark2 = create special effect SPOT_VISUAL_HIGHLIGHT_ON_OBJECT on PHut2 time -1
+	Spark3 = create special effect SPOT_VISUAL_HIGHLIGHT_ON_OBJECT on PHut3 time -1
+	Spark4 = create special effect SPOT_VISUAL_HIGHLIGHT_ON_OBJECT on PHut4 time -1
+	Spark5 = create special effect SPOT_VISUAL_HIGHLIGHT_ON_OBJECT on PHut5 time -1
+	while GorillaWinsSmash == 0 and PlayerWinsSmash == 0 and HolyExplosionsBatman == 0
+		wait until 1 seconds
+		MyCAction = variable get MyCreature current action
+		if MyCAction == variable CREATURE_CAST_EXPLOSION or MyCAction == variable CREATURE_CAST_EXPLOSION_PU1 or MyCAction == variable CREATURE_CAST_EXPLOSION_PU2
+			HolyExplosionsBatman = 1
+		end if
+		if TykeBusy == 1
+			if Tyke played
+				release Tyke
+				TykeBusy = 0
+			end if
+		elsif get TykeTimer time remaining <= 0 and get distance from [Tyke] to [MyCreature] < 100 and TykeFree == 1
+			if get Tyke spell CREATURE_SPELL_STRONG skill == 1 and TykeStrong == 0
+				ENERGY of Tyke = 1
+				EXHAUSTION of Tyke = 0
+				HEALTH of Tyke = 1
+				force Tyke CREATURE_CAST_STRONG_ON_CREATURE MyCreature
+				TykeBusy = 1
+				TykeStrong = 1
+			elsif get Tyke spell CREATURE_SPELL_BIG skill == 1 and TykeBig == 0
+				ENERGY of Tyke = 1
+				EXHAUSTION of Tyke = 0
+				HEALTH of Tyke = 1
+				force Tyke CREATURE_CAST_BIG_ON_CREATURE MyCreature
+				TykeBusy = 1
+				TykeBig = 1
+			elsif get Tyke spell CREATURE_SPELL_WEAK skill == 1 and TykeWeak == 0
+				ENERGY of Tyke = 1
+				EXHAUSTION of Tyke = 0
+				HEALTH of Tyke = 1
+				force Tyke CREATURE_CAST_WEAK_ON_CREATURE Gorilla
+				TykeBusy = 1
+				TykeWeak = 1
+			elsif get Tyke spell CREATURE_SPELL_FREEZE skill == 1 and TykeFreeze == 0
+				ENERGY of Tyke = 1
+				EXHAUSTION of Tyke = 0
+				HEALTH of Tyke = 1
+				force Tyke CREATURE_CAST_FREEZE_ON_CREATURE Gorilla
+				TykeBusy = 1
+				TykeFreeze = 1
+			elsif get Tyke spell CREATURE_SPELL_SMALL skill == 1 and TykeSmall == 0
+				ENERGY of Tyke = 1
+				EXHAUSTION of Tyke = 0
+				HEALTH of Tyke = 1
+				force Tyke CREATURE_CAST_SMALL_ON_CREATURE Gorilla
+				TykeBusy = 1
+				TykeSmall = 1
+			end if
+			set TykeTimer time to 30 seconds
+		end if
+		if Hut1Toast == 0 and HEALTH of PHut1 <= 0.9
+			Hut1Toast = 1
+			delete Spark1
+			begin dialogue
+				eject evil spirit
+				say single line HELP_TEXT_SMASH_BUILDINGS_70
+				wait until read
+			end dialogue
+			PSmashHutTotal++
+		end if
+		if Hut2Toast == 0 and HEALTH of PHut2 <= 0.9
+			delete Spark2
+			Hut2Toast = 1
+			begin dialogue
+				eject evil spirit
+				say single line HELP_TEXT_SMASH_BUILDINGS_80
+				wait until read
+			end dialogue
+			PSmashHutTotal++
+		end if
+		if Hut3Toast == 0 and HEALTH of PHut3 <= 0.9
+			delete Spark3
+			Hut3Toast = 1
+			begin dialogue
+				eject evil spirit
+				say single line HELP_TEXT_SMASH_BUILDINGS_90
+				wait until read
+			end dialogue
+			PSmashHutTotal++
+		end if
+		if Hut4Toast == 0 and HEALTH of PHut4 <= 0.9
+			delete Spark4
+			Hut4Toast = 1
+			begin dialogue
+				eject evil spirit
+				say single line HELP_TEXT_SMASH_BUILDINGS_100
+				wait until read
+			end dialogue
+			PSmashHutTotal++
+		end if
+		if Hut5Toast == 0 and HEALTH of PHut5 <= 0.9
+			delete Spark5
+			Hut5Toast = 1
+			begin dialogue
+				eject evil spirit
+				say single line HELP_TEXT_SMASH_BUILDINGS_110
+				wait until read
+			end dialogue
+			PSmashHutTotal++
+		end if
+		if GSmashHutTotal == 1 and GorillaComment == 1
+			begin dialogue
+				eject evil spirit
+				say single line HELP_TEXT_SMASH_BUILDINGS_250
+				wait until read
+				send evil spirit home
+			end dialogue
+			GorillaComment++
+		elsif GSmashHutTotal == 2 and GorillaComment == 2
+			begin dialogue
+				eject evil spirit
+				say single line HELP_TEXT_SMASH_BUILDINGS_260
+				wait until read
+				send evil spirit home
+			end dialogue
+			GorillaComment++
+		elsif GSmashHutTotal == 3 and GorillaComment == 3
+			begin dialogue
+				eject evil spirit
+				say single line HELP_TEXT_SMASH_BUILDINGS_270
+				wait until read
+				send evil spirit home
+			end dialogue
+			GorillaComment++
+		elsif GSmashHutTotal == 4 and GorillaComment == 4
+			begin dialogue
+				eject evil spirit
+				say single line HELP_TEXT_SMASH_BUILDINGS_280
+				wait until read
+				send evil spirit home
+			end dialogue
+			GorillaComment++
+		end if
+		if (((Hut1Toast + Hut2Toast) + Hut3Toast) + Hut4Toast) + Hut5Toast >= 5 and GorillaWinsSmash == 0
+			PlayerWinsSmash = 1
+		end if
+		until GorillaWinsSmash != 0 or HolyExplosionsBatman != 0
+	end while
+	delete AntiInf
+	if Spark1 exists
+		delete Spark1
+	end if
+	if Spark2 exists
+		delete Spark2
+	end if
+	if Spark3 exists
+		delete Spark3
+	end if
+	if Spark4 exists
+		delete Spark4
+	end if
+	if Spark5 exists
+		delete Spark5
+	end if
+end script RampagingPlayer
+
+begin script RampagingGorilla(GFreeRock, GFreeRockPos)
+	FirstShot = 0
+	AttackNum = 0
+	StompNum = 0
+	Spark1 = 0
+	Spark2 = 0
+	Spark3 = 0
+	Spark4 = 0
+	Spark5 = 0
+start
+	Spark1 = create special effect SPOT_VISUAL_HIGHLIGHT_ON_OBJECT on GHut1 time -1
+	Spark2 = create special effect SPOT_VISUAL_HIGHLIGHT_ON_OBJECT on GHut2 time -1
+	Spark3 = create special effect SPOT_VISUAL_HIGHLIGHT_ON_OBJECT on GHut3 time -1
+	Spark4 = create special effect SPOT_VISUAL_HIGHLIGHT_ON_OBJECT on GHut4 time -1
+	Spark5 = create special effect SPOT_VISUAL_HIGHLIGHT_ON_OBJECT on GHut5 time -1
+	GSmashHutTotal = 0
+	while PlayerWinsSmash == 0 and GorillaWinsSmash == 0 and HolyExplosionsBatman == 0
+		while HEALTH of GHut1 > 0.4 and PlayerWinsSmash == 0 and HolyExplosionsBatman == 0
+			wait until Gorilla played
+			if Gorilla on fire
+				ENERGY of Gorilla = 1
+				EXHAUSTION of Gorilla = 0
+				force Gorilla CREATURE_PUT_OUT_FIRE_WITH_MAGIC_WATER Gorilla
+			elsif AttackNum == 0
+				force Gorilla CREATURE_STOMP GHut1
+				AttackNum++
+				StompNum++
+			elsif StompNum >= 3
+				ENERGY of Gorilla = 1
+				EXHAUSTION of Gorilla = 0
+				force Gorilla CREATURE_CAST_FIREBALL_PU1 GHut1
+				StompNum = 0
+			else
+				force Gorilla CREATURE_KICK GHut1
+				AttackNum = 0
+			end if
+		end while
+		AttackNum = 0
+		StompNum = 0
+		GSmashHutTotal++
+		delete Spark1
+		wait until Gorilla played or 10 seconds
+		Gorilla play ANM_A_COW_WALK loop 1
+		wait until Gorilla played or 10 seconds or PlayerWinsSmash != 0 or HolyExplosionsBatman != 0
+		Gorilla play ANM_A_COW_WALK loop 1
+		wait until Gorilla played or 10 seconds or PlayerWinsSmash != 0 or HolyExplosionsBatman != 0
+		while HEALTH of GHut2 > 0.4 and PlayerWinsSmash == 0 and HolyExplosionsBatman == 0
+			wait until Gorilla played
+			if Gorilla on fire
+				ENERGY of Gorilla = 1
+				EXHAUSTION of Gorilla = 0
+				force Gorilla CREATURE_PUT_OUT_FIRE_WITH_MAGIC_WATER Gorilla
+			elsif AttackNum == 0
+				force Gorilla CREATURE_STOMP GHut2
+				AttackNum++
+				StompNum++
+			elsif StompNum >= 3
+				ENERGY of Gorilla = 1
+				EXHAUSTION of Gorilla = 0
+				force Gorilla CREATURE_CAST_FIREBALL_PU1 GHut2
+				StompNum = 0
+			else
+				force Gorilla CREATURE_KICK GHut2
+				AttackNum = 0
+			end if
+		end while
+		AttackNum = 0
+		StompNum = 0
+		GSmashHutTotal++
+		delete Spark2
+		wait until Gorilla played or 10 seconds
+		Gorilla play ANM_A_COW_WALK loop 1
+		wait until Gorilla played or 10 seconds or PlayerWinsSmash != 0 or HolyExplosionsBatman != 0
+		Gorilla play ANM_A_COW_WALK loop 1
+		wait until Gorilla played or 10 seconds or PlayerWinsSmash != 0 or HolyExplosionsBatman != 0
+		while HEALTH of GHut3 > 0.4 and PlayerWinsSmash == 0 and HolyExplosionsBatman == 0
+			wait until Gorilla played
+			if Gorilla on fire
+				ENERGY of Gorilla = 1
+				EXHAUSTION of Gorilla = 0
+				force Gorilla CREATURE_PUT_OUT_FIRE_WITH_MAGIC_WATER Gorilla
+			elsif AttackNum == 0
+				force Gorilla CREATURE_STOMP GHut3
+				AttackNum++
+				StompNum++
+			elsif StompNum >= 3
+				ENERGY of Gorilla = 1
+				EXHAUSTION of Gorilla = 0
+				force Gorilla CREATURE_CAST_FIREBALL_PU1 GHut3
+				wait until Gorilla played or 20 seconds
+				StompNum = 0
+			else
+				force Gorilla CREATURE_KICK GHut3
+				AttackNum = 0
+			end if
+		end while
+		AttackNum = 0
+		StompNum = 0
+		GSmashHutTotal++
+		delete Spark3
+		wait until Gorilla played or 10 seconds
+		Gorilla play ANM_A_COW_WALK loop 1
+		wait until Gorilla played or 10 seconds or PlayerWinsSmash != 0 or HolyExplosionsBatman != 0
+		Gorilla play ANM_A_COW_WALK loop 1
+		wait until Gorilla played or 10 seconds or PlayerWinsSmash != 0 or HolyExplosionsBatman != 0
+		while HEALTH of GHut4 > 0.4 and PlayerWinsSmash == 0 and HolyExplosionsBatman == 0
+			if FirstShot == 0 and get distance from [GFreeRock] to [GFreeRockPos] < 10
+				force Gorilla CREATURE_HURL GHut4 with GFreeRock
+				wait until Gorilla played
+				FirstShot = 1
+			elsif FirstShot == 1
+				ENERGY of Gorilla = 1
+				EXHAUSTION of Gorilla = 0
+				force Gorilla CREATURE_CAST_FIREBALL_PU1 GHut4
+				wait until Gorilla played or 20 seconds
+				FirstShot = 2
+			else
+				FirstShot = 1
+				ENERGY of Gorilla = 1
+				EXHAUSTION of Gorilla = 0
+				force Gorilla CREATURE_CAST_LIGHTNING_BOLT_PU1 GHut4
+				wait until Gorilla played or 20 seconds
+			end if
+		end while
+		GSmashHutTotal++
+		delete Spark4
+		wait until Gorilla played or 10 seconds
+		Gorilla play ANM_A_COW_WALK loop 1
+		wait until Gorilla played or 10 seconds or PlayerWinsSmash != 0 or HolyExplosionsBatman != 0
+		Gorilla play ANM_A_COW_WALK loop 1
+		wait until Gorilla played or 10 seconds or PlayerWinsSmash != 0 or HolyExplosionsBatman != 0
+		while HEALTH of GHut5 > 0.4 and PlayerWinsSmash == 0 and HolyExplosionsBatman == 0
+			wait until Gorilla played
+			if Gorilla on fire
+				ENERGY of Gorilla = 1
+				EXHAUSTION of Gorilla = 0
+				force Gorilla CREATURE_PUT_OUT_FIRE_WITH_MAGIC_WATER Gorilla
+			elsif AttackNum == 0
+				force Gorilla CREATURE_STOMP GHut5
+				AttackNum++
+				StompNum++
+			elsif StompNum >= 3
+				ENERGY of Gorilla = 1
+				EXHAUSTION of Gorilla = 0
+				force Gorilla CREATURE_CAST_FIREBALL_PU1 GHut5
+				wait until Gorilla played or 20 seconds
+				StompNum = 0
+			else
+				force Gorilla CREATURE_KICK GHut5
+				AttackNum = 0
+			end if
+		end while
+		AttackNum = 0
+		StompNum = 0
+		GSmashHutTotal++
+		delete Spark5
+		if PlayerWinsSmash == 0 and HolyExplosionsBatman == 0
+			GorillaWinsSmash = 1
+		end if
+		until PlayerWinsSmash != 0 or HolyExplosionsBatman != 0
+	end while
+	if Spark1 exists
+		delete Spark1
+	end if
+	if Spark2 exists
+		delete Spark2
+	end if
+	if Spark3 exists
+		delete Spark3
+	end if
+	if Spark4 exists
+		delete Spark4
+	end if
+	if Spark5 exists
+		delete Spark5
+	end if
+end script RampagingGorilla
+
+begin script SmashingBuildings
+	GorillaPos = marker at [2825.42, 50.92, 2245.35]
+	GFreeRock = 0
+	GFreeRockPos = marker at [2817.01, 48.9126, 2346.96]
+	PFreeRock = 0
+	PFreeRockPos = marker at [2802.3, 48.0254, 2341.15]
+	Highlight = 0
+	BeginPos = 0
+	BeginFoc = 0
+	SmashingBuildingsDYKPos = marker at [2836.128, 51.951, 2231.458]
+	AggressiveLeashDYKPos = marker at [2817.279, 46.596, 2287.281]
+	StartViewPos = marker at [2821.94, 84.7285, 2204.52]
+	StartViewFoc = marker at [2805.15, 48.8728, 2306.89]
+	PHut1Pos = marker at [2790.93, 48.6535, 2270.49]
+	PHut2Pos = marker at [2788.98, 46.9209, 2292.2]
+	PHut3Pos = marker at [2779.9, 48.91, 2360.24]
+	PHut4Pos = marker at [2762.21, 78.0498, 2318.26]
+	PHut5Pos = marker at [2778.64, 48.3578, 2378.32]
+	GHut1Pos = marker at [2847.38, 48.2243, 2276.5]
+	GHut2Pos = marker at [2845.73, 46.052, 2297.28]
+	GHut3Pos = marker at [2840.54, 46.2823, 2368.34]
+	GHut4Pos = marker at [2861.97, 74.4982, 2329.83]
+	GHut5Pos = marker at [2840.81, 44.8664, 2385.52]
+	Chimp1Pos = marker at [2870.39, 33.5262, 2081.2]
+	Chimp1 = create DUMB_CREATURE CREATURE_TYPE_CHIMP at [Chimp1Pos]
+	Chimp2Pos = marker at [2877.92, 24.4027, 2024.66]
+	Chimp2 = create DUMB_CREATURE CREATURE_TYPE_CHIMP at [Chimp2Pos]
+	Chimp3Pos = marker at [2934.48, 17.2106, 2045.79]
+	Chimp3 = create CREATURE CREATURE_TYPE_CHIMP at [Chimp3Pos]
+	WonderPos = marker at [2893.01, 25.8029, 2061.14]
+	HighlightLoop = 0
+	MyCreaturePos = marker at [2802.16, 50.92, 2229.61]
+	Chimp3HomePos = marker at [2857.83, 30.5688, 2058.78]
+	TykeWatchPos = marker at [2801.109, 50.92, 2222.351]
+	SmashTown = 0
+	FirstTime = 0
+	WonderTown = 0
+	EndViewPos = marker at [2800.47, 120.791, 2196.9]
+	EndViewFoc = marker at [2814.98, 53.274, 2311.65]
+	NewLantern = 0
+	NewLanternPos = marker at [2926.84, 21.6441, 2075.23]
+	NewLantern2 = 0
+	NewLanternPos2 = marker at [2816.299, 50.92, 2231.746]
+	FirstTimer = 0
+start
+	GorillaGone = 0
+	ChimpsGone = 0
+	NewLantern = create OBJECT MOBILE_STATIC_INFO_STREET_LANTERN at [NewLanternPos]
+	NewLantern2 = create OBJECT MOBILE_STATIC_INFO_STREET_LANTERN at [NewLanternPos2]
+	set Chimp1 name HELP_TEXT_CHIMP_NAME_01
+	set Chimp2 name HELP_TEXT_CHIMP_NAME_03
+	set Chimp3 name HELP_TEXT_CHIMP_NAME_04
+	run script SetupCreatureIsleCreature(Chimp1)
+	run script SetupCreatureIsleCreature(Chimp2)
+	run script SetupCreatureIsleCreature(Chimp3)
+	HolyExplosionsBatman = 0
+	CreatureCanBuildFlag = 0
+	Gorilla = create DUMB_CREATURE CREATURE_TYPE_GORILLA at [GorillaPos]
+	set Gorilla name HELP_TEXT_NAME_GORILLA_01
+	run script SetupCreatureIsleCreature(Gorilla)
+	SmashTown = create player 1 town at [PHut1Pos] type TRIBE_TYPE_JAPANESE
+	WonderTown = create player 1 town at [WonderPos] type TRIBE_TYPE_JAPANESE
+	run background script ImmortalWonder(WonderPos, WonderTown)
+	run background script ImmortalHuts(PHut1Pos, PHut2Pos, PHut3Pos, PHut4Pos, PHut5Pos, GHut1Pos, GHut2Pos, GHut3Pos, GHut4Pos, GHut5Pos, SmashTown)
+	ALIGNMENT of Gorilla = -0.7
+	SCALE of Gorilla = 1
+	STRENGTH of Gorilla = 1
+	teach Gorilla MAGICAL SPELL_FIREBALL_LEVEL_1 TRUE percentage 1
+	teach Gorilla MAGICAL SPELL_FIREBALL_LEVEL_2 TRUE percentage 1
+	teach Gorilla MAGICAL SPELL_LIGHTNING_LEVEL_1 TRUE percentage 1
+	teach Gorilla MAGICAL SPELL_LIGHTNING_LEVEL_2 TRUE percentage 1
+	teach Gorilla MAGICAL SPELL_WATER_LEVEL_1 TRUE percentage 1
+	SCALE of Chimp1 = 0.9
+	ALIGNMENT of Chimp1 = 0.3
+	teach Chimp1 MAGICAL SPELL_WOOD TRUE percentage 1
+	teach Chimp1 MAGICAL SPELL_WATER_LEVEL_1 TRUE percentage 1
+	teach Chimp1 PHYSICAL CREATURE_ACTION_KNOWN_ABOUT_BUILD TRUE percentage 1
+	SCALE of Chimp2 = 1
+	ALIGNMENT of Chimp2 = -0.3
+	STRENGTH of Chimp2 = 1
+	teach Chimp2 MAGICAL SPELL_WOOD TRUE percentage 1
+	teach Chimp2 MAGICAL SPELL_WATER_LEVEL_1 TRUE percentage 1
+	teach Chimp2 PHYSICAL CREATURE_ACTION_KNOWN_ABOUT_BUILD TRUE percentage 1
+	ACTUAL_HEIGHT of Chimp3 = 0.3
+	ALIGNMENT of Chimp3 = 0
+	teach Chimp3 MAGICAL SPELL_WOOD TRUE percentage 10
+	teach Chimp3 MAGICAL SPELL_WATER_LEVEL_1 TRUE percentage 10
+	teach Chimp3 PHYSICAL CREATURE_ACTION_KNOWN_ABOUT_BUILD TRUE percentage 10
+	run background script NoMessingWithHealthOrAnythingElse(Chimp1, Chimp2, Chimp3)
+	run background script ChimpBuilder(Chimp1, Chimp1Pos, 1)
+	run background script ChimpBuilder(Chimp2, Chimp2Pos, 2)
+	set Chimp3 master Chimp2
+	set Chimp3 home position [Chimp3HomePos]
+	set Chimp3 distance from home 350
+	run background script MaintainYouth(Chimp3)
+	release Chimp3
+	begin loop
+		GorillaWinsSmash = 0
+		PlayerWinsSmash = 0
+		run background script GorillaPractise(GorillaPos)
+		wait until TriggerBuildingTrials == 1
+		DojoReminderSmashBuildings = 1
+		if FirstTimer == 0
+			Highlight = create highlight CHALLENGE_SMASH_BUILDINGS HIGHLIGHT_TRIAL at [GorillaPos]
+			ALTITUDE of Highlight = 15
+			run background script TrialNotifyWithScriptLockedCreature(Highlight)
+			run background script ChimpIntroHighlight(Chimp1, Chimp2, Chimp3, WonderPos)
+			FirstTimer = 1
+		end if
+		disable Highlight active
+		begin loop
+			if Highlight clicked and ScriptLockedCreature == 0
+				if GorillaTrialActive == 2
+					set Chimp1 position to [Chimp1Pos]
+					set Chimp2 position to [Chimp2Pos]
+					set Chimp3 position to [Chimp3Pos]
+					GorillaTrialActive = 1
+					wait until 0.5 seconds
+					HighlightLoop = 1
+					clear clicked object
+				elsif get distance from [MyCreature] to [GorillaPos] < 75
+					HighlightLoop = 1
+				else
+					HighlightLoop = 1
+				end if
+			end if
+			until HighlightLoop == 1
+		end loop
+		HighlightLoop = 0
+		GorillaTrialActive = 1
+		PHut1 = get HOUSE at [PHut1Pos] radius 10
+		PHut2 = get HOUSE at [PHut2Pos] radius 10
+		PHut3 = get HOUSE at [PHut3Pos] radius 10
+		PHut4 = get HOUSE at [PHut4Pos] radius 10
+		PHut5 = get HOUSE at [PHut5Pos] radius 10
+		GHut1 = get HOUSE at [GHut1Pos] radius 10
+		GHut2 = get HOUSE at [GHut2Pos] radius 10
+		GHut3 = get HOUSE at [GHut3Pos] radius 10
+		GHut4 = get HOUSE at [GHut4Pos] radius 10
+		GHut5 = get HOUSE at [GHut5Pos] radius 10
+		if PFreeRock exists
+			delete PFreeRock
+		end if
+		PFreeRock = create OBJECT ROCK at [PFreeRockPos]
+		if GFreeRock exists
+			delete GFreeRock
+		end if
+		GFreeRock = create OBJECT ROCK at [GFreeRockPos]
+		begin cinema
+			disable creature sound
+			set fade red 0 green 0 blue 0 time 1.5
+			move MyCreature position to [MyCreaturePos] radius 0
+			wait until 1.5 seconds
+			set MyCreature position to [MyCreaturePos]
+			if Tyke exists and TykeIsReady == 1 and TykeFree == 1
+				set Tyke position to [TykeWatchPos]
+			end if
+			RefreshAllHuts = 1
+			set Gorilla position to [GorillaPos]
+			set Gorilla focus to [Gorilla] + [-15, 5, -15]
+			set camera position to [Gorilla] + [-15, 5, -15]
+			set camera focus to [Gorilla] + [0, 8, 0]
+			move camera position to [Gorilla] + [-15, 1, -15] time 10
+			set fade in time 2
+			wait until 2 seconds
+			if FirstTime == 0
+				snapshot CHALLENGE_SMASH_BUILDINGS quest success 0 alignment 0 HELP_TEXT_CREATURE_ISLE_TITLE_17 StandardReminder (variable HELP_TEXT_CI_REMINDER_13)
+			end if
+			say HELP_TEXT_SMASH_BUILDINGS_140 by Gorilla
+			Gorilla play ANM_A_COW_WALK loop 1
+			wait until Gorilla played
+			wait until read
+			if FirstTime == 0
+				say HELP_TEXT_SMASH_BUILDINGS_150 by Gorilla
+				move camera position to [2798.046, 52.741, 2263.282] time 2.5
+				move camera focus to [2790.31, 48.951, 2271.685] time 1.75
+				wait until 3 seconds
+				move camera position to [2797.405, 51.607, 2282.083] time 2.5
+				move camera focus to [2789.218, 47.596, 2290.975] time 1.75
+				wait until 3 seconds
+				move camera position to [2778.818, 78.834, 2303.199] time 2.5
+				move camera focus to [2770.014, 82.39, 2312.48] time 1.75
+				wait until 3 seconds
+				move camera position to [2788.106, 53.388, 2352.664] time 2.5
+				move camera focus to [2778.686, 49.212, 2361.879] time 1.75
+				wait until 3 seconds
+				move camera position to [2785.767, 52.969, 2367.505] time 2.5
+				move camera focus to [2775.586, 48.544, 2378.893] time 1.75
+				wait until 3 seconds
+				wait until read
+				run background script DidYouKnow(SmashingBuildingsDYKPos, variable HELP_TEXT_SMASHING_DYK, variable DYK_MISC)
+				run background script DidYouKnow(AggressiveLeashDYKPos, variable HELP_TEXT_AGGRESSIVE_LEASH_DYK, variable DYK_MISC)
+				FirstTime = 1
+			end if
+			move camera position to [StartViewPos] time 6
+			move camera focus to [StartViewFoc] time 6
+			say HELP_TEXT_SMASH_BUILDINGS_160 by Gorilla
+			Gorilla play ANM_A_COW_DEAD loop 1
+			wait until Gorilla played
+			wait until read
+			say single line HELP_TEXT_SMASH_BUILDINGS_170 with interaction by Gorilla
+			wait until read
+			wait until camera ready
+			release MyCreature
+		end cinema
+		run background script RampagingGorilla(GFreeRock, GFreeRockPos)
+		run background script RampagingPlayer
+		wait until GorillaWinsSmash == 1 or PlayerWinsSmash == 1 or HolyExplosionsBatman == 1
+		if PlayerWinsSmash == 0 and HolyExplosionsBatman == 0
+			if get distance from (camera position) to [Gorilla] < 200 and not in widescreen and not MyCreature fighting
+				begin cinema
+					disable creature sound
+					update snapshot CHALLENGE_SMASH_BUILDINGS success 0.1 alignment 0 HELP_TEXT_CREATURE_ISLE_TITLE_17 StandardReminder (variable HELP_TEXT_CI_REMINDER_13)
+					move camera position to [Gorilla] + [-15, 5, -15] time 2
+					move camera focus to [Gorilla] + [0, 8, 0] time 2
+					set Gorilla focus to [Gorilla] + [-15, 5, -15]
+					wait until camera ready
+					say HELP_TEXT_SMASH_BUILDINGS_180 by Gorilla
+					Gorilla play ANM_A_COW_WALK loop 1
+					wait until read
+					say HELP_TEXT_SMASH_BUILDINGS_190 with interaction by Gorilla
+					wait until read
+					set fade red 0 green 0 blue 0 time 1.5
+					wait until 1.5 seconds
+					set Gorilla position to [GorillaPos]
+					set camera position to [EndViewPos]
+					set camera focus to [EndViewFoc]
+					set fade in time 3
+				end cinema
+			else
+				update snapshot CHALLENGE_SMASH_BUILDINGS success 0.1 alignment 0 HELP_TEXT_CREATURE_ISLE_TITLE_17 StandardReminder (variable HELP_TEXT_CI_REMINDER_13)
+				set Gorilla position to [GorillaPos]
+			end if
+		end if
+		GorillaTrialActive = 2
+		until PlayerWinsSmash == 1 or HolyExplosionsBatman == 1
+	end loop
+	wait until get distance from (camera position) to [Gorilla] < 200 and [Gorilla] viewed
+	if HolyExplosionsBatman == 0
+		begin cinema
+			disable creature sound
+			move Gorilla position to [Gorilla] radius 0
+			move camera position to [Gorilla] + [-15, 5, -15] time 2
+			move camera focus to [Gorilla] + [0, 8, 0] time 2
+			wait until camera ready
+			set Gorilla focus to [Gorilla] + [-15, 5, -15]
+			say HELP_TEXT_SMASH_BUILDINGS_200 by Gorilla
+			wait until 0.5 seconds
+			Gorilla play ANM_A_COW_IN_HAND loop 1
+			wait until read
+			wait until Gorilla played
+			Gorilla play ANM_A_COW_LANDED_LEFT_SIDE loop 1
+			say HELP_TEXT_SMASH_BUILDINGS_210 with interaction by Gorilla
+			wait until read
+			wait until Gorilla played
+			move Gorilla position to [GorillaPos] radius 0
+		end cinema with widescreen
+	elsif HolyExplosionsBatman == 1
+		wait until MyCreature played or 4 seconds
+		wait until 10 seconds
+		begin cinema
+			disable creature sound
+			move Gorilla position to [Gorilla] radius 0
+			move camera position to [Gorilla] + [-15, 5, -15] time 2
+			move camera focus to [Gorilla] + [0, 8, 0] time 2
+			wait until camera ready
+			set Gorilla focus to [Gorilla] + [-15, 5, -15]
+			say HELP_TEXT_SMASH_BUILDINGS_220 by Gorilla
+			wait until read
+			wait until Gorilla played
+			say HELP_TEXT_SMASH_BUILDINGS_230 by Gorilla
+			Gorilla play ANM_A_COW_IN_HAND loop 1
+			wait until read
+			wait until Gorilla played
+			Gorilla play ANM_A_COW_LANDED_LEFT_SIDE loop 1
+			say HELP_TEXT_SMASH_BUILDINGS_240 with interaction by Gorilla
+			wait until read
+			wait until Gorilla played
+			move Gorilla position to [GorillaPos] radius 0
+		end cinema with widescreen
+	end if
+	GorillaTrialActive = 0
+	run script Dojo(Gorilla)
+	GorillaGone = 1
+	delete Highlight
+	run background script GorillaPractise(GorillaPos)
+	DojoReminderSmashBuildings = 0
+	run background script DeleteDYK(SmashingBuildingsDYKPos)
+	wait until ChimpsGone == 1 and GorillaGone == 1 and TykeCanBuild == 1
+	wait until not Gorilla viewed and not Chimp1 viewed and not Chimp2 viewed and not Chimp3 viewed
+	stop script "MaintainYouth"
+	stop script "NoMessingWithHealthOrAnythingElse"
+	stop script "BuildDecisions"
+	stop script "RepairGorillaHuts"
+	stop script "ImmortalHuts"
+	stop script "ImmortalWonder"
+	stop script "ChimpBuilder"
+	stop script "GorillaPractise"
+	delete Gorilla with fade
+	delete Chimp1 with fade
+	delete Chimp2 with fade
+	delete Chimp3 with fade
+end script SmashingBuildings
+

@@ -1,0 +1,82 @@
+//LHVM Challenge source version 8
+//Decompiled with CHLASM tool by Daniels118
+
+begin script TownsTakenOver2(FinalSequence)
+	OriginalPosition = 0
+	OriginalFocus = 0
+	Sable = 0
+	Dispensor = 0
+	MiracleSeedDYKPos = marker at [1603.846, 124.808, 1625.242]
+start
+	run background script DidYouKnow(MiracleSeedDYKPos, variable HELP_TEXT_DYK_60, variable DYK_MISC)
+	Dispensor = create with angle 0 and scale 1 SCRIPT_OBJECT_TYPE_SPELL_DISPENSER ABODE_INFO_NORSE_SPELL_DISPENSER at [1612.195, 122.126, 1620.624]
+	if FinalSequence == 0
+		set Dispensor magic properties SPELL_FLOCK_FLYING time 0
+	else
+		set Dispensor magic properties MAGIC_TYPE_CREATURE_SPELL_FAST time 0
+	end if
+	enable Dispensor active
+	set Dispensor time to 300 seconds
+	Sable = create VILLAGER NOMADE at [270.15, 0, 389.31]
+	ALTITUDE of Sable = 17
+	set Sable focus to [282.007, 18.705, 388.507]
+	OriginalPosition = marker at (camera position)
+	OriginalFocus = marker at (camera focus)
+	begin cinema
+		set fade red 0 green 0 blue 0 time 1
+		wait until fade ready
+		start music MUSIC_TYPE_SCRIPT_EPIC_04
+		wait until widescreen transition complete
+		set camera position to [1750.952, 71.284, 1586.901]
+		set camera focus to [1693.296, 65.933, 1626.259]
+		move camera position to [1708.076, 64.925, 1586.101] time 8
+		move camera focus to [1725.431, 94.826, 1646.768] time 12
+		set fade in time 1
+		wait until camera ready
+		set fade red 0 green 0 blue 0 time 1
+		wait until fade ready
+		set camera lens 50 time 0
+		Sable play ANM_P_TALK2_FEMALE loop -1
+		set camera position to [291.93, 20.231, 386.665]
+		set camera focus to [103.096, -3.622, 425]
+		move camera position to [276.724, 18.4, 390.605] time 20
+		move camera focus to [60.714, 13.77, 337.429] time 20
+		set fade in time 1
+		wait until fade ready
+		wait until 3 seconds
+		if FinalSequence == 0
+			say HELP_TEXT_ONE_TOWN_TAKEN_OVER_10
+			wait until read
+			say HELP_TEXT_ONE_TOWN_TAKEN_OVER_20
+			wait until read
+			say HELP_TEXT_ONE_TOWN_TAKEN_OVER_30 with interaction
+			wait until read
+		else
+			say HELP_TEXT_ALL_TOWNS_TAKEN_OVER_10
+			wait until read
+			say HELP_TEXT_ALL_TOWNS_TAKEN_OVER_20
+			wait until read
+			say HELP_TEXT_ALL_TOWNS_TAKEN_OVER_30
+			wait until read
+		end if
+		set camera lens 70 time 0
+		set camera position to [1612.182, 138.012, 1593.19]
+		set camera focus to [1611.464, 123.202, 1622.104]
+		move camera position to [1628.871, 136.027, 1605.084] time 12
+		move camera focus to [1611.75, 123.364, 1622.93] time 12
+		say HELP_TEXT_ALL_TOWNS_TAKEN_OVER_40
+		wait until read
+		clear dialogue
+		wait until camera ready
+		set fade red 0 green 0 blue 0 time 1
+		wait until fade ready
+		set camera position to [OriginalPosition]
+		set camera focus to [OriginalFocus]
+		delete Sable
+	end cinema
+	stop music
+	wait until widescreen transition complete
+	set fade in time 1
+	wait until fade ready
+end script TownsTakenOver2
+

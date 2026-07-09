@@ -1,0 +1,19 @@
+//challenge LandControl1
+
+begin script COOP_LandControl1
+
+
+start
+	
+	// Load Map
+	load map "Scripts/COOP_UltimateLand1.txt"
+	stop all scripts excluding files "COOP_LandControl1.txt"
+	set player 1 ally with player 2 percentage 1
+	
+	LandNumber = 1
+	
+	run background script COOP_SingingStoneCircle							// Places Stones and wait until SingingStonesStart == 1
+	SingingStonesStart = 1
+	wait until 1 == 2
+	
+end script COOP_LandControl1

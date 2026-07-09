@@ -4,5 +4,11 @@
     <LocalDebuggerCommand>C:\Games\Black &amp; White\Ultimate\BWUltimate.exe</LocalDebuggerCommand>
     <LocalDebuggerWorkingDirectory>C:\Games\Black &amp; White\Ultimate</LocalDebuggerWorkingDirectory>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
+    <LocalDebuggerCommandArguments>/console /ip 192.168.1.68 /hostname InstanceA</LocalDebuggerCommandArguments>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LocalDebuggerCommand>C:\Games\Black &amp; White\Ultimate\BWUltimate.exe</LocalDebuggerCommand>
+    <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
+    <LocalDebuggerWorkingDirectory>C:\Games\Black &amp; White\Ultimate</LocalDebuggerWorkingDirectory>
   </PropertyGroup>
 </Project>

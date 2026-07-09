@@ -1,0 +1,1771 @@
+//LHVM Challenge source version 8
+//Decompiled with CHLASM tool by Daniels118
+
+global MarblesTrialCompleted
+global MyScore
+global ApeScore
+global PlayerThrowPos
+global ApeThrowPos
+global MApe
+global Round = 1
+global ThrowTargetPos
+global MarbleArenaPos
+global MarblePoint1
+global PMarble[6]
+global OMarble[6]
+global PMarblePos[6]
+global OMarblePos[6]
+global OuterRing = 39
+global OuterMiddleRing = 27
+global InnerMiddleRing = 16
+global InnerRing = 5
+global PlayerMarblePos
+global ApeMarblePos
+global EstimatedAmountOfRoll
+global EstimatedAngle
+global MarbleArena
+global CentreOfArena
+global CentreOfArenaRock
+global ArenaLeftEdge
+global ArenaRightEdge
+global PMarbleScoreboard
+global OMarbleScoreboard
+global MarbleTrialRunning
+global MarblesCancelCurrentGame
+global MarblesPlayingForFun
+global MarblesOldScale
+global MarblesIntroPlayed
+global MarblesGameRunning = 1
+global MarblesApeLogo
+global MarblesMyLogo
+global MarblesExplainAboutScores
+global CancelGameHighlight
+global ArenaAntiInfluence
+global MarblesMaxRoll = 65
+global MarblesMinRoll = 30
+global MarblesMaxAngle = 230
+global MarblesMinAngle = 160
+
+define script CreateMarblesArena
+define script CreateMarbleScoreboards
+define script CreateMarblesHighlightWithReminder
+define script CleanUpMarbles
+define script MarbleGiveReward
+define script PlayerWon
+define script PlayersCreatureThrow(Marble)
+define script MakeSureCreatureIsAtMarbles
+define script MarblesCleanUpCreature
+define script SendApeHome
+define script CalculateTargetPos
+define script CreateMarbles
+define script OpponentThrow(Marble)
+define script MarblesConfirmCancelMessage
+define script MarblesTestForCancelledGame
+define script CreateCreatures
+define script WaitForMarblesToStopMoving
+define script PlaceCountryLanterns
+define script CalculateScore
+define script CreateMarblesHighlight
+define script PositionPlayersCreature
+define script MarblesFireCheck
+define script AdvisorCommentOnHowGameIsGoing
+define script ResetMarblesScoreboards
+define script RepositionMarble(Marble, MoveToPos)
+define script MoveTykeToWatchPos
+define script PlayersThrow
+define script PlayerHasDrawn
+define script IntroToMarbles(DYKPos)
+define script RepositionMarblesThrownTooFar(Who)
+define script DisplayScore
+define script ApesCommentOnHowGameIsGoing
+define script PlayerLost
+
+begin script Marbles
+	Area[3]
+	MarblesDYKPos = 0
+	GreetingSaid = 0
+	SearchSize = 40
+	CreatureDistance = 80
+start
+	EstimatedAmountOfRoll = number from 35 to 60
+	EstimatedAngle = number from 180 to 200
+	MarbleArenaPos = marker at [1501.2122, 11.5863, 2649.0369]
+	MarblePoint1 = marker at [1461.2122, 11.5863, 2700.0369]
+	CentreOfArena = marker at [MarbleArenaPos] - ([0, 2.5])
+	MarblesDYKPos = marker at (get target from [MarblePoint1] to [CentreOfArena] distance 45 angle 90)
+	PlayerThrowPos = marker at (get target from [MarblePoint1] to [CentreOfArena] distance CreatureDistance angle 180)
+	ApeThrowPos = marker at (get target from [MarblePoint1] to [CentreOfArena] distance CreatureDistance angle 0)
+	Area[0] = marker at [CentreOfArena]
+	Area[1] = marker at (get target from [MarblePoint1] to [CentreOfArena] distance 55 angle 0)
+	Area[2] = marker at (get target from [MarblePoint1] to [CentreOfArena] distance 55 angle 180)
+	run script CreateMarblesArena
+	run script PlaceCountryLanterns
+	run script CreateCreatures
+	run script CreateMarbles
+	run script CreateMarbleScoreboards
+	run background script KeepCreatureHealthy(MApe)
+	run background script MarblesFireCheck
+	run background script CheckForObstructions(Area[0], SearchSize, MarblesGameRunning)
+	run background script CheckForObstructions(Area[1], SearchSize, MarblesGameRunning)
+	run background script CheckForObstructions(Area[2], SearchSize, MarblesGameRunning)
+	wait until MarblesReadyToStart == 1
+	DojoReminderMarbles = 1
+	run background script DidYouKnow(MarblesDYKPos, variable HELP_TEXT_MARBLES_DYK_01, variable DYK_MISC)
+	while MarblesTrialCompleted == 0
+		MarblesCancelCurrentGame = 0
+		run script CleanUpMarbles
+		run script CreateMarbles
+		run script CreateMarblesHighlightWithReminder
+		run script ResetMarblesScoreboards
+		MarbleTrialRunning = 1
+		run script PositionPlayersCreature
+		run background script MarblesTestForCancelledGame
+		run background script MakeSureCreatureIsAtMarbles
+		if MarblesIntroPlayed == 0
+			run script IntroToMarbles(MarblesDYKPos)
+			MarblesIntroPlayed = 1
+		else
+			begin cinema
+			end cinema
+		end if
+		while Round <= 6 and MarblesCancelCurrentGame == 0
+			run script PlayersCreatureThrow(PMarble[Round - 1])
+			run script WaitForMarblesToStopMoving
+			run script OpponentThrow(OMarble[Round - 1])
+			run script WaitForMarblesToStopMoving
+			run script CalculateScore
+			run script DisplayScore
+			run script ApesCommentOnHowGameIsGoing
+			Round++
+			until MarblesCancelCurrentGame == 1
+		end while
+		MarbleTrialRunning = 0
+		if MarblesCancelCurrentGame == 0
+			if MyScore > ApeScore
+				run script PlayerWon
+				MarblesTrialCompleted = 1
+			elsif MyScore < ApeScore
+				run script PlayerLost
+			else
+				run script PlayerHasDrawn
+			end if
+		end if
+		Round = 1
+		MyScore = 0
+		ApeScore = 0
+		run script MarblesCleanUpCreature
+	end while
+	run script MarbleGiveReward
+	run background script SendApeHome
+	run script Dojo(MApe)
+	DojoReminderMarbles = 0
+	MarblesPlayingForFun = 1
+	while MarblesPlayingForFun == 1
+		MarblesCancelCurrentGame = 0
+		run script CreateMarblesHighlight
+		run script ResetMarblesScoreboards
+		MarbleTrialRunning = 1
+		run background script MarblesTestForCancelledGame
+		run script CleanUpMarbles
+		run script CreateMarbles
+		while Round <= 6 and MarblesCancelCurrentGame == 0
+			if GreetingSaid == 0
+				begin dialogue
+					disable creature sound
+					say single line HELP_TEXT_MARBLES_70 by MApe
+					wait until read or PMarble[0] clicked
+					enable creature sound
+					close dialogue
+				end dialogue
+				GreetingSaid = 1
+			end if
+			run script PlayersThrow
+			run script WaitForMarblesToStopMoving
+			run script OpponentThrow(OMarble[Round - 1])
+			run script WaitForMarblesToStopMoving
+			run script CalculateScore
+			run script DisplayScore
+			run script ApesCommentOnHowGameIsGoing
+			Round++
+			until MarblesCancelCurrentGame == 1
+		end while
+		MarbleTrialRunning = 0
+		if MyScore > ApeScore
+			run script PlayerWon
+		elsif MyScore < ApeScore
+			run script PlayerLost
+		else
+			run script PlayerHasDrawn
+		end if
+		Round = 1
+		MyScore = 0
+		ApeScore = 0
+	end while
+end script Marbles
+
+begin script CreateMarblesHighlight
+	MarbleHighlight = 0
+start
+	MarbleHighlight = create highlight CHALLENGE_MARBLES HIGHLIGHT_CHALLENGE at [CentreOfArena]
+	run script ChallengeHighlightNotifyCI(MarbleHighlight, CentreOfArena, variable HELP_TEXT_GENERAL_CHALLENGE_START_03)
+	ALTITUDE of MarbleHighlight = 0
+	delete MarbleHighlight
+end script CreateMarblesHighlight
+
+begin script CreateMarblesHighlightWithReminder
+	Highlight = 0
+	PlayerCreatureReady = 0
+	DoneReminder = 0
+	MApeHeight = 0
+	MApeScale = 0
+	RemindPlayerTimer = create timer for 0 seconds
+	RandomNotify = 0
+	OrigPos = 0
+	OrigFoc = 0
+	FirstTimeReminderPos = marker at [1552.5128, 39.464, 2628.7886]
+	FirstTimeReminderFoc = marker at [1545.9071, 18.9549, 2578.7375]
+	TykeWatchPos = marker at [1458.736, 12.73, 2621.152]
+start
+	Highlight = create highlight CHALLENGE_MARBLES HIGHLIGHT_TRIAL at [CentreOfArena]
+	while PlayerCreatureReady == 0
+		RandomNotify = variable constant from HELP_TEXT_GENERAL_TRIAL_STARTS_01 to HELP_TEXT_GENERAL_TRIAL_STARTS_08
+		if get distance from (camera position) to [Highlight] < 100 and Highlight viewed
+			if get RemindPlayerTimer time remaining == 0
+				begin dialogue
+					if good spirit speaks constant RandomNotify
+						eject good spirit
+						make good spirit point at [Highlight] in world
+					else
+						eject evil spirit
+						make evil spirit point at [Highlight] in world
+					end if
+					say single line constant RandomNotify
+					wait until read or Highlight clicked
+				end dialogue
+				set RemindPlayerTimer time to 30 seconds
+			end if
+		end if
+		if Highlight clicked
+			if ScriptLockedCreature == 0
+				ScriptLockedCreature = 1
+				enable Highlight active
+				clear clicked object
+				clear spells on MyCreature
+				enable MyCreature immune to spells
+				if get distance from [MyCreature] to [CentreOfArena] < 100
+					PlayerCreatureReady = 1
+				else
+					set fade red 0 green 0 blue 0 time 1
+					wait until fade ready
+					set MyCreature position to [PlayerThrowPos]
+					if Tyke exists and TykeIsReady == 1 and TykeFree == 1
+						set Tyke position to [TykeWatchPos]
+					end if
+					set fade in time 1
+					PlayerCreatureReady = 1
+				end if
+			elsif ScriptLockedCreature == 1
+				run script ScriptLockedHighlight(Highlight)
+			end if
+		end if
+		wait until 0.1 seconds
+	end while
+	delete Highlight
+end script CreateMarblesHighlightWithReminder
+
+begin script CreateMarblesArena
+	Counter = 0
+start
+	ArenaAntiInfluence = create anti influence at position [MarbleArenaPos] radius 70
+end script CreateMarblesArena
+
+begin script CreateMarbles
+	PlayersMarble[6]
+	ApesMarble[6]
+	MDistance = 12
+	SFX = 0
+	Smoke = 0
+	Counter = 0
+start
+	PlayerMarblePos = marker at (get target from [MarblePoint1] to [CentreOfArena] distance MDistance angle 180)
+	ApeMarblePos = marker at (get target from [MarblePoint1] to [CentreOfArena] distance MDistance angle 0)
+	PMarblePos[0] = marker at (get target from [CentreOfArena] to [PlayerThrowPos] distance MDistance angle 144)
+	PMarblePos[1] = marker at (get target from [CentreOfArena] to [PlayerThrowPos] distance MDistance angle 132)
+	PMarblePos[2] = marker at (get target from [CentreOfArena] to [PlayerThrowPos] distance MDistance angle 120)
+	PMarblePos[3] = marker at (get target from [CentreOfArena] to [PlayerThrowPos] distance MDistance angle -144)
+	PMarblePos[4] = marker at (get target from [CentreOfArena] to [PlayerThrowPos] distance MDistance angle -132)
+	PMarblePos[5] = marker at (get target from [CentreOfArena] to [PlayerThrowPos] distance MDistance angle -120)
+	OMarblePos[0] = marker at (get target from [CentreOfArena] to [ApeThrowPos] distance MDistance angle 144)
+	OMarblePos[1] = marker at (get target from [CentreOfArena] to [ApeThrowPos] distance MDistance angle 132)
+	OMarblePos[2] = marker at (get target from [CentreOfArena] to [ApeThrowPos] distance MDistance angle 120)
+	OMarblePos[3] = marker at (get target from [CentreOfArena] to [ApeThrowPos] distance MDistance angle -144)
+	OMarblePos[4] = marker at (get target from [CentreOfArena] to [ApeThrowPos] distance MDistance angle -132)
+	OMarblePos[5] = marker at (get target from [CentreOfArena] to [ApeThrowPos] distance MDistance angle -120)
+	PlayersMarble[0] = variable MOBILE_STATIC_INFO_MARBLE1
+	PlayersMarble[1] = variable MOBILE_STATIC_INFO_MARBLE2
+	PlayersMarble[2] = variable MOBILE_STATIC_INFO_MARBLE3
+	PlayersMarble[3] = variable MOBILE_STATIC_INFO_MARBLE4
+	PlayersMarble[4] = variable MOBILE_STATIC_INFO_MARBLE5
+	PlayersMarble[5] = variable MOBILE_STATIC_INFO_MARBLE6
+	ApesMarble[0] = variable MOBILE_STATIC_INFO_MARBLE7
+	ApesMarble[1] = variable MOBILE_STATIC_INFO_MARBLE8
+	ApesMarble[2] = variable MOBILE_STATIC_INFO_MARBLE9
+	ApesMarble[3] = variable MOBILE_STATIC_INFO_MARBLE10
+	ApesMarble[4] = variable MOBILE_STATIC_INFO_MARBLE11
+	ApesMarble[5] = variable MOBILE_STATIC_INFO_MARBLE12
+	while Counter < 6
+		if not PMarble[Counter] exists
+			PMarble[Counter] = create with angle 0 and scale 1 OBJECT constant PlayersMarble[Counter] at [PMarblePos[Counter]]
+			disable PMarble[Counter] pickup
+			disable PMarble[Counter] moveable
+			enable PMarble[Counter] indestructible
+			enable jc special SJC_ALWAYS_VISIBLE on PMarble[Counter] with number 0
+			SFX = create special effect SPOT_VISUAL_OBJECT_APPEAR at [PMarblePos[Counter]] time 2
+			Smoke = create special effect SPOT_VISUAL_BANG at [PMarblePos[Counter]] time 2
+		end if
+		Counter++
+	end while
+	Counter = 0
+	while Counter < 6
+		if not OMarble[Counter] exists
+			OMarble[Counter] = create with angle 0 and scale 1 OBJECT constant ApesMarble[Counter] at [OMarblePos[Counter]]
+			disable OMarble[Counter] pickup
+			disable OMarble[Counter] moveable
+			enable OMarble[Counter] indestructible
+			enable jc special SJC_ALWAYS_VISIBLE on OMarble[Counter] with number 0
+			SFX = create special effect SPOT_VISUAL_OBJECT_APPEAR at [OMarblePos[Counter]] time 2
+			Smoke = create special effect SPOT_VISUAL_BANG at [OMarblePos[Counter]] time 2
+		end if
+		Counter++
+	end while
+end script CreateMarbles
+
+begin script ReCreateOneMarble(Who, Pos)
+	Player = 1
+	SFX = 0
+	Smoke = 0
+start
+	if Who == Player
+		if Round - 1 == 0
+			delete PMarble[0] with fade
+			SFX = create special effect SPOT_VISUAL_OBJECT_APPEAR at [Pos] time 2
+			Smoke = create special effect SPOT_VISUAL_BANG at [Pos] time 2
+			PMarble[0] = create with angle 0 and scale 1 OBJECT MOBILE_STATIC_INFO_MARBLE1 at [Pos]
+			ALTITUDE of PMarble[0] = -2
+			enable PMarble[0] indestructible
+			disable PMarble[0] pickup
+			enable jc special SJC_ALWAYS_VISIBLE on PMarble[0] with number 0
+			while ALTITUDE of PMarble[0] < 0
+				ALTITUDE of PMarble[0] += 0.2
+			end while
+			disable PMarble[0] moveable
+		elsif Round - 1 == 1
+			delete PMarble[1] with fade
+			SFX = create special effect SPOT_VISUAL_OBJECT_APPEAR at [Pos] time 2
+			Smoke = create special effect SPOT_VISUAL_BANG at [Pos] time 2
+			PMarble[1] = create with angle 0 and scale 1 OBJECT MOBILE_STATIC_INFO_MARBLE2 at [Pos]
+			ALTITUDE of PMarble[1] = -2
+			enable PMarble[1] indestructible
+			disable PMarble[1] pickup
+			enable jc special SJC_ALWAYS_VISIBLE on PMarble[1] with number 0
+			while ALTITUDE of PMarble[1] < 0
+				ALTITUDE of PMarble[1] += 0.2
+			end while
+			disable PMarble[1] moveable
+		elsif Round - 1 == 2
+			delete PMarble[2] with fade
+			SFX = create special effect SPOT_VISUAL_OBJECT_APPEAR at [Pos] time 2
+			Smoke = create special effect SPOT_VISUAL_BANG at [Pos] time 2
+			PMarble[2] = create with angle 0 and scale 1 OBJECT MOBILE_STATIC_INFO_MARBLE3 at [Pos]
+			ALTITUDE of PMarble[2] = -2
+			enable PMarble[2] indestructible
+			disable PMarble[2] pickup
+			enable jc special SJC_ALWAYS_VISIBLE on PMarble[2] with number 0
+			while ALTITUDE of PMarble[2] < 0
+				ALTITUDE of PMarble[2] += 0.2
+			end while
+			disable PMarble[2] moveable
+		elsif Round - 1 == 3
+			delete PMarble[3] with fade
+			SFX = create special effect SPOT_VISUAL_OBJECT_APPEAR at [Pos] time 2
+			Smoke = create special effect SPOT_VISUAL_BANG at [Pos] time 2
+			PMarble[3] = create with angle 0 and scale 1 OBJECT MOBILE_STATIC_INFO_MARBLE4 at [Pos]
+			ALTITUDE of PMarble[3] = -2
+			enable PMarble[3] indestructible
+			disable PMarble[3] pickup
+			enable jc special SJC_ALWAYS_VISIBLE on PMarble[3] with number 0
+			while ALTITUDE of PMarble[3] < 0
+				ALTITUDE of PMarble[3] += 0.2
+			end while
+			disable PMarble[3] moveable
+		elsif Round - 1 == 4
+			delete PMarble[4] with fade
+			SFX = create special effect SPOT_VISUAL_OBJECT_APPEAR at [Pos] time 2
+			Smoke = create special effect SPOT_VISUAL_BANG at [Pos] time 2
+			PMarble[4] = create with angle 0 and scale 1 OBJECT MOBILE_STATIC_INFO_MARBLE5 at [Pos]
+			ALTITUDE of PMarble[4] = -2
+			enable PMarble[4] indestructible
+			disable PMarble[4] pickup
+			enable jc special SJC_ALWAYS_VISIBLE on PMarble[4] with number 0
+			while ALTITUDE of PMarble[4] < 0
+				ALTITUDE of PMarble[4] += 0.2
+			end while
+			disable PMarble[4] moveable
+		elsif Round - 1 == 5
+			delete PMarble[5] with fade
+			SFX = create special effect SPOT_VISUAL_OBJECT_APPEAR at [Pos] time 2
+			Smoke = create special effect SPOT_VISUAL_BANG at [Pos] time 2
+			PMarble[5] = create with angle 0 and scale 1 OBJECT MOBILE_STATIC_INFO_MARBLE6 at [Pos]
+			ALTITUDE of PMarble[5] = -2
+			enable PMarble[5] indestructible
+			disable PMarble[5] pickup
+			enable jc special SJC_ALWAYS_VISIBLE on PMarble[5] with number 0
+			while ALTITUDE of PMarble[5] < 0
+				ALTITUDE of PMarble[5] += 0.2
+			end while
+			disable PMarble[5] moveable
+		end if
+	else
+		if Round - 1 == 0
+			delete OMarble[0] with fade
+			SFX = create special effect SPOT_VISUAL_OBJECT_APPEAR at [Pos] time 2
+			Smoke = create special effect SPOT_VISUAL_BANG at [Pos] time 2
+			OMarble[0] = create with angle 0 and scale 1 OBJECT MOBILE_STATIC_INFO_MARBLE7 at [Pos]
+			ALTITUDE of OMarble[0] = -2
+			enable OMarble[0] indestructible
+			disable OMarble[0] pickup
+			enable jc special SJC_ALWAYS_VISIBLE on OMarble[0] with number 0
+			while ALTITUDE of OMarble[0] < 0
+				ALTITUDE of OMarble[0] += 0.2
+			end while
+			disable OMarble[0] moveable
+		elsif Round - 1 == 1
+			delete OMarble[1] with fade
+			SFX = create special effect SPOT_VISUAL_OBJECT_APPEAR at [Pos] time 2
+			Smoke = create special effect SPOT_VISUAL_BANG at [Pos] time 2
+			OMarble[1] = create with angle 0 and scale 1 OBJECT MOBILE_STATIC_INFO_MARBLE8 at [Pos]
+			ALTITUDE of OMarble[1] = -2
+			enable OMarble[1] indestructible
+			disable OMarble[1] pickup
+			enable jc special SJC_ALWAYS_VISIBLE on OMarble[1] with number 0
+			while ALTITUDE of OMarble[1] < 0
+				ALTITUDE of OMarble[1] += 0.2
+			end while
+			disable OMarble[1] moveable
+		elsif Round - 1 == 2
+			delete OMarble[2] with fade
+			SFX = create special effect SPOT_VISUAL_OBJECT_APPEAR at [Pos] time 2
+			Smoke = create special effect SPOT_VISUAL_BANG at [Pos] time 2
+			OMarble[2] = create with angle 0 and scale 1 OBJECT MOBILE_STATIC_INFO_MARBLE9 at [Pos]
+			ALTITUDE of OMarble[2] = -2
+			enable OMarble[2] indestructible
+			disable OMarble[2] pickup
+			enable jc special SJC_ALWAYS_VISIBLE on OMarble[2] with number 0
+			while ALTITUDE of OMarble[2] < 0
+				ALTITUDE of OMarble[2] += 0.2
+			end while
+			disable OMarble[2] moveable
+		elsif Round - 1 == 3
+			delete OMarble[3] with fade
+			SFX = create special effect SPOT_VISUAL_OBJECT_APPEAR at [Pos] time 2
+			Smoke = create special effect SPOT_VISUAL_BANG at [Pos] time 2
+			OMarble[3] = create with angle 0 and scale 1 OBJECT MOBILE_STATIC_INFO_MARBLE10 at [Pos]
+			ALTITUDE of OMarble[3] = -2
+			enable OMarble[3] indestructible
+			disable OMarble[3] pickup
+			enable jc special SJC_ALWAYS_VISIBLE on OMarble[3] with number 0
+			while ALTITUDE of OMarble[3] < 0
+				ALTITUDE of OMarble[3] += 0.2
+			end while
+			disable OMarble[3] moveable
+		elsif Round - 1 == 4
+			delete OMarble[4] with fade
+			SFX = create special effect SPOT_VISUAL_OBJECT_APPEAR at [Pos] time 2
+			Smoke = create special effect SPOT_VISUAL_BANG at [Pos] time 2
+			OMarble[4] = create with angle 0 and scale 1 OBJECT MOBILE_STATIC_INFO_MARBLE11 at [Pos]
+			ALTITUDE of OMarble[4] = -2
+			enable OMarble[4] indestructible
+			disable OMarble[4] pickup
+			enable jc special SJC_ALWAYS_VISIBLE on OMarble[4] with number 0
+			while ALTITUDE of OMarble[4] < 0
+				ALTITUDE of OMarble[4] += 0.2
+			end while
+			disable OMarble[4] moveable
+		elsif Round - 1 == 5
+			delete OMarble[5] with fade
+			SFX = create special effect SPOT_VISUAL_OBJECT_APPEAR at [Pos] time 2
+			Smoke = create special effect SPOT_VISUAL_BANG at [Pos] time 2
+			OMarble[5] = create with angle 0 and scale 1 OBJECT MOBILE_STATIC_INFO_MARBLE12 at [Pos]
+			ALTITUDE of OMarble[5] = -2
+			enable OMarble[5] indestructible
+			disable OMarble[5] pickup
+			enable jc special SJC_ALWAYS_VISIBLE on OMarble[5] with number 0
+			while ALTITUDE of OMarble[5] < 0
+				ALTITUDE of OMarble[5] += 0.2
+			end while
+			disable OMarble[5] moveable
+		end if
+	end if
+end script ReCreateOneMarble
+
+begin script CreateCreatures
+start
+	MyCreature = get player 1 creature
+	MApe = create dumb creature from creature MyCreature 1 at [ApeThrowPos] + [10, 0, 0] CREATURE_TYPE_APE
+	run script SetupCreatureIsleCreature(MApe)
+	set MApe name HELP_TEXT_NAME_APE_01
+	ALIGNMENT of MApe = 0.75
+	FATNESS of MApe = 0.65
+	STRENGTH of MApe = 0.5
+	ACTUAL_HEIGHT of MApe = 1.5
+	enable MApe immune to spells
+	run script SendApeHome
+end script CreateCreatures
+
+begin script PlayersCreatureThrow(Marble)
+	MarbleThrown = 0
+	AimingPoint = 0
+	AimingPointFX = 0
+	Player = 1
+	ObjectInHand = 0
+	TempType = 0
+	YourGo = 0
+start
+	if MarblesCancelCurrentGame == 0
+		if Round > 1
+			run script AdvisorCommentOnHowGameIsGoing
+		end if
+		detach MyCreature leash
+		enable right hand only for MyCreature
+		clear clicked position
+		if Marble exists
+			begin dialogue
+				disable creature sound
+				YourGo = variable constant from HELP_TEXT_MARBLES_EXTRA_10 to HELP_TEXT_MARBLES_EXTRA_14
+				say single line constant YourGo by MApe
+				wait until read or [CentreOfArena] clicked radius OuterRing or CancelGameHighlight clicked
+				enable creature sound
+			end dialogue
+			while MarbleThrown == 0 and MarblesCancelCurrentGame == 0
+				set MyCreature focus to (hand position)
+				if [CentreOfArena] clicked radius OuterRing
+					AimingPoint = marker at (hand position)
+					AimingPointFX = create special effect SPOT_VISUAL_COMMAND_SUCCEED at [AimingPoint] time 1
+					enable Marble pickup
+					enable Marble moveable
+					force MyCreature CREATURE_HOLD_OBJECT Marble
+					wait until Marble in MyCreature hand
+					force MyCreature CREATURE_HURL_OBJECT_IN_HAND AimingPoint with Marble
+					wait until MyCreature played
+					disable Marble pickup
+					wait until not Marble is FLYING or not Marble exists
+					MarbleThrown = 1
+				end if
+				until MarblesCancelCurrentGame == 1
+			end while
+		end if
+		if MarblesCancelCurrentGame == 0
+			move MyCreature position to [PlayerThrowPos] radius 10
+			wait until get distance from [MyCreature] to [PlayerThrowPos] < 10
+			force MyCreature CREATURE_LOOK_FOREVER CentreOfArena
+			wait until 0.1 seconds
+			run script RepositionMarblesThrownTooFar(Player)
+		end if
+		disable right hand only for MyCreature
+	end if
+	if MarblesCancelCurrentGame == 1
+		disable right hand only for MyCreature
+	end if
+end script PlayersCreatureThrow
+
+begin script PlayersThrow
+	MarblePos = marker at [PlayerThrowPos]
+	MarbleBowled = 0
+	YourGo = 0
+	Player = 1
+	MarbleInfluence = 0
+start
+	if MarblesCancelCurrentGame == 0
+		if Round > 1
+			run script AdvisorCommentOnHowGameIsGoing
+		end if
+		YourGo = variable constant from HELP_TEXT_MARBLES_100 to HELP_TEXT_MARBLES_102
+		begin dialogue
+			disable creature sound
+			say single line constant YourGo by MApe
+			wait until read or PMarble[Round - 1] is HELD
+			close dialogue
+			enable creature sound
+		end dialogue
+		run script RepositionMarble(PMarble[Round - 1], MarblePos)
+		MarbleInfluence = create influence on PMarble[Round - 1] radius 5
+		enable PMarble[Round - 1] pickup
+		enable PMarble[Round - 1] moveable
+		while MarbleBowled == 0 and MarblesCancelCurrentGame == 0
+			if PMarble[Round - 1] exists
+				if PMarble[Round - 1] is HELD
+					if not get distance from (hand position) to [MarblePos] < 14
+						run script ReCreateOneMarble(Player, MarblePos)
+						MarbleInfluence = create influence on PMarble[Round - 1] radius 5
+						enable PMarble[Round - 1] pickup
+						enable PMarble[Round - 1] moveable
+						begin dialogue
+							disable creature sound
+							say single line HELP_TEXT_MARBLES_90 by MApe
+							wait until read or PMarble[Round - 1] is HELD
+							enable creature sound
+						end dialogue
+					end if
+				end if
+				if not PMarble[Round - 1] is HELD
+					if not get distance from [PMarble[Round - 1]] to [MarblePos] < 15
+						MarbleBowled = 1
+						MarbleInfluence = create anti influence on PMarble[Round - 1] radius 5
+						disable PMarble[Round - 1] pickup
+					end if
+				end if
+			end if
+			until MarblesCancelCurrentGame == 1
+		end while
+		if MarblesCancelCurrentGame == 0
+			run script RepositionMarblesThrownTooFar(Player)
+		end if
+	end if
+end script PlayersThrow
+
+begin script OpponentThrow(Marble)
+	MarbleThrown = 0
+	AimingPoint = 0
+	Counter = 0
+	ApeLookPos = 0
+	Ape = 0
+start
+	if MarblesCancelCurrentGame == 0
+		force MApe CREATURE_IDLE MApe
+		enable right hand only for MApe
+		begin dialogue
+			if get distance from [PMarble[Round - 1]] to [MarbleArenaPos] < InnerRing
+				say single line HELP_TEXT_MARBLES_EXTRA_15 by MApe
+			elsif get distance from [PMarble[Round - 1]] to [MarbleArenaPos] < InnerMiddleRing
+				say single line HELP_TEXT_MARBLES_EXTRA_16 by MApe
+			elsif get distance from [PMarble[Round - 1]] to [MarbleArenaPos] < OuterMiddleRing
+				say single line HELP_TEXT_MARBLES_EXTRA_17 by MApe
+			elsif get distance from [PMarble[Round - 1]] to [MarbleArenaPos] < OuterRing
+				say single line HELP_TEXT_MARBLES_EXTRA_18 by MApe
+			else
+				say single line HELP_TEXT_MARBLES_EXTRA_19 by MApe
+			end if
+			wait until read
+		end dialogue
+		run script CalculateTargetPos
+		if Marble exists
+			while MarbleThrown == 0 and MarblesCancelCurrentGame == 0
+				set MApe focus to [ThrowTargetPos]
+				enable Marble pickup
+				enable Marble moveable
+				AimingPoint = marker at [ThrowTargetPos]
+				force MApe CREATURE_HOLD_OBJECT Marble
+				wait until Marble in MApe hand
+				force MApe CREATURE_HURL_OBJECT_IN_HAND AimingPoint with Marble
+				wait until MApe played
+				disable Marble pickup
+				wait until not Marble is FLYING or not Marble exists
+				MarbleThrown = 1
+				until MarblesCancelCurrentGame == 1
+			end while
+		end if
+		if MarblesCancelCurrentGame == 0
+			move MApe position to [ApeThrowPos] radius 10
+			wait until get distance from [MApe] to [ApeThrowPos] < 10
+			force MApe CREATURE_LOOK_FOREVER CentreOfArena
+			wait until 0.1 seconds
+		end if
+		disable right hand only for MApe
+	end if
+end script OpponentThrow
+
+begin script CalculateTargetPos
+	Angle = 0
+	Distance = 0
+	DistanceToCentre = 0
+	MarblePos = 0
+	MarbleDistance = 0
+	MarbleDistanceOut = 0
+	MarbleDistanceFromLeftEdge = 0
+	MarbleDistanceFromRightEdge = 0
+	MarbleAngleOut = 0
+	LeftEdgePos = 0
+	RightEdgePos = 0
+	Sparkle = 0
+start
+	if MarblesCancelCurrentGame == 0
+		LeftEdgePos = marker at (get target from [MarblePoint1] to [CentreOfArena] distance 42.5 angle -90)
+		RightEdgePos = marker at (get target from [MarblePoint1] to [CentreOfArena] distance 42.5 angle 90)
+		if Round == 1
+			if not CentreOfArenaRock exists
+				CentreOfArenaRock = create with angle 0 and scale 0.001 ROCK_OBJECT ROCK at [CentreOfArena]
+				enable CentreOfArenaRock indestructible
+				disable CentreOfArenaRock pickup
+				disable CentreOfArenaRock moveable
+			end if
+			if not ArenaLeftEdge exists
+				ArenaLeftEdge = create with angle 0 and scale 0.001 ROCK_OBJECT ROCK at [LeftEdgePos]
+				enable ArenaLeftEdge indestructible
+				disable ArenaLeftEdge pickup
+				disable ArenaLeftEdge moveable
+			end if
+			if not ArenaRightEdge exists
+				ArenaRightEdge = create with angle 0 and scale 0.001 ROCK_OBJECT ROCK at [RightEdgePos]
+				enable ArenaRightEdge indestructible
+				disable ArenaRightEdge pickup
+				disable ArenaRightEdge moveable
+			end if
+		end if
+		DistanceToCentre = get distance from [CentreOfArena] to [ApeThrowPos]
+		if Round > 1
+			if Round == 2
+				MarblePos = marker at [OMarble[0]]
+			elsif Round == 3
+				MarblePos = marker at [OMarble[1]]
+			elsif Round == 4
+				MarblePos = marker at [OMarble[2]]
+			elsif Round == 5
+				MarblePos = marker at [OMarble[3]]
+			elsif Round == 6
+				MarblePos = marker at [OMarble[4]]
+			end if
+			MarbleDistance = get distance from [MarblePos] to [ApeThrowPos]
+			MarbleDistanceOut = get distance from [MarblePos] to [CentreOfArena]
+			if DistanceToCentre > MarbleDistance
+				EstimatedAmountOfRoll += MarbleDistanceOut / 2
+			elsif DistanceToCentre < MarbleDistance
+				EstimatedAmountOfRoll -= MarbleDistanceOut / 2
+			else
+			end if
+			MarbleDistanceFromLeftEdge = get distance from [MarblePos] to [ArenaLeftEdge]
+			MarbleDistanceFromRightEdge = get distance from [MarblePos] to [ArenaRightEdge]
+			MarbleAngleOut = get distance from [MarblePos] to [CentreOfArena]
+			if MarbleDistanceFromRightEdge > MarbleDistanceFromLeftEdge
+				EstimatedAngle += MarbleAngleOut / 2
+			elsif MarbleDistanceFromRightEdge < MarbleDistanceFromLeftEdge
+				EstimatedAngle -= MarbleAngleOut / 2
+			else
+			end if
+		end if
+		if EstimatedAmountOfRoll > MarblesMaxRoll
+			EstimatedAmountOfRoll = MarblesMaxRoll
+		end if
+		if EstimatedAmountOfRoll < MarblesMinRoll
+			EstimatedAmountOfRoll = MarblesMinRoll
+		end if
+		if EstimatedAngle > MarblesMaxAngle
+			EstimatedAngle = MarblesMaxAngle
+		end if
+		if EstimatedAngle < MarblesMinAngle
+			EstimatedAngle = MarblesMinAngle
+		end if
+		Distance = DistanceToCentre - EstimatedAmountOfRoll
+		Angle = EstimatedAngle
+		ThrowTargetPos = marker at (get target from [ApeThrowPos] to [CentreOfArena] distance Distance angle Angle)
+	end if
+end script CalculateTargetPos
+
+begin script CalculateScore
+	CurrentScore = 0
+	Distance = 0
+	OuterRingScore = 10
+	OuterMiddleRingScore = 30
+	InnerMiddleRingScore = 70
+	InnerRingScore = 150
+	Counter = 0
+start
+	while Counter < 6 and MarblesCancelCurrentGame == 0
+		if PMarble[Counter] exists
+			wait until not PMarble[Counter] is FLYING
+		end if
+		Counter++
+		until MarblesCancelCurrentGame == 1
+	end while
+	Counter = 0
+	while Counter < 6 and MarblesCancelCurrentGame == 0
+		if OMarble[Counter] exists
+			wait until not OMarble[Counter] is FLYING
+		end if
+		Counter++
+		until MarblesCancelCurrentGame == 1
+	end while
+	Counter = 0
+	while Counter < 6 and MarblesCancelCurrentGame == 0
+		if PMarble[Counter] exists
+			Distance = get distance from [CentreOfArena] to [PMarble[Counter]]
+			if Distance <= InnerRing
+				CurrentScore += InnerRingScore
+			elsif Distance <= InnerMiddleRing
+				CurrentScore += InnerMiddleRingScore
+			elsif Distance <= OuterMiddleRing
+				CurrentScore += OuterMiddleRingScore
+			elsif Distance <= OuterRing
+				CurrentScore += OuterRingScore
+			else
+				CurrentScore += 0
+			end if
+		end if
+		Counter++
+	end while
+	MyScore = CurrentScore
+	CurrentScore = 0
+	Counter = 0
+	while Counter < 6 and MarblesCancelCurrentGame == 0
+		if OMarble[Counter] exists
+			Distance = get distance from [CentreOfArena] to [OMarble[Counter]]
+			if Distance <= InnerRing
+				CurrentScore += InnerRingScore
+			elsif Distance <= InnerMiddleRing
+				CurrentScore += InnerMiddleRingScore
+			elsif Distance <= OuterMiddleRing
+				CurrentScore += OuterMiddleRingScore
+			elsif Distance <= OuterRing
+				CurrentScore += OuterRingScore
+			else
+				CurrentScore += 0
+			end if
+		end if
+		Counter++
+	end while
+	ApeScore = CurrentScore
+end script CalculateScore
+
+begin script DisplayScore
+	OrigPos = 0
+	OrigFoc = 0
+	ViewScoreboardsPos = marker at [1509.4037, 19.9796, 2652.647]
+	ViewScoreboardsFoc = marker at [1536.1294, 12.7345, 2672.5698]
+start
+	if MarblesCancelCurrentGame == 0
+		set PMarbleScoreboard score MyScore
+		set OMarbleScoreboard score ApeScore
+		if Round == 1 and MarblesExplainAboutScores == 0
+			OrigPos = marker at (camera position)
+			OrigFoc = marker at (camera focus)
+			begin cinema
+				move camera position to [ViewScoreboardsPos] time 3
+				move camera focus to [ViewScoreboardsFoc] time 3
+				wait until camera ready
+				make good spirit appear
+				say single line HELP_TEXT_MARBLES_80
+				wait until read
+				clear dialogue
+				stop good spirit pointing
+				make good spirit disappear
+				move camera position to [OrigPos] time 3
+				move camera focus to [OrigFoc] time 3
+				wait until camera ready
+			end cinema
+			MarblesExplainAboutScores = 1
+		end if
+	end if
+end script DisplayScore
+
+begin script PlayerWon
+	ApeLost = 0
+	GotMarble = 0
+	MarbleToKick = 0
+	ApeHeight = 0
+	MyCreatureHeight = 0
+	StandNextToMyCreaturePos = 0
+	LookingAtApeGoingToDojo = 0
+	RandomDojoLine = 0
+	CloseUpOfApeLosing = 0
+	WatchKissPos = 0
+	MidPoint = 0
+	Dist = 0
+	ApeGoingToDojo = marker at [1445.1594, 18.9955, 2473.5518]
+	OverMyCreatureShoulderPos = marker at [1415.7968, 43.3075, 2710.8274]
+	OverMyCreatureShoulderFoc = marker at [1482.1304, 13.033, 2674.409]
+	OrigPos = 0
+	OrigFoc = 0
+	PlayerBeatApePos = marker at [1532.5962, 53.2923, 2559.9495]
+	PlayerBeatApeFoc = marker at [1537.4175, 13.3058, 2610.2737]
+	MeetingPoint = marker at (get target from [ApeThrowPos] to [CentreOfArena] distance 40 angle 0)
+start
+	if MarblesCancelCurrentGame == 0
+		ApeHeight = HEIGHT of MApe
+		ApeHeight = ApeHeight * 0.8
+		MyCreatureHeight = HEIGHT of MyCreature
+		MyCreatureHeight = MyCreatureHeight * 0.8
+		if MarblesPlayingForFun == 0
+			while GotMarble == 0
+				MarbleToKick = number from 0 to 5
+				if OMarble[MarbleToKick] exists
+					GotMarble = 1
+				end if
+			end while
+			begin cinema
+				set camera position to [OverMyCreatureShoulderPos]
+				set camera focus to [OverMyCreatureShoulderFoc]
+				wait until 1 seconds
+				CloseUpOfApeLosing = marker at (get target from (camera position) to [MApe] distance 30 angle 180)
+				set camera position to [CloseUpOfApeLosing] + [0, ApeHeight, 0]
+				set camera focus to [MApe] + [0, ApeHeight, 0]
+				set MApe focus to [OMarble[MarbleToKick]]
+				wait until 1 seconds
+				MApe play ANM_A_COW_DEAD loop 1
+				wait until MApe played
+				set camera focus follow MApe
+				move camera position to [OverMyCreatureShoulderPos] time 2
+				move camera focus to [OverMyCreatureShoulderFoc] time 2
+				disable creature sound
+				force MApe CREATURE_KICK OMarble[MarbleToKick]
+				say single line HELP_TEXT_MARBLES_APE_LOST_04 by MApe
+				wait until 3 seconds
+				move MyCreature position to [MeetingPoint] radius 0
+				wait until MApe played
+				enable creature sound
+				set MApe focus to [MyCreature]
+				wait until read
+				close dialogue
+				RandomDojoLine = number from 1 to 2
+				disable creature sound
+				if RandomDojoLine == 1
+					say single line HELP_TEXT_MARBLES_APE_LOST_02 by MApe
+				else
+					say single line HELP_TEXT_MARBLES_APE_LOST_03 by MApe
+				end if
+				enable creature sound
+				LookingAtApeGoingToDojo = marker at (get target from [ApeGoingToDojo] to [MyCreature] distance 20 angle -30)
+				set MApe focus to [ApeGoingToDojo]
+				move MApe position to [ApeGoingToDojo] radius 0
+				move camera position to [LookingAtApeGoingToDojo] + [0, MyCreatureHeight, 0] time 2
+				move camera focus to [ApeGoingToDojo] time 2
+				wait until 2 seconds
+				set MyCreature focus to [ApeGoingToDojo]
+				wait until 1 seconds
+				
+				if MyCreature type CREATURE CREATURE_TYPE_OGRE
+					MyCreature play C_INDIVIDUAL_HAPPY loop 1
+				else
+					MyCreature play ANM_A_HORSE_DEADRHS loop 1
+				end if
+		
+				wait until MyCreature played
+				wait until read
+			end cinema with widescreen
+		else
+			begin cinema
+				OrigPos = marker at (camera position)
+				OrigFoc = marker at (camera focus)
+				set camera position to [PlayerBeatApePos]
+				set camera focus to [PlayerBeatApeFoc]
+				MApe play ANM_A_COW_DEAD loop 1
+				wait until MApe played
+				set MApe focus to (camera position)
+				wait until 0.5 seconds
+				move camera focus to [MApe] + [0, ApeHeight / 3, 0] time 3
+				disable creature sound
+				MApe play ANM_A_HORSE_EAT1 loop 1
+				say single line HELP_TEXT_MARBLES_APE_LOST_01 by MApe
+				wait until read
+				enable creature sound
+				eject good spirit
+				make good spirit play across 0.2 down 0.5 ANIM_TRIUMPH speed 1
+				say single line HELP_TEXT_COW_BOWLING_ADVISOR_WELL_05
+				wait until read
+				set MApe focus to [CentreOfArena]
+				move camera position to [OrigPos] time 2
+				move camera focus to [OrigFoc] time 2
+				wait until good spirit played
+				send good spirit home
+				wait until camera ready
+			end cinema
+		end if
+	end if
+end script PlayerWon
+
+begin script PlayerLost
+	ApeWon = 0
+	GotMarble = 0
+	MarbleToPickUp = 0
+	ViewCreatureSad = 0
+	AdvisorComment = 0
+	MyCreatureHeight = 0
+	ApeHeight = 0
+	ApeNextToMarble = 0
+	CloseUpOfApe = 0
+	LookBackToMyCreature = 0
+	OrigPos = 0
+	OrigFoc = 0
+	LookAtApeCelebratingPos = 0
+	MoveApePastCameraPos = 0
+	OverMyCreatureShoulderPos = marker at [1415.7968, 43.3075, 2710.8274]
+	OverMyCreatureShoulderFoc = marker at [1482.1304, 13.033, 2674.409]
+	InitialLostCameraPos = marker at [1443.1472, 36.6954, 2691.5686]
+	InitialLostCameraFoc = marker at [1563.1656, 14.8718, 2623.0647]
+	WatchingHandStandPos = marker at [1467.0918, 43.3368, 2660.1663]
+	WatchingHandStandFoc = marker at [1526.7151, 13.4777, 2639.604]
+	TempMarble = 0
+start
+	ApeHeight = HEIGHT of MApe
+	ApeHeight = ApeHeight * 0.8
+	MyCreatureHeight = HEIGHT of MyCreature
+	MyCreatureHeight = MyCreatureHeight * 0.8
+	if MarblesCancelCurrentGame == 0
+		if MarblesPlayingForFun == 0
+			ApeWon = variable constant from HELP_TEXT_MARBLES_APE_WON_01 to HELP_TEXT_MARBLES_APE_WON_03
+			while GotMarble == 0
+				MarbleToPickUp = number from 0 to 5
+				if OMarble[MarbleToPickUp] exists
+					GotMarble = 1
+				end if
+			end while
+			begin cinema
+				update snapshot CHALLENGE_MARBLES success 0 alignment 0 HELP_TEXT_CREATURE_ISLE_TITLE_15 StandardReminder (variable HELP_TEXT_CI_REMINDER_12)
+				set camera position to [OverMyCreatureShoulderPos]
+				set camera focus to [OverMyCreatureShoulderFoc]
+				set camera focus follow MApe
+				while ApeNextToMarble == 0
+					if not get distance from [MApe] to [OMarble[MarbleToPickUp]] < 1
+						move MApe position to [OMarble[MarbleToPickUp]] radius 0
+					else
+						ApeNextToMarble = 1
+					end if
+				end while
+				disable creature sound
+				say single line constant ApeWon by MApe
+				force MApe POINT_AT MyCreature
+				CloseUpOfApe = marker at (get target from (camera position) to [MApe] distance 30 angle 180)
+				move camera position to [CloseUpOfApe] + [0, ApeHeight + ApeHeight / 3, 0] time 2
+				move camera focus to [MApe] + [0, ApeHeight, 0] time 2
+				wait until 1 seconds
+				MApe play ANM_A_COW_DEAD_ON_RHS loop 1
+				wait until MApe played
+				enable OMarble[MarbleToPickUp] moveable
+				enable OMarble[MarbleToPickUp] pickup
+				force MApe CREATURE_HOLD_OBJECT OMarble[MarbleToPickUp]
+				wait until OMarble[MarbleToPickUp] in MApe hand
+				set MApe focus to [OMarblePos[MarbleToPickUp]]
+				LookBackToMyCreature = marker at (get target from [MyCreature] to [MApe] distance 30 angle -30)
+				MoveApePastCameraPos = marker at (get target from [MyCreature] to [MApe] distance 50 angle 0)
+				set camera position to [LookBackToMyCreature] + [0, ApeHeight, 0]
+				set camera focus to [MyCreature]
+				move MApe position to [MoveApePastCameraPos] radius 0
+				enable creature sound
+				MyCreature play ANM_A_HORSE_EAT1 loop 1
+				wait until get distance from [MApe] to [MoveApePastCameraPos] < 1 or 10 seconds
+				move MApe position to [ApeThrowPos] radius 0
+				wait until MyCreature played
+				wait until read
+				ViewCreatureSad = marker at (get target from [MApe] to [MyCreature] distance 30 angle 180)
+				set camera position to [ViewCreatureSad] + [0, MyCreatureHeight, 0]
+				set camera focus to [MyCreature] + [0, MyCreatureHeight / 2, 0]
+				MyCreature play ANM_PIPER_CAVE_OPENING loop 1
+				AdvisorComment = number from 1 to 2
+				if AdvisorComment == 1
+					eject good spirit
+					say single line HELP_TEXT_MARBLES_ADVISOR_POOR_02
+				else
+					eject evil spirit
+					say single line HELP_TEXT_MARBLES_ADVISOR_POOR_05
+				end if
+				wait until MyCreature played
+				wait until read
+				send good spirit home
+				send evil spirit home
+				move MApe position to [ApeThrowPos] radius 0
+				wait until get distance from [MApe] to [ApeThrowPos] < 1
+				set MApe focus to [CentreOfArena]
+				force MApe CREATURE_START_FIRE MApe
+				move camera position to [OverMyCreatureShoulderPos] time 2
+				move camera focus to [OverMyCreatureShoulderFoc] time 2
+				wait until camera ready
+			end cinema
+		else
+			begin cinema
+				ApeWon = variable constant from HELP_TEXT_MARBLES_APE_WON_01 to HELP_TEXT_MARBLES_APE_WON_04
+				set camera position to [InitialLostCameraPos]
+				set camera focus to [InitialLostCameraFoc]
+				wait until 0.1 seconds
+				set MApe focus to (camera position)
+				move MApe position to [CentreOfArena] radius 0
+				wait until get distance from [MApe] to [CentreOfArena] < 5
+				set MApe focus to (camera position)
+				wait until 0.1 seconds
+				MApe play ANM_A_COW_UPFROM_EAT loop 1
+				wait until MApe played
+				set camera position to [WatchingHandStandPos]
+				set camera focus to [WatchingHandStandFoc]
+				wait until 0.1 seconds
+				TempMarble = create with angle 0 and scale 0.001 OBJECT MOBILE_STATIC_INFO_MARBLE7 at (camera position)
+				ALTITUDE of TempMarble = ApeHeight + ApeHeight / 2
+				set MApe focus to [TempMarble]
+				wait until 0.1 seconds
+				disable creature sound
+				force MApe POINT_AT TempMarble
+				say single line constant ApeWon by MApe
+				wait until 3 seconds
+				enable creature sound
+				MApe play ANM_A_COW_LANDED_RIGHT_SIDE loop 1
+				wait until read
+				delete TempMarble
+			end cinema
+			wait until 4 seconds
+			move MApe position to [ApeThrowPos] radius 0
+			begin dialogue
+				eject good spirit
+				make good spirit play across 0.2 down 0.5 ANIM_HEADINHANDS speed 1
+				say single line HELP_TEXT_MARBLES_ADVISOR_POOR_02
+				wait until read
+				wait until get distance from [MApe] to [ApeThrowPos] < 5 or 10 seconds
+				set MApe focus to [CentreOfArena]
+				wait until 0.5 seconds
+			end dialogue
+		end if
+	end if
+end script PlayerLost
+
+begin script PlayerHasDrawn
+	ApeDrawn = 0
+	ApeHeight = 0
+	MyCreatureHeight = 0
+	CloseUpOfApePos = 0
+	CloseUpOfMyCreaturePos = 0
+	OverMyCreatureShoulderPos = marker at [1415.7968, 43.3075, 2710.8274]
+	OverMyCreatureShoulderFoc = marker at [1482.1304, 13.033, 2674.409]
+	OrigPos = 0
+	OrigFoc = 0
+	LookAtApeCelebratingPos = 0
+	DrawnCameraPos = marker at [1543.4393, 41.3461, 2562.4287]
+	DrawnCameraFoc = marker at [1532.0505, 12.7064, 2621.2334]
+	Marker = 0
+start
+	ApeHeight = HEIGHT of MApe
+	ApeHeight = ApeHeight * 0.8
+	MyCreatureHeight = HEIGHT of MyCreature
+	MyCreatureHeight = MyCreatureHeight * 0.8
+	if MarblesCancelCurrentGame == 0
+		if MarblesPlayingForFun == 0
+			begin cinema
+				update snapshot CHALLENGE_MARBLES success 0 alignment 0 HELP_TEXT_CREATURE_ISLE_TITLE_15 StandardReminder (variable HELP_TEXT_CI_REMINDER_12)
+				ApeDrawn = variable constant from HELP_TEXT_MARBLES_GAME_DRAWN_01 to HELP_TEXT_MARBLES_GAME_DRAWN_05
+				CloseUpOfApePos = marker at (get target from [MyCreature] to [MApe] distance ApeHeight * 2 angle 180)
+				set camera position to [CloseUpOfApePos] + [0, ApeHeight, 0]
+				set camera focus to [MApe] + [0, ApeHeight, 0]
+				disable creature sound
+				MApe play ANM_A_HORSE_DEADRHS loop 1
+				say single line constant ApeDrawn by MApe
+				wait until MApe played
+				enable creature sound
+				MApe play ANM_A_COW_DOWNED_ON_RHS loop 1
+				wait until MApe played
+				MApe play ANM_A_COW_EAT_1 loop 1
+				wait until read
+				CloseUpOfMyCreaturePos = marker at (get target from [MApe] to [MyCreature] distance MyCreatureHeight * 2 angle 180)
+				set camera position to [CloseUpOfMyCreaturePos] + [0, MyCreatureHeight, 0]
+				set camera focus to [MyCreature] + [0, MyCreatureHeight - MyCreatureHeight / 4, 0]
+				MyCreature play ANM_PIPER_CAVE_OPENING loop 1
+				eject evil spirit
+				make evil spirit play across 0.2 down 0.5 ANIM_RUDE speed 1
+				say single line HELP_TEXT_MARBLES_ADVISOR_POOR_05
+				wait until read
+				wait until MyCreature played
+				wait until evil spirit played
+				send evil spirit home
+				move camera position to [OverMyCreatureShoulderPos] time 2
+				move camera focus to [OverMyCreatureShoulderFoc] time 2
+				wait until camera ready
+			end cinema
+		else
+			begin cinema
+				ApeDrawn = variable HELP_TEXT_MARBLES_GAME_DRAWN_02
+				OrigPos = marker at (camera position)
+				OrigFoc = marker at (camera focus)
+				set camera position to [DrawnCameraPos]
+				set camera focus to [DrawnCameraFoc]
+				set MApe focus to (camera position)
+				move camera focus to [MApe] + [0, ApeHeight, 0] time 3
+				wait until 0.5 seconds
+				disable creature sound
+				Marker = marker at (camera position)
+				force MApe POINT_AT Marker
+				wait until 1 seconds
+				say single line constant ApeDrawn by MApe
+				wait until MApe played
+				wait until read
+				enable creature sound
+				MApe play ANM_PIPER_CAVE_CLOSING loop 1
+				wait until MApe played
+				eject good spirit
+				MApe play ANM_GATE_TOTEM_PLINTHE loop 1
+				make good spirit play across 0.2 down 0.5 ANIM_SULK speed 1
+				say single line HELP_TEXT_COW_BOWLING_ADVISOR_POOR_04
+				wait until MApe played
+				set MApe focus to (camera position)
+				force MApe CREATURE_START_FIRE MApe
+				wait until good spirit played
+				wait until read
+				send good spirit home
+				set MApe focus to [CentreOfArena]
+				move camera position to [OrigPos] time 2
+				move camera focus to [OrigFoc] time 2
+				wait until camera ready
+			end cinema
+		end if
+	end if
+end script PlayerHasDrawn
+
+begin script CleanUpMarbles
+	Counter = 0
+	SFX = 0
+	Smoke = 0
+start
+	while Counter < 6
+		if PMarble[Counter] exists and not get distance from [PMarble[Counter]] to [PMarblePos[Counter]] == 0
+			SFX = create special effect SPOT_VISUAL_OBJECT_APPEAR at [PMarble[Counter]] time 2
+			Smoke = create special effect SPOT_VISUAL_BANG at [PMarble[Counter]] time 2
+			delete PMarble[Counter]
+		end if
+		Counter++
+	end while
+	Counter = 0
+	while Counter < 6
+		if OMarble[Counter] exists and not get distance from [OMarble[Counter]] to [OMarblePos[Counter]] == 0
+			SFX = create special effect SPOT_VISUAL_OBJECT_APPEAR at [OMarble[Counter]] time 2
+			Smoke = create special effect SPOT_VISUAL_BANG at [OMarble[Counter]] time 2
+			delete OMarble[Counter]
+		end if
+		Counter++
+	end while
+end script CleanUpMarbles
+
+begin script MarbleGiveReward
+start
+end script MarbleGiveReward
+
+begin script PositionPlayersCreature
+	ApeSize = 0
+start
+	if MarblesCancelCurrentGame == 0
+		begin cinema
+			begin dual camera to MyCreature MApe
+				detach MyCreature leash
+				move MyCreature position to [PlayerThrowPos] radius 0
+				if Tyke exists and TykeIsReady == 1 and TykeFree == 1
+					run background script MoveTykeToWatchPos
+				end if
+				wait until get distance from [MyCreature] to [PlayerThrowPos] < 1 or 10 seconds
+				if not get distance from [MyCreature] to [PlayerThrowPos] < 1
+					set MyCreature position to [PlayerThrowPos]
+				end if
+				force MyCreature CREATURE_LOOK_FOREVER CentreOfArena
+				wait until 1 seconds
+				MarblesOldScale = ACTUAL_HEIGHT of MyCreature
+				ApeSize = ACTUAL_HEIGHT of MApe
+				run script ScaleCreature(MyCreature, ApeSize)
+				run script CreatureDropsHeldObject(MyCreature)
+			end dual camera
+		end cinema with widescreen
+	end if
+end script PositionPlayersCreature
+
+begin script IntroToMarbles(DYKPos)
+	OverMyCreatureShoulderPos = marker at [1415.7968, 43.3075, 2710.8274]
+	OverMyCreatureShoulderFoc = marker at [1482.1304, 13.033, 2674.409]
+	LeftSideOfApePos = marker at [1536.8395, 31.4818, 2624.4377]
+	LeftSideOfApeFoc = marker at [1553.217, 21.5756, 2572.0325]
+	RightSideOfApePos = marker at [1512.6598, 33.9246, 2598.2722]
+	RightSideOfApeFoc = marker at [1567.5734, 20.6479, 2580.5088]
+	LookingFromBehindApePos = marker at [1554.4374, 39.1627, 2564.0237]
+	LookingFromBehindApeFoc = marker at [1510.3932, 14.0869, 2627.0256]
+	LooknigAtApePointingPos = marker at [1538.5337, 35.9669, 2564.6367]
+	LooknigAtApePointingFoc = marker at [1526.309, 13.5259, 2637.851]
+	CloseUpOfArenaPos = marker at [1508.8433, 32.9307, 2604.4438]
+	CloseUpOfArenaFoc = marker at [1509.4785, 14.0451, 2663.9248]
+	LookAtDYKPos = marker at [1504.8036, 25.1619, 2685.2292]
+	LookAtDYKFoc = marker at [1539.3368, 13.0574, 2670.7256]
+	MyCreatureScale = 0
+	MyCreatureHeight = 0
+	MApeHeight = 0
+	ViewMarbleCamPos = 0
+	MarkerRock = 0
+	CloseUpOfMyCreaturePos = 0
+start
+	MyCreatureScale = ACTUAL_HEIGHT of MyCreature
+	MyCreatureHeight = HEIGHT of MyCreature
+	MyCreatureHeight = MyCreatureHeight * MyCreatureScale
+	MApeHeight = HEIGHT of MApe
+	MApeHeight = MApeHeight * 0.8
+	if MarblesCancelCurrentGame == 0
+		begin cinema
+			force MApe CREATURE_LOOK_FOREVER MyCreature
+			set MyCreature focus to [MApe]
+			wait until 1 seconds
+			set camera position to [LeftSideOfApePos]
+			set camera focus to [LeftSideOfApeFoc] + [0, 2, 0]
+			wait until camera ready
+			move camera position to [RightSideOfApePos] time 15
+			move camera focus to [RightSideOfApeFoc] + [0, 2, 0] time 15
+			disable creature sound
+			say single line HELP_TEXT_MARBLES_10 by MApe
+			MApe play ANM_PIED_PIPER_DANCE_STAND loop 1
+			wait until read
+			say single line HELP_TEXT_MARBLES_20 by MApe
+			enable OMarble[0] moveable
+			enable OMarble[0] pickup
+			force MApe CREATURE_HOLD_OBJECT OMarble[0]
+			wait until OMarble[0] in MApe hand
+			set MApe focus to [MyCreature]
+			wait until 1 seconds
+			ViewMarbleCamPos = marker at (get target from [MyCreature] to [MApe] distance 30 angle 180)
+			set camera position to [ViewMarbleCamPos] + [0, MApeHeight, 0]
+			set camera focus to [MApe] + [0, MApeHeight / 1.5, 0]
+			wait until 0.5 seconds
+			force MApe CREATURE_EXAMINE_OBJECT_IN_HAND OMarble[0]
+			wait until MApe played
+			force MApe CREATURE_STROKE_OBJECT_IN_HAND OMarble[0]
+			wait until read
+			close dialogue
+			set camera position to [RightSideOfApePos]
+			set camera focus to [RightSideOfApeFoc]
+			wait until 0.1 seconds
+			snapshot CHALLENGE_MARBLES quest success 0 alignment 0 HELP_TEXT_CREATURE_ISLE_TITLE_15 StandardReminder (variable HELP_TEXT_CI_REMINDER_12)
+			force MApe CREATURE_PUT_DOWN OMarble[0]
+			wait until MApe played
+			disable OMarble[0] moveable
+			disable OMarble[0] pickup
+			set camera position to [LookingFromBehindApePos]
+			set camera focus to [LookingFromBehindApeFoc]
+			wait until camera ready
+			delete OMarble[0]
+			OMarble[0] = create with angle 0 and scale 1 OBJECT MOBILE_STATIC_INFO_MARBLE7 at [OMarblePos[0]]
+			disable OMarble[0] pickup
+			disable OMarble[0] moveable
+			enable OMarble[0] indestructible
+			MarkerRock = create with angle 0 and scale 0.001 ROCK_OBJECT ROCK at [CentreOfArena]
+			force MApe POINT_AT MarkerRock
+			say HELP_TEXT_MARBLES_30 by MApe
+			wait until 1 seconds
+			move camera position to [LooknigAtApePointingPos] time 1
+			move camera focus to [LooknigAtApePointingFoc] time 1
+			wait until camera ready
+			wait until 1 seconds
+			delete MarkerRock
+			move camera position to [CloseUpOfArenaPos] time 2
+			move camera focus to [CloseUpOfArenaFoc] time 2
+			wait until 0.5 seconds
+			enable OMarble[0] moveable
+			set OMarble[0] velocity heading [CentreOfArena] speed 29 angular x 0 y 0 z 0
+			wait until 4 seconds
+			wait until read
+			say HELP_TEXT_MARBLES_40 with interaction by MApe
+			ViewMarbleCamPos = marker at (get target from [MyCreature] to [MApe] distance 20 angle 180)
+			set camera position to [ViewMarbleCamPos] + [0, MApeHeight, 0]
+			set camera focus to [MApe] + [0, MApeHeight / 1.2, 0]
+			MApe play ANM_A_COW_EAT_1 loop 1
+			wait until MApe played
+			wait until 2 seconds
+			MApe play ANM_A_COW_DEAD_ON_RHS loop 1
+			wait until MApe played
+			MApe play ANM_A_COW_EAT_1 loop 1
+			delete OMarble[0]
+			OMarble[0] = create with angle 0 and scale 1 OBJECT MOBILE_STATIC_INFO_MARBLE7 at [OMarblePos[0]]
+			disable OMarble[0] pickup
+			disable OMarble[0] moveable
+			enable OMarble[0] indestructible
+			wait until read
+			say single line HELP_TEXT_MARBLES_50 by MApe
+			wait until 1.5 seconds
+			CloseUpOfMyCreaturePos = marker at (get target from [MApe] to [MyCreature] distance 40 angle 180)
+			set camera position to [CloseUpOfMyCreaturePos] + [0, MyCreatureHeight / 2, 0]
+			set camera focus to [MyCreature] + [0, MyCreatureHeight / 3, 0]
+			wait until camera ready
+			wait until 0.5 seconds
+			MyCreature play ANM_A_COW_DEAD_ON_RHS loop 1
+			wait until read
+			close dialogue
+			set camera position to [LookAtDYKPos]
+			set camera focus to [LookAtDYKFoc]
+			wait until 0.5 seconds
+			say single line HELP_TEXT_MARBLES_60 by MApe
+			force MApe POINT_AT DYKPos
+			move camera position to [OverMyCreatureShoulderPos] time 2.5
+			move camera focus to [OverMyCreatureShoulderFoc] time 2.5
+			wait until read
+			say single line HELP_TEXT_MARBLES_65 by MApe
+			wait until read
+			wait until camera ready
+			set MApe focus to [CentreOfArena]
+		end cinema
+	end if
+end script IntroToMarbles
+
+begin script CreateMarbleScoreboards
+	PlayerScoreboardPos = marker at (get target from [MarblePoint1] to [CentreOfArena] distance 45 angle 110)
+	ApeScoreboardPos = marker at (get target from [MarblePoint1] to [CentreOfArena] distance 45 angle 70)
+start
+	PMarbleScoreboard = create highlight CHALLENGE_NONE SCRIPT_HIGHLIGHT_INFO_SCOREBOARD_BIG at [PlayerScoreboardPos]
+	OMarbleScoreboard = create highlight CHALLENGE_NONE SCRIPT_HIGHLIGHT_INFO_SCOREBOARD_BIG at [ApeScoreboardPos]
+	ALTITUDE of PMarbleScoreboard = 0
+	ALTITUDE of OMarbleScoreboard = 0
+	enable PMarbleScoreboard indestructible
+	enable OMarbleScoreboard indestructible
+end script CreateMarbleScoreboards
+
+begin script MarblesTestForCancelledGame
+	ClickedOnce = 0
+	ConfirmMessage = 0
+	CancelConfirmedOrCancelled = 0
+	ConfirmTimer = create timer for 0 seconds
+	CancelGameHighlightPos = marker at (get target from [MarblePoint1] to [CentreOfArena] distance 45 angle -90)
+start
+	CurrentCancelScrollPos = marker at [CancelGameHighlightPos]
+	wait until MarblesIntroPlayed == 1
+	if MarbleTrialRunning == 1 and not CancelGameHighlight exists
+		if MarblesTrialCompleted == 0
+			CancelGameHighlight = create highlight CHALLENGE_NONE HIGHLIGHT_CANCEL_QUEST at [CancelGameHighlightPos]
+			ALTITUDE of CancelGameHighlight = 0
+		else
+			CancelGameHighlight = create highlight CHALLENGE_NONE HIGHLIGHT_CANCEL_CHALLENGE at [CancelGameHighlightPos]
+			ALTITUDE of CancelGameHighlight = 0
+		end if
+	end if
+	clear clicked object
+	while CancelConfirmedOrCancelled == 0 and MarblesCancelCurrentGame == 0 and MarbleTrialRunning == 1
+		if CancelGameHighlight exists
+			if CancelGameHighlight clicked
+				if ClickedOnce == 0
+					ClickedOnce = 1
+					wait until 0.1 seconds
+					clear clicked object
+					set ConfirmTimer time to 30 seconds
+					run background script MarblesConfirmCancelMessage
+				elsif ClickedOnce == 1
+					MarblesCancelCurrentGame = 1
+					CancelConfirmedOrCancelled = 1
+					delete CancelGameHighlight with fade
+					clear clicked object
+					if MyCreature exists and MarblesPlayingForFun == 0
+						run background script MarblesCleanUpCreature
+					end if
+					if MApe exists
+						run background script SendApeHome
+					end if
+				end if
+			end if
+			if ClickedOnce == 1
+				if get ConfirmTimer time remaining <= 0
+					ClickedOnce = 0
+				end if
+			end if
+		else
+			CancelConfirmedOrCancelled = 1
+		end if
+	end while
+	if CancelGameHighlight exists
+		delete CancelGameHighlight
+	end if
+	CurrentCancelScrollPos = 0
+end script MarblesTestForCancelledGame
+
+begin script ResetMarblesScoreboards
+start
+	set PMarbleScoreboard score 0
+	set OMarbleScoreboard score 0
+end script ResetMarblesScoreboards
+
+begin script PlaceCountryLanterns
+	LPos[14]
+	Lantern[14]
+	Dist = 40
+	Counter = 0
+start
+	LPos[0] = marker at (get target from [MarblePoint1] to [CentreOfArena] distance Dist angle 0)
+	LPos[1] = marker at (get target from [MarblePoint1] to [CentreOfArena] distance Dist angle 45)
+	LPos[2] = marker at (get target from [MarblePoint1] to [CentreOfArena] distance Dist angle 90)
+	LPos[3] = marker at (get target from [MarblePoint1] to [CentreOfArena] distance Dist angle 135)
+	LPos[4] = marker at (get target from [MarblePoint1] to [CentreOfArena] distance Dist angle 180)
+	LPos[5] = marker at (get target from [MarblePoint1] to [CentreOfArena] distance Dist angle 225)
+	LPos[6] = marker at (get target from [MarblePoint1] to [CentreOfArena] distance Dist angle 270)
+	LPos[7] = marker at (get target from [MarblePoint1] to [CentreOfArena] distance Dist angle 315)
+	LPos[8] = marker at (get target from [CentreOfArena] to [ApeThrowPos] distance 10 angle 95)
+	LPos[9] = marker at (get target from [CentreOfArena] to [ApeThrowPos] distance 10 angle -95)
+	LPos[10] = marker at (get target from [CentreOfArena] to [ApeThrowPos] distance 10 angle 0)
+	LPos[11] = marker at (get target from [CentreOfArena] to [PlayerThrowPos] distance 10 angle 95)
+	LPos[12] = marker at (get target from [CentreOfArena] to [PlayerThrowPos] distance 10 angle -95)
+	LPos[13] = marker at (get target from [CentreOfArena] to [PlayerThrowPos] distance 10 angle 0)
+	while Counter < 14
+		Lantern[Counter] = create with angle 0 and scale 1 OBJECT MOBILE_STATIC_INFO_COUNTRY_LANTERN at [LPos[Counter]]
+		enable Lantern[Counter] indestructible
+		disable Lantern[Counter] pickup
+		disable Lantern[Counter] moveable
+		Counter++
+	end while
+end script PlaceCountryLanterns
+
+begin script MarblesCleanUpCreature
+start
+	run script ScaleCreature(MyCreature, MarblesOldScale)
+	ScriptLockedCreature = 0
+	disable MyCreature immune to spells
+	release MyCreature
+	if Tyke exists and TykeIsReady == 1 and TykeFree == 1
+		release Tyke
+	end if
+end script MarblesCleanUpCreature
+
+begin script RepositionMarblesThrownTooFar(Who)
+	PlayerMarbleStore = marker at (get target from [MarblePoint1] to [CentreOfArena] distance 50 angle 130)
+	ApeMarbleStore = marker at (get target from [MarblePoint1] to [CentreOfArena] distance 50 angle 50)
+	PlayerMarble0Pos = marker at (get target from [CentreOfArena] to [PlayerMarbleStore] distance 2 angle 0)
+	PlayerMarble1Pos = marker at (get target from [CentreOfArena] to [PlayerMarbleStore] distance 2 angle 60)
+	PlayerMarble2Pos = marker at (get target from [CentreOfArena] to [PlayerMarbleStore] distance 2 angle 120)
+	PlayerMarble3Pos = marker at (get target from [CentreOfArena] to [PlayerMarbleStore] distance 2 angle 180)
+	PlayerMarble4Pos = marker at (get target from [CentreOfArena] to [PlayerMarbleStore] distance 2 angle 240)
+	PlayerMarble5Pos = marker at (get target from [CentreOfArena] to [PlayerMarbleStore] distance 2 angle 300)
+	ApeMarble0Pos = marker at (get target from [CentreOfArena] to [ApeMarbleStore] distance 2 angle 0)
+	ApeMarble1Pos = marker at (get target from [CentreOfArena] to [ApeMarbleStore] distance 2 angle 60)
+	ApeMarble2Pos = marker at (get target from [CentreOfArena] to [ApeMarbleStore] distance 2 angle 120)
+	ApeMarble3Pos = marker at (get target from [CentreOfArena] to [ApeMarbleStore] distance 2 angle 180)
+	ApeMarble4Pos = marker at (get target from [CentreOfArena] to [ApeMarbleStore] distance 2 angle 240)
+	ApeMarble5Pos = marker at (get target from [CentreOfArena] to [ApeMarbleStore] distance 2 angle 300)
+	MaxDistance = 100
+	MarbleDistance = 0
+	Counter = 0
+	Player = 1
+	Ape = 0
+start
+	if Who == Player
+		if Round - 1 == 0
+			while PMarble[0] exists and PMarble[0] is FLYING
+				MarbleDistance = get distance from [CentreOfArena] to [PMarble[0]]
+				if MarbleDistance > MaxDistance
+					run script ReCreateOneMarble(Player, PlayerMarble0Pos)
+				end if
+				until MarblesCancelCurrentGame == 1
+			end while
+		elsif Round - 1 == 1
+			while PMarble[1] exists and PMarble[1] is FLYING
+				MarbleDistance = get distance from [CentreOfArena] to [PMarble[1]]
+				if MarbleDistance > MaxDistance
+					run script ReCreateOneMarble(Player, PlayerMarble1Pos)
+				end if
+				until MarblesCancelCurrentGame == 1
+			end while
+		elsif Round - 1 == 2
+			while PMarble[2] exists and PMarble[2] is FLYING
+				MarbleDistance = get distance from [CentreOfArena] to [PMarble[2]]
+				if MarbleDistance > MaxDistance
+					run script ReCreateOneMarble(Player, PlayerMarble2Pos)
+				end if
+				until MarblesCancelCurrentGame == 1
+			end while
+		elsif Round - 1 == 3
+			while PMarble[3] exists and PMarble[3] is FLYING
+				MarbleDistance = get distance from [CentreOfArena] to [PMarble[3]]
+				if MarbleDistance > MaxDistance
+					run script ReCreateOneMarble(Player, PlayerMarble3Pos)
+				end if
+				until MarblesCancelCurrentGame == 1
+			end while
+		elsif Round - 1 == 4
+			while PMarble[4] exists and PMarble[4] is FLYING
+				MarbleDistance = get distance from [CentreOfArena] to [PMarble[4]]
+				if MarbleDistance > MaxDistance
+					run script ReCreateOneMarble(Player, PlayerMarble4Pos)
+				end if
+				until MarblesCancelCurrentGame == 1
+			end while
+		elsif Round - 1 == 5
+			while PMarble[5] exists and PMarble[5] is FLYING
+				MarbleDistance = get distance from [CentreOfArena] to [PMarble[5]]
+				if MarbleDistance > MaxDistance
+					run script ReCreateOneMarble(Player, PlayerMarble5Pos)
+				end if
+				until MarblesCancelCurrentGame == 1
+			end while
+		end if
+	end if
+end script RepositionMarblesThrownTooFar
+
+begin script ApesCommentOnHowGameIsGoing
+	ApeMessage = 0
+start
+	if Round < 6 and MarblesCancelCurrentGame == 0
+		if MyScore < ApeScore
+			if Round <= 3
+				ApeMessage = variable constant from HELP_TEXT_MARBLES_APE_WINNING_01 to HELP_TEXT_MARBLES_APE_WINNING_05
+			else
+				ApeMessage = variable constant from HELP_TEXT_MARBLES_APE_WINNING_02 to HELP_TEXT_MARBLES_APE_WINNING_05
+			end if
+		elsif MyScore > ApeScore
+			ApeMessage = variable constant from HELP_TEXT_MARBLES_APE_LOSING_01 to HELP_TEXT_MARBLES_APE_LOSING_05
+		else
+			ApeMessage = variable HELP_TEXT_MARBLES_APE_DRAWING_01
+		end if
+		begin dialogue
+			disable creature sound
+			say single line constant ApeMessage by MApe
+			wait until read or [CentreOfArena] clicked radius OuterRing
+			enable creature sound
+		end dialogue
+	end if
+end script ApesCommentOnHowGameIsGoing
+
+begin script AdvisorCommentOnHowGameIsGoing
+	AdvisorMessage = 0
+start
+	if Round < 6 and MarblesCancelCurrentGame == 0
+		if MyScore < ApeScore
+			if MarblesPlayingForFun == 0
+				AdvisorMessage = variable constant from HELP_TEXT_MARBLES_ADVISOR_POOR_01 to HELP_TEXT_MARBLES_ADVISOR_POOR_05
+			else
+				AdvisorMessage = variable constant from HELP_TEXT_MARBLES_ADVISOR_POOR_01 to HELP_TEXT_MARBLES_ADVISOR_POOR_04
+			end if
+		elsif MyScore > ApeScore
+			if MarblesPlayingForFun == 0
+				AdvisorMessage = variable constant from HELP_TEXT_MARBLES_ADVISOR_WELL_01 to HELP_TEXT_MARBLES_ADVISOR_WELL_05
+			else
+				AdvisorMessage = variable constant from HELP_TEXT_MARBLES_ADVISOR_WELL_02 to HELP_TEXT_MARBLES_ADVISOR_WELL_05
+			end if
+		else
+			AdvisorMessage = variable constant from HELP_TEXT_MARBLES_APE_DRAWING_02 to HELP_TEXT_MARBLES_APE_DRAWING_03
+		end if
+		if dialogue ready
+			begin dialogue
+				if good spirit speaks constant AdvisorMessage
+					eject good spirit
+				elsif evil spirit speaks constant AdvisorMessage
+					eject evil spirit
+				end if
+				say single line constant AdvisorMessage
+				wait until read or [CentreOfArena] clicked radius OuterRing
+				stop dialogue sound
+				send good spirit home
+				send evil spirit home
+			end dialogue
+		end if
+	end if
+end script AdvisorCommentOnHowGameIsGoing
+
+begin script SendApeHome
+	DistanceFromHome = 0
+	ApeIsHome = 0
+start
+	wait until 2 seconds
+	DistanceFromHome = get distance from [MApe] to [ApeThrowPos]
+	while ApeIsHome == 0
+		if not get distance from [MApe] to [ApeThrowPos] < 1 or 10 seconds
+			if DistanceFromHome > 100
+				set MApe position to [ApeThrowPos]
+			else
+				move MApe position to [ApeThrowPos] radius 0
+			end if
+		else
+			ApeIsHome = 1
+		end if
+	end while
+	set MApe focus to [CentreOfArena]
+	wait until 0.1 seconds
+	force MApe CREATURE_START_FIRE MApe
+end script SendApeHome
+
+begin script MarblesFireCheck
+	AlwaysCheck = 1
+start
+	while AlwaysCheck == 1
+		if MyCreature exists
+			if MyCreature on fire and get distance from [MyCreature] to [PlayerThrowPos] < 20
+				delete fire at [MyCreature] radius 10
+			end if
+		end if
+		wait until 0.1 seconds
+		if MApe exists
+			if MApe on fire
+				delete fire at [MApe] radius 10
+			end if
+		end if
+		wait until 0.1 seconds
+	end while
+end script MarblesFireCheck
+
+begin script RepositionMarble(Marble, MoveToPos)
+	SFX = 0
+	Smoke = 0
+start
+	SFX = create special effect SPOT_VISUAL_OBJECT_APPEAR at [Marble] time 2
+	Smoke = create special effect SPOT_VISUAL_BANG at [Marble] time 2
+	if ALTITUDE of Marble == 0
+		while ALTITUDE of Marble >= -2
+			ALTITUDE of Marble -= 0.2
+		end while
+	end if
+	SFX = create special effect SPOT_VISUAL_OBJECT_APPEAR at [MoveToPos] time 2
+	Smoke = create special effect SPOT_VISUAL_BANG at [MoveToPos] time 2
+	set Marble position to [MoveToPos]
+	ALTITUDE of Marble = -2
+	while ALTITUDE of Marble < 0
+		ALTITUDE of Marble += 0.2
+	end while
+end script RepositionMarble
+
+begin script MakeSureCreatureIsAtMarbles
+start
+	while MarblesPlayingForFun == 0 and MarbleTrialRunning == 1 and MarblesCancelCurrentGame == 0
+		if not get distance from [MyCreature] to [PlayerThrowPos] < 100
+			set MyCreature position to [PlayerThrowPos]
+			set MyCreature focus to [CentreOfArena]
+		end if
+		wait until 0.1 seconds
+		until MarblesCancelCurrentGame == 1
+	end while
+end script MakeSureCreatureIsAtMarbles
+
+begin script MarblesConfirmCancelMessage
+	ConfirmMessage = 0
+	CurrentMarble = 0
+start
+	if Round + 1 == 1
+		CurrentMarble = PMarble[0]
+	elsif Round + 1 == 2
+		CurrentMarble = PMarble[1]
+	elsif Round + 1 == 3
+		CurrentMarble = PMarble[2]
+	elsif Round + 1 == 4
+		CurrentMarble = PMarble[3]
+	elsif Round + 1 == 5
+		CurrentMarble = PMarble[4]
+	elsif Round + 1 == 6
+		CurrentMarble = PMarble[5]
+	end if
+	ConfirmMessage = variable constant from HELP_TEXT_TRIAL_CANCEL_01 to HELP_TEXT_TRIAL_CANCEL_03
+	begin dialogue
+		if good spirit speaks constant ConfirmMessage
+			eject good spirit
+			make good spirit point at [CancelGameHighlight]
+		else
+			eject evil spirit
+			make evil spirit point at [CancelGameHighlight]
+		end if
+		say single line constant ConfirmMessage
+		wait until read or CancelGameHighlight clicked or not CancelGameHighlight exists or CurrentMarble is HELD or [CentreOfArena] clicked radius OuterRing
+		send good spirit home
+		send evil spirit home
+	end dialogue
+end script MarblesConfirmCancelMessage
+
+begin script WaitForMarblesToStopMoving
+	Count = 0
+start
+	while Count < 6 and MarblesCancelCurrentGame == 0
+		wait until not PMarble[Count] is FLYING or not PMarble[Count] exists
+		wait until not OMarble[Count] is FLYING or not OMarble[Count] exists
+		Count++
+		until MarblesCancelCurrentGame == 1
+	end while
+end script WaitForMarblesToStopMoving
+
+begin script MoveTykeToWatchPos
+	TykesWatchPos = marker at [1443.2478, 14.193, 2641.5994]
+start
+	move Tyke position to [TykesWatchPos] radius 0
+	wait until get distance from [Tyke] to [TykesWatchPos] < 5 or MarblesCancelCurrentGame == 1
+end script MoveTykeToWatchPos
+

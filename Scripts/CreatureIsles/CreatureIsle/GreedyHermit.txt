@@ -1,0 +1,778 @@
+//LHVM Challenge source version 8
+//Decompiled with CHLASM tool by Daniels118
+
+global Alerted
+global HermitTrialCompleted
+global IsNight
+global HermitAsleep
+global TiePostBroken
+global BrickInSock
+global HermaFoc
+global BearIntroPlaying
+
+begin script DeleteDaBear(Bear)
+start
+	wait until 10 seconds
+	set MyCreature position to [733.999, 46.3661, 1996.54]
+	release MyCreature
+	delete Bear with fade
+end script DeleteDaBear
+
+begin script Hermafocus(Hermit)
+start
+	begin loop
+		if HermaFoc == 0
+			while HermaFoc == 0
+				set Hermit focus to (camera position)
+			end while
+		end if
+		until HermaFoc == 2
+	end loop
+end script Hermafocus
+
+begin script FearTyke(TriggerIntroPos)
+	FearPos = marker at [562.83, 11.6962, 1684.6]
+start
+	begin loop
+		if get distance from [Tyke] to [TriggerIntroPos] < 50
+			move Tyke position to [Tyke] radius 0
+			Tyke play ANM_A_COW_EAT_2 loop 1
+			wait until Tyke played
+			move Tyke position to [FearPos] radius 0
+			wait until get distance from [Tyke] to [FearPos] < 20
+			release Tyke
+		end if
+		until HermitTrialCompleted == 1
+	end loop
+end script FearTyke
+
+begin script TimeOfDayCheat
+	RockPos = marker at [714.412, 26.4833, 1916.56]
+	TimeRock = create OBJECT ROCK at [RockPos]
+	InvisSeed = create ONE_SHOT SPELL_SEED_TYPE_CREATURE_SPELL_INVISIBLE at [566.809, 9.40617, 1752.91]
+start
+	begin loop
+		if not InvisSeed exists
+			InvisSeed = create ONE_SHOT SPELL_SEED_TYPE_CREATURE_SPELL_INVISIBLE at [566.809, 9.40617, 1752.91]
+		end if
+		if TimeRock is HELD
+			set game time 21.3
+			wait until not TimeRock is HELD
+		end if
+	end loop
+end script TimeOfDayCheat
+
+begin script NightFlag
+start
+	begin loop
+		wait until 5 seconds
+		if get game time > 21 or get game time < 7
+			IsNight = 1
+		else
+			IsNight = 0
+		end if
+		until HermitTrialCompleted == 1
+	end loop
+end script NightFlag
+
+begin script BearActions(Bear, TiePost, Hermit, BearPos, Highlight)
+	BeginPos = 0
+	BeginFoc = 0
+	KickHint = 0
+	NewBearPos = marker at [824.347, 54.94, 2017.83]
+	NewMyCreaturePos = marker at [856.957, 54.0083, 2020.32]
+	SeeBear1Pos = marker at [803.901, 60.9324, 2001.67]
+	SeeBear1Foc = marker at [831.211, 63.9896, 2029.32]
+	SeeBear2Pos = marker at [781.201, 58.3914, 1978.69]
+	SeeBear2Foc = marker at [810.495, 61.6709, 2008.35]
+	Firework1Pos = marker at [829.229, 32.56484, 2079.65]
+	Firework2Pos = marker at [890.947, 32.68, 2067.83]
+	Firework3Pos = marker at [903.158, 31.97859, 1980.53]
+	FireWorks = 0
+start
+	begin loop
+		if IsNight == 0 and TiePostBroken == 0
+			while IsNight != 1 and TiePostBroken != 1
+				if not get distance from [Bear] to [BearPos] < 10
+					move Bear position to [BearPos] radius 0
+					wait until get distance from [Bear] to [BearPos] < 10 or 20 seconds
+					wait until 1 seconds
+				end if
+			end while
+		else
+			force Bear CREATURE_SLEEP Bear
+			begin loop
+				wait until 1 seconds
+				if not get distance from [Bear] to [BearPos] < 10
+					move Bear position to [BearPos] radius 0
+					wait until get distance from [Bear] to [BearPos] < 10 or 20 seconds
+					wait until 1 seconds
+				elsif get distance from [MyCreature] to [Bear] < 35
+					force Bear CREATURE_LOOK_FOREVER MyCreature
+					begin loop
+						if BearIntroPlaying != 1
+							force Bear CREATURE_WAVE_AT_OBJECT MyCreature
+							wait until 3 seconds
+							force Bear POINT_AT TiePost
+							wait until 3 seconds
+							if KickHint == 0 and get distance from [MyCreature] to [Bear] < 60 and TiePostBroken == 0
+								KickHint = 1
+								begin dialogue
+									say single line HELP_TEXT_GREEDY_HERMIT_100 by Bear
+									wait until read
+								end dialogue
+							end if
+						end if
+						until TiePostBroken == 1 or Alerted != 0 or not get distance from [MyCreature] to [Bear] < 200
+					end loop
+					force Bear CREATURE_LOOK_FOREVER Hermit
+					if Alerted == 0
+						if TiePostBroken == 0
+							force Bear CREATURE_SLEEP Bear
+						else
+							wait until get distance from (camera position) to [Bear] < 200 and [Bear] viewed
+							begin cinema
+								BeginPos = marker at (camera position)
+								BeginFoc = marker at (camera focus)
+								set fade red 0 green 0 blue 0 time 1.5
+								wait until 1.5 seconds
+								delete Highlight
+								if get distance from [MyCreature] to [NewBearPos] < 100
+									set MyCreature position to [NewMyCreaturePos]
+									set MyCreature focus to [SeeBear1Pos]
+								end if
+								set Bear position to [NewBearPos]
+								set camera position to [SeeBear1Pos]
+								set camera focus to [SeeBear1Foc]
+								set fade in time 2
+								FireWorks = create special effect SPOT_VISUAL_TOWN_FIREWORKS at [Firework1Pos] time 20
+								FireWorks = create special effect SPOT_VISUAL_TOWN_FIREWORKS at [Firework2Pos] time 20
+								FireWorks = create special effect SPOT_VISUAL_TOWN_FIREWORKS at [Firework3Pos] time 20
+								wait until 0.5 seconds
+								set Bear focus to [SeeBear1Pos]
+								wait until 1.5 seconds
+								move camera position to [SeeBear2Pos] time 10
+								move camera focus to [SeeBear2Foc] time 10
+								disable creature sound
+								Bear play ANM_A_COW_DEAD_ON_RHS loop 1
+								say HELP_TEXT_GREEDY_HERMIT_110 by Bear
+								wait until read
+								wait until Bear played
+								Bear play ANM_A_COW_LANDED_LEFT_SIDE loop 1
+								say HELP_TEXT_GREEDY_HERMIT_120 with interaction by Bear
+								wait until read
+								wait until Bear played
+							end cinema with widescreen
+							HermitTrialCompleted = 1
+						end if
+					end if
+				end if
+				until IsNight == 0 and TiePostBroken == 0
+			end loop
+		end if
+		until HermitTrialCompleted == 1
+	end loop
+end script BearActions
+
+begin script HermitAlerted(Hermit, CampfirePos)
+	RayEffect = 0
+	BeginPos = 0
+	BeginFoc = 0
+	BangEffect = 0
+	CreatureHomePos = marker at [1263.89, 167.5, 1257.08]
+	HermitHigh = 0
+	HermitMarker = 0
+	RetryPos = marker at [542.567, 20.485, 1705.431]
+	SeeRetryPos = marker at [442.607, 54.432, 1668.384]
+	SeeRetryFoc = marker at [546.112, 10.995, 1779.974]
+	PlayerNotLooking = 0
+start
+	if in widescreen
+		PlayerNotLooking = 1
+	end if
+	if not get distance from (camera position) to [Hermit] < 200 and not [Hermit] viewed and not [MyCreature] viewed
+		PlayerNotLooking = 1
+	end if
+	if PlayerNotLooking == 0
+		begin cinema
+			update snapshot CHALLENGE_GREEDY_HERMIT success 0.1 alignment 0 HELP_TEXT_CREATURE_ISLE_TITLE_12 StandardReminder (variable HELP_TEXT_CI_REMINDER_09)
+			move Hermit position to [Hermit] radius 0
+			BeginPos = marker at (camera position)
+			BeginFoc = marker at (camera focus)
+			if IsNight == 1 and Alerted == 1
+				Alerted = 4
+			end if
+			HermitHigh = marker at (camera position) + [0, 60, 0]
+			move camera position to [HermitHigh] time 3
+			move camera focus to [Hermit] + [0, 1, 0] time 2
+			wait until 2 seconds
+			move camera position to [Hermit] + [-2, 1, -2] time 2
+			set Hermit focus to [MyCreature]
+			wait until camera ready
+			if Alerted == 1
+				say single line HELP_TEXT_GREEDY_HERMIT_130
+				wait until read
+			elsif Alerted == 2
+				say single line HELP_TEXT_GREEDY_HERMIT_140
+				wait until read
+			elsif Alerted == 3
+				say single line HELP_TEXT_GREEDY_HERMIT_150
+				wait until read
+			elsif Alerted == 4
+				say single line HELP_TEXT_GREEDY_HERMIT_160
+				wait until read
+			end if
+			Hermit play ANM_P_TALKING_AND_POINTING loop 1
+			HermitMarker = marker at (get target from [MyCreature] to [Hermit] distance 0.6 angle 180)
+			HermitMarker = marker at [HermitMarker] + [0, 1.05, 0]
+			RayEffect = create special effect SPOT_VISUAL_MAGIC_BEAM on HermitMarker time 2
+			start sound LH_SAMPLE_HERMITCAST
+			add RayEffect target on MyCreature
+			wait until 1 seconds
+			set camera position to [MyCreature] + [-15, 40, -15]
+			set camera focus to [MyCreature]
+			wait until 1 seconds
+			stop sound LH_SAMPLE_HERMITCAST
+			BangEffect = create special effect SPOT_VISUAL_BANG on MyCreature time 1
+			HEALTH of MyCreature = 0
+			force MyCreature CREATURE_DEAD MyCreature
+			wait until 3 seconds
+			if Alerted == 1
+				eject evil spirit
+				say single line HELP_TEXT_GREEDY_HERMIT_170 with interaction
+				wait until read
+				send evil spirit home
+			elsif Alerted == 2
+				eject good spirit
+				if BrickInSock == 0
+					say single line HELP_TEXT_GREEDY_HERMIT_180 with interaction
+					BrickInSock = 1
+				else
+					say single line HELP_TEXT_GREEDY_HERMIT_185 with interaction
+				end if
+				wait until read
+				send good spirit home
+			elsif Alerted == 3
+				eject good spirit
+				say HELP_TEXT_GREEDY_HERMIT_190
+				wait until read
+				say HELP_TEXT_GREEDY_HERMIT_200 with interaction
+				wait until read
+				send good spirit home
+			elsif Alerted == 4
+				eject evil spirit
+				say HELP_TEXT_GREEDY_HERMIT_210
+				wait until read
+				say HELP_TEXT_GREEDY_HERMIT_220
+				wait until read
+				eject good spirit
+				say HELP_TEXT_GREEDY_HERMIT_230 with interaction
+				wait until read
+				send evil spirit home
+			end if
+			set game speed to 8
+			wait until get distance from [MyCreature] to [CreatureHomePos] < 100
+			set game speed to 1
+			set MyCreature position to [RetryPos]
+			move camera position to [SeeRetryPos] time 2
+			move camera focus to [SeeRetryFoc] time 2
+			wait until camera ready
+			stop music
+			release MyCreature
+		end cinema
+	else
+		set MyCreature position to [RetryPos]
+		release MyCreature
+	end if
+	Alerted = 0
+end script HermitAlerted
+
+begin script HermitPatrol(Hermit, Campfire, HermitPos, Bear, CampfirePos, NearCampfirePos)
+	LoopTotal = 0
+	DayPos1 = marker at [765.503, 56.4475, 2011.28]
+	RayEffect = 0
+	BangEffect = 0
+	HermitMarker = 0
+start
+	begin loop
+		begin loop
+			if IsNight == 0
+				move Hermit position to [DayPos1] radius 0
+				set Bear focus to [DayPos1]
+				wait until get distance from [Hermit] to [DayPos1] < 1 or 60 seconds
+				set Hermit focus to [Bear]
+				Hermit play ANM_P_WAITING_IMPATEINTLY loop 2
+				Bear play ANM_A_COW_EAT_2 loop 1
+				wait until 3 seconds
+				Hermit play ANM_P_TALKING_AND_POINTING loop 1
+				HermitMarker = marker at [Hermit] + [0, 1, 0]
+				RayEffect = create special effect SPOT_VISUAL_MAGIC_BEAM on HermitMarker time 2
+				start sound LH_SAMPLE_HERMITCAST at [Hermit]
+				add RayEffect target on Bear
+				wait until 1 seconds
+				BangEffect = create special effect SPOT_VISUAL_BANG on Bear time 1
+				Bear play ANM_A_TIGER_GOTO_SIT loop 1
+				wait until 1 seconds
+				stop sound LH_SAMPLE_HERMITCAST
+				wait until 0.5 seconds
+				Hermit play ANM_P_WAITING_IMPATEINTLY loop 2
+				wait until 1 seconds
+				force Bear CREATURE_SHOW_IMPRESSIVE_ANIMATION Bear
+				wait until 5 seconds
+				begin loop
+					LoopTotal++
+					move Hermit position to [HermitPos] radius 0
+					force Bear CREATURE_SIT Bear
+					wait until get distance from [Hermit] to [HermitPos] < 1 or 30 seconds
+					set Hermit focus to [CampfirePos]
+					Hermit play ANM_P_SITTING_DOWN1_INTO loop 1
+					wait until Hermit played
+					Hermit play ANM_P_SITTING_DOWN1_SITTING loop 6
+					wait until Hermit played
+					Hermit play ANM_P_SITTING_DOWN1_OUT_OF loop 1
+					wait until Hermit played
+					move Hermit position to [NearCampfirePos] radius 0
+					wait until get distance from [Hermit] to [NearCampfirePos] < 1 or 10 seconds
+					wait until 1 seconds
+					Hermit play ANM_P_PROD_CAMPFIRE loop 2
+					wait until Hermit played
+					until LoopTotal > 4 or IsNight == 1 or Alerted != 0
+				end loop
+				LoopTotal = 0
+			else
+				begin loop
+					move Hermit position to [HermitPos] radius 0
+					wait until get distance from [Hermit] to [HermitPos] < 1
+					set Hermit focus to [CampfirePos]
+					wait until 0.5 seconds
+					HermitAsleep = 1
+					Hermit play ANM_P_SLEEPING loop 15
+					wait until Hermit played
+					if get distance from [MyCreature] to [Hermit] < 75 and MyCreature affected by spell CREATURE_SPELL_INVISIBLE
+						begin dialogue
+							eject evil spirit
+							make evil spirit point at [Hermit]
+							say single line HELP_TEXT_GREEDY_HERMIT_240
+							wait until read
+							stop evil spirit pointing
+							send evil spirit home
+						end dialogue
+					end if
+					wait until 4 seconds
+					HermitAsleep = 0
+					move Hermit position to [NearCampfirePos] radius 0
+					wait until get distance from [Hermit] to [NearCampfirePos] < 1 or 10 seconds
+					wait until 1 seconds
+					Hermit play ANM_P_PROD_CAMPFIRE loop 2
+					wait until Hermit played
+					until Alerted != 0 or IsNight == 0
+				end loop
+				HermitAsleep = 0
+			end if
+			until Alerted != 0
+		end loop
+		wait until Alerted == 0
+		until HermitTrialCompleted == 1
+	end loop
+end script HermitPatrol
+
+begin script HermitEars(Hermit, BearPos)
+	CreatureInitialPos = 0
+	HermitEarRadius = 65
+start
+	begin loop
+		wait until 1 seconds
+		if HermitAsleep == 0
+			if get distance from [MyCreature] to [Hermit] < HermitEarRadius and not get distance from [MyCreature] to [BearPos] < 75
+				CreatureInitialPos = marker at [MyCreature]
+				wait until 2 seconds
+				if not get distance from [MyCreature] to [CreatureInitialPos] < 10
+					Alerted = 1
+				end if
+			end if
+			wait until 1 seconds
+		end if
+		until HermitTrialCompleted == 1
+	end loop
+end script HermitEars
+
+begin script DogPatrol(Dog, *WPArray, ArrayLength, DogSpeed)
+	DogVisionRadius = 80
+	DogSmellRadius = 40
+	CheckCounter = 0
+	CreatureInvis = 0
+	WPCount = 0
+	Dust = 0
+	NearbyAnimal = 0
+start
+	begin loop
+		while Alerted == 0
+			move Dog position to [WPArray[WPCount]] radius 0
+			SPEED of Dog = DogSpeed
+			while not get distance from [Dog] to [WPArray[WPCount]] < 1 and HEALTH of Dog > 0 and Alerted == 0
+				CheckCounter++
+				if CheckCounter == 5 or CheckCounter == 10 or CheckCounter == 15
+					Dust = create special effect SPOT_VISUAL_SMOKE at [Dog] time 3
+					NearbyAnimal = get ANIMAL at [Dog] radius 50 excluding scripted
+					if NearbyAnimal exists and not NearbyAnimal is HELD and not NearbyAnimal is FLYING and not NearbyAnimal in MyCreature hand
+						move Dog position to [NearbyAnimal] radius 0
+						SPEED of Dog = DogSpeed
+						move NearbyAnimal position to [NearbyAnimal] radius 0
+						wait until get distance from [Dog] to [NearbyAnimal] < 2
+						move Dog position to [Dog] radius 0
+						wait until 0.2 seconds
+						Dog play ANM_A_WOLF_POUNCE loop 1
+						HEALTH of NearbyAnimal = 0
+						wait until Dog played
+						delete NearbyAnimal with fade
+						Dog play ANM_A_WOLF_HOWL loop 2
+						wait until Dog played
+						move Dog position to [WPArray[WPCount]] radius 0
+						SPEED of Dog = DogSpeed
+					end if
+				end if
+				if CheckCounter > 15
+					CheckCounter = 0
+					if get distance from [MyCreature] to [Dog] < DogVisionRadius
+						if MyCreature affected by spell CREATURE_SPELL_INVISIBLE
+							CreatureInvis = 1
+						end if
+						if CreatureInvis == 0
+							Alerted = 2
+							move Dog position to [Dog] radius 0
+							set Dog focus to [MyCreature]
+							start sound constant (number from 506 to 508) AUDIO_SFX_BANK_TYPE_EDITOR
+						elsif get distance from [MyCreature] to [Dog] < DogSmellRadius
+							Alerted = 3
+							move Dog position to [Dog] radius 0
+							set Dog focus to [MyCreature]
+							start sound constant (number from 506 to 508) AUDIO_SFX_BANK_TYPE_EDITOR
+						end if
+						CreatureInvis = 0
+					end if
+				end if
+			end while
+			WPCount++
+			if WPCount >= ArrayLength
+				WPCount = 0
+			end if
+		end while
+		wait until Alerted == 0
+		until HEALTH of Dog <= 0 or HermitTrialCompleted == 1
+	end loop
+end script DogPatrol
+
+begin challenge help script GreedyHermitTrialNotify(Highlight)
+	HighlightClicked = 0
+	RandomNotify = 0
+	RemindTimer = create timer for 0 seconds
+start
+	while HighlightClicked == 0 and not Highlight active
+		RandomNotify = variable constant from HELP_TEXT_GENERAL_TRIAL_STARTS_01 to HELP_TEXT_GENERAL_TRIAL_STARTS_08
+		if get distance from (camera position) to [Highlight] < NotifyDistance and Highlight viewed
+			if get RemindTimer time remaining == 0
+				if not in widescreen
+					begin dialogue
+						if good spirit speaks constant RandomNotify
+							eject good spirit
+							make good spirit point at [Highlight] in world
+						else
+							eject evil spirit
+							make evil spirit point at [Highlight] in world
+						end if
+						say single line constant RandomNotify
+						wait until read or Highlight clicked
+					end dialogue
+					set RemindTimer time to 30 seconds
+				end if
+			end if
+		end if
+		if Highlight clicked or [Highlight] clicked radius 5
+			HighlightClicked = 1
+		end if
+	end while
+	enable Highlight active
+end script GreedyHermitTrialNotify
+
+begin script GreedyHermit
+	HermitPos = marker at [703.366, 26.13, 1900.92]
+	Hermit = 0
+	BearPos = marker at [828.908, 54.94, 2021.09]
+	Bear = 0
+	Dog1StartPos = marker at [705.366, 26.13, 1900.92]
+	Dog1Patrol[4]
+	Dog1 = 0
+	Dog2StartPos = marker at [577.296, 2.68, 1953.44]
+	Dog2 = 0
+	Dog2Patrol[4]
+	Dog3StartPos = marker at [513.013, 1.005, 1944.79]
+	Dog3 = 0
+	Dog3Patrol[4]
+	CampfirePos = marker at [699.564, 26.2138, 1898.48]
+	Campfire = 0
+	NearCampfirePos = marker at [CampfirePos] + ([1, 1])
+	TiePostPos = marker at [849.34, 54.5422, 2018.9]
+	TiePost = get HOUSE at [TiePostPos]
+	RayEffect = 0
+	BangEffect = 0
+	Highlight = 0
+	BeginPos = 0
+	BeginFoc = 0
+	Lantern = 0
+	HermitMarker = 0
+	Lantern1Pos = marker at [579.296, 2.68, 1951.44]
+	Lantern2Pos = marker at [585.287, 1.675, 2008.49]
+	Lantern3Pos = marker at [513.092, 0.230313, 2002.26]
+	Lantern4Pos = marker at [511.013, 1.005, 1942.79]
+	ViewDogsPos = marker at [486.745, 10.451, 2025.08]
+	ViewDogsFoc = marker at [551.102, 4.68, 1976.59]
+	HermitLowPos = marker at [700.366, 26.13, 1900.92]
+	HermitLowFoc = marker at [703.366, 26.13, 1900.92]
+	ViewHermitPos = marker at [690.658, 28.8633, 1903.62]
+	NewPos = marker at [699.655, 29.7457, 1904.23]
+	NewFoc = marker at [702.053, 26.7507, 1900.05]
+	HermitFacePos = marker at [702.366, 27.13, 1902.92]
+	HermitFaceFoc = marker at [703.366, 27.13, 1900.92]
+	ViewDogs2Pos = marker at [630.635, 22.3683, 2029.8]
+	ViewUpHill = marker at [610.296, 3.62839, 1917.92]
+	TriggerIntroPos = marker at [549.966, 5.36, 1860.83]
+	TriggerIntroPos2 = marker at [795.056, 54.94, 2015.356]
+	TiePostTown = 0
+	BodgeFlock = 0
+	BodgeFlockPos = marker at [869.493, 8.71, 1735.86]
+	AndysLowPos = marker at [697.24, 27.3859, 1904.38]
+	AndysLowFoc = marker at [701.193, 27.0903, 1900.32]
+	AndyLanternPos1 = marker at [840.092, 54.2752, 2026.77]
+	AndyLantern1 = create OBJECT MOBILE_STATIC_INFO_STREET_LANTERN at [AndyLanternPos1]
+	AndyLanternPos2 = marker at [841.903, 53.4142, 2015.15]
+	AndyLantern2 = create OBJECT MOBILE_STATIC_INFO_STREET_LANTERN at [AndyLanternPos2]
+	AndyLanternPos3 = marker at [801.29, 53.935, 2025.04]
+	AndyLantern3 = create OBJECT MOBILE_STATIC_INFO_STREET_LANTERN at [AndyLanternPos3]
+	AndyLanternPos4 = marker at [804.129, 54.94, 2010.17]
+	AndyLantern4 = create OBJECT MOBILE_STATIC_INFO_STREET_LANTERN at [AndyLanternPos4]
+	HermitLanternPos = marker at [703.753, 26.13, 1905.68]
+	HermitLantern = create OBJECT MOBILE_STATIC_INFO_STREET_LANTERN at [HermitLanternPos]
+	StompAttack = 0
+	LeashType = 0
+	AggressiveLeashDYKPos = marker at [845.951, 54.668, 2028.794]
+	GreedyHermitDYKPos = marker at [699.335, 35.322, 1878.751]
+start
+	DojoReminderGreedyHermit = 1
+	Lantern = create OBJECT MOBILE_STATIC_INFO_STREET_LANTERN at [Lantern1Pos]
+	Lantern = create OBJECT MOBILE_STATIC_INFO_STREET_LANTERN at [Lantern2Pos]
+	Lantern = create OBJECT MOBILE_STATIC_INFO_STREET_LANTERN at [Lantern3Pos]
+	Lantern = create OBJECT MOBILE_STATIC_INFO_STREET_LANTERN at [Lantern4Pos]
+	Dog1Patrol[0] = marker at [Lantern1Pos]
+	Dog1Patrol[1] = marker at [Lantern2Pos]
+	Dog1Patrol[2] = marker at [Lantern3Pos]
+	Dog1Patrol[3] = marker at [Lantern4Pos]
+	Dog2Patrol[0] = marker at [Lantern1Pos]
+	Dog2Patrol[1] = marker at [Lantern2Pos]
+	Dog2Patrol[2] = marker at [Lantern3Pos]
+	Dog2Patrol[3] = marker at [Lantern2Pos]
+	Dog3Patrol[0] = marker at [Lantern4Pos]
+	Dog3Patrol[1] = marker at [Lantern1Pos]
+	Dog3Patrol[2] = marker at [Lantern4Pos]
+	Dog3Patrol[3] = marker at [Lantern3Pos]
+	Alerted = 0
+	BrickInSock = 0
+	HermitTrialCompleted = 0
+	TiePostBroken = 0
+	TiePostTown = create player 0 town at [TiePost] type TRIBE_TYPE_JAPANESE
+	attach TiePost to TiePostTown
+	Highlight = create highlight CHALLENGE_GREEDY_HERMIT HIGHLIGHT_TRIAL at [TiePostPos] + [0, 10, 0]
+	ALTITUDE of Highlight = 20
+	Bear = create DUMB_CREATURE CREATURE_TYPE_BEAR at [BearPos]
+	run script SetupCreatureIsleCreature(Bear)
+	set Bear name HELP_TEXT_NAME_BEAR_01
+	SCALE of Bear = 0.5
+	set Bear DEVELOPMENT_PHASE_FULLY_MATURE development
+	set player 2 creature to Bear
+	attach Bear leash to TiePost
+	run background script BearActions(Bear, TiePost, Hermit, BearPos, Highlight)
+	run background script NightFlag
+	Campfire = create OBJECT MOBILE_STATIC_INFO_BONFIRE at [CampfirePos]
+	Hermit = create VILLAGER HERMIT at [HermitPos]
+	disable Hermit pickup
+	enable Hermit indestructible
+	disable Hermit hurt by fire
+	disable Hermit set on fire
+	disable Hermit moveable
+	set Hermit focus to [CampfirePos]
+	force Bear CREATURE_LOOK_FOREVER Hermit
+	Dog1 = create ANIMAL ANIMAL_INFO_WOLF at [Dog1StartPos]
+	SCALE of Dog1 = 2
+	disable Dog1 pickup
+	disable Dog1 hurt by fire
+	disable Dog1 set on fire
+	enable Dog1 indestructible
+	disable Dog1 moveable
+	set Dog1 focus to [CampfirePos]
+	Dog2 = create ANIMAL ANIMAL_INFO_WOLF at [Dog2StartPos]
+	SCALE of Dog2 = 2
+	disable Dog2 pickup
+	disable Dog2 hurt by fire
+	disable Dog2 set on fire
+	enable Dog2 indestructible
+	disable Dog2 moveable
+	Dog3 = create ANIMAL ANIMAL_INFO_WOLF at [Dog3StartPos]
+	disable Dog3 pickup
+	disable Dog3 hurt by fire
+	disable Dog3 set on fire
+	enable Dog3 indestructible
+	disable Dog3 moveable
+	SCALE of Dog3 = 2
+	run background script DogPatrol(Dog2, &Dog2Patrol[0], 4, 0.3)
+	run background script DogPatrol(Dog3, &Dog3Patrol[0], 4, 0.3)
+	run background script FearTyke(TriggerIntroPos)
+	run background script GreedyHermitTrialNotify(Highlight)
+	begin loop
+		move Hermit position to [HermitPos] radius 0
+		wait until get distance from [Hermit] to [HermitPos] < 1 or 20 seconds
+		wait until 1 seconds
+		set Hermit focus to [CampfirePos]
+		Hermit play ANM_P_SITTING_DOWN1_INTO loop 1
+		wait until Hermit played
+		Hermit play ANM_P_SITTING_DOWN1_SITTING loop 6
+		wait until Hermit played
+		Hermit play ANM_P_SITTING_DOWN1_OUT_OF loop 1
+		wait until Hermit played
+		move Hermit position to [NearCampfirePos] radius 0
+		wait until get distance from [Hermit] to [NearCampfirePos] < 1 or 20 seconds
+		wait until 1 seconds
+		Hermit play ANM_P_PROD_CAMPFIRE loop 2
+		wait until Hermit played
+		until Highlight clicked or get distance from [MyCreature] to [TriggerIntroPos] < 50 or get distance from [MyCreature] to [TriggerIntroPos2] < 75
+	end loop
+	enable Highlight active
+	begin cinema
+		BearIntroPlaying = 1
+		BeginPos = marker at (camera position)
+		BeginFoc = marker at (camera focus)
+		move camera position to [Bear] + [-10, 5, -10] time 3
+		move camera focus to [Bear] + [0, 5, 0] time 3
+		set Bear focus to [Bear] + [-10, 5, -10]
+		wait until Bear played
+		set Bear focus to [Bear] + [-10, 5, -10]
+		wait until camera ready
+		wait until 1 seconds
+		snapshot CHALLENGE_GREEDY_HERMIT quest success 0 alignment 0 HELP_TEXT_CREATURE_ISLE_TITLE_12 StandardReminder (variable HELP_TEXT_CI_REMINDER_09)
+		disable creature sound
+		force Bear CREATURE_BE_SAD Bear
+		set Hermit position to [HermitPos]
+		set Hermit focus to [HermitFacePos]
+		say single line HELP_TEXT_GREEDY_HERMIT_10 by Bear
+		wait until read
+		run background script DidYouKnow(GreedyHermitDYKPos, variable HELP_TEXT_RESCUE_DYK, variable DYK_MISC)
+		enable creature sound
+		start music MUSIC_TYPE_SCRIPT_HERMIT
+		set camera position to [HermitFacePos]
+		set camera focus to [HermitFaceFoc]
+		run background script DidYouKnow(AggressiveLeashDYKPos, variable HELP_TEXT_AGGRESSIVE_LEASH_DYK, variable DYK_MISC)
+		HermaFoc = 0
+		run background script Hermafocus(Hermit)
+		set Bear focus to (camera position)
+		set Dog1 focus to [Hermit] + [-8, 3, -8]
+		Hermit play ANM_P_WAITING_IMPATEINTLY loop 1
+		say HELP_TEXT_GREEDY_HERMIT_20
+		wait until 2 seconds
+		move camera position to [ViewHermitPos] time 18
+		wait until read
+		say HELP_TEXT_GREEDY_HERMIT_30
+		wait until 1 seconds
+		HermaFoc = 1
+		wait until 2 seconds
+		set Hermit focus to [Campfire]
+		set camera position to [NewPos]
+		set camera focus to [NewFoc]
+		set Dog1 focus to [NewPos]
+		wait until 1 seconds
+		Hermit play ANM_P_TALKING_AND_POINTING loop 1
+		HermitMarker = marker at (get target from [Campfire] to [Hermit] distance 0.6 angle 180)
+		HermitMarker = marker at [HermitMarker] + [0, 1.35, 0]
+		RayEffect = create special effect SPOT_VISUAL_MAGIC_BEAM on HermitMarker time 1
+		start sound LH_SAMPLE_HERMITCAST
+		add RayEffect target on Campfire
+		wait until 1 seconds
+		stop sound LH_SAMPLE_HERMITCAST
+		BangEffect = create special effect SPOT_VISUAL_BANG on Campfire time 1
+		set Hermit focus to [Hermit] + [-8, 3, -8]
+		wait until Hermit played
+		HermaFoc = 0
+		Hermit play ANM_P_WAITING_IMPATEINTLY loop 1
+		move camera position to [AndysLowPos] time 6
+		move camera focus to [AndysLowFoc] time 6
+		wait until read
+		say HELP_TEXT_GREEDY_HERMIT_40
+		wait until read
+		say HELP_TEXT_GREEDY_HERMIT_50 with interaction
+		wait until 1 seconds
+		set Hermit focus to (camera position)
+		Hermit play ANM_P_TALK1_MALE loop 2
+		wait until read
+		set camera position to [HermitLowPos]
+		set camera focus to [HermitLowFoc]
+		set Hermit focus to [HermitLowPos]
+		say HELP_TEXT_GREEDY_HERMIT_60
+		wait until read
+		start sound constant (number from 506 to 508) AUDIO_SFX_BANK_TYPE_EDITOR at [Dog1]
+		set fade red 0 green 0 blue 0 time 1.5
+		wait until 1.5 seconds
+		set camera position to [ViewDogsPos]
+		set camera focus to [ViewDogsFoc]
+		set Dog1 position to [Dog1Patrol[0]]
+		run background script DogPatrol(Dog1, &Dog1Patrol[0], 4, 0.8)
+		set fade in time 2
+		wait until 2 seconds
+		say HELP_TEXT_GREEDY_HERMIT_70
+		wait until read or 2 seconds
+		move camera position to [ViewDogs2Pos] time 20
+		move camera focus to [ViewUpHill] time 20
+		wait until read
+		say HELP_TEXT_GREEDY_HERMIT_80
+		wait until read
+		say HELP_TEXT_GREEDY_HERMIT_90 with interaction
+		wait until read
+		set fade red 0 green 0 blue 0 time 1.5
+		wait until 1.5 seconds
+		set camera position to [BeginPos]
+		set camera focus to [BeginFoc]
+		set fade in time 2
+		wait until 1 seconds
+		HermaFoc = 2
+		stop music
+		BearIntroPlaying = 0
+	end cinema
+	run background script HermitPatrol(Hermit, Campfire, HermitPos, Bear, CampfirePos, NearCampfirePos)
+	run background script HermitEars(Hermit, BearPos)
+	while HermitTrialCompleted == 0
+		if HEALTH of TiePost <= 0.5 and get distance from [MyCreature] to [TiePost] < 70
+			TiePostBroken = 1
+			detach Bear leash
+		elsif get distance from [MyCreature] to [TiePost] < 50 and TiePost clicked and StompAttack == 0
+			LeashType = variable get MyCreature leash type
+			if LeashType == 1
+				force MyCreature CREATURE_KICK TiePost
+				wait until MyCreature played or 20 seconds
+				if HEALTH of TiePost > 0.5
+					force MyCreature CREATURE_STOMP TiePost
+					wait until MyCreature played or 10 seconds
+				end if
+				release MyCreature
+				StompAttack = 1
+			end if
+		end if
+		if Alerted != 0
+			run script HermitAlerted(Hermit, CampfirePos)
+		end if
+	end while
+	wait until 1 seconds
+	run background script DeleteDaBear(Bear)
+	run script Dojo(Bear)
+	delete Dog1
+	delete Dog2
+	delete Dog3
+	delete Hermit
+	DojoReminderGreedyHermit = 0
+end script GreedyHermit
+

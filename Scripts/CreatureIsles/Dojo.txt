@@ -1,0 +1,1833 @@
+//LHVM Challenge source version 8
+//Decompiled with CHLASM tool by Daniels118
+
+global Zedi
+global LionCreature
+global DojoCreature
+global CreaturePortraits[18]
+global CreatureInDojo[18]
+global CreatureTypes[18]
+global DefeatedCreature[18]
+global Creatures[18]
+global CreatureEntryPos[18]
+global DojoCentre
+global DojoCave
+global DojoCaveEntrance
+global DojoArenaEntrance
+global MyCreatureSwapPos
+global DojoCreaturePos
+global CloseUpOfPlinth
+global DojoCreatureOnWayToDojo
+global DojoIsThisFirstTrial = 1
+global TitleForSnapshot
+global ChallangeIdForSnapshot
+global CreaturesAreFighting
+global CreaturesAreSwapping
+global CreatureHasTimedOut
+global DoneRockCheck
+global FightSwapTimer
+global DontDoDojoReminder
+global SwapBackPossible
+global CIGlobalReset
+global MinTeleportDistance = 200
+global CreaturesToPlinth[19]
+global CICreatureControlledLocally
+
+define script KensRufusIsReallyImpressed
+define script ChooseToSwapOrFightWithDojoCreature(Creature)
+define script GetChicken
+define script SetupTypeToPlinth
+define script IntroToRufusTrial
+define script CreateCreature(Creature, Pos, Scale, Strength, Alignment, CreatureOb)
+define script CreateWinIndicator(Creature)
+define script CreatureEntersDojo(Creature, SubType, Total)
+define script NameDojoCreature(Creature)
+define script CheckForRocksInDojo
+define script GetAngleForPlinth(Plinth, Distance)
+define script CheckIfSwapBackAvailable(FightScroll, SwapScroll)
+
+begin script Dojo(Creature)
+	CreatureSubType = 0
+	DojoDYKPos = marker at [1224.356, 58.96, 945.624]
+start
+	if DoneRockCheck == 0
+		run background script CheckForRocksInDojo
+		DoneRockCheck = 1
+	end if
+	DontDoDojoReminder = 1
+	ChallengeTotal++
+	if DojoCreature exists
+		delete DojoCreature
+		stop script "ChooseToSwapOrFightWithDojoCreature"
+		CreaturesAreSwapping = 0
+		CreaturesAreFighting = 0
+		CreatureHasTimedOut = 0
+		if CICreatureControlledLocally == 1
+			ScriptLockedCreature = 0
+			disable MyCreature immune to spells
+			release MyCreature
+			CICreatureControlledLocally = 0
+		end if
+	end if
+	CreatureSubType = variable get Creature sub type
+	if CreatureSubType == Creatures[4]
+		run script GetChicken
+		if ChallengeTotal == 16
+			begin cinema
+				run script IntroToRufusTrial
+			end cinema
+		end if
+	elsif ChallengeTotal == 2
+		run script CreatureEntersDojo(Creature, CreatureSubType, ChallengeTotal)
+	elsif ChallengeTotal == 4
+		run script CreatureEntersDojo(Creature, CreatureSubType, ChallengeTotal)
+	elsif ChallengeTotal <= 16
+		run script CreatureEntersDojo(Creature, CreatureSubType, ChallengeTotal)
+		if ChallengeTotal == 16
+		end if
+	elsif ChallengeTotal == 17
+		run script KensRufusIsReallyImpressed
+	end if
+	if ChallengeTotal == 1
+		run background script DidYouKnow(DojoDYKPos, variable HELP_TEXT_DOJO_DYK, variable DYK_MISC)
+	end if
+	DontDoDojoReminder = 0
+end script Dojo
+
+begin script MoveZediFromDojoCave(Pos)
+	CreatureAtFinalPos = 0
+	CreatureIsAtCaveEntrance = 0
+	CreatureInCavePos = 0
+	ZediRhino = 10
+	LookPos = marker at [DojoArenaEntrance] + [0, 10, 0]
+start
+	CreatureInCavePos = marker at [DojoCentre] - [DojoCave]
+	run script CreateCreature(ZediRhino, CreatureInCavePos, 0.2, 1, 0, 2)
+	if Zedi exists
+		enable Zedi immune to spells
+		disable Zedi navigation
+		force Zedi CREATURE_IDLE Zedi
+		force Zedi CREATURE_LOOK_FOREVER LookPos
+		wait until 1 seconds
+		set Zedi focus to [LookPos]
+		while CreatureAtFinalPos == 0
+			move Zedi position to [Pos] radius 0
+			if ACTUAL_HEIGHT of Zedi < 2
+				ACTUAL_HEIGHT of Zedi += 0.1
+			end if
+			if get distance from [Zedi] to [Pos] < 1
+				CreatureAtFinalPos = 1
+			end if
+		end while
+		enable Zedi navigation
+	end if
+end script MoveZediFromDojoCave
+
+begin script MoveLionFromDojoCave(Pos)
+	CreatureAtFinalPos = 0
+	CreatureIsAtCaveEntrance = 0
+	CreatureInCavePos = 0
+	Lion = 5
+	LookPos = marker at [DojoArenaEntrance] + [0, 10, 0]
+start
+	CreatureInCavePos = marker at [DojoCentre] - [DojoCave]
+	run script CreateCreature(Lion, CreatureInCavePos, 0.2, 1, 0, 0)
+	if LionCreature exists
+		enable LionCreature immune to spells
+		disable LionCreature navigation
+		force LionCreature CREATURE_IDLE LionCreature
+		force LionCreature CREATURE_LOOK_FOREVER LookPos
+		wait until 1 seconds
+		set LionCreature focus to [LookPos]
+		while CreatureAtFinalPos == 0
+			move LionCreature position to [Pos] radius 0
+			if ACTUAL_HEIGHT of LionCreature < 2
+				ACTUAL_HEIGHT of LionCreature += 0.1
+			end if
+			if get distance from [LionCreature] to [Pos] < 1
+				CreatureAtFinalPos = 1
+			end if
+		end while
+		enable LionCreature navigation
+	end if
+end script MoveLionFromDojoCave
+
+begin script MoveCreatureFromDojoCave(Creature, Pos, FinalSize)
+	CreatureAtFinalPos = 0
+	CreatureIsAtCaveEntrance = 0
+	CreatureInCavePos = 0
+	LookPos = marker at [DojoArenaEntrance] + [0, 10, 0]
+start
+	CreatureInCavePos = marker at [DojoCentre] - [DojoCave]
+	run script CreateCreature(Creature, CreatureInCavePos, 0.2, 1, 0, 1)
+	if DojoCreature exists
+		enable DojoCreature immune to spells
+		disable DojoCreature navigation
+		force DojoCreature CREATURE_IDLE DojoCreature
+		force DojoCreature CREATURE_LOOK_FOREVER LookPos
+		wait until 1 seconds
+		set DojoCreature focus to [LookPos]
+		while CreatureAtFinalPos == 0
+			move DojoCreature position to [Pos] radius 0
+			if ACTUAL_HEIGHT of DojoCreature < FinalSize
+				ACTUAL_HEIGHT of DojoCreature += 0.1
+			end if
+			if get distance from [DojoCreature] to [Pos] < 1
+				CreatureAtFinalPos = 1
+			end if
+		end while
+		enable DojoCreature navigation
+	end if
+end script MoveCreatureFromDojoCave
+
+begin script MoveCreatureToDojoCave(Creature)
+	CreatureInsideCave = 0
+	CreatureIsAtCaveEntrance = 0
+	ScaleDown = 0
+	BackOfDojoCave = marker at [1079.4164, 71.423, 884.2906]
+	MidPoint = marker at (get target from [DojoCave] to [DojoCentre] distance 30 angle 180)
+start
+	if Creature exists
+		DojoCreatureOnWayToDojo = 1
+		disable Creature navigation
+		force Creature CREATURE_LOOK_FOREVER DojoCave
+		wait until 1 seconds
+		set Creature focus to [DojoCave]
+		move Creature position to [MidPoint] radius 0
+		wait until get distance from [Creature] to [MidPoint] < 5 or 10 seconds
+		while CreatureInsideCave == 0
+			move Creature position to [BackOfDojoCave] radius 0
+			if get distance from [Creature] to [BackOfDojoCave] < 120
+				ScaleDown = 1
+			end if
+			if ScaleDown == 1
+				if ACTUAL_HEIGHT of Creature > 0.2
+					ACTUAL_HEIGHT of Creature -= 0.05
+				end if
+			end if
+			if get distance from [Creature] to [BackOfDojoCave] < 60
+				CreatureInsideCave = 1
+			end if
+			until not Creature exists
+		end while
+		if Creature exists
+			enable Creature navigation
+			delete Creature with fade
+		end if
+		DojoCreatureOnWayToDojo = 0
+	end if
+end script MoveCreatureToDojoCave
+
+begin script LoadCreatures
+	Total = 0
+	Count = 0
+start
+	Creatures[0] = variable CREATURE_TYPE_COW
+	Creatures[1] = variable CREATURE_TYPE_WOLF
+	Creatures[2] = variable CREATURE_TYPE_GORILLA
+	Creatures[3] = variable CREATURE_TYPE_POLAR_BEAR
+	Creatures[4] = variable CREATURE_TYPE_CHICKEN
+	Creatures[5] = variable CREATURE_TYPE_LION
+	Creatures[6] = variable CREATURE_TYPE_SHEEP
+	Creatures[7] = variable CREATURE_TYPE_APE
+	Creatures[8] = variable CREATURE_TYPE_TIGER
+	Creatures[9] = variable CREATURE_TYPE_TORTOISE
+	Creatures[10] = variable CREATURE_TYPE_RHINO
+	Creatures[11] = variable CREATURE_TYPE_MANDRILL
+	Creatures[12] = variable CREATURE_TYPE_ZEBRA
+	Creatures[13] = variable CREATURE_TYPE_CROCODILE
+	Creatures[14] = variable CREATURE_TYPE_BEAR
+	Creatures[15] = variable CREATURE_TYPE_LEOPARD
+	Creatures[16] = variable CREATURE_TYPE_CHIMP
+	Creatures[17] = variable CREATURE_TYPE_HORSE
+	while Total < 18
+		CreatureTypes[Count] = Total
+		Count++
+		Total++
+	end while
+end script LoadCreatures
+
+begin script CreateCreature(Creature, Pos, Scale, Strength, Alignment, CreatureOb)
+start
+	if CreatureOb == 1
+		if MyCreature exists
+			if Creature == CreatureTypes[0]
+				ChallangeIdForSnapshot = variable CHALLENGE_BOWLING
+				TitleForSnapshot = variable HELP_TEXT_CREATURE_ISLE_TITLE_03
+				DojoCreature = create creature from creature MyCreature 1 at [Pos] CREATURE_TYPE_COW
+			elsif Creature == CreatureTypes[1]
+				ChallangeIdForSnapshot = variable CHALLENGE_WOLF_TRIAL
+				TitleForSnapshot = variable HELP_TEXT_CREATURE_ISLE_TITLE_10
+				DojoCreature = create creature from creature MyCreature 1 at [Pos] CREATURE_TYPE_WOLF
+			elsif Creature == CreatureTypes[2]
+				ChallangeIdForSnapshot = variable CHALLENGE_SMASH_BUILDINGS
+				TitleForSnapshot = variable HELP_TEXT_CREATURE_ISLE_TITLE_17
+				DojoCreature = create creature from creature MyCreature 1 at [Pos] CREATURE_TYPE_GORILLA
+			elsif Creature == CreatureTypes[3]
+				ChallangeIdForSnapshot = variable CHALLENGE_MISSIONARIES_LEAVE
+				TitleForSnapshot = variable HELP_TEXT_CREATURE_ISLE_TITLE_18
+				DojoCreature = create creature from creature MyCreature 1 at [Pos] CREATURE_TYPE_POLAR_BEAR
+			elsif Creature == CreatureTypes[4]
+				ChallangeIdForSnapshot = variable CHALLENGE_TYKES_COMING_OF_AGE
+				TitleForSnapshot = variable HELP_TEXT_CREATURE_ISLE_TITLE_06
+				DojoCreature = create creature from creature MyCreature 1 at [Pos] CREATURE_TYPE_CHICKEN
+			elsif Creature == CreatureTypes[5]
+				ChallangeIdForSnapshot = variable CHALLENGE_DOJO
+				TitleForSnapshot = variable HELP_TEXT_CREATURE_ISLE_TITLE_25
+				DojoCreature = create creature from creature MyCreature 1 at [Pos] CREATURE_TYPE_LION
+			elsif Creature == CreatureTypes[6]
+				ChallangeIdForSnapshot = variable CHALLENGE_CREATURE_HERDER
+				TitleForSnapshot = variable HELP_TEXT_CREATURE_ISLE_TITLE_09
+				DojoCreature = create creature from creature MyCreature 1 at [Pos] CREATURE_TYPE_SHEEP
+			elsif Creature == CreatureTypes[7]
+				ChallangeIdForSnapshot = variable CHALLENGE_MARBLES
+				TitleForSnapshot = variable HELP_TEXT_CREATURE_ISLE_TITLE_15
+				DojoCreature = create creature from creature MyCreature 1 at [Pos] CREATURE_TYPE_APE
+			elsif Creature == CreatureTypes[8]
+				ChallangeIdForSnapshot = variable CHALLENGE_TIGER_CANNON
+				TitleForSnapshot = variable HELP_TEXT_CREATURE_ISLE_TITLE_22
+				DojoCreature = create creature from creature MyCreature 1 at [Pos] CREATURE_TYPE_TIGER
+			elsif Creature == CreatureTypes[9]
+				ChallangeIdForSnapshot = variable CHALLENGE_THE_RACES
+				TitleForSnapshot = variable HELP_TEXT_CREATURE_ISLE_TITLE_02
+				DojoCreature = create creature from creature MyCreature 1 at [Pos] CREATURE_TYPE_TORTOISE
+			elsif Creature == CreatureTypes[10]
+				ChallangeIdForSnapshot = variable CHALLENGE_ZEDI_FIGHT
+				TitleForSnapshot = variable HELP_TEXT_CREATURE_ISLE_TITLE_11
+				DojoCreature = create creature from creature MyCreature 1 at [Pos] CREATURE_TYPE_RHINO
+			elsif Creature == CreatureTypes[11]
+				ChallangeIdForSnapshot = variable CHALLENGE_FOOTBALL_SKILLS
+				TitleForSnapshot = variable HELP_TEXT_CREATURE_ISLE_TITLE_07
+				DojoCreature = create creature from creature MyCreature 1 at [Pos] CREATURE_TYPE_MANDRILL
+			elsif Creature == CreatureTypes[12]
+				ChallangeIdForSnapshot = variable CHALLENGE_BALLISTA_BLOKE
+				TitleForSnapshot = variable HELP_TEXT_CREATURE_ISLE_TITLE_08
+				DojoCreature = create creature from creature MyCreature 1 at [Pos] CREATURE_TYPE_ZEBRA
+			elsif Creature == CreatureTypes[13]
+				ChallangeIdForSnapshot = variable CHALLENGE_GRADUATION
+				TitleForSnapshot = variable HELP_TEXT_CREATURE_ISLE_TITLE_19
+				DojoCreature = create creature from creature MyCreature 1 at [Pos] CREATURE_TYPE_CROCODILE
+				Alignment = -0.5
+				Strength = 1
+			elsif Creature == CreatureTypes[14]
+				ChallangeIdForSnapshot = variable CHALLENGE_GREEDY_HERMIT
+				TitleForSnapshot = variable HELP_TEXT_CREATURE_ISLE_TITLE_12
+				DojoCreature = create creature from creature MyCreature 1 at [Pos] CREATURE_TYPE_BEAR
+			elsif Creature == CreatureTypes[15]
+				ChallangeIdForSnapshot = variable CHALLENGE_KING_OF_THE_CASTLE
+				TitleForSnapshot = variable HELP_TEXT_CREATURE_ISLE_TITLE_13
+				DojoCreature = create creature from creature MyCreature 1 at [Pos] CREATURE_TYPE_LEOPARD
+			elsif Creature == CreatureTypes[16]
+				ChallangeIdForSnapshot = variable CHALLENGE_CREATURE_TAPPER
+				TitleForSnapshot = variable HELP_TEXT_CREATURE_ISLE_TITLE_27
+				DojoCreature = create creature from creature MyCreature 1 at [Pos] CREATURE_TYPE_CHIMP
+			elsif Creature == CreatureTypes[17]
+				ChallangeIdForSnapshot = variable CHALLENGE_SPECIAL_CROPS
+				TitleForSnapshot = variable HELP_TEXT_CREATURE_ISLE_TITLE_14
+				DojoCreature = create creature from creature MyCreature 1 at [Pos] CREATURE_TYPE_HORSE
+			end if
+			set DojoCreature fade in time 2
+			ACTUAL_HEIGHT of DojoCreature = Scale
+			STRENGTH of DojoCreature = Strength
+			ALIGNMENT of DojoCreature = Alignment
+		end if
+	elsif CreatureOb == 0
+		if MyCreature exists
+			if Creature == CreatureTypes[5]
+				LionCreature = create creature from creature MyCreature 1 at [Pos] CREATURE_TYPE_LION
+				run script SetupCreatureIsleCreature(LionCreature)
+				set LionCreature name HELP_TEXT_NAME_LION_01
+			end if
+			set LionCreature fade in time 2
+			ACTUAL_HEIGHT of LionCreature = Scale
+			STRENGTH of LionCreature = Strength
+			ALIGNMENT of LionCreature = Alignment
+		end if
+	else
+		if MyCreature exists
+			if Creature == CreatureTypes[10]
+				Zedi = create creature from creature MyCreature 1 at [Pos] CREATURE_TYPE_RHINO
+				run script SetupCreatureIsleCreature(Zedi)
+				set Zedi name HELP_TEXT_NAME_RHINO_01
+			end if
+			set Zedi fade in time 2
+			ACTUAL_HEIGHT of Zedi = Scale
+			STRENGTH of Zedi = Strength
+			ALIGNMENT of Zedi = Alignment
+			enable Zedi tattoo CREATURE_TATTOO_TYPE_FIGHTER
+		end if
+	end if
+end script CreateCreature
+
+begin script SelectPlinth
+	Counter = 0
+	Creature = 0
+	GameFinished = 0
+	CamPos = 0
+	DojoCreatureSubType = 0
+	CreatureSize = 0
+	HandPos = 0
+	OKToSwapOrFight = 0
+	WatchCreatureEmergePos = marker at [1269.4601, 96.6306, 1032.9374]
+	WatchCreatureEmergeFoc = marker at [1205.7299, 61.3717, 984.1387]
+start
+	CamPos = marker at (get target from [DojoCave] to [DojoCentre] distance 70 angle 0)
+	MyCreatureSwapPos = marker at (get target from [DojoCave] to [DojoCentre] distance 30 angle 0)
+	DojoCreaturePos = marker at (get target from [DojoCave] to [DojoCentre] distance 30 angle 180)
+	while GameFinished == 0
+		if Dojo clicked and CreaturesAreFighting == 0 and CreaturesAreSwapping == 0 and CreatureHasTimedOut == 0
+			clear clicked object
+			HandPos = marker at (hand position)
+			while Counter < 18
+				if get distance from [HandPos] to [CreaturePortraits[Counter]] < 10 and CreatureInDojo[Counter] == 1
+					CreatureSize = ACTUAL_HEIGHT of MyCreature
+					Creature = CreatureTypes[Counter]
+					OKToSwapOrFight = 0
+					stop script "ChooseToSwapOrFightWithDojoCreature"
+					CreaturesAreSwapping = 0
+					CreaturesAreFighting = 0
+					CreatureHasTimedOut = 0
+					if CICreatureControlledLocally == 1
+						ScriptLockedCreature = 0
+						disable MyCreature immune to spells
+						release MyCreature
+						CICreatureControlledLocally = 0
+					end if
+					if DojoCreature exists
+						DojoCreatureSubType = variable get DojoCreature sub type
+						if DojoCreatureSubType != Creatures[Counter]
+							begin cinema
+								move camera position to [WatchCreatureEmergePos] time 3
+								move camera focus to [WatchCreatureEmergeFoc] time 3
+								if DojoCreatureOnWayToDojo == 0
+									run script MoveCreatureToDojoCave(DojoCreature)
+								else
+									wait until DojoCreatureOnWayToDojo == 0 or 5 seconds
+								end if
+								run script MoveCreatureFromDojoCave(Creature, DojoCreaturePos, CreatureSize)
+								run script NameDojoCreature(DojoCreature)
+								OKToSwapOrFight = 1
+							end cinema
+						else
+							OKToSwapOrFight = 1
+						end if
+					else
+						begin cinema
+							move camera position to [WatchCreatureEmergePos] time 3
+							move camera focus to [WatchCreatureEmergeFoc] time 3
+							run script MoveCreatureFromDojoCave(Creature, DojoCreaturePos, CreatureSize)
+							run script NameDojoCreature(DojoCreature)
+							OKToSwapOrFight = 1
+						end cinema
+					end if
+					if OKToSwapOrFight == 1
+						run background script ChooseToSwapOrFightWithDojoCreature(Creature)
+					end if
+					Counter = 18
+				end if
+				Counter++
+			end while
+		end if
+		Counter = 0
+	end while
+end script SelectPlinth
+
+begin script PolarBearOutro
+start
+	begin known cinema
+		start music MUSIC_TYPE_SCRIPT_MISSIONARIES_INTRO
+		set camera position to [-150.328, 6.39, 844.669]
+		set camera focus to [-528.633, 13.182, 436.043]
+		move camera position to [-138.504, 6.178, 857.443] time 60
+		set fade in time 2
+		wait until 4 seconds
+		start jc special SJC_CI_BOAT_ARRIVAL
+		wait until 16 seconds
+		set fade red 0 green 0 blue 0 time 1
+		stop music
+		wait until fade ready
+		start jc special SJC_CI_BOAT_ARRIVAL_END
+		set camera position to [3395.212, 176.705, 1914.943]
+		set camera focus to [2782.607, 27.343, 1696.16]
+		set fade in time 1
+	end known cinema
+end script PolarBearOutro
+
+begin script CreatureEntersDojo(Creature, SubType, Total)
+	Count = 0
+	CreatureFound = 0
+	Plinth = 0
+	EntryPos = 0
+	PlinthToRaise = 0
+	PlinthHeight = 10
+	DistanceFromPlinth = 30
+	CreatureMoving = 1
+	TempCreature = 0
+	TempCreatureSubType = 0
+	TempCreatureScale = 0
+	TempCreatureStrength = 0
+	TempCreatureAlignment = 0
+	TempCreatureHeight = 0
+	LionCreatureHeight = 0
+	OriginalPos = 0
+	OriginalFoc = 0
+	BeamFX = 0
+	BangFX = 0
+	ScaleOfMyCreature = 0
+	CreatureHeight = 0
+	ObjectToPointAt = 0
+	BearIsArriving = 0
+	MovedPlayersCreature = 0
+	MovedTyke = 0
+	TempStartPos = marker at [1353.618, 63.65, 1103.1659]
+	JustInsideArena = marker at (get target from [DojoCave] to [DojoCentre] distance 30 angle 0)
+	LionPos = marker at (get target from [DojoCave] to [DojoCentre] distance 30 angle 180)
+	LookFromOverShoulder = marker at (get target from [DojoCave] to [DojoCentre] distance 40 angle 195)
+	MoveAwayFromLionPos = marker at (get target from [DojoCave] to [DojoCentre] distance 40 angle 200)
+	MoveAwayFromLionFoc = marker at (get target from [DojoCave] to [DojoCentre] distance 50 angle 20)
+	CloseUpOfLion = marker at (get target from [DojoCave] to [DojoCentre] distance 15 angle 190)
+	LookingAtPlinthToRaise = 0
+	BackUpFromCreaturePos = 0
+	LookingUpAtRufusPos = 0
+	DojoCreatureHeight = 0
+	TrialCreatureHappyPos = marker at [1229.565, 84.7979, 1028.0962]
+	TrialCreatureHappyFoc = marker at [1276.4636, 72.8318, 1040.6329]
+	WatchCreaturesEnterDojoPos = marker at [1272.4415, 96.9275, 1095.9586]
+	WatchCreaturesEnterDojoFoc = marker at [1221.4382, 57.8184, 980.4913]
+	ClosUpOfDojoLogoPos = marker at [1245.6919, 118.0397, 1015.6172]
+	ClosUpOfDojoLogoFoc = marker at [1254.6224, 61.951, 1022.3043]
+	BaseOfEntrance = marker at [1313.0604, 63.5165, 1088.0419]
+	CreaturesEnteringDojoPos = marker at [1297.6307, 87.5201, 1023.7504]
+	CreaturesEnteringDojoFoc = marker at [1206.4962, 60.9423, 995.0615]
+	MoveToTemplePos = marker at [1281.9135, 167.5, 1232.2821]
+	LookingFromInsideDojoPos = marker at (get target from [DojoCave] to [DojoCentre] distance 170 angle 179)
+	CloseUpOfTrialCreaturePos = marker at (get target from [DojoCave] to [DojoCentre] distance 10 angle 180)
+	CreatureBlocked = create timer for 0 seconds
+	Reminder = 0
+start
+	begin cinema
+		set fade red 0 green 0 blue 0 time 1
+		wait until fade ready
+		wait until widescreen transition complete
+		run background script MoveLionFromDojoCave(LionPos)
+		TempCreatureSubType = variable get Creature sub type
+		TempCreatureScale = ACTUAL_HEIGHT of Creature
+		TempCreatureStrength = STRENGTH of Creature
+		TempCreatureAlignment = ALIGNMENT of Creature
+		if TempCreatureScale < 0.8
+			TempCreatureScale = 0.8
+		end if
+		if TempCreatureSubType == Creatures[14]
+			BearIsArriving = 1
+		end if
+		while Count < 18 and CreatureFound == 0
+			if TempCreatureSubType == Creatures[Count]
+				Plinth = CreaturePortraits[Count]
+				EntryPos = CreatureEntryPos[Count]
+				PlinthToRaise = Count
+				CreatureFound = 1
+			end if
+			Count++
+		end while
+		OriginalPos = marker at (camera position)
+		OriginalFoc = marker at (camera focus)
+		start music MUSIC_TYPE_SCRIPT_CREATURE_GUIDE
+		if get distance from [MyCreature] to [DojoCentre] < 60 or get distance from [MyCreature] to [TempStartPos] < 60
+			detach MyCreature leash
+			set MyCreature position to [MoveToTemplePos]
+			if Tyke exists and TykeIsReady == 1 and TykeFree == 1
+				set Tyke position to [MoveToTemplePos] + ([20, 20])
+				MovedTyke = 1
+			end if
+			MovedPlayersCreature = 1
+		end if
+		TempCreature = create CREATURE constant TempCreatureSubType at [TempStartPos]
+		ACTUAL_HEIGHT of TempCreature = TempCreatureScale
+		STRENGTH of TempCreature = TempCreatureStrength
+		ALIGNMENT of TempCreature = TempCreatureAlignment
+		run script SetupCreatureIsleCreature(TempCreature)
+		disable TempCreature navigation
+		CreatureHeight = HEIGHT of TempCreature
+		set TempCreature focus to [DojoCave]
+		set camera position to [ClosUpOfDojoLogoPos]
+		set camera focus to [ClosUpOfDojoLogoFoc]
+		wait until widescreen transition complete
+		set fade in time 2
+		wait until fade ready
+		wait until get distance from [LionCreature] to [LionPos] < 1 or 10 seconds
+		set LionCreature focus to [TempCreature]
+		wait until 0.1 seconds
+		disable LionCreature navigation
+		if DojoIsThisFirstTrial == 1
+			disable creature sound
+			say HELP_TEXT_DOJO_EXPLANATION_10 by LionCreature
+		else
+			LionCreature play ANM_SWALLOW_FLAP loop 2
+			wait until 0.5 seconds
+		end if
+		move TempCreature position to [JustInsideArena] radius 0
+		move camera position to [LookFromOverShoulder] + [0, 32, 0] time 4
+		move camera focus to [BaseOfEntrance] time 4
+		wait until camera ready
+		move camera position to [MoveAwayFromLionPos] + [0, 32, 0] time 3
+		move camera focus to [MoveAwayFromLionFoc] time 3
+		TempCreatureHeight = HEIGHT of TempCreature
+		TempCreatureHeight = TempCreatureHeight * 0.8
+		LionCreatureHeight = HEIGHT of LionCreature
+		LionCreatureHeight = LionCreatureHeight * 0.9
+		if DojoIsThisFirstTrial == 1
+			wait until read
+			set camera position to [CloseUpOfLion] + [0, 28, 0]
+			set camera focus to [LionCreature] + [0, LionCreatureHeight, 0]
+			say HELP_TEXT_DOJO_EXPLANATION_20 by LionCreature
+		end if
+		wait until 3 seconds
+		set camera position to [DojoCentre] + [0, TempCreatureHeight, 0]
+		set camera focus to [TempCreature] + [0, TempCreatureHeight, 0]
+		wait until get distance from [TempCreature] to [JustInsideArena] < 1 or 10 seconds
+		wait until read
+		enable creature sound
+		TempCreature play ANM_PHONEBOX loop 1
+		LionCreature play ANM_PHONEBOX loop 1
+		wait until 1.5 seconds
+		set camera position to [DojoCentre] + [0, LionCreatureHeight, 0]
+		set camera focus to [LionCreature] + [0, LionCreatureHeight, 0]
+		wait until 0.5 seconds
+		wait until LionCreature played
+		wait until TempCreature played
+		if BearIsArriving == 0
+			LookingAtPlinthToRaise = marker at (get target from [DojoCentre] to [Plinth] distance 130 angle 180)
+		else
+			LookingAtPlinthToRaise = marker at (get target from [DojoCentre] to [CreaturePortraits[12]] distance 130 angle 180)
+		end if
+		set camera position to [LookingAtPlinthToRaise] + [0, 30, 0]
+		set camera focus to [Plinth]
+		force TempCreature CREATURE_LOOK_FOREVER Plinth
+		force LionCreature CREATURE_LOOK_FOREVER Plinth
+		wait until 0.1 seconds
+		set TempCreature focus to [Plinth]
+		set LionCreature focus to [Plinth]
+		ObjectToPointAt = marker at [Plinth] + [0, 10, 0]
+		force TempCreature POINT_AT ObjectToPointAt
+		force LionCreature POINT_AT ObjectToPointAt
+		wait until 1 seconds
+		if BearIsArriving == 0
+			run script GetAngleForPlinth(Plinth, DistanceFromPlinth)
+		else
+			run script GetAngleForPlinth(CreaturePortraits[15], DistanceFromPlinth)
+		end if
+		move camera position to [CloseUpOfPlinth] + [0, 5, 0] time 3
+		move camera focus to [Plinth] + [0, 10, 0] time 3
+		wait until 2 seconds
+		if DojoIsThisFirstTrial == 1
+			disable creature sound
+			wait until read
+			say HELP_TEXT_DOJO_EXPLANATION_30 with interaction by LionCreature
+		end if
+		enable jc special SJC_RAISE_TOTEM on Dojo with number PlinthToRaise
+		start sound LH_SCRIPT_SAMPLE_CAVEDOOR_SLIDE AUDIO_SFX_BANK_TYPE_SCRIPT_SFX at (camera position)
+		shake camera at (camera position) radius 40 amplitude 0.1 time 4
+		wait until 3 seconds
+		start sound LH_SCRIPT_SAMPLE_CAVEDOOR_SLAM AUDIO_SFX_BANK_TYPE_SCRIPT_SFX at (camera position)
+		shake camera at (camera position) radius 20 amplitude 0.5 time 0.5
+		wait until 1 seconds
+		run script CreateCreature(PlinthToRaise, EntryPos, 0.2, 1, 0, 1)
+		force DojoCreature CREATURE_LOOK_FOREVER DojoCentre
+		wait until 0.1 seconds
+		set DojoCreature focus to [DojoCentre]
+		disable DojoCreature navigation
+		start sound LH_SAMPLE_G_PLASMASMALL at [Plinth]
+		BeamFX = create special effect SPOT_VISUAL_MAGIC_BEAM on Plinth time 3
+		ALTITUDE of BeamFX = PlinthHeight
+		add BeamFX target on DojoCreature
+		wait until 1 seconds
+		BangFX = create special effect SPOT_VISUAL_BANG on DojoCreature time 3
+		DojoCreature play ANM_A_LEOPARD_UPFROM_SLEEP loop 1
+		BackUpFromCreaturePos = marker at (get target from [Plinth] to (camera position) distance 10 angle 0)
+		ScaleOfMyCreature = ACTUAL_HEIGHT of MyCreature
+		if ScaleOfMyCreature < 1
+			ScaleOfMyCreature = 1
+		end if
+		while ACTUAL_HEIGHT of DojoCreature != ScaleOfMyCreature
+			ACTUAL_HEIGHT of DojoCreature += 0.05
+			CreatureHeight = HEIGHT of DojoCreature
+			move camera position to [BackUpFromCreaturePos] + [0, 5, 0] time 2
+			move camera focus to [DojoCreature] + [0, CreatureHeight, 0] time 1
+			if ACTUAL_HEIGHT of DojoCreature > ScaleOfMyCreature
+				ACTUAL_HEIGHT of DojoCreature = ScaleOfMyCreature
+			end if
+		end while
+		wait until DojoCreature played
+		stop sound LH_SAMPLE_G_PLASMASMALL
+		move camera position to [LookingAtPlinthToRaise] + [0, 30, 0] time 3
+		if BearIsArriving == 0
+			move camera focus to [Plinth] time 3
+		else
+			move camera focus to [DojoCentre] + [0, LionCreatureHeight / 2, 0] time 3
+		end if
+		set CreatureBlocked time to 10 seconds
+		while CreatureMoving == 1
+			move DojoCreature position to [DojoCentre] radius 0
+			set TempCreature focus to [DojoCreature] + [0, CreatureHeight, 0]
+			set LionCreature focus to [DojoCreature] + [0, CreatureHeight, 0]
+			if get distance from [DojoCreature] to [DojoCentre] < 1
+				CreatureMoving = 0
+			end if
+			if get CreatureBlocked time remaining <= 0
+				if not get distance from [DojoCreature] to [DojoCentre] < 5
+					set DojoCreature position to [DojoCentre]
+					CreatureMoving = 0
+				end if
+			end if
+		end while
+		if DojoIsThisFirstTrial == 1
+			wait until read
+			close dialogue
+			enable creature sound
+		end if
+		force DojoCreature CREATURE_LOOK_FOREVER DojoCave
+		wait until 0.5 seconds
+		set DojoCreature focus to [DojoCave]
+		force LionCreature CREATURE_LOOK_FOREVER DojoCreature
+		wait until 0.5 seconds
+		set LionCreature focus to [DojoCreature] + [0, CreatureHeight, 0]
+		DojoCreature play ANM_PIED_PIPER_DANCE_STAND loop 1
+		wait until 3 seconds
+		LionCreature play ANM_SWALLOW_FLAP loop 2
+		wait until 2 seconds
+		DojoCreatureHeight = HEIGHT of DojoCreature
+		DojoCreatureHeight = LionCreatureHeight * 0.8
+		LookingUpAtRufusPos = marker at (get target from [LionCreature] to [DojoCreature] distance 30 angle -45)
+		set camera position to [LookingUpAtRufusPos] + [0, LionCreatureHeight / 3, 0]
+		set camera focus to [LionCreature] + [0, LionCreatureHeight / 1.5, 0]
+		wait until 0.1 seconds
+		if ChallangeIdForSnapshot == variable CHALLENGE_BOWLING
+			Reminder = variable HELP_TEXT_CI_REMINDER_02
+		elsif ChallangeIdForSnapshot == variable CHALLENGE_MARBLES
+			Reminder = variable HELP_TEXT_CI_REMINDER_12
+		elsif ChallangeIdForSnapshot == variable CHALLENGE_TIGER_CANNON
+			Reminder = variable HELP_TEXT_CI_REMINDER_03
+		elsif ChallangeIdForSnapshot == variable CHALLENGE_THE_RACES
+			Reminder = variable HELP_TEXT_CI_REMINDER_01
+		end if
+		snapshot constant ChallangeIdForSnapshot quest success 1 alignment 0 constant TitleForSnapshot StandardReminder (Reminder)
+		wait until 0.1 seconds
+		wait until DojoCreature played
+		wait until LionCreature played
+		run background script MoveCreatureToDojoCave(LionCreature)
+		wait until 2 seconds
+		run background script MoveCreatureToDojoCave(DojoCreature)
+		wait until 3 seconds
+		set camera position to [LookingFromInsideDojoPos] + [0, LionCreatureHeight, 0]
+		set camera focus to [DojoCentre]
+		CreatureInDojo[PlinthToRaise] = 1
+		wait until 5 seconds
+		move camera position to [CloseUpOfTrialCreaturePos] + [0, TempCreatureHeight, 0] time 2
+		move camera focus to [TempCreature] + [0, TempCreatureHeight, 0] time 2
+		TempCreature play ANM_A_COW_DEAD_ON_RHS loop 1
+		wait until TempCreature played
+		set TempCreature focus to [TempStartPos]
+		move TempCreature position to [TempStartPos] radius 0
+		wait until 2 seconds
+		if DojoIsThisFirstTrial == 1
+			set camera position to [CloseUpOfPlinth] + [0, 5, 0]
+			set camera focus to [Plinth] + [0, 10, 0]
+			eject evil spirit
+			make evil spirit point at [Plinth] + [0, PlinthHeight, 0]
+			say HELP_TEXT_DOJO_EXPLANATION_45 with interaction
+			wait until read
+			stop evil spirit pointing
+			eject good spirit
+			say HELP_TEXT_DOJO_EXPLANATION_46
+			wait until read
+			send evil spirit home
+			send good spirit home
+			DojoIsThisFirstTrial = 0
+		end if
+		set fade red 0 green 0 blue 0 time 2
+		wait until fade ready
+		delete TempCreature
+		if SubType == Creatures[3]
+			run script PolarBearOutro
+			if Total == 16
+				run script IntroToRufusTrial
+			end if
+		elsif Total == 2
+			run script BrotherhoodApprentice
+		elsif Total == 4
+			run script EveIntro
+		elsif Total == 16
+			run script IntroToRufusTrial
+		else
+			set camera position to [OriginalPos]
+			set camera focus to [OriginalFoc]
+			wait until camera ready
+		end if
+		if MovedPlayersCreature == 1
+			release MyCreature
+		end if
+		if MovedTyke == 1
+			release Tyke
+		end if
+		stop music
+	end cinema
+	set fade in time 2
+	wait until fade ready
+end script CreatureEntersDojo
+
+begin script DoBeams(Origin, Target)
+	Explosion = 0
+	Distance = 0
+	ExplosionTarget = 0
+	Step = 0
+	NumberOfBeams = 100
+	ExplosionCount = 0
+start
+	Distance = get distance from [Origin] to [Target]
+	Distance /= NumberOfBeams
+	while Step < NumberOfBeams
+		ExplosionTarget = marker at (get target from [Origin] - ([Target] - [Origin]) to [Origin] distance Distance * Step angle 0)
+		Explosion = create special effect SPOT_VISUAL_SEE_THIS_BEAM at [ExplosionTarget] time 10
+		if ExplosionCount > 16
+			Explosion = cast SPELL_EXPLOSION_LEVEL_1 spell at [ExplosionTarget] from [ExplosionTarget] + [0, 30, 0] radius 50 time 15 curl 0
+			ExplosionCount = 0
+		end if
+		Step++
+		ExplosionCount++
+	end while
+end script DoBeams
+
+begin script GiveFightTattoo
+	AmountOfCreaturesDefeated = 0
+	TattooEarnt = 0
+	Count = 0
+	MyCreatureHeight = 0
+	ZediHeight = 0
+	AnimDone = 0
+	AnimPercentage = 0
+	TykePos = marker at (get target from [DojoCave] to [DojoCentre] distance 75 angle 20)
+	TykeWaypoint1 = marker at (get target from [DojoCave] to [DojoCentre] distance 75 angle 25)
+	MyCreaturePos = marker at (get target from [DojoCave] to [DojoCentre] distance 10 angle 0)
+	ZediPos = marker at (get target from [DojoCave] to [DojoCentre] distance 40 angle 180)
+	MyCreatureLookPos = marker at (get target from [DojoCave] to [DojoCentre] distance 200 angle 180)
+	LookAtMyCreatureSitting = marker at (get target from [DojoCave] to [DojoCentre] distance 20 angle 180)
+	LookingFromInsideDojoPos = marker at (get target from [DojoCave] to [DojoCentre] distance 168 angle 179)
+	LookAtZediExitingDojo = marker at (get target from [DojoCave] to [DojoCentre] distance 40 angle 20)
+	MyRhino = 0
+start
+	while TattooEarnt == 0
+		Count = 0
+		AmountOfCreaturesDefeated = 0
+		wait until 2 seconds
+		while Count < 18
+			if DefeatedCreature[Count] == 1
+				AmountOfCreaturesDefeated++
+			end if
+			Count++
+		end while
+		if AmountOfCreaturesDefeated == 18
+			TattooEarnt = 1
+		end if
+	end while
+	begin cinema
+		start music MUSIC_TYPE_SCRIPT_EPIC_01
+		set fade red 0 green 0 blue 0 time 2
+		wait until fade ready
+		wait until widescreen transition complete
+		if DojoCreature exists
+			delete DojoCreature
+		end if
+		MyCreature = get player 1 creature
+		set MyCreature position to [1263.941, 60.97, 1029.172]
+		set MyCreature focus to [1225.391, 60.97, 999.693]
+		MyRhino = create DUMB_CREATURE CREATURE_TYPE_RHINO at [1225.391, 60.97, 999.693]
+		ACTUAL_HEIGHT of MyRhino = 2
+		set MyRhino name HELP_TEXT_NAME_RHINO_01
+		run script SetupCreatureIsleCreature(MyRhino)
+		set MyRhino focus to [1273.946, 60.97, 1039.167]
+		set camera position to [1244.725, 88.209, 998.548]
+		set camera focus to [1010.535, 88.05, 1033.379]
+		move camera position to [1239.695, 89.006, 991.355] time 20
+		move camera focus to [1042.729, 81.272, 1122.513] time 20
+		wait until 1 seconds
+		set fade in time 2
+		wait until fade ready
+		wait until 1 seconds
+		say HELP_TEXT_COMBAT_BEATEN_EVERYONE_50 by MyRhino
+		wait until read
+		say HELP_TEXT_COMBAT_BEATEN_EVERYONE_60 by MyRhino
+		wait until read
+		say HELP_TEXT_COMBAT_BEATEN_EVERYONE_70 by MyRhino
+		wait until read
+		say HELP_TEXT_COMBAT_BEATEN_EVERYONE_80 with interaction by MyRhino
+		wait until read
+		set camera position to [1219.068, 90.669, 972.432]
+		set camera focus to [1371.967, 52.791, 1149.193]
+		set camera lens 85 time 20
+		disable sound effects
+		run background script DoBeams(marker at [1325.587, 62.922, 1079.178], marker at [1252.941, 60.559, 943.877])
+		run background script DoBeams(marker at [1325.587, 62.922, 1079.178], marker at [1173.945, 60.3, 1038.778])
+		MyCreature play ANM_A_COW_EAT_2 loop 2
+		say HELP_TEXT_COMBAT_BEATEN_EVERYONE_90 by MyRhino
+		wait until read
+		say HELP_TEXT_COMBAT_BEATEN_EVERYONE_100 by MyRhino
+		wait until read
+		say HELP_TEXT_COMBAT_BEATEN_EVERYONE_110 by MyRhino
+		wait until read
+		clear dialogue
+		wait until 1 seconds
+		set fade red 255 green 255 blue 255 time 2
+		enable sound effects
+		start music MUSIC_TYPE_SCRIPT_EPIC_02
+		start sound LH_SAMPLE_G_KNOCKROOFMULTI_03_C2
+		wait until fade ready
+		wait until 1 seconds
+		enable MyCreature tattoo CREATURE_TATTOO_TYPE_FIGHTER
+		enable MyCreature tattoo CREATURE_TATTOO_TYPE_FIGHTER_ALWAYS
+		delete MyRhino
+		set camera lens 70 time 0
+		set camera position to [1171.136, 136.745, 951.931]
+		set camera focus to [1279.934, 61.404, 1039.493]
+		set fade in time 10
+		say HELP_TEXT_COMBAT_BEATEN_EVERYONE_120
+		wait until read
+		say HELP_TEXT_COMBAT_BEATEN_EVERYONE_130
+		wait until read
+		say HELP_TEXT_COMBAT_BEATEN_EVERYONE_140
+		wait until read
+		clear dialogue
+		wait until fade ready
+		stop music
+		release MyCreature
+		disable MyCreature tattoo CREATURE_TATTOO_TYPE_FIGHTER_ALWAYS
+	end cinema
+end script GiveFightTattoo
+
+begin script PlaceEntryPointBases
+	EDist = 50
+	PDist = 65
+	Counter = 0
+	Sparkle = 0
+start
+	CreatureEntryPos[0] = marker at (get target from [DojoCave] to [DojoCentre] distance EDist angle 90)
+	CreatureEntryPos[1] = marker at (get target from [DojoCave] to [DojoCentre] distance EDist angle 110)
+	CreatureEntryPos[2] = marker at (get target from [DojoCave] to [DojoCentre] distance EDist angle 130)
+	CreatureEntryPos[3] = marker at (get target from [DojoCave] to [DojoCentre] distance EDist angle 150)
+	CreatureEntryPos[4] = marker at (get target from [DojoCave] to [DojoCentre] distance EDist angle 170)
+	CreatureEntryPos[5] = marker at (get target from [DojoCave] to [DojoCentre] distance EDist angle 190)
+	CreatureEntryPos[6] = marker at (get target from [DojoCave] to [DojoCentre] distance EDist angle 210)
+	CreatureEntryPos[7] = marker at (get target from [DojoCave] to [DojoCentre] distance EDist angle 230)
+	CreatureEntryPos[8] = marker at (get target from [DojoCave] to [DojoCentre] distance EDist angle 250)
+	CreatureEntryPos[9] = marker at (get target from [DojoCave] to [DojoCentre] distance EDist angle 270)
+	CreatureEntryPos[10] = marker at (get target from [DojoCave] to [DojoCentre] distance EDist angle 290)
+	CreatureEntryPos[11] = marker at (get target from [DojoCave] to [DojoCentre] distance EDist angle 310)
+	CreatureEntryPos[12] = marker at (get target from [DojoCave] to [DojoCentre] distance EDist angle 330)
+	CreatureEntryPos[13] = marker at (get target from [DojoCave] to [DojoCentre] distance EDist angle 350)
+	CreatureEntryPos[14] = marker at (get target from [DojoCave] to [DojoCentre] distance EDist angle 10)
+	CreatureEntryPos[15] = marker at (get target from [DojoCave] to [DojoCentre] distance EDist angle 30)
+	CreatureEntryPos[16] = marker at (get target from [DojoCave] to [DojoCentre] distance EDist angle 50)
+	CreatureEntryPos[17] = marker at (get target from [DojoCave] to [DojoCentre] distance EDist angle 70)
+	CreaturePortraits[0] = marker at (get target from [DojoCave] to [DojoCentre] distance PDist angle 90)
+	CreaturePortraits[1] = marker at (get target from [DojoCave] to [DojoCentre] distance PDist angle 110)
+	CreaturePortraits[2] = marker at (get target from [DojoCave] to [DojoCentre] distance PDist angle 130)
+	CreaturePortraits[3] = marker at (get target from [DojoCave] to [DojoCentre] distance PDist angle 150)
+	CreaturePortraits[4] = marker at (get target from [DojoCave] to [DojoCentre] distance PDist angle 170)
+	CreaturePortraits[5] = marker at (get target from [DojoCave] to [DojoCentre] distance PDist angle 190)
+	CreaturePortraits[6] = marker at (get target from [DojoCave] to [DojoCentre] distance PDist angle 210)
+	CreaturePortraits[7] = marker at (get target from [DojoCave] to [DojoCentre] distance PDist angle 230)
+	CreaturePortraits[8] = marker at (get target from [DojoCave] to [DojoCentre] distance PDist angle 250)
+	CreaturePortraits[9] = marker at (get target from [DojoCave] to [DojoCentre] distance PDist angle 270)
+	CreaturePortraits[10] = marker at (get target from [DojoCave] to [DojoCentre] distance PDist angle 290)
+	CreaturePortraits[11] = marker at (get target from [DojoCave] to [DojoCentre] distance PDist angle 310)
+	CreaturePortraits[12] = marker at (get target from [DojoCave] to [DojoCentre] distance PDist angle 330)
+	CreaturePortraits[13] = marker at (get target from [DojoCave] to [DojoCentre] distance PDist angle 350)
+	CreaturePortraits[14] = marker at (get target from [DojoCave] to [DojoCentre] distance PDist angle 10)
+	CreaturePortraits[15] = marker at (get target from [DojoCave] to [DojoCentre] distance PDist angle 30)
+	CreaturePortraits[16] = marker at (get target from [DojoCave] to [DojoCentre] distance PDist angle 50)
+	CreaturePortraits[17] = marker at (get target from [DojoCave] to [DojoCentre] distance PDist angle 70)
+end script PlaceEntryPointBases
+
+begin script ChooseToSwapOrFightWithDojoCreature(Creature)
+	TempMyCreature = 0
+	SwapActive = 1
+	Reset = 0
+	Waiting = 0
+	Waited4Click = 0
+	S1Effect = 0
+	S2Effect = 0
+	SwapScrollClicked = 0
+	CreaturesInPosition = 0
+	GivenWarning = 0
+	SwapChosen = 0
+	FightChosen = 0
+	DoneAction = 0
+	FightScrollClicked = 0
+	SwapConfirmation = 0
+	FightConfirmation = 0
+	SwapReminder = create timer for 0 seconds
+	FightReminder = create timer for 10 seconds
+	SwapAreYouSureTimer = create timer for 0 seconds
+	FightAreYouSureTimer = create timer for 0 seconds
+	ConfirmTimer = create timer for 0 seconds
+	MyTimer = create timer for 0 seconds
+	FightScroll = 0
+	SwapScroll = 0
+	SwapCancelled = 0
+	FightCancelled = 0
+	FightScrollPos = marker at (get target from [DojoCave] to [DojoCentre] distance 30 angle 210)
+	SwapScrollPos = marker at (get target from [DojoCave] to [DojoCentre] distance 30 angle 150)
+	MoveToTemplePos = marker at [1281.9135, 167.5, 1232.2821]
+	MyCreatureOldHeight = 0
+	DojoCreatureOldHeight = 0
+	DoneScale = 0
+	MyCreatureScaled = 0
+	DojoCreatureScaled = 0
+	RanOutOfTime = 0
+	SFX = 0
+start
+	MyCreature = get player 1 creature
+	disable DojoCreature pickup
+	CreaturesAreFighting = 0
+	CreaturesAreSwapping = 0
+	CreatureHasTimedOut = 0
+	while DoneAction == 0 and RanOutOfTime == 0
+		if not FightScroll exists
+			FightScroll = create highlight CHALLENGE_NONE FIGHT_HIGHLIGHT at [FightScrollPos]
+			ALTITUDE of FightScroll = 0
+		end if
+		if not SwapScroll exists
+			SwapScroll = create highlight CHALLENGE_NONE SWAP_HIGHLIGHT at [SwapScrollPos]
+			ALTITUDE of SwapScroll = 0
+		end if
+		SwapScrollClicked = 0
+		FightScrollClicked = 0
+		set FightSwapTimer time to 90 seconds
+		while SwapScrollClicked == 0 and FightScrollClicked == 0 and RanOutOfTime == 0
+			set DojoCreature focus to (camera position)
+			if get distance from (camera position) to [DojoCreature] < 100 and DojoCreature viewed
+				if get SwapReminder time remaining <= 0
+					set SwapReminder time to 60 seconds
+					begin dialogue
+						eject good spirit
+						make good spirit point at [SwapScroll] in world
+						say single line HELP_TEXT_DOJO_EXPLANATION_60
+						wait until read or MyCreature clicked or DojoCreature clicked or SwapScroll clicked or FightScroll clicked or Dojo clicked
+					end dialogue
+				end if
+				if get FightReminder time remaining <= 0
+					set FightReminder time to 60 seconds
+					begin dialogue
+						eject evil spirit
+						make evil spirit point at [FightScroll] in world
+						say single line HELP_TEXT_DOJO_EXPLANATION_50
+						wait until read or MyCreature clicked or DojoCreature clicked or SwapScroll clicked or FightScroll clicked or Dojo clicked
+					end dialogue
+				end if
+			end if
+			if SwapScroll clicked
+				clear clicked object
+				if ScriptLockedCreature == 0
+					SwapScrollClicked = 1
+					FightScrollClicked = 0
+					if GivenWarning == 0
+						run script CheckIfSwapBackAvailable(FightScroll, SwapScroll)
+						GivenWarning = 1
+					end if
+				elsif ScriptLockedCreature == 1
+					run script ScriptLockedHighlight(SwapScroll)
+				end if
+			end if
+			if FightScroll clicked
+				clear clicked object
+				if ScriptLockedCreature == 0
+					FightScrollClicked = 1
+					SwapScrollClicked = 0
+				elsif ScriptLockedCreature == 1
+					run script ScriptLockedHighlight(FightScroll)
+				end if
+			end if
+			if get FightSwapTimer time remaining <= 0
+				RanOutOfTime = 1
+				CreatureHasTimedOut = 1
+			end if
+		end while
+		if RanOutOfTime == 0
+			if ScriptLockedCreature == 0
+				clear spells on MyCreature
+				enable MyCreature immune to spells
+				if get distance from [DojoCreature] to [MyCreature] < MinTeleportDistance
+					Waited4Click = 0
+				else
+					set fade red 0 green 0 blue 0 time 1
+					wait until fade ready
+					set MyCreature position to [MyCreatureSwapPos]
+					if Tyke exists and TykeIsReady == 1 and TykeFree == 1
+						set Tyke position to [MoveToTemplePos] + ([20, 20])
+					end if
+					set fade in time 1
+				end if
+				Reset = 0
+				CICreatureControlledLocally = 1
+				ScriptLockedCreature = 1
+			else
+				Reset = 1
+			end if
+			if Reset == 0
+				Waiting = 1
+				detach MyCreature leash
+				move MyCreature position to [MyCreatureSwapPos] radius 0
+				set MyTimer time to 5 seconds
+				CreaturesInPosition = 0
+				while CreaturesInPosition == 0
+					if get distance from [MyCreature] to [DojoCreature] < 70
+						CreaturesInPosition = 1
+					end if
+					if get MyTimer time remaining <= 0
+						CreaturesInPosition = 1
+					end if
+				end while
+				set SwapAreYouSureTimer time to 0 seconds
+				set FightAreYouSureTimer time to 0 seconds
+				set ConfirmTimer time to 110 seconds
+				clear clicked object
+				while Waiting == 1 and Reset == 0
+					if SwapScrollClicked == 1
+						if get SwapAreYouSureTimer time remaining <= 0
+							set SwapAreYouSureTimer time to 30 seconds
+							wait until 0.1 seconds
+							clear clicked object
+							if get distance from (camera position) to [DojoCreature] < 201 and DojoCreature viewed
+								begin dialogue
+									eject evil spirit
+									make evil spirit point at [SwapScroll] in world
+									say single line HELP_TEXT_DOJO_EXPLANATION_70
+									wait until read or MyCreature clicked or SwapScroll clicked or FightScroll clicked or DojoCreature clicked or Dojo clicked or CIGlobalReset == 1
+									send good spirit home
+								end dialogue
+							end if
+							SwapConfirmation = 1
+							FightConfirmation = 0
+						end if
+					elsif FightScrollClicked == 1
+						if get FightAreYouSureTimer time remaining <= 0
+							set FightAreYouSureTimer time to 30 seconds
+							wait until 0.1 seconds
+							clear clicked object
+							if get distance from (camera position) to [DojoCreature] < 201 and DojoCreature viewed
+								begin dialogue
+									eject evil spirit
+									make evil spirit point at [FightScroll] in world
+									say single line HELP_TEXT_DOJO_EXPLANATION_70
+									wait until read or MyCreature clicked or FightScroll clicked or SwapScroll clicked or DojoCreature clicked or Dojo clicked or CIGlobalReset == 1
+									send good spirit home
+								end dialogue
+							end if
+							FightConfirmation = 1
+							SwapConfirmation = 0
+						end if
+					end if
+					if SwapScrollClicked == 1
+						if MyCreature clicked or FightScroll clicked or DojoCreature clicked
+							clear clicked object
+							Reset = 1
+							SwapCancelled = 1
+						end if
+					elsif FightScrollClicked == 1
+						if MyCreature clicked or SwapScroll clicked or DojoCreature clicked
+							clear clicked object
+							Reset = 1
+							FightCancelled = 1
+						end if
+					end if
+					if SwapScroll clicked
+						clear clicked object
+						if CICreatureControlledLocally == 1
+							Waiting = 0
+							if SwapConfirmation == 1
+								SwapChosen = 1
+								delete SwapScroll
+								delete FightScroll
+							end if
+						else
+							run script ScriptLockedHighlight(SwapScroll)
+						end if
+					elsif FightScroll clicked
+						clear clicked object
+						if CICreatureControlledLocally == 1
+							Waiting = 0
+							if FightConfirmation == 1
+								MyCreatureInFight = 1
+								FightChosen = 1
+								delete SwapScroll
+								delete FightScroll
+							end if
+						else
+							run script ScriptLockedHighlight(FightScroll)
+						end if
+					elsif MyCreature clicked or DojoCreature clicked
+						clear clicked object
+						Reset = 1
+						SwapScrollClicked = 0
+						FightScrollClicked = 0
+					end if
+					if get ConfirmTimer time remaining <= 0
+						Reset = 1
+					end if
+				end while
+				if SwapCancelled == 1
+					begin dialogue
+						eject good spirit
+						say single line HELP_TEXT_DOJO_EXPLANATION_90
+						wait until read or SwapScroll clicked or FightScroll clicked or Dojo clicked
+						SwapCancelled = 0
+					end dialogue
+				elsif FightCancelled == 1
+					begin dialogue
+						eject evil spirit
+						say single line HELP_TEXT_DOJO_EXPLANATION_100
+						wait until read or SwapScroll clicked or FightScroll clicked or Dojo clicked
+						FightCancelled = 0
+					end dialogue
+				end if
+				if SwapChosen == 1 or FightChosen == 1
+					if not get distance from [DojoCreature] to [MyCreature] < MinTeleportDistance
+						set fade red 0 green 0 blue 0 time 1
+						wait until fade ready
+						set MyCreature position to [MyCreatureSwapPos]
+						if Tyke exists and TykeIsReady == 1 and TykeFree == 1
+							set Tyke position to [MoveToTemplePos] + ([20, 20])
+						end if
+						set fade in time 1
+					end if
+					wait until get distance from [MyCreature] to [MyCreatureSwapPos] < 1 or 5 seconds
+					force MyCreature CREATURE_EXAMINE_BY_LOOKING DojoCreature
+					force DojoCreature CREATURE_EXAMINE_BY_LOOKING MyCreature
+					set MyCreature focus to [DojoCreature]
+					set DojoCreature focus to [MyCreature]
+				end if
+				if SwapChosen == 1
+					if Reset == 0
+						Waiting = 0
+						if Reset == 0
+							clear spells on MyCreature
+							clear spells on DojoCreature
+							enable MyCreature immune to spells
+							begin cinema
+								CreaturesAreSwapping = 1
+								TempMyCreature = MyCreature
+								begin dual camera to DojoCreature MyCreature
+									set MyCreature focus to [DojoCreature]
+									set DojoCreature focus to [MyCreature]
+									wait until 1 seconds
+									S1Effect = create special effect SPOT_VISUAL_COMMAND_SUCCEED at [DojoCreature] time 1
+									S2Effect = create special effect SPOT_VISUAL_COMMAND_SUCCEED at [MyCreature] time 1
+									detach MyCreature leash
+									force MyCreature POINT_AT DojoCreature
+									force DojoCreature POINT_AT MyCreature
+									MyCreatureOldHeight = ACTUAL_HEIGHT of MyCreature
+									DojoCreatureOldHeight = ACTUAL_HEIGHT of MyCreature
+								end dual camera
+								NoTykeRestraint = 1
+								while DoneScale == 0
+									if ACTUAL_HEIGHT of MyCreature > 0.2
+										ACTUAL_HEIGHT of MyCreature -= 0.05
+									end if
+									if ACTUAL_HEIGHT of DojoCreature > 0.2
+										ACTUAL_HEIGHT of DojoCreature -= 0.05
+									end if
+									if ACTUAL_HEIGHT of MyCreature <= 0.2
+										ACTUAL_HEIGHT of MyCreature = 0.2
+										MyCreatureScaled = 1
+									end if
+									if ACTUAL_HEIGHT of DojoCreature <= 0.2
+										ACTUAL_HEIGHT of DojoCreature = 0.2
+										DojoCreatureScaled = 1
+									end if
+									if MyCreatureScaled == 1 and DojoCreatureScaled == 1
+										DoneScale = 1
+									end if
+								end while
+								start sound LH_SAMPLE_G_CREATURESWAP_01
+								wait until DojoCreature played
+								SFX = create special effect SPOT_VISUAL_OBJECT_APPEAR at [MyCreature] time 3
+								SFX = create special effect SPOT_VISUAL_OBJECT_APPEAR at [MyCreature] + ([1, 1]) time 3
+								SFX = create special effect SPOT_VISUAL_OBJECT_APPEAR at [MyCreature] - ([1, 1]) time 3
+								SFX = create special effect SPOT_VISUAL_OBJECT_APPEAR at [DojoCreature] time 3
+								SFX = create special effect SPOT_VISUAL_OBJECT_APPEAR at [DojoCreature] + ([1, 1]) time 3
+								SFX = create special effect SPOT_VISUAL_OBJECT_APPEAR at [DojoCreature] - ([1, 1]) time 3
+								set MyCreature position to [DojoCreaturePos]
+								set DojoCreature position to [MyCreatureSwapPos]
+								set MyCreature focus to [DojoCreature]
+								set DojoCreature focus to [MyCreature]
+								DoneScale = 0
+								MyCreatureScaled = 0
+								DojoCreatureScaled = 0
+								while DoneScale == 0
+									if ACTUAL_HEIGHT of MyCreature < MyCreatureOldHeight
+										ACTUAL_HEIGHT of MyCreature += 0.05
+									end if
+									if ACTUAL_HEIGHT of DojoCreature < DojoCreatureOldHeight
+										ACTUAL_HEIGHT of DojoCreature += 0.05
+									end if
+									if ACTUAL_HEIGHT of MyCreature >= MyCreatureOldHeight
+										ACTUAL_HEIGHT of MyCreature = MyCreatureOldHeight
+										MyCreatureScaled = 1
+									end if
+									if ACTUAL_HEIGHT of DojoCreature >= DojoCreatureOldHeight
+										ACTUAL_HEIGHT of DojoCreature = DojoCreatureOldHeight
+										DojoCreatureScaled = 1
+									end if
+									if MyCreatureScaled == 1 and DojoCreatureScaled == 1
+										DoneScale = 1
+									end if
+								end while
+								swap creature from MyCreature to DojoCreature
+								ALIGNMENT of DojoCreature = ALIGNMENT of MyCreature
+								ALIGNMENT of MyCreature = 0.0
+								NoTykeRestraint = 0
+							end cinema
+							release DojoCreature
+							GlobalCurrentCreature = variable get DojoCreature sub type
+							enable DojoCreature pickup
+							MyCreature = DojoCreature
+							DojoCreature = TempMyCreature
+							disable DojoCreature pickup
+							if SwapBackPossible == 1
+								begin dialogue
+									eject evil spirit
+									say single line HELP_TEXT_CREATURE_BREEDER_11
+									wait until read or Dojo clicked
+								end dialogue
+							end if
+							force DojoCreature CREATURE_IDLE DojoCreature
+							DoneAction = 1
+						end if
+					end if
+				elsif FightChosen == 1
+					if Reset == 0
+						Waiting = 0
+						if Reset == 0
+							clear spells on MyCreature
+							clear spells on DojoCreature
+							enable DojoCreature immune to spells
+							detach MyCreature leash
+							disable leash on MyCreature
+							force DojoCreature CREATURE_FIGHT MyCreature
+							force MyCreature CREATURE_FIGHT DojoCreature
+							HEALTH of DojoCreature = 1
+							FIGHTHEALTH of DojoCreature = 1
+							CreaturesAreFighting = 1
+							wait until MyCreature fighting
+							wait until DojoCreature fighting
+							wait until not MyCreature fighting
+							wait until not DojoCreature fighting
+							enable leash on MyCreature
+							if FIGHTHEALTH of MyCreature > FIGHTHEALTH of DojoCreature
+								DefeatedCreature[Creature] = 1
+								run script CreateWinIndicator(DojoCreature)
+								begin dialogue
+									eject evil spirit
+									say single line HELP_TEXT_DOJO_EXPLANATION_130
+									wait until read or Dojo clicked
+								end dialogue
+							else
+								begin dialogue
+									eject good spirit
+									say single line HELP_TEXT_DOJO_EXPLANATION_140
+									wait until read or Dojo clicked
+								end dialogue
+							end if
+							DoneAction = 1
+						end if
+					end if
+				end if
+				disable DojoCreature pickup
+				enable MyCreature pickup
+				MyCreature = get player 1 creature
+				if CICreatureControlledLocally == 1
+					ScriptLockedCreature = 0
+					MyCreatureInFight = 0
+					disable MyCreature immune to spells
+					release MyCreature
+					CICreatureControlledLocally = 0
+				end if
+			end if
+		end if
+	end while
+	if SwapScroll exists
+		delete SwapScroll
+	end if
+	if FightScroll exists
+		delete FightScroll
+	end if
+	if CICreatureControlledLocally == 1
+		disable MyCreature immune to spells
+		release MyCreature
+		ScriptLockedCreature = 0
+	end if
+	run script MoveCreatureToDojoCave(DojoCreature)
+	wait until not DojoCreature exists
+	CreaturesAreFighting = 0
+	CreaturesAreSwapping = 0
+	CreatureHasTimedOut = 0
+end script ChooseToSwapOrFightWithDojoCreature
+
+begin script CheckIfSwapBackAvailable(FightScroll, SwapScroll)
+	SwapBack = 0
+	MyCreatureSubType = 0
+	Count = 0
+start
+	MyCreatureSubType = variable get MyCreature sub type
+	begin dialogue
+		if Creatures[CreaturesToPlinth[MyCreatureSubType]] == MyCreatureSubType
+			if CreatureInDojo[CreaturesToPlinth[MyCreatureSubType]] == 0
+				say single line HELP_TEXT_DOJO_EXPLANATION_150 with interaction
+				SwapBackPossible = 0
+			else
+				say single line HELP_TEXT_DOJO_EXPLANATION_160
+				SwapBackPossible = 1
+			end if
+			clear clicked object
+			wait until read or FightScroll clicked or SwapScroll clicked or MyCreature clicked or DojoCreature clicked
+		end if
+	end dialogue
+end script CheckIfSwapBackAvailable
+
+begin script SetupDojo
+start
+	DojoArenaEntrance = marker at [1325.8998, 62.925, 1079.1852]
+	DojoCentre = marker at [1253.2899, 57.5075, 1021.62]
+	DojoCave = marker at [130, 61, 100]
+	DojoCaveEntrance = marker at [1183.4343, 60.97, 967.3648]
+	FightSwapTimer = create timer for 0 seconds
+	run script LoadCreatures
+	run script SetupTypeToPlinth
+	run script PlaceEntryPointBases
+end script SetupDojo
+
+begin script GetAngleForPlinth(Plinth, Distance)
+	CowAngle = marker at (get target from [DojoCave] to [DojoCentre] distance Distance angle 90)
+	WolfAngle = marker at (get target from [DojoCave] to [DojoCentre] distance Distance angle 110)
+	GorillaAngle = marker at (get target from [DojoCave] to [DojoCentre] distance Distance angle 130)
+	PolarBearAngle = marker at (get target from [DojoCave] to [DojoCentre] distance Distance angle 150)
+	ChickenAngle = marker at (get target from [DojoCave] to [DojoCentre] distance Distance angle 170)
+	LionAngle = marker at (get target from [DojoCave] to [DojoCentre] distance Distance angle 190)
+	SheepAngle = marker at (get target from [DojoCave] to [DojoCentre] distance Distance angle 210)
+	ApeAngle = marker at (get target from [DojoCave] to [DojoCentre] distance Distance angle 230)
+	TigerAngle = marker at (get target from [DojoCave] to [DojoCentre] distance Distance angle 250)
+	TortoiseAngle = marker at (get target from [DojoCave] to [DojoCentre] distance Distance angle 270)
+	RhinoAngle = marker at (get target from [DojoCave] to [DojoCentre] distance Distance angle 290)
+	MandrillAngle = marker at (get target from [DojoCave] to [DojoCentre] distance Distance angle 310)
+	ZebraAngle = marker at (get target from [DojoCave] to [DojoCentre] distance Distance angle 330)
+	CrocodileAngle = marker at (get target from [DojoCave] to [DojoCentre] distance Distance angle 350)
+	BearAngle = marker at (get target from [DojoCave] to [DojoCentre] distance Distance angle 10)
+	LeopardAngle = marker at (get target from [DojoCave] to [DojoCentre] distance Distance angle 30)
+	ChimpAngle = marker at (get target from [DojoCave] to [DojoCentre] distance Distance angle 50)
+	HorseAngle = marker at (get target from [DojoCave] to [DojoCentre] distance Distance angle 70)
+start
+	if Plinth == CreaturePortraits[0]
+		CloseUpOfPlinth = marker at [CowAngle]
+	elsif Plinth == CreaturePortraits[1]
+		CloseUpOfPlinth = marker at [WolfAngle]
+	elsif Plinth == CreaturePortraits[2]
+		CloseUpOfPlinth = marker at [GorillaAngle]
+	elsif Plinth == CreaturePortraits[3]
+		CloseUpOfPlinth = marker at [PolarBearAngle]
+	elsif Plinth == CreaturePortraits[4]
+		CloseUpOfPlinth = marker at [ChickenAngle]
+	elsif Plinth == CreaturePortraits[5]
+		CloseUpOfPlinth = marker at [LionAngle]
+	elsif Plinth == CreaturePortraits[6]
+		CloseUpOfPlinth = marker at [SheepAngle]
+	elsif Plinth == CreaturePortraits[7]
+		CloseUpOfPlinth = marker at [ApeAngle]
+	elsif Plinth == CreaturePortraits[8]
+		CloseUpOfPlinth = marker at [TigerAngle]
+	elsif Plinth == CreaturePortraits[9]
+		CloseUpOfPlinth = marker at [TortoiseAngle]
+	elsif Plinth == CreaturePortraits[10]
+		CloseUpOfPlinth = marker at [RhinoAngle]
+	elsif Plinth == CreaturePortraits[11]
+		CloseUpOfPlinth = marker at [MandrillAngle]
+	elsif Plinth == CreaturePortraits[12]
+		CloseUpOfPlinth = marker at [ZebraAngle]
+	elsif Plinth == CreaturePortraits[13]
+		CloseUpOfPlinth = marker at [CrocodileAngle]
+	elsif Plinth == CreaturePortraits[14]
+		CloseUpOfPlinth = marker at [BearAngle]
+	elsif Plinth == CreaturePortraits[15]
+		CloseUpOfPlinth = marker at [LeopardAngle]
+	elsif Plinth == CreaturePortraits[16]
+		CloseUpOfPlinth = marker at [ChimpAngle]
+	elsif Plinth == CreaturePortraits[17]
+		CloseUpOfPlinth = marker at [HorseAngle]
+	end if
+end script GetAngleForPlinth
+
+begin script NameDojoCreature(Creature)
+	CreatureSubType = 0
+start
+	CreatureSubType = variable get Creature sub type
+	if CreatureSubType == Creatures[0]
+		set Creature name HELP_TEXT_NAME_COW_02
+	elsif CreatureSubType == Creatures[1]
+		set Creature name HELP_TEXT_NAME_WOLF_02
+	elsif CreatureSubType == Creatures[2]
+		set Creature name HELP_TEXT_NAME_GORILLA_02
+	elsif CreatureSubType == Creatures[3]
+		set Creature name HELP_TEXT_NAME_POLAR_BEAR_02
+	elsif CreatureSubType == Creatures[4]
+		set Creature name HELP_TEXT_NAME_CHICKEN_02
+	elsif CreatureSubType == Creatures[5]
+		set Creature name HELP_TEXT_NAME_LION_02
+	elsif CreatureSubType == Creatures[6]
+		set Creature name HELP_TEXT_NAME_SHEEP_02
+	elsif CreatureSubType == Creatures[7]
+		set Creature name HELP_TEXT_NAME_APE_02
+	elsif CreatureSubType == Creatures[8]
+		set Creature name HELP_TEXT_NAME_TIGER_02
+	elsif CreatureSubType == Creatures[9]
+		set Creature name HELP_TEXT_NAME_TURTLE_02
+	elsif CreatureSubType == Creatures[10]
+		set Creature name HELP_TEXT_NAME_RHINO_02
+	elsif CreatureSubType == Creatures[11]
+		set Creature name HELP_TEXT_NAME_MANDRILL_02
+	elsif CreatureSubType == Creatures[12]
+		set Creature name HELP_TEXT_NAME_ZEBRA_02
+	elsif CreatureSubType == Creatures[13]
+		set Creature name HELP_TEXT_NAME_CROCODILE_02
+	elsif CreatureSubType == Creatures[14]
+		set Creature name HELP_TEXT_NAME_BEAR_02
+	elsif CreatureSubType == Creatures[15]
+		set Creature name HELP_TEXT_NAME_LEOPARD_02
+	elsif CreatureSubType == Creatures[16]
+		set Creature name HELP_TEXT_NAME_CHIMP_02
+	elsif CreatureSubType == Creatures[17]
+		set Creature name HELP_TEXT_NAME_HORSE_02
+	end if
+end script NameDojoCreature
+
+begin script KensRufusIsReallyImpressed
+	Lion = 0
+start
+	begin cinema
+		set fade red 0 green 0 blue 0 time 1
+		wait until fade ready
+		wait until widescreen transition complete
+		Lion = create DUMB_CREATURE CREATURE_TYPE_LION at [1242.039, 60.97, 1012.28]
+		ACTUAL_HEIGHT of Lion = 2
+		set Lion name HELP_TEXT_NAME_LION_01
+		run script SetupCreatureIsleCreature(Lion)
+		set Lion focus to [1297.916, 60.97, 1059.745]
+		MyCreature = get player 1 creature
+		set MyCreature position to [1277.594, 60.97, 1035.776]
+		set MyCreature focus to [1242.039, 60.97, 1012.28]
+		start music MUSIC_TYPE_SCRIPT_CREATURE_GUIDE
+		set camera position to [1217.422, 72.164, 981.814]
+		set camera focus to [1183.705, 71.169, 941.266]
+		set fade in time 2
+		wait until fade ready
+		enable jc special SJC_RAISE_TOTEM on Dojo with number 5
+		start sound LH_SCRIPT_SAMPLE_CAVEDOOR_SLIDE AUDIO_SFX_BANK_TYPE_SCRIPT_SFX at (camera position)
+		shake camera at (camera position) radius 40 amplitude 0.1 time 4
+		wait until 3 seconds
+		start sound LH_SCRIPT_SAMPLE_CAVEDOOR_SLAM AUDIO_SFX_BANK_TYPE_SCRIPT_SFX at (camera position)
+		shake camera at (camera position) radius 20 amplitude 0.5 time 0.5
+		wait until 1 seconds
+		snapshot CHALLENGE_DOJO quest success 1 alignment 0 HELP_TEXT_CREATURE_ISLE_TITLE_25 StandardReminder (variable HELP_TEXT_CI_REMINDER_14)
+		CreatureInDojo[5] = 1
+		wait until 0.1 seconds
+		move camera position to [1284.814, 81.616, 978.859] time 8
+		move camera focus to [1255.698, 73.542, 1029.313] time 8
+		wait until 3 seconds
+		say HELP_TEXT_RUFUS_STARTS_GRADUATION_10 by Lion
+		wait until read
+		say HELP_TEXT_RUFUS_STARTS_GRADUATION_20 by Lion
+		wait until read
+		say HELP_TEXT_RUFUS_STARTS_GRADUATION_30 by Lion
+		wait until read
+		set camera position to [1243.262, 86.738, 1026.622]
+		set camera focus to [1276.556, 85.695, 978.156]
+		say HELP_TEXT_RUFUS_STARTS_GRADUATION_40 with interaction by Lion
+		wait until read
+		say HELP_TEXT_RUFUS_STARTS_GRADUATION_50 by Lion
+		wait until read
+		move camera focus to [MyCreature] + [0, (HEIGHT of MyCreature) * 0.5, 0] time 5
+		say HELP_TEXT_RUFUS_STARTS_GRADUATION_60 by Lion
+		wait until read
+		say HELP_TEXT_RUFUS_STARTS_GRADUATION_70 by Lion
+		wait until read
+		clear dialogue
+		wait until camera ready
+		MyCreature play ANM_A_COW_DEAD_ON_RHS loop 1
+		set fade red 0 green 0 blue 0 time 2
+		wait until fade ready
+		delete Lion
+		release MyCreature
+		stop music
+	end cinema
+end script KensRufusIsReallyImpressed
+
+begin script GetChicken
+	Lion = 0
+	ChickenPlinth = 4
+	PlinthPos = marker at [1201.263, 60.813, 993.6075]
+start
+	if TykeFree == 0
+		TykeFree = 4
+		wait until 1 seconds
+	end if
+	begin cinema
+		set fade red 0 green 0 blue 0 time 1
+		wait until fade ready
+		wait until widescreen transition complete
+		Lion = create DUMB_CREATURE CREATURE_TYPE_LION at [1195.503, 60.97, 975.223]
+		ACTUAL_HEIGHT of Lion = 2
+		set Lion name HELP_TEXT_NAME_LION_01
+		run script SetupCreatureIsleCreature(Lion)
+		set Lion focus to [1297.916, 60.97, 1059.745]
+		MyCreature = get player 1 creature
+		set MyCreature position to [1320.172, 62.336, 1075.145]
+		set MyCreature focus to [1224.745, 60.97, 998.097]
+		set Tyke position to [1293.267, 60.97, 1054.94]
+		set Tyke focus to [1226.339, 60.97, 1000.403]
+		start music MUSIC_TYPE_SCRIPT_CREATURE_GUIDE
+		disable creature sound
+		set camera position to [1257.013, 68.225, 1043.699]
+		set camera focus follow Tyke
+		set fade in time 1
+		move camera position to [1262.233, 61.918, 1021.54] time 14
+		move Tyke position to [1251.88, 60.97, 1020.031] radius 0
+		wait until get distance from [Tyke] to [1251.88, 60.97, 1020.031] == 0
+		say HELP_TEXT_LION_APPRENTICE_TRIAL_COMPLETE_10 by Lion
+		wait until read
+		say HELP_TEXT_LION_APPRENTICE_TRIAL_COMPLETE_20 by Lion
+		wait until read
+		say HELP_TEXT_LION_APPRENTICE_TRIAL_COMPLETE_30 with interaction by Lion
+		wait until read
+		close dialogue
+		snapshot CHALLENGE_TYKES_COMING_OF_AGE quest success 1 alignment 0 HELP_TEXT_CREATURE_ISLE_TITLE_06 StandardReminder (variable HELP_TEXT_CI_REMINDER_14)
+		CreatureInDojo[ChickenPlinth] = 1
+		wait until 0.1 seconds
+		set camera position to [1202.651, 61.763, 998.248]
+		set camera focus to [1198.966, 69.143, 991.23]
+		move camera position to [1202.651, 61.763, 998.248] time 10
+		move camera focus to [1197.994, 68.688, 991.345] time 10
+		say HELP_TEXT_LION_APPRENTICE_TRIAL_COMPLETE_35 by Lion
+		wait until read
+		say HELP_TEXT_LION_APPRENTICE_TRIAL_COMPLETE_40 by Lion
+		wait until read
+		close dialogue
+		enable creature sound
+		Lion play ANM_SWALLOW_FLAP loop 1
+		enable jc special SJC_RAISE_TOTEM on Dojo with number ChickenPlinth
+		start sound LH_SCRIPT_SAMPLE_CAVEDOOR_SLIDE AUDIO_SFX_BANK_TYPE_SCRIPT_SFX at [PlinthPos]
+		shake camera at (camera position) radius 40 amplitude 0.1 time 4
+		wait until 2 seconds
+		set camera position to [1177.736, 68.033, 994.14]
+		set camera focus to [1188.205, 68.529, 996.868]
+		wait until 1 seconds
+		start sound LH_SCRIPT_SAMPLE_CAVEDOOR_SLAM AUDIO_SFX_BANK_TYPE_SCRIPT_SFX at [PlinthPos]
+		shake camera at (camera position) radius 20 amplitude 0.2 time 0.5
+		Tyke play ANM_A_COW_DEAD_ON_RHS loop 2
+		wait until 1 seconds
+		move Tyke position to [1294.861, 60.97, 1054.729] radius 0
+		move camera position to [1252.659, 82.903, 1057.748] time 8
+		move camera focus to [1262.984, 79.896, 1059.022] time 8
+		wait until camera ready
+		stop music
+	end cinema
+	delete Lion
+	release MyCreature
+	release Tyke
+end script GetChicken
+
+begin script IntroToRufusTrial
+	LionPos = marker at (get target from [DojoCave] to [DojoCentre] distance 30 angle 180)
+	Lion = 0
+start
+	begin known cinema
+		start music MUSIC_TYPE_SCRIPT_CREATURE_GUIDE
+		set fade red 0 green 0 blue 0 time 2
+		wait until fade ready
+		Lion = create DUMB_CREATURE CREATURE_TYPE_LION at [1242.039, 60.97, 1012.28]
+		ACTUAL_HEIGHT of Lion = 2
+		run script SetupCreatureIsleCreature(Lion)
+		set Lion name HELP_TEXT_NAME_LION_01
+		set Lion focus to [1297.916, 60.97, 1059.745]
+		wait until 2 seconds
+		set camera lens 45 time 0
+		set camera position to [1261.242, 62, 1026.058]
+		set camera focus to [1209.95, 62, 988.549]
+		set fade in time 2
+		move camera position to [1256.1, 65, 996.5] time 8
+		move camera focus to [1213.19, 66, 1043.366] time 8
+		wait until 4 seconds
+		move camera position to [1226.973, 68, 999.715] time 8
+		move camera focus to [1275.809, 71, 1040.37] time 8
+		wait until 4 seconds
+		move camera position to [1232.25, 71, 1029.791] time 8
+		move camera focus to [1263.894, 76, 974.708] time 8
+		wait until 4 seconds
+		move camera position to [1261.242, 74, 1026.058] time 8
+		move camera focus to [1209.95, 81, 988.549] time 8
+		wait until 4 seconds
+		move camera position to [1256.1, 77, 996.5] time 8
+		move camera focus to [1213.19, 86, 1043.366] time 8
+		wait until 4 seconds
+		move camera position to [1226.973, 80, 999.715] time 8
+		move camera focus to [1275.809, 91, 1040.37] time 8
+		wait until 4 seconds
+		move camera position to [1232.25, 85, 1029.791] time 8
+		move camera focus to [1263.894, 95, 974.708] time 8
+		wait until 4 seconds
+		move camera position to [1257.458, 83.758, 1024.053] time 8
+		move camera focus to [1207.045, 95.279, 985.879] time 8
+		say HELP_TEXT_RUFUS_INTRO_HIS_TRIAL_10 by Lion
+		wait until read
+		say HELP_TEXT_RUFUS_INTRO_HIS_TRIAL_20 by Lion
+		wait until read
+		say HELP_TEXT_RUFUS_INTRO_HIS_TRIAL_30 by Lion
+		wait until read
+		say HELP_TEXT_RUFUS_INTRO_HIS_TRIAL_40 with interaction by Lion
+		wait until read
+		clear dialogue
+		stop music
+		set fade red 0 green 0 blue 0 time 2
+		wait until fade ready
+		delete Lion
+		set camera position to [3764.516, 173.533, 2921.006]
+		set camera focus to [3756.451, 129.391, 2995.609]
+		set fade in time 2
+		wait until fade ready
+	end known cinema
+end script IntroToRufusTrial
+
+begin script CheckForRocksInDojo
+	Object = 0
+	SearchSize = 100
+	KeepChecking = 1
+start
+	while KeepChecking == 1
+		Object = get ROCK_OBJECT at [DojoCentre] radius SearchSize excluding scripted
+		if Object exists
+			delete Object with fade
+		end if
+		wait until 0.1 seconds
+	end while
+end script CheckForRocksInDojo
+
+begin script DojoDoFunkyGlowyStrand(Position, Radius, Degrees, Height, HeightDegrees)
+	Sparkle = 0
+	Pos = 0
+	Smoke = 0
+start
+	Pos = marker at [Position] + [(sin Degrees) * Radius, Height + (sin HeightDegrees) / 4, (cos Degrees) * Radius]
+	Sparkle = create special effect SPOT_VISUAL_DUST at [Pos] time 2
+	Smoke = create special effect SPOT_VISUAL_OBJECT_APPEAR at [Pos] time 2
+end script DojoDoFunkyGlowyStrand
+
+begin script DojoDoFunkyGlowyStuff
+	Degrees1 = 0
+	Degrees2 = 120
+	Degrees3 = 240
+	Degrees4 = 20
+	Degrees5 = 300
+	HeightDegrees1 = 0
+	HeightDegrees2 = 0
+	HeightDegrees3 = 0
+	HeightDegrees4 = 0
+	HeightDegrees5 = 0
+	Height = -20
+	Centre = marker at [1319.526, 62.033, 1072.952]
+	StartPos = marker at [1174.64, 60.661, 960.788]
+	EndPos = marker at [1327.405, 62.98, 1085.513]
+start
+	begin loop
+		Height += 0.3
+		run background script DojoDoFunkyGlowyStrand(Centre, 0.1, Degrees1, Height, HeightDegrees1)
+		run background script DojoDoFunkyGlowyStrand(Centre, 0.2, Degrees2, Height, HeightDegrees2)
+		run background script DojoDoFunkyGlowyStrand(Centre, 0.25, Degrees3, Height, HeightDegrees3)
+		run background script DojoDoFunkyGlowyStrand(Centre, 0.05, Degrees4, Height, HeightDegrees4)
+		run background script DojoDoFunkyGlowyStrand(Centre, 0.15, Degrees5, Height, HeightDegrees5)
+		Degrees1 += 10
+		Degrees2 += 4
+		Degrees3 += 11
+		Degrees4 += 8
+		Degrees5 += 3
+		HeightDegrees1 += 12
+		HeightDegrees2 += 6
+		HeightDegrees3 += 4
+		HeightDegrees4 += 10
+		HeightDegrees5 += 8
+		if Degrees1 > 359
+			Degrees1 = 0
+		end if
+		if Degrees2 > 359
+			Degrees2 = 0
+		end if
+		if Degrees3 > 359
+			Degrees3 = 0
+		end if
+		if HeightDegrees1 > 359
+			HeightDegrees1 = 0
+		end if
+		if HeightDegrees2 > 359
+			HeightDegrees2 = 0
+		end if
+		if HeightDegrees3 > 359
+			HeightDegrees3 = 0
+		end if
+	end loop
+end script DojoDoFunkyGlowyStuff
+
+begin script SetupTypeToPlinth
+start
+	CreaturesToPlinth[0] = 7
+	CreaturesToPlinth[1] = 0
+	CreaturesToPlinth[2] = 8
+	CreaturesToPlinth[3] = 15
+	CreaturesToPlinth[4] = 1
+	CreaturesToPlinth[5] = 5
+	CreaturesToPlinth[6] = 17
+	CreaturesToPlinth[7] = 9
+	CreaturesToPlinth[8] = 12
+	CreaturesToPlinth[9] = 14
+	CreaturesToPlinth[10] = 3
+	CreaturesToPlinth[11] = 6
+	CreaturesToPlinth[12] = 16
+	CreaturesToPlinth[13] = 0
+	CreaturesToPlinth[14] = 11
+	CreaturesToPlinth[15] = 10
+	CreaturesToPlinth[16] = 2
+	CreaturesToPlinth[17] = 4
+	CreaturesToPlinth[18] = 13
+end script SetupTypeToPlinth
+
+begin script CreateWinIndicator(Creature)
+	Count = 0
+	CreatureSubType = 0
+	Mushroom = 0
+	CreatureFound = 0
+	Plinth = 0
+	RandomAngle = number from 0 to 360
+	AlreadyPlacedObj = 0
+start
+	CreatureSubType = variable get Creature sub type
+	while Count < 18 and CreatureFound == 0
+		if CreatureSubType == Creatures[Count]
+			Plinth = CreaturePortraits[Count]
+			CreatureFound = 1
+		end if
+		Count++
+	end while
+	run script GetAngleForPlinth(Plinth, 59)
+	AlreadyPlacedObj = get FEATURE FEATURE_INFO_MAGIC_MUSHROOM at [CloseUpOfPlinth]
+	if not AlreadyPlacedObj exists
+		Mushroom = create with angle RandomAngle and scale 0.5 FEATURE FEATURE_INFO_MAGIC_MUSHROOM at [CloseUpOfPlinth]
+		disable Mushroom pickup
+		enable Mushroom indestructible
+		disable Mushroom hurt by fire
+	end if
+end script CreateWinIndicator
+

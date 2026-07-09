@@ -1,0 +1,89 @@
+//LHVM Challenge source version 8
+//Decompiled with CHLASM tool by Daniels118
+
+begin script BrotherhoodApprentice
+	Lion = 0
+	MyCreaturePos = marker at [1326.9233, 62.9355, 1079.3483]
+start
+	begin known cinema
+		if EveWatching == 0
+			EveWatching = 1
+		end if
+		enable highlight draw
+		set fade red 0 green 0 blue 0 time 1
+		wait until fade ready
+		Lion = create DUMB_CREATURE CREATURE_TYPE_LION at [1448.264, 2.565, 2022.214]
+		set Lion name HELP_TEXT_NAME_LION_01
+		run script SetupCreatureIsleCreature(Lion)
+		SCALE of Lion = 2
+		MyCreature = get player 1 creature
+		set MyCreature position to [MyCreaturePos]
+		set Lion position to [1168.273, 56.95, 960.044]
+		set MyCreature focus to [Lion]
+		set Lion focus to [1310.179, 87.741, 1066.408]
+		move Lion position to [1296.337, 61.02, 1056.916] radius 0
+		start music MUSIC_TYPE_SCRIPT_CREATURE_GUIDE
+		wait until widescreen transition complete
+		set fade in time 1
+		set camera position to [1244.706, 174.455, 1017.124]
+		set camera focus to [1259.172, 33.993, 1027.207]
+		move camera position to [1278.61, 106.918, 1095.191] time 10
+		move camera focus to [1330.841, 39.407, 1029.724] time 10
+		wait until camera ready
+		set camera position to [1311.311, 86.794, 1066.627]
+		set camera focus to [1171.308, 92.009, 978.915]
+		if Tyke exists
+			say HELP_TEXT_LION_YOU_HAVE_APPRENTICE_10 by Lion
+			wait until read
+			say HELP_TEXT_LION_YOU_HAVE_APPRENTICE_20 by Lion
+			wait until read
+			say HELP_TEXT_LION_YOU_HAVE_APPRENTICE_30 by Lion
+			wait until read
+			say HELP_TEXT_LION_YOU_HAVE_APPRENTICE_40 by Lion
+			wait until read
+			say HELP_TEXT_LION_YOU_HAVE_APPRENTICE_50 by Lion
+			wait until read
+			say HELP_TEXT_LION_YOU_HAVE_APPRENTICE_60 with interaction by Lion
+			wait until read
+		else
+			enable highlight draw
+			say HELP_TEXT_LION_FIND_APPRENTICE_10 by Lion
+			wait until read
+			say HELP_TEXT_LION_FIND_APPRENTICE_20 with interaction by Lion
+			wait until read
+			say HELP_TEXT_LION_FIND_APPRENTICE_30 by Lion
+			wait until read
+			set camera position to [1117.602, 160.66, 1344.133]
+			set camera focus to [1246.944, 61.526, 1220.34]
+			say HELP_TEXT_LION_FIND_APPRENTICE_40 with interaction by Lion
+			wait until read
+			move camera position to [618.588, 172.939, 825.277] time 15
+			move camera focus to [507.01, 105.894, 669.183] time 15
+			say HELP_TEXT_LION_FIND_APPRENTICE_50 by Lion
+			wait until read
+			say HELP_TEXT_LION_FIND_APPRENTICE_60 with interaction by Lion
+			wait until read
+			wait until camera ready
+			set camera position to [1311.311, 86.794, 1066.627]
+			set camera focus to [1171.308, 92.009, 978.915]
+			disable highlight draw
+		end if
+		close dialogue
+		set Lion focus to [1155.407, 56.602, 950.196]
+		wait until 1 seconds
+		move Lion position to [1179.55, 56.311, 962.489] radius 0
+		wait until 4 seconds
+		move camera position to [1311.647, 99.388, 1066.837] time 10
+		move camera focus to [1181.283, 80.841, 966.924] time 10
+		set fade red 0 green 0 blue 0 time 3
+		wait until fade ready
+		set camera position to [1258.744, 119.203, 1020.476]
+		set camera focus to [1411.171, 0.878, 1171.141]
+		delete Lion
+		stop music
+		wait until widescreen transition complete
+		set fade in time 1
+		release MyCreature
+	end known cinema
+end script BrotherhoodApprentice
+

@@ -1,0 +1,1954 @@
+//LHVM Challenge source version 8
+//Decompiled with CHLASM tool by Daniels118
+
+global DiceNumber
+global WitchGhost
+global KingOfCastle
+global GameStart
+global Dice
+global DiceInfluence
+global QuitGame
+global Bodger
+global Bodger2
+global CreatureSpeed
+global WitchSpeed
+global CreatureMissGo
+global WitchMissGo
+global CreatureSlowed
+global WitchSlowed
+global CurrentSquare
+global WitchCurrentSquare
+global LastFightWon
+global LocalTrialFlag
+
+begin script FadeFix
+	RestartPos = marker at [1159.63, 6.14254, 2280.92]
+start
+	wait until not get distance from (camera position) to [RestartPos] < 200
+	wait until get distance from (camera position) to [RestartPos] < 200
+	set MyCreature position to [RestartPos]
+	set MyCreature focus to [MyCreature] + [15, 6, 15]
+	begin cinema
+		set camera position to [MyCreature] + [15, 6, 15]
+		set camera focus to [MyCreature] + [0, 9, 0]
+	end cinema
+	release MyCreature
+end script FadeFix
+
+begin script DeleteLeopard(Leopard)
+start
+	wait until 10 seconds
+	delete Leopard
+end script DeleteLeopard
+
+begin script MaintainCreature
+start
+	begin loop
+		if HEALTH of MyCreature < 0.5
+			HEALTH of MyCreature = 0.6
+		elsif ENERGY of MyCreature < 0.5
+			ENERGY of MyCreature = 0.6
+		elsif EXHAUSTION of MyCreature > 0.5
+			EXHAUSTION of MyCreature = 0.4
+		elsif ZANGLE of MyCreature > 0.5
+			ZANGLE of MyCreature = 0.4
+		end if
+		until GameStart == 0 or GameStart >= 4
+	end loop
+end script MaintainCreature
+
+begin script DeleteBats(Bats, Bats2)
+	Bat = 0
+start
+	wait until 5 seconds
+	while size of Bats > 0
+		Bat = get BIRD in Bats
+		if Bat exists
+			delete Bat
+		end if
+	end while
+	while size of Bats2 > 0
+		Bat = get BIRD in Bats2
+		if Bat exists
+			delete Bat
+		end if
+	end while
+end script DeleteBats
+
+begin script DeleteOgre(EnemyOgre)
+start
+	wait until not [EnemyOgre] viewed
+	delete EnemyOgre
+end script DeleteOgre
+
+begin script WitchEvadeFight(OgrePos, LocalDifficulty)
+	EnemyOgre = 0
+	InvisSpell = 0
+start
+	EnemyOgre = create dumb creature from creature MyCreature 0.9 at [OgrePos] CREATURE_TYPE_OGRE
+	set EnemyOgre name HELP_TEXT_NAME_OGRE_02
+	ACTUAL_HEIGHT of EnemyOgre = (ACTUAL_HEIGHT of MyCreature) + LocalDifficulty
+	ALIGNMENT of EnemyOgre = 0
+	wait until 0.2 seconds
+	EnemyOgre play ANM_A_COW_WALK loop 1
+	WitchGhost play ANM_A_COW_WALK loop 1
+	InvisSpell = cast CREATURE_SPELL_INVISIBLE spell on WitchGhost from [WitchGhost] radius 0 time 10 curl 0
+	wait until EnemyOgre played
+	wait until WitchGhost played
+	wait until 2 seconds
+	run background script DeleteOgre(EnemyOgre)
+end script WitchEvadeFight
+
+begin script OgreFight(Leopard, CurrentlyUnwantedVariable, LocalDifficulty)
+	EvilComment = 0
+	EnemyOgre = 0
+	OgrePos = marker at [1057.19, 126.63, 2646.51]
+	MyFightPos = marker at [1111.57, 124.013, 2627.51]
+	SeeFightPos = marker at [1117.68, 134.314, 2611.58]
+	SeeFightFoc = marker at [1096.76, 126.305, 2630.54]
+	EnemyOgreHeight = 0
+	CancelAttack = 0
+	MyCreatureFightin = 0
+start
+	EnemyOgre = create dumb creature from creature MyCreature 1 at [OgrePos] CREATURE_TYPE_OGRE
+	ALIGNMENT of EnemyOgre = 0
+	set EnemyOgre name HELP_TEXT_NAME_OGRE_02
+	disable EnemyOgre hurt by fire
+	if LocalDifficulty > 0
+		ACTUAL_HEIGHT of EnemyOgre = (ACTUAL_HEIGHT of MyCreature) + LocalDifficulty
+	else
+		ACTUAL_HEIGHT of EnemyOgre = ACTUAL_HEIGHT of MyCreature
+	end if
+	if ACTUAL_HEIGHT of EnemyOgre < 0.4
+		ACTUAL_HEIGHT of EnemyOgre = 0.4
+	end if
+	STRENGTH of EnemyOgre = (STRENGTH of MyCreature) + LocalDifficulty
+	ALIGNMENT of EnemyOgre = 0
+	wait until 0.2 seconds
+	begin cinema
+		set camera position to [EnemyOgre] + [-15, 10, -15]
+		set camera focus to [EnemyOgre] + [0, 8, 0]
+		EnemyOgreHeight = (HEIGHT of EnemyOgre) * 0.7
+		move camera position to [EnemyOgre] + [-8, 6, -8] time 8
+		move camera focus to [EnemyOgre] + [0, EnemyOgreHeight, 0] time 8
+		eject evil spirit
+		make evil spirit point at [EnemyOgre]
+		say single line HELP_TEXT_KINGOFTHECASTLE_FIGHT_10
+		set EnemyOgre focus to [MyCreature]
+		wait until 0.5 seconds
+		EnemyOgre play ANM_A_COW_WALK loop 1
+		force MyCreature POINT_AT EnemyOgre
+		wait until MyCreature played
+		wait until EnemyOgre played
+		wait until read
+		clear dialogue
+		stop evil spirit pointing
+		send evil spirit home
+		set camera auto track MyCreature distance 35
+		move MyCreature position to [MyFightPos] radius 0
+		wait until 2 seconds
+		set fade red 0 green 0 blue 0 time 1.5
+		wait until 2 seconds
+		set camera position to [SeeFightPos]
+		set camera focus to [SeeFightFoc]
+		set MyCreature position to [MyFightPos]
+		set MyCreature focus to [EnemyOgre]
+		set fade in time 2
+	end cinema
+	detach MyCreature leash
+	detach MyCreature leash
+	disable leash on MyCreature
+	force EnemyOgre CREATURE_FIGHT MyCreature
+	force MyCreature CREATURE_FIGHT EnemyOgre
+	while MyCreatureFightin == 0
+		if MyCreature fighting
+			MyCreatureFightin = 1
+		elsif EnemyOgre affected by spell CREATURE_SPELL_FREEZE or EnemyOgre affected by spell CREATURE_SPELL_SMALL or EnemyOgre affected by spell CREATURE_SPELL_ITCHY
+			CancelAttack = cast MAGIC_TYPE_CREATURE_SPELL_ANTI_SPELL spell on EnemyOgre from [EnemyOgre] radius 0 time 6 curl 0
+			wait until 4 seconds
+			if MyCreature fighting
+			else
+				force EnemyOgre CREATURE_FIGHT MyCreature
+				force MyCreature CREATURE_FIGHT EnemyOgre
+			end if
+		end if
+	end while
+	MyCreatureFightin = 0
+	while MyCreature fighting
+		if EvilComment == 0
+			if FIGHTHEALTH of MyCreature > 0.7 and FIGHTHEALTH of EnemyOgre < 0.3
+				begin dialogue
+					make evil spirit cling across 0.7 down 1
+					say single line HELP_TEXT_KINGOFTHECASTLE_FIGHT_20
+					wait until read
+					send evil spirit home
+					EvilComment = 1
+				end dialogue
+			elsif FIGHTHEALTH of MyCreature < 0.3 and FIGHTHEALTH of EnemyOgre > 0.7
+				begin dialogue
+					make evil spirit cling across 0.7 down 1
+					say single line HELP_TEXT_KINGOFTHECASTLE_FIGHT_30
+					wait until read
+					send evil spirit home
+					EvilComment = 1
+				end dialogue
+			elsif FIGHTHEALTH of MyCreature < 0.2 and FIGHTHEALTH of EnemyOgre < 0.2
+				begin dialogue
+					make good spirit cling across 0.2 down 1
+					say single line HELP_TEXT_KINGOFTHECASTLE_FIGHT_40
+					wait until read
+					send good spirit home
+					EvilComment = 1
+				end dialogue
+			end if
+			if FIGHTHEALTH of EnemyOgre <= 0.1 and FIGHTHEALTH of EnemyOgre > 0
+				begin dialogue
+					make evil spirit cling across 0.7 down 1
+					say single line HELP_TEXT_KINGOFTHECASTLE_FIGHT_50
+					wait until read
+					send evil spirit home
+					EvilComment = 1
+				end dialogue
+			end if
+		end if
+	end while
+	if FIGHTHEALTH of MyCreature > FIGHTHEALTH of EnemyOgre
+		LastFightWon = 1
+	else
+		LastFightWon = 2
+	end if
+	enable leash on MyCreature
+	run background script DeleteOgre(EnemyOgre)
+end script OgreFight
+
+begin script RollDice(Leopard, DicePos)
+	GoodRoll = 0
+	RollingTimer = create timer for 0 seconds
+	Spangle1 = 0
+	Spangle2 = 0
+	Spangle3 = 0
+	Spangle4 = 0
+	Spangle5 = 0
+	Spangle6 = 0
+	Spangle7 = 0
+	Spangle8 = 0
+	Ray1 = 0
+	Ray2 = 0
+	Ray3 = 0
+	Ray4 = 0
+	Ray5 = 0
+	Ray6 = 0
+	Ray7 = 0
+	Ray8 = 0
+	FSize = 6.5
+	DiceThrowPos = marker at [1180.31, 25.8783, 2307.23]
+	DiceThrowFoc = marker at [1148.43, 3.00739, 2365.17]
+	CancelHighlight = 0
+	CancelHighlightPos = marker at [DicePos] + ([15, 10])
+	GiveUpOnDice = 0
+	DetonateTimer = create timer for 0 seconds
+	ThrowInfluence = 0
+start
+	CurrentCancelScrollPos = marker at [CancelHighlightPos]
+	while GoodRoll == 0
+		begin cinema
+			if Dice exists
+				delete Dice
+				Dice = create SCRIPT_OBJECT_TYPE_DIE at [DicePos]
+				DiceInfluence = create influence on Dice radius 5
+				enable Dice indestructible
+			else
+				Dice = create SCRIPT_OBJECT_TYPE_DIE at [DicePos]
+				DiceInfluence = create influence on Dice radius 5
+				enable Dice indestructible
+			end if
+			set camera position to [DiceThrowPos]
+			set camera focus to [DiceThrowFoc]
+			Spangle1 = marker at [DicePos] + [5 * FSize, 3, 0]
+			Spangle2 = marker at [DicePos] + [3.5 * FSize, 3, 3.5 * FSize]
+			Spangle3 = marker at [DicePos] + [0, 3, 5 * FSize]
+			Spangle4 = marker at [DicePos] + [(-3.5) * FSize, 3, 3.5 * FSize]
+			Spangle5 = marker at [DicePos] + [(-5) * FSize, 3, 0]
+			Spangle6 = marker at [DicePos] + [(-3.5) * FSize, 3, (-3.5) * FSize]
+			Spangle7 = marker at [DicePos] + [0, 3, (-5) * FSize]
+			Spangle8 = marker at [DicePos] + [3.5 * FSize, 3, (-3.5) * FSize]
+			Ray1 = create special effect SPOT_VISUAL_MAGIC_BEAM on Spangle1 time -1
+			add Ray1 target on Spangle2
+			Ray2 = create special effect SPOT_VISUAL_MAGIC_BEAM on Spangle2 time -1
+			add Ray2 target on Spangle3
+			Ray3 = create special effect SPOT_VISUAL_MAGIC_BEAM on Spangle3 time -1
+			add Ray3 target on Spangle4
+			Ray4 = create special effect SPOT_VISUAL_MAGIC_BEAM on Spangle4 time -1
+			add Ray4 target on Spangle5
+			Ray5 = create special effect SPOT_VISUAL_MAGIC_BEAM on Spangle5 time -1
+			add Ray5 target on Spangle6
+			Ray6 = create special effect SPOT_VISUAL_MAGIC_BEAM on Spangle6 time -1
+			add Ray6 target on Spangle7
+			Ray7 = create special effect SPOT_VISUAL_MAGIC_BEAM on Spangle7 time -1
+			add Ray7 target on Spangle8
+			Ray8 = create special effect SPOT_VISUAL_MAGIC_BEAM on Spangle8 time -1
+			add Ray8 target on Spangle1
+		end cinema
+		enable Dice pickup
+		CancelHighlight = create highlight CHALLENGE_NONE HIGHLIGHT_CANCEL_QUEST at [CancelHighlightPos]
+		ALTITUDE of CancelHighlight = 15
+		begin dialogue
+			say single line HELP_TEXT_KINGOFTHECASTLE_GAME_10 by Leopard
+			wait until read or Dice is HELD or CancelHighlight clicked
+		end dialogue
+		wait until Dice is HELD or CancelHighlight clicked
+		ThrowInfluence = create influence at [DicePos] radius 100
+		if CancelHighlight clicked
+			delete ThrowInfluence
+			delete CancelHighlight
+			QuitGame = 1
+			GoodRoll = 1
+			CurrentCancelScrollPos = 0
+		else
+			delete CancelHighlight
+			wait until not Dice is HELD
+			disable Dice pickup
+			delete ThrowInfluence
+			set RollingTimer time to 1.5 seconds
+			set DetonateTimer time to 5 seconds
+			GiveUpOnDice = 0
+			while Dice is FLYING and GiveUpOnDice == 0
+				if get DetonateTimer time remaining <= 0 and not get distance from [Dice] to [DicePos] < 75
+					delete Dice
+					GiveUpOnDice = 1
+				end if
+			end while
+			if Dice exists
+				DiceNumber = get Dice score
+			end if
+			if GiveUpOnDice == 1
+				begin dialogue
+					say single line HELP_TEXT_KINGOFTHECASTLE_GAME_20 by Leopard
+					wait until read
+				end dialogue
+			elsif not Dice exists
+				Dice = create SCRIPT_OBJECT_TYPE_DIE at [DicePos]
+				DiceInfluence = create influence on Dice radius 5
+				enable Dice indestructible
+				begin dialogue
+					say single line HELP_TEXT_KINGOFTHECASTLE_GAME_20 by Leopard
+					wait until read
+				end dialogue
+			elsif not get distance from [Dice] to [DicePos] < 40
+				begin dialogue
+					say single line HELP_TEXT_KINGOFTHECASTLE_GAME_20 by Leopard
+					wait until read
+				end dialogue
+			elsif get RollingTimer time remaining <= 0 and DiceNumber > 0
+				GoodRoll = 1
+			elsif get RollingTimer time remaining > 0 or DiceNumber <= 0
+				begin dialogue
+					say single line HELP_TEXT_KINGOFTHECASTLE_GAME_30 by Leopard
+					wait until read
+				end dialogue
+			end if
+		end if
+	end while
+	GoodRoll = 0
+	delete Ray1
+	delete Ray2
+	delete Ray3
+	delete Ray4
+	delete Ray5
+	delete Ray6
+	delete Ray7
+	delete Ray8
+	if QuitGame == 0
+		begin dialogue
+			if DiceNumber == 1
+				say single line HELP_TEXT_KINGOFTHECASTLE_GAME_40 by Leopard
+			elsif DiceNumber == 2
+				say single line HELP_TEXT_KINGOFTHECASTLE_GAME_50 by Leopard
+			elsif DiceNumber == 3
+				say single line HELP_TEXT_KINGOFTHECASTLE_GAME_60 by Leopard
+			elsif DiceNumber == 4
+				say single line HELP_TEXT_KINGOFTHECASTLE_GAME_70 by Leopard
+			elsif DiceNumber == 5
+				say single line HELP_TEXT_KINGOFTHECASTLE_GAME_80 by Leopard
+			elsif DiceNumber == 6
+				say single line HELP_TEXT_KINGOFTHECASTLE_GAME_90 by Leopard
+			end if
+			wait until read
+		end dialogue
+		if CreatureSpeed == 1
+			begin dialogue
+				say HELP_TEXT_KINGOFTHECASTLE_GAME_100
+				wait until read
+				DiceNumber += 2
+				CreatureSpeed = 0
+				if DiceNumber == 3
+					say HELP_TEXT_KINGOFTHECASTLE_GAME_150 by Leopard
+				elsif DiceNumber == 4
+					say HELP_TEXT_KINGOFTHECASTLE_GAME_160 by Leopard
+				elsif DiceNumber == 5
+					say HELP_TEXT_KINGOFTHECASTLE_GAME_170 by Leopard
+				elsif DiceNumber == 6
+					say HELP_TEXT_KINGOFTHECASTLE_GAME_180 by Leopard
+				elsif DiceNumber == 7
+					say HELP_TEXT_KINGOFTHECASTLE_GAME_190 by Leopard
+				elsif DiceNumber == 8
+					say HELP_TEXT_KINGOFTHECASTLE_GAME_200 by Leopard
+				end if
+				wait until read
+			end dialogue
+		elsif CreatureSlowed == 1
+			begin dialogue
+				say HELP_TEXT_KINGOFTHECASTLE_GAME_110 by Leopard
+				wait until read
+				DiceNumber -= 2
+				if DiceNumber <= 0
+					DiceNumber = 1
+					say HELP_TEXT_KINGOFTHECASTLE_GAME_120 by Leopard
+					wait until read
+				else
+					if DiceNumber == 1
+						say HELP_TEXT_KINGOFTHECASTLE_GAME_130 by Leopard
+					elsif DiceNumber == 2
+						say HELP_TEXT_KINGOFTHECASTLE_GAME_140 by Leopard
+					elsif DiceNumber == 3
+						say HELP_TEXT_KINGOFTHECASTLE_GAME_150 by Leopard
+					elsif DiceNumber == 4
+						say HELP_TEXT_KINGOFTHECASTLE_GAME_160 by Leopard
+					end if
+					wait until read
+				end if
+				CreatureSlowed = 0
+			end dialogue
+		end if
+	end if
+end script RollDice
+
+begin script WitchRollDice(Leopard, DicePos)
+	Spangle1 = 0
+	Spangle2 = 0
+	Spangle3 = 0
+	Spangle4 = 0
+	Spangle5 = 0
+	Spangle6 = 0
+	Spangle7 = 0
+	Spangle8 = 0
+	Ray1 = 0
+	Ray2 = 0
+	Ray3 = 0
+	Ray4 = 0
+	Ray5 = 0
+	Ray6 = 0
+	Ray7 = 0
+	Ray8 = 0
+	FSize = 6.5
+	DiceAim = 0
+	SpecEffect = 0
+	GoodRoll = 0
+	DiceThrowPos = marker at [1165.71, 8.85827, 2333.68]
+	DiceThrowFoc = marker at [1139.9, 7.9449, 2390.79]
+start
+	while GoodRoll == 0
+		begin cinema
+			set fade red 0 green 0 blue 0 time 1.5
+			wait until 1.5 seconds
+			delete Dice
+			Dice = create SCRIPT_OBJECT_TYPE_DIE at [DicePos]
+			DiceInfluence = create influence on Dice radius 5
+			enable Dice indestructible
+			disable Dice dice check
+			set camera position to [DiceThrowPos]
+			set camera focus to [DiceThrowFoc]
+			Spangle1 = marker at [DicePos] + [5 * FSize, 3, 0]
+			Spangle2 = marker at [DicePos] + [3.5 * FSize, 3, 3.5 * FSize]
+			Spangle3 = marker at [DicePos] + [0, 3, 5 * FSize]
+			Spangle4 = marker at [DicePos] + [(-3.5) * FSize, 3, 3.5 * FSize]
+			Spangle5 = marker at [DicePos] + [(-5) * FSize, 3, 0]
+			Spangle6 = marker at [DicePos] + [(-3.5) * FSize, 3, (-3.5) * FSize]
+			Spangle7 = marker at [DicePos] + [0, 3, (-5) * FSize]
+			Spangle8 = marker at [DicePos] + [3.5 * FSize, 3, (-3.5) * FSize]
+			Ray1 = create special effect SPOT_VISUAL_MAGIC_BEAM on Spangle1 time -1
+			add Ray1 target on Spangle2
+			Ray2 = create special effect SPOT_VISUAL_MAGIC_BEAM on Spangle2 time -1
+			add Ray2 target on Spangle3
+			Ray3 = create special effect SPOT_VISUAL_MAGIC_BEAM on Spangle3 time -1
+			add Ray3 target on Spangle4
+			Ray4 = create special effect SPOT_VISUAL_MAGIC_BEAM on Spangle4 time -1
+			add Ray4 target on Spangle5
+			Ray5 = create special effect SPOT_VISUAL_MAGIC_BEAM on Spangle5 time -1
+			add Ray5 target on Spangle6
+			Ray6 = create special effect SPOT_VISUAL_MAGIC_BEAM on Spangle6 time -1
+			add Ray6 target on Spangle7
+			Ray7 = create special effect SPOT_VISUAL_MAGIC_BEAM on Spangle7 time -1
+			add Ray7 target on Spangle8
+			Ray8 = create special effect SPOT_VISUAL_MAGIC_BEAM on Spangle8 time -1
+			add Ray8 target on Spangle1
+			set camera focus follow Dice
+			set fade in time 2
+			wait until 2 seconds
+			say single line HELP_TEXT_KINGOFTHECASTLE_GAME_210 by Leopard
+			DiceAim = marker at [Dice] + [number from -3 to 3, 10, number from -3 to 3]
+			set Dice velocity heading [DiceAim] speed 20 angular x (number from 1 to 10) y 10 z (number from 1 to 10)
+			SpecEffect = create special effect SPOT_VISUAL_OBJECT_APPEAR at [DicePos] time 0.5
+			start sound LH_SAMPLE_GOALDISAPPEAR at [DicePos]
+			wait until 0.5 seconds
+			wait until not Dice is FLYING
+			move camera position to [Dice] + [-6, 10, -6] time 2
+			DiceNumber = get Dice score
+			if DiceNumber > 0
+				if DiceNumber == 1
+					say single line HELP_TEXT_KINGOFTHECASTLE_GAME_40 by Leopard
+				elsif DiceNumber == 2
+					say single line HELP_TEXT_KINGOFTHECASTLE_GAME_50 by Leopard
+				elsif DiceNumber == 3
+					say single line HELP_TEXT_KINGOFTHECASTLE_GAME_60 by Leopard
+				elsif DiceNumber == 4
+					say single line HELP_TEXT_KINGOFTHECASTLE_GAME_70 by Leopard
+				elsif DiceNumber == 5
+					say single line HELP_TEXT_KINGOFTHECASTLE_GAME_80 by Leopard
+				elsif DiceNumber == 6
+					say single line HELP_TEXT_KINGOFTHECASTLE_GAME_90 by Leopard
+				end if
+				wait until read
+				if WitchSpeed == 1
+					say HELP_TEXT_KINGOFTHECASTLE_GAME_100 by Leopard
+					wait until read
+					DiceNumber += 2
+					WitchSpeed = 0
+					if DiceNumber == 3
+						say HELP_TEXT_KINGOFTHECASTLE_GAME_150 by Leopard
+					elsif DiceNumber == 4
+						say HELP_TEXT_KINGOFTHECASTLE_GAME_160 by Leopard
+					elsif DiceNumber == 5
+						say HELP_TEXT_KINGOFTHECASTLE_GAME_170 by Leopard
+					elsif DiceNumber == 6
+						say HELP_TEXT_KINGOFTHECASTLE_GAME_180 by Leopard
+					elsif DiceNumber == 7
+						say HELP_TEXT_KINGOFTHECASTLE_GAME_190 by Leopard
+					elsif DiceNumber == 8
+						say HELP_TEXT_KINGOFTHECASTLE_GAME_200 by Leopard
+					end if
+				elsif WitchSlowed == 1
+					say HELP_TEXT_KINGOFTHECASTLE_GAME_110 by Leopard
+					wait until read
+					DiceNumber -= 2
+					if DiceNumber <= 0
+						DiceNumber = 1
+						say HELP_TEXT_KINGOFTHECASTLE_GAME_120 by Leopard
+						wait until read
+					else
+						if DiceNumber == 1
+							say HELP_TEXT_KINGOFTHECASTLE_GAME_130 by Leopard
+						elsif DiceNumber == 2
+							say HELP_TEXT_KINGOFTHECASTLE_GAME_140 by Leopard
+						elsif DiceNumber == 3
+							say HELP_TEXT_KINGOFTHECASTLE_GAME_150 by Leopard
+						elsif DiceNumber == 4
+							say HELP_TEXT_KINGOFTHECASTLE_GAME_160 by Leopard
+						end if
+						wait until read
+					end if
+					WitchSlowed = 0
+				end if
+				enable Dice dice check
+				GoodRoll = 1
+			elsif DiceNumber < 1
+				say single line HELP_TEXT_KINGOFTHECASTLE_GAME_220 by Leopard
+				wait until read
+			end if
+			wait until 2 seconds
+			delete Ray1
+			delete Ray2
+			delete Ray3
+			delete Ray4
+			delete Ray5
+			delete Ray6
+			delete Ray7
+			delete Ray8
+		end cinema with widescreen
+	end while
+end script WitchRollDice
+
+begin script SquareEvents(Leopard)
+	Freeze = 0
+	Speed = 0
+	BoardSq1 = marker at [1108.64, 15.198, 2315.8]
+	BoardSq2 = marker at [1085.79, 22.6753, 2326.82]
+	BoardSq3 = marker at [1068.54, 27.3967, 2353]
+	BoardSq5 = marker at [1091.79, 38.7893, 2407.21]
+	BoardSq6 = marker at [1114.56, 41.137, 2433.99]
+	BoardSq7 = marker at [1148.39, 45.0418, 2452.3]
+	BoardSq11 = marker at [1268.94, 58.5727, 2490.48]
+	BoardSq12 = marker at [1297.29, 60.4963, 2493.73]
+	BoardSq13 = marker at [1328.09, 66.8377, 2501.44]
+	BoardSq14 = marker at [1346.79, 71.8811, 2520.89]
+	BoardSq16 = marker at [1345.43, 80.332, 2579.5]
+	BoardSq17 = marker at [1330.51, 83.1323, 2611.32]
+	BoardSq20 = marker at [1248.22, 94.0146, 2642.9]
+	BoardSq21 = marker at [1217.76, 106.394, 2652.46]
+	BoardSq22 = marker at [1187.75, 116.748, 2662.22]
+	BoardSq24 = marker at [1145.16, 124.704, 2636.13]
+	SideBoardSq1 = marker at [1127.22, 3.24793, 2328.81]
+	SideBoardSq2 = marker at [1070.19, 26.2085, 2315.75]
+	SideBoardSq7 = marker at [1162.96, 44.7905, 2436.18]
+	SideBoardSq11 = marker at [1274.35, 56.3088, 2466.99]
+	SideBoardSq12 = marker at [1306.1, 58.5543, 2467.88]
+	SideBoardSq16 = marker at [1366.81, 81.4521, 2582.66]
+	SideBoardSq17 = marker at [1326.88, 83.1507, 2596.63]
+	SideBoardSq20 = marker at [1259.3, 88.3301, 2656.34]
+	SideBoardSq24 = marker at [1159.59, 128.281, 2631.24]
+	EnemyOgre = 0
+	OgrePos4 = marker at [1062.32, 51.5429, 2425.78]
+	OgrePos15 = marker at [1300.79, 83.0617, 2548.73]
+	OgrePos23 = marker at [1123.27, 125.85, 2655.95]
+	FungusFume = 0
+	Shroom1Pos = marker at [1203.43, 58.3162, 2480.22]
+	Shroom2Pos = marker at [1208.63, 59.664, 2484.73]
+	Shroom3Pos = marker at [1219.67, 59.8132, 2474.04]
+	Shroom4Pos = marker at [1211.94, 58.8632, 2475.58]
+	Bats = 0
+	Bats2 = 0
+	BatPos1 = marker at [1065.48, 29.8935, 2362.73]
+	BatPos2 = marker at [1076.93, 26.4467, 2355.17]
+	SwampGas = 0
+	InvisSpell = 0
+	MSquare = 0
+	MPos = 0
+	WSquare = 0
+	WPos = 0
+	Smoke1 = 0
+	Smoke2 = 0
+	Smoke3 = 0
+	Smoke4 = 0
+	Smoke5 = 0
+	Smoke6 = 0
+	Smoke7 = 0
+	Smoke8 = 0
+	Smoke9 = 0
+	Smoke10 = 0
+	Smoke11 = 0
+	Smoke12 = 0
+start
+	if CurrentSquare == 0
+		begin cinema
+			CreatureSpeed = 1
+			Speed = cast MAGIC_TYPE_CREATURE_SPELL_FAST spell on MyCreature from [MyCreature] radius 0 time 3 curl 0
+			MyCreature play ANM_A_COW_DEAD_ON_RHS loop 1
+			say single line HELP_TEXT_KINGOFTHECASTLE_GAME_230 by Leopard
+			wait until read
+			wait until MyCreature played
+			wait until 2 seconds
+		end cinema with widescreen
+	elsif CurrentSquare == 1
+		begin cinema
+			MyCreature play ANM_A_COW_EAT_1 loop 1
+			say single line HELP_TEXT_KINGOFTHECASTLE_GAME_240 by Leopard
+			wait until read
+			wait until MyCreature played
+		end cinema with widescreen
+	elsif CurrentSquare == 2
+		begin cinema
+			if get distance from [WitchGhost] to [BoardSq7] < 10
+				move WitchGhost position to [SideBoardSq7] radius 0
+			end if
+			InvisSpell = cast CREATURE_SPELL_INVISIBLE spell on MyCreature from [MyCreature] radius 0 time 6 curl 0
+			wait until 5 seconds
+			set MyCreature position to [BoardSq7]
+			say single line HELP_TEXT_KINGOFTHECASTLE_GAME_250 by Leopard
+			wait until read
+			delete InvisSpell
+			wait until 0.5 seconds
+			set camera auto track MyCreature distance 35
+			MyCreature play ANM_A_COW_DEAD_ON_RHS loop 1
+			wait until 3 seconds
+			CurrentSquare = 7
+		end cinema with widescreen
+	elsif CurrentSquare == 3
+		begin cinema
+			set camera auto track MyCreature distance 35
+			say single line HELP_TEXT_KINGOFTHECASTLE_GAME_260 by Leopard
+			Bats = flock at [BatPos1]
+			set Bats properties inner 15 outer 30 calm 0
+			populate Bats with 10 ANIMAL ANIMAL_INFO_BAT
+			Bats2 = flock at [BatPos2]
+			set Bats2 properties inner 15 outer 30 calm 0
+			populate Bats2 with 10 ANIMAL ANIMAL_INFO_BAT
+			move MyCreature position to [BoardSq2] radius 0
+			wait until read
+			wait until get distance from [MyCreature] to [BoardSq2] < 10 or 20 seconds
+			move MyCreature position to [BoardSq1] radius 0
+			if get distance from [WitchGhost] to [BoardSq1] < 10
+				move WitchGhost position to [SideBoardSq1] radius 0
+			end if
+			wait until get distance from [MyCreature] to [BoardSq1] < 10 or 20 seconds
+			CurrentSquare = 1
+			wait until 2 seconds
+		end cinema with widescreen
+		run background script DeleteBats(Bats, Bats2)
+	elsif CurrentSquare == 4
+		run script OgreFight(Leopard, OgrePos4, -0.2)
+		if LastFightWon == 1
+			MyCreature play ANM_A_COW_DEAD_ON_RHS loop 1
+			wait until MyCreature played
+			wait until 0.5 seconds
+			begin cinema
+				set camera auto track MyCreature distance 35
+				eject evil spirit
+				say single line HELP_TEXT_KINGOFTHECASTLE_GAME_270
+				move MyCreature position to [BoardSq5] radius 0
+				wait until read
+				send evil spirit home
+				wait until get distance from [MyCreature] to [BoardSq5] < 10 or 20 seconds
+				CurrentSquare = 5
+				wait until 2 seconds
+			end cinema with widescreen
+		else
+			begin cinema
+				set camera auto track MyCreature distance 35
+				eject good spirit
+				say single line HELP_TEXT_KINGOFTHECASTLE_GAME_280
+				move MyCreature position to [BoardSq3] radius 0
+				wait until read
+				send good spirit home
+				wait until get distance from [MyCreature] to [BoardSq3] < 10 or 20 seconds
+				move MyCreature position to [BoardSq2] radius 0
+				wait until get distance from [MyCreature] to [BoardSq2] < 10 or 20 seconds
+				move MyCreature position to [BoardSq1] radius 0
+				if get distance from [WitchGhost] to [BoardSq1] < 10
+					move WitchGhost position to [SideBoardSq1] radius 0
+				end if
+				wait until get distance from [MyCreature] to [BoardSq1] < 10 or 20 seconds
+				CurrentSquare = 1
+				wait until 2 seconds
+			end cinema with widescreen
+		end if
+		LastFightWon = 0
+	elsif CurrentSquare == 5
+		begin cinema
+			MyCreature play ANM_A_COW_EAT_1 loop 1
+			say single line HELP_TEXT_KINGOFTHECASTLE_GAME_240 by Leopard
+			wait until read
+			wait until MyCreature played
+		end cinema with widescreen
+	elsif CurrentSquare == 6
+		begin cinema
+			say single line HELP_TEXT_KINGOFTHECASTLE_GAME_290 by Leopard
+			MyCreature play ANM_A_HORSE_EAT1 loop 1
+			SwampGas = create special effect SPOT_VISUAL_STEAM at [BoardSq6] time 5
+			SCALE of SwampGas = 2
+			wait until MyCreature played
+			wait until read
+			CreatureSlowed = 1
+		end cinema with widescreen
+	elsif CurrentSquare == 7
+		begin cinema
+			if get distance from [WitchGhost] to [BoardSq2] < 10
+				move WitchGhost position to [SideBoardSq2] radius 0
+			end if
+			InvisSpell = cast CREATURE_SPELL_INVISIBLE spell on MyCreature from [MyCreature] radius 0 time 6 curl 0
+			wait until 5 seconds
+			set MyCreature position to [BoardSq2]
+			CurrentSquare = 2
+			say single line HELP_TEXT_KINGOFTHECASTLE_GAME_300 by Leopard
+			wait until read
+			delete InvisSpell
+			wait until 0.5 seconds
+			set camera auto track MyCreature distance 35
+			MyCreature play ANM_A_HORSE_EAT1 loop 1
+			wait until 3 seconds
+		end cinema with widescreen
+	elsif CurrentSquare == 8
+		begin cinema
+			MyCreature play ANM_A_COW_EAT_1 loop 1
+			say single line HELP_TEXT_KINGOFTHECASTLE_GAME_240 by Leopard
+			wait until read
+			wait until MyCreature played
+		end cinema with widescreen
+	elsif CurrentSquare == 9
+		begin cinema
+			CreatureMissGo = 1
+			FungusFume = create special effect SPOT_VISUAL_OBJECT_APPEAR at [Shroom1Pos] time 3
+			FungusFume = create special effect SPOT_VISUAL_OBJECT_APPEAR at [Shroom2Pos] time 3
+			FungusFume = create special effect SPOT_VISUAL_OBJECT_APPEAR at [Shroom3Pos] time 3
+			FungusFume = create special effect SPOT_VISUAL_OBJECT_APPEAR at [Shroom4Pos] time 3
+			MyCreature play ANM_A_COW_GOTO_EAT loop 1
+			say single line HELP_TEXT_KINGOFTHECASTLE_GAME_310 by Leopard
+			wait until read
+			wait until MyCreature played
+			wait until 2 seconds
+		end cinema with widescreen
+	elsif CurrentSquare == 10
+		begin cinema
+			set camera auto track MyCreature distance 35
+			MSquare = CurrentSquare
+			MPos = marker at [MyCreature]
+			WSquare = WitchCurrentSquare
+			WPos = marker at [WitchGhost]
+			Smoke1 = create special effect SPOT_VISUAL_SMOKE at [MyCreature] time 8
+			SCALE of Smoke1 = 10
+			Smoke2 = create special effect SPOT_VISUAL_SMOKE at [MyCreature] + [0, 10, 0] time 8
+			SCALE of Smoke2 = 10
+			Smoke5 = create special effect SPOT_VISUAL_SMOKE at [MyCreature] + [5, 3, 0] time 8
+			SCALE of Smoke5 = 10
+			Smoke6 = create special effect SPOT_VISUAL_SMOKE at [MyCreature] + [0, 3, 5] time 8
+			SCALE of Smoke6 = 10
+			Smoke7 = create special effect SPOT_VISUAL_SMOKE at [MyCreature] + [-5, 3, 0] time 8
+			SCALE of Smoke7 = 10
+			Smoke8 = create special effect SPOT_VISUAL_SMOKE at [MyCreature] + [0, 3, -5] time 8
+			SCALE of Smoke8 = 10
+			Smoke3 = create special effect SPOT_VISUAL_SMOKE at [WitchGhost] time 8
+			SCALE of Smoke3 = 10
+			Smoke4 = create special effect SPOT_VISUAL_SMOKE at [WitchGhost] + [0, 10, 0] time 8
+			SCALE of Smoke4 = 10
+			Smoke9 = create special effect SPOT_VISUAL_SMOKE at [WitchGhost] + [5, 3, 0] time 8
+			SCALE of Smoke9 = 10
+			Smoke10 = create special effect SPOT_VISUAL_SMOKE at [WitchGhost] + [0, 3, 5] time 8
+			SCALE of Smoke10 = 10
+			Smoke11 = create special effect SPOT_VISUAL_SMOKE at [WitchGhost] + [-5, 3, 0] time 8
+			SCALE of Smoke11 = 10
+			Smoke12 = create special effect SPOT_VISUAL_SMOKE at [WitchGhost] + [0, 3, -5] time 8
+			SCALE of Smoke12 = 10
+			say HELP_TEXT_KINGOFTHECASTLE_240 by Leopard
+			wait until 2 seconds
+			wait until read
+			set MyCreature position to [WPos]
+			CurrentSquare = WSquare
+			set WitchGhost position to [MPos]
+			WitchCurrentSquare = MSquare
+			wait until 2 seconds
+			if CurrentSquare < WitchCurrentSquare
+				eject evil spirit
+				say HELP_TEXT_KINGOFTHECASTLE_250
+				MyCreature play ANM_A_HORSE_EAT1 loop 1
+				wait until MyCreature played
+				wait until read
+				send evil spirit home
+			else
+				eject evil spirit
+				say HELP_TEXT_KINGOFTHECASTLE_260
+				MyCreature play ANM_A_COW_DEAD_ON_RHS loop 1
+				wait until MyCreature played
+				wait until read
+				send evil spirit home
+			end if
+		end cinema with widescreen
+	elsif CurrentSquare == 11
+		begin cinema
+			if get distance from [WitchGhost] to [BoardSq17] < 10
+				move WitchGhost position to [SideBoardSq17] radius 0
+			end if
+			InvisSpell = cast CREATURE_SPELL_INVISIBLE spell on MyCreature from [MyCreature] radius 0 time 6 curl 0
+			wait until 5 seconds
+			set MyCreature position to [BoardSq17]
+			CurrentSquare = 17
+			say single line HELP_TEXT_KINGOFTHECASTLE_GAME_250 by Leopard
+			wait until read
+			delete InvisSpell
+			wait until 0.5 seconds
+			set camera auto track MyCreature distance 35
+			MyCreature play ANM_A_COW_DEAD_ON_RHS loop 1
+			wait until 3 seconds
+		end cinema with widescreen
+	elsif CurrentSquare == 12
+		begin cinema
+			MyCreature play ANM_A_COW_EAT_1 loop 1
+			say single line HELP_TEXT_KINGOFTHECASTLE_GAME_240 by Leopard
+			wait until read
+			wait until MyCreature played
+		end cinema with widescreen
+	elsif CurrentSquare == 13
+		begin cinema
+			CreatureSpeed = 1
+			Speed = cast MAGIC_TYPE_CREATURE_SPELL_FAST spell on MyCreature from [MyCreature] radius 0 time 3 curl 0
+			MyCreature play ANM_A_COW_DEAD_ON_RHS loop 1
+			say single line HELP_TEXT_KINGOFTHECASTLE_GAME_230 by Leopard
+			wait until read
+			wait until MyCreature played
+			wait until 2 seconds
+		end cinema with widescreen
+	elsif CurrentSquare == 14
+		begin cinema
+			MyCreature play ANM_A_COW_EAT_1 loop 1
+			say single line HELP_TEXT_KINGOFTHECASTLE_GAME_240 by Leopard
+			wait until read
+			wait until MyCreature played
+		end cinema with widescreen
+	elsif CurrentSquare == 15
+		run script OgreFight(Leopard, OgrePos15, 0)
+		if LastFightWon == 1
+			MyCreature play ANM_A_COW_DEAD_ON_RHS loop 1
+			wait until MyCreature played
+			wait until 0.5 seconds
+			begin cinema
+				set camera auto track MyCreature distance 35
+				eject evil spirit
+				say single line HELP_TEXT_KINGOFTHECASTLE_GAME_270
+				move MyCreature position to [BoardSq16] radius 0
+				if get distance from [WitchGhost] to [BoardSq16] < 10
+					move WitchGhost position to [SideBoardSq16] radius 0
+				end if
+				wait until read
+				send evil spirit home
+				wait until get distance from [MyCreature] to [BoardSq16] < 10 or 20 seconds
+				CurrentSquare = 16
+				wait until 2 seconds
+			end cinema with widescreen
+		else
+			begin cinema
+				set camera auto track MyCreature distance 35
+				eject good spirit
+				say single line HELP_TEXT_KINGOFTHECASTLE_GAME_280
+				move MyCreature position to [BoardSq14] radius 0
+				wait until read
+				send good spirit home
+				wait until get distance from [MyCreature] to [BoardSq14] < 10 or 20 seconds
+				move MyCreature position to [BoardSq13] radius 0
+				wait until get distance from [MyCreature] to [BoardSq13] < 10 or 20 seconds
+				move MyCreature position to [BoardSq12] radius 0
+				if get distance from [WitchGhost] to [BoardSq12] < 10
+					move WitchGhost position to [SideBoardSq12] radius 0
+				end if
+				wait until get distance from [MyCreature] to [BoardSq12] < 10 or 20 seconds
+				CurrentSquare = 12
+				wait until 2 seconds
+			end cinema with widescreen
+		end if
+		LastFightWon = 0
+	elsif CurrentSquare == 16
+		begin cinema
+			MyCreature play ANM_A_COW_EAT_1 loop 1
+			say single line HELP_TEXT_KINGOFTHECASTLE_GAME_240 by Leopard
+			wait until read
+			wait until MyCreature played
+		end cinema with widescreen
+	elsif CurrentSquare == 17
+		begin cinema
+			if get distance from [WitchGhost] to [BoardSq11] < 10
+				move WitchGhost position to [SideBoardSq11] radius 0
+			end if
+			InvisSpell = cast CREATURE_SPELL_INVISIBLE spell on MyCreature from [MyCreature] radius 0 time 6 curl 0
+			wait until 5 seconds
+			set MyCreature position to [BoardSq11]
+			CurrentSquare = 11
+			say single line HELP_TEXT_KINGOFTHECASTLE_GAME_300 by Leopard
+			wait until read
+			delete InvisSpell
+			wait until 0.5 seconds
+			set camera auto track MyCreature distance 35
+			MyCreature play ANM_A_HORSE_EAT1 loop 1
+			wait until 3 seconds
+		end cinema with widescreen
+	elsif CurrentSquare == 18
+		begin cinema
+			set camera auto track MyCreature distance 35
+			MSquare = CurrentSquare
+			MPos = marker at [MyCreature]
+			WSquare = WitchCurrentSquare
+			WPos = marker at [WitchGhost]
+			Smoke1 = create special effect SPOT_VISUAL_SMOKE at [MyCreature] time 8
+			SCALE of Smoke1 = 10
+			Smoke2 = create special effect SPOT_VISUAL_SMOKE at [MyCreature] + [0, 10, 0] time 8
+			SCALE of Smoke2 = 10
+			Smoke5 = create special effect SPOT_VISUAL_SMOKE at [MyCreature] + [5, 3, 0] time 8
+			SCALE of Smoke5 = 10
+			Smoke6 = create special effect SPOT_VISUAL_SMOKE at [MyCreature] + [0, 3, 5] time 8
+			SCALE of Smoke6 = 10
+			Smoke7 = create special effect SPOT_VISUAL_SMOKE at [MyCreature] + [-5, 3, 0] time 8
+			SCALE of Smoke7 = 10
+			Smoke8 = create special effect SPOT_VISUAL_SMOKE at [MyCreature] + [0, 3, -5] time 8
+			SCALE of Smoke8 = 10
+			Smoke3 = create special effect SPOT_VISUAL_SMOKE at [WitchGhost] time 8
+			SCALE of Smoke3 = 10
+			Smoke4 = create special effect SPOT_VISUAL_SMOKE at [WitchGhost] + [0, 10, 0] time 8
+			SCALE of Smoke4 = 10
+			Smoke9 = create special effect SPOT_VISUAL_SMOKE at [WitchGhost] + [5, 3, 0] time 8
+			SCALE of Smoke9 = 10
+			Smoke10 = create special effect SPOT_VISUAL_SMOKE at [WitchGhost] + [0, 3, 5] time 8
+			SCALE of Smoke10 = 10
+			Smoke11 = create special effect SPOT_VISUAL_SMOKE at [WitchGhost] + [-5, 3, 0] time 8
+			SCALE of Smoke11 = 10
+			Smoke12 = create special effect SPOT_VISUAL_SMOKE at [WitchGhost] + [0, 3, -5] time 8
+			SCALE of Smoke12 = 10
+			say HELP_TEXT_KINGOFTHECASTLE_240 by Leopard
+			wait until 2 seconds
+			wait until read
+			set MyCreature position to [WPos]
+			CurrentSquare = WSquare
+			set WitchGhost position to [MPos]
+			WitchCurrentSquare = MSquare
+			wait until 2 seconds
+			if CurrentSquare < WitchCurrentSquare
+				eject evil spirit
+				say HELP_TEXT_KINGOFTHECASTLE_280
+				MyCreature play ANM_A_HORSE_EAT1 loop 1
+				wait until MyCreature played
+				wait until read
+				send evil spirit home
+			else
+				eject evil spirit
+				say HELP_TEXT_KINGOFTHECASTLE_270
+				MyCreature play ANM_A_COW_DEAD_ON_RHS loop 1
+				wait until MyCreature played
+				wait until read
+				send evil spirit home
+			end if
+		end cinema with widescreen
+	elsif CurrentSquare == 19
+		begin cinema
+			CreatureMissGo = 1
+			Freeze = cast CREATURE_SPELL_FREEZE spell on MyCreature from [MyCreature] radius 0 time 3 curl 0
+			MyCreature play ANM_A_COW_DROWNING loop 1
+			say single line HELP_TEXT_KINGOFTHECASTLE_GAME_320 by Leopard
+			wait until read
+			wait until 3 seconds
+		end cinema with widescreen
+	elsif CurrentSquare == 20
+		begin cinema
+			MyCreature play ANM_A_COW_EAT_1 loop 1
+			say single line HELP_TEXT_KINGOFTHECASTLE_GAME_240 by Leopard
+			wait until read
+			wait until MyCreature played
+		end cinema with widescreen
+	elsif CurrentSquare == 21
+		begin cinema
+			say single line HELP_TEXT_KINGOFTHECASTLE_GAME_290 by Leopard
+			MyCreature play ANM_A_HORSE_EAT1 loop 1
+			SwampGas = create special effect SPOT_VISUAL_STEAM at [BoardSq6] time 5
+			SCALE of SwampGas = 2
+			wait until MyCreature played
+			wait until read
+			CreatureSlowed = 1
+		end cinema with widescreen
+	elsif CurrentSquare == 22
+		begin cinema
+			MyCreature play ANM_A_COW_EAT_1 loop 1
+			say single line HELP_TEXT_KINGOFTHECASTLE_GAME_240 by Leopard
+			wait until read
+			wait until MyCreature played
+		end cinema with widescreen
+	elsif CurrentSquare == 23
+		run script OgreFight(Leopard, OgrePos23, 0.2)
+		if LastFightWon == 1
+			MyCreature play ANM_A_COW_DEAD_ON_RHS loop 1
+			wait until MyCreature played
+			wait until 0.5 seconds
+			begin cinema
+				set camera auto track MyCreature distance 35
+				eject evil spirit
+				say single line HELP_TEXT_KINGOFTHECASTLE_GAME_270
+				move MyCreature position to [BoardSq24] radius 0
+				if get distance from [WitchGhost] to [BoardSq24] < 10
+					move WitchGhost position to [SideBoardSq24] radius 0
+				end if
+				wait until read
+				send evil spirit home
+				wait until get distance from [MyCreature] to [BoardSq24] < 10 or 20 seconds
+				CurrentSquare = 24
+				wait until 2 seconds
+			end cinema with widescreen
+		else
+			begin cinema
+				set camera auto track MyCreature distance 35
+				eject good spirit
+				say single line HELP_TEXT_KINGOFTHECASTLE_GAME_280
+				move MyCreature position to [BoardSq22] radius 0
+				wait until read
+				send good spirit home
+				wait until get distance from [MyCreature] to [BoardSq22] < 10 or 20 seconds
+				move MyCreature position to [BoardSq21] radius 0
+				wait until get distance from [MyCreature] to [BoardSq21] < 10 or 20 seconds
+				move MyCreature position to [BoardSq20] radius 0
+				if get distance from [WitchGhost] to [BoardSq20] < 10
+					move WitchGhost position to [SideBoardSq20] radius 0
+				end if
+				wait until get distance from [MyCreature] to [BoardSq20] < 10 or 20 seconds
+				CurrentSquare = 20
+				wait until 2 seconds
+			end cinema with widescreen
+		end if
+		LastFightWon = 0
+	elsif CurrentSquare == 24
+		begin cinema
+			MyCreature play ANM_A_COW_EAT_1 loop 1
+			say single line HELP_TEXT_KINGOFTHECASTLE_GAME_240 by Leopard
+			wait until read
+			wait until MyCreature played
+		end cinema with widescreen
+	elsif CurrentSquare >= 25
+		KingOfCastle = 1
+		GameStart = 3
+	end if
+end script SquareEvents
+
+begin script WitchSquareEvents(Leopard)
+	Speed = 0
+	Freeze = 0
+	BoardSq1 = marker at [1108.64, 15.198, 2315.8]
+	BoardSq2 = marker at [1085.79, 22.6753, 2326.82]
+	BoardSq6 = marker at [1114.56, 41.137, 2433.99]
+	BoardSq7 = marker at [1148.39, 45.0418, 2452.3]
+	BoardSq11 = marker at [1268.94, 58.5727, 2490.48]
+	BoardSq17 = marker at [1330.51, 83.1323, 2611.32]
+	EnemyOgre = 0
+	OgrePos4 = marker at [1062.32, 51.5429, 2425.78]
+	OgrePos15 = marker at [1300.79, 83.0617, 2548.73]
+	OgrePos23 = marker at [1123.27, 125.85, 2655.95]
+	SideBoardSq1 = marker at [1127.22, 3.24793, 2328.81]
+	SideBoardSq2 = marker at [1070.19, 26.2085, 2315.75]
+	SideBoardSq7 = marker at [1162.96, 44.7905, 2436.18]
+	SideBoardSq11 = marker at [1274.35, 56.3088, 2466.99]
+	SideBoardSq17 = marker at [1326.88, 83.1507, 2596.63]
+	FungusFume = 0
+	Shroom1Pos = marker at [1203.43, 58.3162, 2480.22]
+	Shroom2Pos = marker at [1208.63, 59.664, 2484.73]
+	Shroom3Pos = marker at [1219.67, 59.8132, 2474.04]
+	Shroom4Pos = marker at [1211.94, 58.8632, 2475.58]
+	Bats = 0
+	Bats2 = 0
+	BatPos1 = marker at [1065.48, 29.8935, 2362.73]
+	BatPos2 = marker at [1076.93, 26.4467, 2355.17]
+	SwampGas = 0
+	InvisSpell = 0
+	MSquare = 0
+	MPos = 0
+	WSquare = 0
+	WPos = 0
+	Smoke1 = 0
+	Smoke2 = 0
+	Smoke3 = 0
+	Smoke4 = 0
+	Smoke5 = 0
+	Smoke6 = 0
+	Smoke7 = 0
+	Smoke8 = 0
+	Smoke9 = 0
+	Smoke10 = 0
+	Smoke11 = 0
+	Smoke12 = 0
+start
+	begin known cinema
+		if WitchCurrentSquare == 0
+			WitchSpeed = 1
+			Speed = cast MAGIC_TYPE_CREATURE_SPELL_FAST spell on WitchGhost from [WitchGhost] radius 0 time 3 curl 0
+			WitchGhost play ANM_A_COW_DEAD_ON_RHS loop 1
+			say single line HELP_TEXT_KINGOFTHECASTLE_GAME_330 by Leopard
+			wait until read
+			wait until WitchGhost played
+			wait until 2 seconds
+		elsif WitchCurrentSquare == 1
+			WitchGhost play ANM_A_COW_EAT_1 loop 1
+			say single line HELP_TEXT_KINGOFTHECASTLE_GAME_340 by Leopard
+			wait until read
+			wait until WitchGhost played
+		elsif WitchCurrentSquare == 2
+			if get distance from [MyCreature] to [BoardSq7] < 10
+				move MyCreature position to [SideBoardSq7] radius 0
+			end if
+			InvisSpell = cast CREATURE_SPELL_INVISIBLE spell on WitchGhost from [WitchGhost] radius 0 time 6 curl 0
+			wait until 5 seconds
+			set WitchGhost position to [BoardSq7]
+			say single line HELP_TEXT_KINGOFTHECASTLE_GAME_350 by Leopard
+			wait until read
+			delete InvisSpell
+			wait until 0.5 seconds
+			set camera auto track WitchGhost distance 35
+			WitchGhost play ANM_A_COW_DEAD_ON_RHS loop 1
+			wait until 3 seconds
+			WitchCurrentSquare = 7
+		elsif WitchCurrentSquare == 3
+			say single line HELP_TEXT_KINGOFTHECASTLE_GAME_360 by Leopard
+			Bats = flock at [BatPos1]
+			set Bats properties inner 15 outer 30 calm 0
+			populate Bats with 20 ANIMAL ANIMAL_INFO_BAT
+			Bats2 = flock at [BatPos2]
+			set Bats2 properties inner 15 outer 30 calm 0
+			populate Bats2 with 20 ANIMAL ANIMAL_INFO_BAT
+			move WitchGhost position to [BoardSq2] radius 0
+			wait until read
+			wait until get distance from [WitchGhost] to [BoardSq2] < 10 or 20 seconds
+			move WitchGhost position to [BoardSq1] radius 0
+			if get distance from [MyCreature] to [BoardSq1] < 10
+				move MyCreature position to [SideBoardSq1] radius 0
+			end if
+			wait until get distance from [WitchGhost] to [BoardSq1] < 10 or 20 seconds
+			WitchCurrentSquare = 1
+			wait until 2 seconds
+			run background script DeleteBats(Bats, Bats2)
+		elsif WitchCurrentSquare == 4
+			run script WitchEvadeFight(OgrePos4, -0.2)
+			say single line HELP_TEXT_KINGOFTHECASTLE_GAME_370 by Leopard
+			wait until read
+		elsif WitchCurrentSquare == 5
+			WitchGhost play ANM_A_COW_EAT_1 loop 1
+			say single line HELP_TEXT_KINGOFTHECASTLE_GAME_340 by Leopard
+			wait until read
+			wait until WitchGhost played
+		elsif WitchCurrentSquare == 6
+			say single line HELP_TEXT_KINGOFTHECASTLE_GAME_390 by Leopard
+			WitchGhost play ANM_A_HORSE_EAT1 loop 1
+			SwampGas = create special effect SPOT_VISUAL_STEAM at [BoardSq6] time 5
+			SCALE of SwampGas = 2
+			wait until WitchGhost played
+			wait until read
+			WitchSlowed = 1
+		elsif WitchCurrentSquare == 7
+			if get distance from [MyCreature] to [BoardSq2] < 10
+				move MyCreature position to [SideBoardSq2] radius 0
+			end if
+			InvisSpell = cast CREATURE_SPELL_INVISIBLE spell on WitchGhost from [WitchGhost] radius 0 time 6 curl 0
+			wait until 5 seconds
+			set WitchGhost position to [BoardSq2]
+			WitchCurrentSquare = 2
+			say single line HELP_TEXT_KINGOFTHECASTLE_GAME_400 by Leopard
+			wait until read
+			delete InvisSpell
+			wait until 0.5 seconds
+			set camera auto track WitchGhost distance 35
+			WitchGhost play ANM_A_HORSE_EAT1 loop 1
+			wait until 3 seconds
+		elsif WitchCurrentSquare == 8
+			WitchGhost play ANM_A_COW_EAT_1 loop 1
+			say single line HELP_TEXT_KINGOFTHECASTLE_GAME_340 by Leopard
+			wait until read
+			wait until WitchGhost played
+		elsif WitchCurrentSquare == 9
+			WitchMissGo = 1
+			FungusFume = create special effect SPOT_VISUAL_OBJECT_APPEAR at [Shroom1Pos] time 3
+			FungusFume = create special effect SPOT_VISUAL_OBJECT_APPEAR at [Shroom2Pos] time 3
+			FungusFume = create special effect SPOT_VISUAL_OBJECT_APPEAR at [Shroom3Pos] time 3
+			FungusFume = create special effect SPOT_VISUAL_OBJECT_APPEAR at [Shroom4Pos] time 3
+			WitchGhost play ANM_A_COW_GOTO_EAT loop 1
+			say single line HELP_TEXT_KINGOFTHECASTLE_GAME_410 by Leopard
+			wait until read
+			wait until WitchGhost played
+			wait until 2 seconds
+		elsif WitchCurrentSquare == 10
+			MSquare = CurrentSquare
+			MPos = marker at [MyCreature]
+			WSquare = WitchCurrentSquare
+			WPos = marker at [WitchGhost]
+			Smoke1 = create special effect SPOT_VISUAL_SMOKE at [MyCreature] time 8
+			SCALE of Smoke1 = 10
+			Smoke2 = create special effect SPOT_VISUAL_SMOKE at [MyCreature] + [0, 10, 0] time 8
+			SCALE of Smoke2 = 10
+			Smoke5 = create special effect SPOT_VISUAL_SMOKE at [MyCreature] + [5, 3, 0] time 8
+			SCALE of Smoke5 = 10
+			Smoke6 = create special effect SPOT_VISUAL_SMOKE at [MyCreature] + [0, 3, 5] time 8
+			SCALE of Smoke6 = 10
+			Smoke7 = create special effect SPOT_VISUAL_SMOKE at [MyCreature] + [-5, 3, 0] time 8
+			SCALE of Smoke7 = 10
+			Smoke8 = create special effect SPOT_VISUAL_SMOKE at [MyCreature] + [0, 3, -5] time 8
+			SCALE of Smoke8 = 10
+			Smoke3 = create special effect SPOT_VISUAL_SMOKE at [WitchGhost] time 8
+			SCALE of Smoke3 = 10
+			Smoke4 = create special effect SPOT_VISUAL_SMOKE at [WitchGhost] + [0, 10, 0] time 8
+			SCALE of Smoke4 = 10
+			Smoke9 = create special effect SPOT_VISUAL_SMOKE at [WitchGhost] + [5, 3, 0] time 8
+			SCALE of Smoke9 = 10
+			Smoke10 = create special effect SPOT_VISUAL_SMOKE at [WitchGhost] + [0, 3, 5] time 8
+			SCALE of Smoke10 = 10
+			Smoke11 = create special effect SPOT_VISUAL_SMOKE at [WitchGhost] + [-5, 3, 0] time 8
+			SCALE of Smoke11 = 10
+			Smoke12 = create special effect SPOT_VISUAL_SMOKE at [WitchGhost] + [0, 3, -5] time 8
+			SCALE of Smoke12 = 10
+			say HELP_TEXT_KINGOFTHECASTLE_240 by Leopard
+			wait until 2 seconds
+			wait until read
+			set MyCreature position to [WPos]
+			CurrentSquare = WSquare
+			set WitchGhost position to [MPos]
+			WitchCurrentSquare = MSquare
+			wait until 2 seconds
+			if WitchCurrentSquare < CurrentSquare
+				eject evil spirit
+				say HELP_TEXT_KINGOFTHECASTLE_260
+				WitchGhost play ANM_A_HORSE_EAT1 loop 1
+				wait until WitchGhost played
+				wait until read
+				send evil spirit home
+			else
+				eject evil spirit
+				say HELP_TEXT_KINGOFTHECASTLE_250
+				WitchGhost play ANM_A_COW_DEAD_ON_RHS loop 1
+				wait until WitchGhost played
+				wait until read
+				send evil spirit home
+			end if
+		elsif WitchCurrentSquare == 11
+			if get distance from [MyCreature] to [BoardSq17] < 10
+				move MyCreature position to [SideBoardSq17] radius 0
+			end if
+			InvisSpell = cast CREATURE_SPELL_INVISIBLE spell on WitchGhost from [WitchGhost] radius 0 time 6 curl 0
+			wait until 5 seconds
+			set WitchGhost position to [BoardSq17]
+			WitchCurrentSquare = 17
+			say single line HELP_TEXT_KINGOFTHECASTLE_GAME_350 by Leopard
+			wait until read
+			delete InvisSpell
+			wait until 0.5 seconds
+			set camera auto track WitchGhost distance 35
+			WitchGhost play ANM_A_COW_DEAD_ON_RHS loop 1
+			wait until 3 seconds
+		elsif WitchCurrentSquare == 12
+			WitchGhost play ANM_A_COW_EAT_1 loop 1
+			say single line HELP_TEXT_KINGOFTHECASTLE_GAME_340 by Leopard
+			wait until read
+			wait until WitchGhost played
+		elsif WitchCurrentSquare == 13
+			WitchSpeed = 1
+			Speed = cast MAGIC_TYPE_CREATURE_SPELL_FAST spell on WitchGhost from [WitchGhost] radius 0 time 3 curl 0
+			WitchGhost play ANM_A_COW_DEAD_ON_RHS loop 1
+			say single line HELP_TEXT_KINGOFTHECASTLE_GAME_330 by Leopard
+			wait until read
+			wait until WitchGhost played
+			wait until 2 seconds
+		elsif WitchCurrentSquare == 14
+			WitchGhost play ANM_A_COW_EAT_1 loop 1
+			say single line HELP_TEXT_KINGOFTHECASTLE_GAME_340 by Leopard
+			wait until read
+			wait until WitchGhost played
+		elsif WitchCurrentSquare == 15
+			run script WitchEvadeFight(OgrePos15, 0)
+			say single line HELP_TEXT_KINGOFTHECASTLE_GAME_370 by Leopard
+			wait until read
+		elsif WitchCurrentSquare == 16
+			WitchGhost play ANM_A_COW_EAT_1 loop 1
+			say single line HELP_TEXT_KINGOFTHECASTLE_GAME_340 by Leopard
+			wait until read
+			wait until WitchGhost played
+		elsif WitchCurrentSquare == 17
+			if get distance from [MyCreature] to [BoardSq11] < 10
+				move MyCreature position to [SideBoardSq11] radius 0
+			end if
+			InvisSpell = cast CREATURE_SPELL_INVISIBLE spell on WitchGhost from [WitchGhost] radius 0 time 6 curl 0
+			wait until 5 seconds
+			set WitchGhost position to [BoardSq11]
+			WitchCurrentSquare = 11
+			say single line HELP_TEXT_KINGOFTHECASTLE_GAME_400 by Leopard
+			wait until read
+			delete InvisSpell
+			wait until 0.5 seconds
+			set camera auto track WitchGhost distance 35
+			WitchGhost play ANM_A_HORSE_EAT1 loop 1
+			wait until 3 seconds
+		elsif WitchCurrentSquare == 18
+			MSquare = CurrentSquare
+			MPos = marker at [MyCreature]
+			WSquare = WitchCurrentSquare
+			WPos = marker at [WitchGhost]
+			Smoke1 = create special effect SPOT_VISUAL_SMOKE at [MyCreature] time 8
+			SCALE of Smoke1 = 10
+			Smoke2 = create special effect SPOT_VISUAL_SMOKE at [MyCreature] + [0, 10, 0] time 8
+			SCALE of Smoke2 = 10
+			Smoke5 = create special effect SPOT_VISUAL_SMOKE at [MyCreature] + [5, 3, 0] time 8
+			SCALE of Smoke5 = 10
+			Smoke6 = create special effect SPOT_VISUAL_SMOKE at [MyCreature] + [0, 3, 5] time 8
+			SCALE of Smoke6 = 10
+			Smoke7 = create special effect SPOT_VISUAL_SMOKE at [MyCreature] + [-5, 3, 0] time 8
+			SCALE of Smoke7 = 10
+			Smoke8 = create special effect SPOT_VISUAL_SMOKE at [MyCreature] + [0, 3, -5] time 8
+			SCALE of Smoke8 = 10
+			Smoke3 = create special effect SPOT_VISUAL_SMOKE at [WitchGhost] time 8
+			SCALE of Smoke3 = 10
+			Smoke4 = create special effect SPOT_VISUAL_SMOKE at [WitchGhost] + [0, 10, 0] time 8
+			SCALE of Smoke4 = 10
+			Smoke9 = create special effect SPOT_VISUAL_SMOKE at [WitchGhost] + [5, 3, 0] time 8
+			SCALE of Smoke9 = 10
+			Smoke10 = create special effect SPOT_VISUAL_SMOKE at [WitchGhost] + [0, 3, 5] time 8
+			SCALE of Smoke10 = 10
+			Smoke11 = create special effect SPOT_VISUAL_SMOKE at [WitchGhost] + [-5, 3, 0] time 8
+			SCALE of Smoke11 = 10
+			Smoke12 = create special effect SPOT_VISUAL_SMOKE at [WitchGhost] + [0, 3, -5] time 8
+			SCALE of Smoke12 = 10
+			say HELP_TEXT_KINGOFTHECASTLE_240 by Leopard
+			wait until 2 seconds
+			wait until read
+			set MyCreature position to [WPos]
+			CurrentSquare = WSquare
+			set WitchGhost position to [MPos]
+			WitchCurrentSquare = MSquare
+			wait until 2 seconds
+			if WitchCurrentSquare < CurrentSquare
+				eject evil spirit
+				say HELP_TEXT_KINGOFTHECASTLE_270
+				WitchGhost play ANM_A_HORSE_EAT1 loop 1
+				wait until WitchGhost played
+				wait until read
+				send evil spirit home
+			else
+				eject evil spirit
+				say HELP_TEXT_KINGOFTHECASTLE_280
+				WitchGhost play ANM_A_COW_DEAD_ON_RHS loop 1
+				wait until WitchGhost played
+				wait until read
+				send evil spirit home
+			end if
+		elsif WitchCurrentSquare == 19
+			WitchMissGo = 1
+			Freeze = cast CREATURE_SPELL_FREEZE spell on WitchGhost from [WitchGhost] radius 0 time 3 curl 0
+			WitchGhost play ANM_A_COW_DROWNING loop 1
+			say single line HELP_TEXT_KINGOFTHECASTLE_GAME_420 by Leopard
+			wait until read
+			wait until 3 seconds
+		elsif WitchCurrentSquare == 20
+			WitchGhost play ANM_A_COW_EAT_1 loop 1
+			say single line HELP_TEXT_KINGOFTHECASTLE_GAME_340 by Leopard
+			wait until read
+			wait until WitchGhost played
+		elsif WitchCurrentSquare == 21
+			say single line HELP_TEXT_KINGOFTHECASTLE_GAME_390 by Leopard
+			WitchGhost play ANM_A_HORSE_EAT1 loop 1
+			SwampGas = create special effect SPOT_VISUAL_STEAM at [BoardSq6] time 5
+			SCALE of SwampGas = 2
+			wait until WitchGhost played
+			wait until read
+			WitchSlowed = 1
+		elsif WitchCurrentSquare == 22
+			WitchGhost play ANM_A_COW_EAT_1 loop 1
+			say single line HELP_TEXT_KINGOFTHECASTLE_GAME_340 by Leopard
+			wait until read
+			wait until WitchGhost played
+		elsif WitchCurrentSquare == 23
+			run script WitchEvadeFight(OgrePos23, 0.2)
+			say single line HELP_TEXT_KINGOFTHECASTLE_GAME_370 by Leopard
+			wait until read
+		elsif WitchCurrentSquare == 24
+			WitchGhost play ANM_A_COW_EAT_1 loop 1
+			say single line HELP_TEXT_KINGOFTHECASTLE_GAME_340 by Leopard
+			wait until read
+			wait until WitchGhost played
+		elsif WitchCurrentSquare >= 25
+			KingOfCastle = 0
+			GameStart = 3
+		end if
+	end known cinema
+end script WitchSquareEvents
+
+begin script MoveCreature(Leopard, PlayerPiece)
+	BoardSquares[26]
+	SideBoardSquares[26]
+start
+	BoardSquares[0] = marker at [1133.98, 8.58699, 2302.95]
+	BoardSquares[1] = marker at [1108.64, 15.198, 2315.8]
+	BoardSquares[2] = marker at [1085.79, 22.6753, 2326.82]
+	BoardSquares[3] = marker at [1068.54, 27.3967, 2353]
+	BoardSquares[4] = marker at [1065.67, 35.1959, 2381.35]
+	BoardSquares[5] = marker at [1091.79, 38.7893, 2407.21]
+	BoardSquares[6] = marker at [1114.56, 41.137, 2433.99]
+	BoardSquares[7] = marker at [1148.39, 45.0418, 2452.3]
+	BoardSquares[8] = marker at [1177.48, 51.3152, 2464.25]
+	BoardSquares[9] = marker at [1211.32, 57.5912, 2474.58]
+	BoardSquares[10] = marker at [1241.15, 61.0904, 2482.97]
+	BoardSquares[11] = marker at [1268.94, 58.5727, 2490.48]
+	BoardSquares[12] = marker at [1297.29, 60.4963, 2493.73]
+	BoardSquares[13] = marker at [1328.09, 66.8377, 2501.44]
+	BoardSquares[14] = marker at [1346.79, 71.8811, 2520.89]
+	BoardSquares[15] = marker at [1354.9, 77.72, 2549.78]
+	BoardSquares[16] = marker at [1345.43, 80.332, 2579.5]
+	BoardSquares[17] = marker at [1330.51, 83.1323, 2611.32]
+	BoardSquares[18] = marker at [1302.47, 86.6054, 2632.49]
+	BoardSquares[19] = marker at [1276.8, 90.6646, 2639.72]
+	BoardSquares[20] = marker at [1248.22, 94.0146, 2642.9]
+	BoardSquares[21] = marker at [1217.76, 106.394, 2652.46]
+	BoardSquares[22] = marker at [1187.75, 116.748, 2662.22]
+	BoardSquares[23] = marker at [1162.56, 125.85, 2659.12]
+	BoardSquares[24] = marker at [1145.16, 124.704, 2636.13]
+	BoardSquares[25] = marker at [1178.16, 134.466, 2604.13]
+	SideBoardSquares[0] = marker at [1147.9, 2.95742, 2325.89]
+	SideBoardSquares[1] = marker at [1127.22, 3.24793, 2328.81]
+	SideBoardSquares[2] = marker at [1070.19, 26.2085, 2315.75]
+	SideBoardSquares[3] = marker at [1091.74, 27.2554, 2354.95]
+	SideBoardSquares[4] = marker at [1084.34, 33.6466, 2375.56]
+	SideBoardSquares[5] = marker at [1109.28, 34.4239, 2395.79]
+	SideBoardSquares[6] = marker at [1130.51, 36.0596, 2415.78]
+	SideBoardSquares[7] = marker at [1162.96, 44.7905, 2436.18]
+	SideBoardSquares[8] = marker at [1192.08, 48.0228, 2441.19]
+	SideBoardSquares[9] = marker at [1212.82, 51.2236, 2456.97]
+	SideBoardSquares[10] = marker at [1231.32, 63.4773, 2501.43]
+	SideBoardSquares[11] = marker at [1274.35, 56.3088, 2466.99]
+	SideBoardSquares[12] = marker at [1306.1, 58.5543, 2467.88]
+	SideBoardSquares[13] = marker at [1340.37, 62.3493, 2482.93]
+	SideBoardSquares[14] = marker at [1360.85, 73.6267, 2515.57]
+	SideBoardSquares[15] = marker at [1373.91, 77.4164, 2551.67]
+	SideBoardSquares[16] = marker at [1366.81, 81.4521, 2582.66]
+	SideBoardSquares[17] = marker at [1326.88, 83.1507, 2596.63]
+	SideBoardSquares[18] = marker at [1293.59, 88.775, 2622.8]
+	SideBoardSquares[19] = marker at [1273.85, 86.8959, 2655.53]
+	SideBoardSquares[20] = marker at [1259.3, 88.3301, 2656.34]
+	SideBoardSquares[21] = marker at [1206.62, 109.139, 2674.05]
+	SideBoardSquares[22] = marker at [1196.42, 115.104, 2645.65]
+	SideBoardSquares[23] = marker at [1174.58, 125.073, 2645.23]
+	SideBoardSquares[24] = marker at [1159.59, 128.281, 2631.24]
+	SideBoardSquares[25] = marker at [1175.35, 133.89, 2616.26]
+	if PlayerPiece == 0
+		begin cinema
+			set fade red 0 green 0 blue 0 time 2
+			wait until 2 seconds
+			set camera auto track MyCreature distance 35
+			set fade in time 2
+			wait until 2 seconds
+			while DiceNumber > 0
+				CurrentSquare++
+				if CurrentSquare < 26
+					move MyCreature position to [BoardSquares[CurrentSquare]] radius 0
+					if get distance from [WitchGhost] to [BoardSquares[CurrentSquare]] < 10
+						move WitchGhost position to [SideBoardSquares[CurrentSquare]] radius 0
+					end if
+					wait until get distance from [MyCreature] to [BoardSquares[CurrentSquare]] < 10 or 10 seconds
+					DiceNumber--
+				else
+					DiceNumber = 0
+					CurrentSquare = 25
+				end if
+			end while
+			wait until 1 seconds
+		end cinema with widescreen
+	else
+		begin cinema
+			set fade red 0 green 0 blue 0 time 2
+			wait until 2 seconds
+			set camera auto track WitchGhost distance 35
+			set fade in time 2
+			wait until 2 seconds
+			while DiceNumber > 0
+				WitchCurrentSquare++
+				if WitchCurrentSquare < 26
+					move WitchGhost position to [BoardSquares[WitchCurrentSquare]] radius 0
+					if get distance from [MyCreature] to [BoardSquares[CurrentSquare]] < 10
+						move MyCreature position to [SideBoardSquares[CurrentSquare]] radius 0
+					end if
+					wait until get distance from [WitchGhost] to [BoardSquares[WitchCurrentSquare]] < 10 or 10 seconds
+					DiceNumber--
+				else
+					DiceNumber = 0
+					WitchCurrentSquare = 25
+				end if
+			end while
+			wait until 1 seconds
+			run script WitchSquareEvents(Leopard)
+		end cinema
+	end if
+end script MoveCreature
+
+begin script LocalTrialNotify(Highlight)
+start
+	LocalTrialFlag = 1
+	run script TrialNotifyWithScriptLockedCreature(Highlight)
+	LocalTrialFlag = 2
+end script LocalTrialNotify
+
+begin script KingOfTheCastle
+	BeginPos = 0
+	BeginFoc = 0
+	LeopardPos = marker at [1117.04, 3.52797, 2258.61]
+	Leopard = 0
+	Highlight = 0
+	DicePos = marker at [1153.37, 4.88152, 2360.35]
+	GhostHeight = 0
+	OriginalDiceNumber = 0
+	WitchOriginalDiceNumber = 0
+	AnimNum = 0
+	RewardPos = marker at [1223.98, 153.283, 2597.81]
+	ViewMountainPos = marker at [1375, 205.272, 2214.72]
+	ViewMountainFoc = marker at [1202.45, 59.1242, 2489.43]
+	CancelSeed = 0
+	FirstSquare = marker at [1159.63, 6.14254, 2280.92]
+	BoardSquares[25]
+	RestartPos = marker at [FirstSquare]
+	StrengthBodgeSpell = 0
+	ViewHealPos = marker at [1092.7, 9.23239, 2190.72]
+	ViewHealFoc = marker at [1122.87, 11.966, 2306.38]
+	ViewHeal2Pos = marker at [1136.41, 21.45, 2172.59]
+	ViewHeal2Foc = marker at [1135.24, 5.91132, 2259.37]
+	MyCreatureHealPos = marker at [1138.69, 6.02738, 2261.3]
+	RunBackDownHillPos = marker at [1082.71, 91.8842, 2514.34]
+	RewardDispenserInfluence = 0
+	SpellDispenser = 0
+	TownPos = marker at [1233.08, 3.35, 2008.27]
+	TownForDispenser = 0
+	BrotherhoodLogo = 0
+	LeopardHeight = 0
+	Lantern1 = create OBJECT MOBILE_STATIC_INFO_STREET_LANTERN at [1124.31, 6.43043, 2276]
+	Lantern2 = create OBJECT MOBILE_STATIC_INFO_STREET_LANTERN at [1144.45, 4.58531, 2320.82]
+	Lantern3 = create OBJECT MOBILE_STATIC_INFO_STREET_LANTERN at [1228.75, 153.43, 2603.33]
+	KingOfTheCastleDYKPos = marker at [1123.073, 3.408, 2241.724]
+	TempOgaw = 0
+	TempOgawPos = marker at [1195.113, 139.666, 2584.605]
+	MiracleDispenserDYKPos = marker at [1229.265, 153.213, 2614.023]
+	MyFocHeight = 0
+start
+	DojoReminderKingOfTheCastle = 1
+	Bodger = 0
+	Bodger2 = 0
+	Leopard = create DUMB_CREATURE CREATURE_TYPE_LEOPARD at [LeopardPos]
+	set Leopard name HELP_TEXT_NAME_LEOPARD_01
+	run script SetupCreatureIsleCreature(Leopard)
+	SCALE of Leopard = 1.2
+	ALIGNMENT of Leopard = -0.6
+	STRENGTH of Leopard = 1
+	FATNESS of Leopard = 0.25
+	Highlight = create highlight CHALLENGE_KING_OF_THE_CASTLE HIGHLIGHT_TRIAL at [LeopardPos] + ([12, 12])
+	ALTITUDE of Highlight = 15
+	run background script LocalTrialNotify(Highlight)
+	SpellDispenser = create with angle 0 and scale 1 SCRIPT_OBJECT_TYPE_SPELL_DISPENSER ABODE_INFO_NORSE_SPELL_DISPENSER at [RewardPos]
+	run background script DidYouKnow(MiracleDispenserDYKPos, variable HELP_TEXT_DYK_90, variable DYK_MISC)
+	enable SpellDispenser indestructible
+	set SpellDispenser magic properties MAGIC_TYPE_CREATURE_SPELL_ANTI_SPELL time 0
+	disable SpellDispenser active
+	CancelSeed = get ONE_SHOT at [RewardPos] radius 50
+	while CancelSeed exists
+		delete CancelSeed
+		CancelSeed = get ONE_SHOT at [RewardPos] radius 50
+	end while
+	while LocalTrialFlag < 2
+		if Leopard played
+			if AnimNum == 0
+				if get distance from (camera position) to [Leopard] < 100
+					force Leopard POINT_AT Highlight
+				else
+					force Leopard CREATURE_SCRATCH Leopard
+				end if
+				AnimNum = 1
+			else
+				set Leopard focus to (camera position)
+				wait until 1 seconds
+				force Leopard CREATURE_WAVE_AT_PLAYER Leopard
+				AnimNum = 0
+			end if
+		end if
+	end while
+	LeopardHeight = (HEIGHT of Leopard) * 0.7
+	begin cinema
+		disable creature sound
+		if get distance from [MyCreature] to [Leopard] < 75
+			move MyCreature position to [FirstSquare] radius 0
+		end if
+		BeginPos = marker at (camera position)
+		BeginFoc = marker at (camera focus)
+		move camera position to [Leopard] + [15, 6, 15] time 3
+		move camera focus to [Leopard] + [0, LeopardHeight, 0] time 3
+		
+		FemaleCreatureOverride = 2
+		TempOgaw = create dumb creature from creature MyCreature 0.9 at [TempOgawPos] CREATURE_TYPE_OGRE
+		wait 0.1 seconds
+		FemaleCreatureOverride = 0
+		ACTUAL_HEIGHT of TempOgaw = 1.5
+		ALIGNMENT of TempOgaw = -1
+		set TempOgaw focus to [ViewMountainPos]
+		TempOgaw play ANM_A_COW_WALK loop -1
+		wait until Leopard played
+		set Leopard focus to [Leopard] + [15, 6, 15]
+		wait until camera ready
+		wait until Leopard played
+		Dice = create SCRIPT_OBJECT_TYPE_DIE at [DicePos]
+		DiceInfluence = create influence on Dice radius 5
+		enable Dice indestructible
+		disable Dice pickup
+		wait until 0.1 seconds
+		snapshot CHALLENGE_KING_OF_THE_CASTLE quest success 0 alignment 0 HELP_TEXT_CREATURE_ISLE_TITLE_13 StandardReminder (variable HELP_TEXT_CI_REMINDER_10)
+		say HELP_TEXT_KINGOFTHECASTLE_10 by Leopard
+		Leopard play ANM_A_HORSE_DEADRHS loop 1
+		move camera position to [Leopard] + [15, 12, 15] time 30
+		wait until read
+		wait until Leopard played
+		say HELP_TEXT_KINGOFTHECASTLE_20 by Leopard
+		Leopard play ANM_A_HORSE_EAT1 loop 1
+		wait until read
+		wait until Leopard played
+		say HELP_TEXT_KINGOFTHECASTLE_25 with interaction by Leopard
+		Leopard play ANM_A_COW_LANDED_LEFT_SIDE loop 1
+		wait until Leopard played
+		wait until read
+		say HELP_TEXT_KINGOFTHECASTLE_27 by Leopard
+		wait until 2 seconds
+		force Leopard CREATURE_POINT_AT_CAMERA Leopard
+		wait until read
+		wait until Leopard played
+		eject evil spirit
+		say HELP_TEXT_KINGOFTHECASTLE_30
+		disable sound effects
+		wait until read
+		say HELP_TEXT_KINGOFTHECASTLE_40 by Leopard
+		Leopard play ANM_A_COW_DOWNED_ON_RHS loop 1
+		wait until read
+		say HELP_TEXT_KINGOFTHECASTLE_50 with interaction
+		wait until Leopard played
+		wait until read
+		clear dialogue
+		send evil spirit home
+		set camera position to [1229.79, 157.877, 2608.23]
+		set camera focus to [1224.88, 155.624, 2600.18]
+		move camera position to [1232.75, 157.026, 2597.53] time 15
+		move camera focus to [1223.47, 154.248, 2597.81] time 15
+		say HELP_TEXT_KINGOFTHECASTLE_60 by Leopard
+		wait until read
+		say HELP_TEXT_KINGOFTHECASTLE_70 by Leopard
+		wait until read
+		say HELP_TEXT_KINGOFTHECASTLE_80 by Leopard
+		move camera position to [ViewMountainPos] time 12
+		wait until 3 seconds
+		move camera focus to [ViewMountainFoc] time 9
+		wait until read
+		wait until camera ready
+		set camera position to [Leopard] + [15, 6, 15]
+		set camera focus to [Leopard] + [0, LeopardHeight, 0]
+		say HELP_TEXT_KINGOFTHECASTLE_90 with interaction by Leopard
+		force Leopard POINT_AT Highlight
+		wait until 1 seconds
+		move camera position to [1189.213, 34.404, 2232.702] time 4
+		move camera focus to [1123.403, 10.682, 2296.231] time 4
+		wait until read
+		run background script DidYouKnow(KingOfTheCastleDYKPos, variable HELP_TEXT_BOARD_GAME_DYK, variable DYK_MISC)
+		wait until 1 seconds
+		release MyCreature
+		wait until camera ready
+		delete TempOgaw
+		enable sound effects
+	end cinema
+	disable Highlight active
+	begin loop
+		clear clicked object
+		CurrentSquare = -1
+		WitchCurrentSquare = -1
+		CreatureSpeed = 0
+		WitchSpeed = 0
+		CreatureMissGo = 0
+		WitchMissGo = 0
+		CreatureSlowed = 0
+		WitchSlowed = 0
+		while GameStart <= 1
+			wait until 2 seconds
+			if Highlight clicked and ScriptLockedCreature == 0
+				clear clicked object
+				begin camera
+					set camera position to [1180.31, 25.8783, 2307.23]
+					set camera focus to [1148.43, 3.00739, 2365.17]
+				end camera
+				set MyCreature position to [RestartPos]
+				if Tyke exists and TykeIsReady == 1 and TykeFree == 1
+					set Tyke position to [RestartPos] + [3, 0, 3]
+				end if
+				enable Highlight active
+				GameStart = 2
+			end if
+		end while
+		run background script MaintainCreature
+		force MyCreature CREATURE_IDLE MyCreature
+		begin dialogue
+			say single line HELP_TEXT_KINGOFTHECASTLE_130 by Leopard
+			wait until read
+		end dialogue
+		ScriptLockedCreature = 1
+		FemaleCreatureOverride = 2
+		WitchGhost = create DUMB_CREATURE CREATURE_TYPE_OGRE at [FirstSquare] + ([10, 10])
+		wait 0.1 seconds
+		FemaleCreatureOverride = 0
+		set WitchGhost name HELP_TEXT_NAME_OGRE_03
+		disable WitchGhost hurt by fire
+		disable WitchGhost set on fire
+		ZANGLE of WitchGhost = 0.45
+		ACTUAL_HEIGHT of WitchGhost = ACTUAL_HEIGHT of MyCreature
+		ALIGNMENT of WitchGhost = -1
+		teach WitchGhost MAGICAL CREATURE_SPELL_INVISIBLE TRUE percentage 1
+		begin loop
+			if CreatureMissGo == 0
+				run script RollDice(Leopard, DicePos)
+				if QuitGame == 0
+					OriginalDiceNumber = DiceNumber
+					disable MyCreature navigation
+					run script MoveCreature(Leopard, 0)
+					run script SquareEvents(Leopard)
+					enable MyCreature navigation
+				else
+					KingOfCastle = 2
+					GameStart = 3
+				end if
+			else
+				begin dialogue
+					say single line HELP_TEXT_KINGOFTHECASTLE_140 by Leopard
+					wait until read
+				end dialogue
+				CreatureMissGo = 0
+			end if
+			if GameStart < 3 and QuitGame == 0
+				if WitchMissGo == 0
+					run script WitchRollDice(Leopard, DicePos)
+					WitchOriginalDiceNumber = DiceNumber
+					disable WitchGhost navigation
+					run script MoveCreature(Leopard, 1)
+					enable WitchGhost navigation
+				else
+					begin dialogue
+						say single line HELP_TEXT_KINGOFTHECASTLE_150 by Leopard
+						wait until read
+					end dialogue
+					WitchMissGo = 0
+				end if
+			end if
+			until GameStart >= 3
+		end loop
+		ScriptLockedCreature = 0
+		if KingOfCastle == 1
+			begin cinema
+				run background script DeleteDYK(KingOfTheCastleDYKPos)
+				disable MyCreature navigation
+				move camera position to [1190.395, 160.662, 2653.899] time 4
+				move camera focus to [1038.891, 2.214, 2146.69] time 4
+				eject evil spirit
+				say single line HELP_TEXT_KINGOFTHECASTLE_160
+				MyCreature play ANM_A_COW_DEAD_ON_RHS loop 1
+				enable SpellDispenser active
+				set SpellDispenser time to 1 seconds
+				wait until 1.5 seconds
+				wait until read
+				send evil spirit home
+				close dialogue
+				CancelSeed = 0
+				while not CancelSeed exists
+					CancelSeed = get ONE_SHOT at [RewardPos] radius 50
+				end while
+				set CancelSeed position to [1224.29, 153.43, 2603.32]
+				set SpellDispenser time to 300 seconds
+				RewardDispenserInfluence = create influence at [RewardPos] radius 10
+				wait until MyCreature played
+				move MyCreature position to [1219.859, 153.409, 2604.803] radius 0
+				move camera position to [1239.265, 171.356, 2637.879] time 4
+				move camera focus to [927.72, 1.721, 2069.624] time 4
+				wait until camera ready
+				wait until get distance from [MyCreature] to [1217.445, 152.284, 2598.367] < 5 or 3 seconds
+				wait until 0.5 seconds
+				MyCreature play ANM_A_COW_DEAD_ON_RHS loop 1
+				wait until 1 seconds
+				set camera position to [1231.127, 162.013, 2612.974]
+				set camera focus to [1222.595, 153.926, 2601.686]
+				wait until MyCreature played
+				force MyCreature CREATURE_EXAMINE_BY_PICKING_UP CancelSeed
+				wait until CancelSeed in MyCreature hand
+				wait until 2 seconds
+				set camera position to [1232.852, 171.262, 2640.241]
+				set camera focus to [921.785, 1.886, 2072.857]
+				set camera focus follow MyCreature
+				move MyCreature position to [RunBackDownHillPos] radius 0
+				eject good spirit
+				say single line HELP_TEXT_KINGOFTHECASTLE_170
+				wait until read
+				send good spirit home
+				close dialogue
+				set fade red 0 green 0 blue 0 time 2
+				wait until 2 seconds
+				set camera position to [1103.579, 19.36, 2221.81]
+				set camera focus follow MyCreature
+				disable creature sound
+				delete CancelSeed
+				teach MyCreature MAGICAL MAGIC_TYPE_CREATURE_SPELL_ANTI_SPELL TRUE percentage 1
+				set MyCreature position to [MyCreatureHealPos]
+				wait until 0.2 seconds
+				set MyCreature focus to [Leopard]
+				set Leopard focus to [MyCreature]
+				set fade in time 2
+				wait until 2 seconds
+				Leopard play ANM_A_COW_THROWN loop 1
+				say single line HELP_TEXT_KINGOFTHECASTLE_180 by Leopard
+				wait until read
+				close dialogue
+				move camera position to [1124.88, 11.453, 2231.827] time 4
+				move MyCreature position to [1207.808, 7.773, 2278.018] radius 0
+				wait until get distance from [MyCreature] to [1207.808, 7.773, 2278.018] < 5 or 3 seconds
+				wait until 1 seconds
+				force MyCreature CREATURE_CAST_ANTI_SPELL Leopard
+				wait until 4 seconds
+				wait until 1 seconds
+				if ACTUAL_HEIGHT of MyCreature > 1.6
+					wait until 1 seconds
+				end if
+				move camera position to [1161.62, 19.171, 2247.35] time 2
+				move camera focus to [1047.129, -0.419, 2275.685] time 2
+				wait until 3 seconds
+				set camera position to [1126.941, 6.794, 2241.654]
+				set camera focus to [1097.05, 65.724, 2341.296]
+				while ALIGNMENT of Leopard < 0.6
+					ALIGNMENT of Leopard += 0.1
+					wait until 0.2 seconds
+				end while
+				move camera position to [1135.469, 16.241, 2258.437] time 6
+				move camera focus to [1018.356, 39.457, 2264.783] time 6
+				Leopard play ANM_A_COW_LANDED_LEFT_SIDE loop 1
+				say HELP_TEXT_KINGOFTHECASTLE_190 by Leopard
+				wait until read
+				wait until Leopard played
+				move camera position to [1157.49, 19.1286, 2260.04] time 10
+				move camera focus to [1040.08, -3.28472, 2257.17] time 10
+				force Leopard CREATURE_PRACTICE_DANCE Leopard
+				
+				if MyCreature type CREATURE CREATURE_TYPE_OGRE
+					MyCreature play C_INDIVIDUAL_HAPPY loop 1
+				else
+					MyCreature play ANM_A_COW_LANDED_LEFT_SIDE loop 1
+				end if
+				
+				say HELP_TEXT_KINGOFTHECASTLE_200 with interaction by Leopard
+				wait until read
+				wait until MyCreature played
+				teach MyCreature MAGICAL MAGIC_TYPE_CREATURE_SPELL_ANTI_SPELL FALSE percentage 1
+				enable MyCreature navigation
+				release MyCreature
+				delete WitchGhost with fade
+			end cinema with widescreen
+			GameStart = 4
+		elsif KingOfCastle == 0
+			begin cinema
+				update snapshot CHALLENGE_KING_OF_THE_CASTLE success 0.1 alignment 0 HELP_TEXT_CREATURE_ISLE_TITLE_13 StandardReminder (variable HELP_TEXT_CI_REMINDER_10)
+				move camera position to [1148.96, 139.784, 2588.06] time 2
+				move camera focus to [1180.28, 144.912, 2602.81] time 2
+				set WitchGhost focus to [1148.96, 139.784, 2588.06]
+				wait until camera ready
+				GhostHeight = (HEIGHT of WitchGhost) * 0.8
+				move camera position to [1162.4, 146.251, 2596.6] time 8
+				move camera focus to [WitchGhost] + [0, GhostHeight, 0] time 8
+				say HELP_TEXT_KINGOFTHECASTLE_210
+				WitchGhost play ANM_A_COW_DEAD_ON_RHS loop -1
+				wait until read
+				say HELP_TEXT_KINGOFTHECASTLE_220 with interaction
+				wait until read
+				set fade red 0 green 0 blue 0 time 2
+				wait until 2 seconds
+				set camera position to [1151.04, 49.8893, 2203.58]
+				set camera focus to [1134.97, 9.60486, 2275.38]
+				set MyCreature position to [RestartPos]
+				if Tyke exists and TykeIsReady == 1 and TykeFree == 1
+					set Tyke position to [RestartPos] + [3, 0, 3]
+				end if
+				set fade in time 2
+				wait until 2 seconds
+			end cinema
+			GameStart = 0
+			release MyCreature
+			delete WitchGhost with fade
+		elsif KingOfCastle == 2
+			begin cinema
+				set camera auto track WitchGhost distance 35
+				set WitchGhost focus to (camera position)
+				wait until 1 seconds
+				eject evil spirit
+				say single line HELP_TEXT_KINGOFTHECASTLE_230
+				WitchGhost play ANM_A_COW_DEAD_ON_RHS loop 1
+				wait until read
+				send evil spirit home
+				wait until WitchGhost played
+			end cinema
+			QuitGame = 0
+			GameStart = 0
+			set MyCreature position to [RestartPos]
+			enable MyCreature navigation
+			release MyCreature
+			delete WitchGhost with fade
+			KingOfCastle = 0
+		end if
+		disable Highlight active
+		until GameStart >= 4
+	end loop
+	run background script DeleteLeopard(Leopard)
+	run script Dojo(Leopard)
+	delete Dice with fade
+	DojoReminderKingOfTheCastle = 0
+end script KingOfTheCastle
+

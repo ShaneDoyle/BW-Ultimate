@@ -1,0 +1,19 @@
+//challenge LandControl1
+
+begin script COOP-LandControl1
+
+ dyk76 = marker at [1751.1938, 0.0000, 2466.3926]				// fish farms
+ MyCitadel = 0
+ CreatureGates = 0
+ TempTyke = 0
+ MyEve = 0
+
+start
+	
+	//
+	stop all scripts excluding files "COOP-LandControl1.txt"
+	load map "Scripts/UltimateLand1.txt"
+	run background script SingingStoneCircle							// Places Stones and wait until SingingStonesStart == 1
+	
+	
+end script COOP-LandControl1

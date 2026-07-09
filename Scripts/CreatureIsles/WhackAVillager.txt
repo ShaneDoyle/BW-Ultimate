@@ -1,0 +1,542 @@
+//LHVM Challenge source version 8
+//Decompiled with CHLASM tool by Daniels118
+
+global AncestorsCaught
+global VillagersCaught
+
+begin script YankedDown(Skeleton, SkeletonPos)
+	Random = 0
+	Dust = 0
+start
+	Random = number from 1 to 3
+	if Random == 1
+		Skeleton play ANM_P_YANKED_UNDERGROUND loop 1
+		Dust = create special effect SPOT_VISUAL_SMOKE at [SkeletonPos] time 2
+		wait until Skeleton played
+		delete Skeleton
+	elsif Random == 2
+		Skeleton play ANM_P_YANKED_UNDERGROUND2 loop 1
+		Dust = create special effect SPOT_VISUAL_SMOKE at [SkeletonPos] time 2
+		wait until Skeleton played
+		delete Skeleton
+	else
+		Skeleton play ANM_P_YANKED_UNDERGROUND3 loop 1
+		Dust = create special effect SPOT_VISUAL_SMOKE at [SkeletonPos] time 2
+		wait until Skeleton played
+		delete Skeleton
+	end if
+end script YankedDown
+
+begin script PopUpVillager(Hole, IsSkeleton)
+	Random = 0
+	Pop = -1.5
+	Sex = 0
+	Villager = 0
+start
+	Sex = number from 1 to 2
+	if Sex == 1
+		Villager = create VILLAGER VILLAGER_INFO_TIBETAN_FORESTER_MALE at [Hole] + [0, -1.5, 0]
+	elsif Sex == 2
+		Villager = create VILLAGER VILLAGER_INFO_TIBETAN_HOUSEWIFE_FEMALE at [Hole] + [0, -1.5, 0]
+	end if
+	if IsSkeleton != 0
+		enable Villager skeleton
+	end if
+	ALTITUDE of Villager = Pop
+	begin loop
+		set Villager focus to (camera position)
+		while ALTITUDE of Villager <= -0.4
+			Pop = Pop + 0.1
+			ALTITUDE of Villager = Pop
+		end while
+		Villager play ANM_P_ATTRACT_YOUR_ATTENTION loop 1
+		Random = number from 20 to 40
+		Random /= 10
+		wait until Random seconds
+		ALTITUDE of Villager = Pop
+		while ALTITUDE of Villager >= -1.5
+			Pop = Pop - 0.1
+			ALTITUDE of Villager = Pop
+		end while
+		delete Villager
+		until not Villager exists
+		until Villager is HELD
+	end loop
+	if Villager exists
+		if IsSkeleton == 1
+			AncestorsCaught++
+			delete Villager with fade
+		else
+			VillagersCaught++
+			start say sound HELP_TEXT_THROW_BLOKE_16
+			wait until not Villager is HELD
+			wait until not Villager is FLYING
+			delete Villager with fade
+		end if
+	end if
+end script PopUpVillager
+
+begin script PopUpVillagerRun(Hole1, Hole2, IsSkeleton)
+	Speed = 0
+	Sex = 0
+	Villager = 0
+start
+	Speed = number from 5 to 10
+	Sex = number from 1 to 2
+	if Sex == 1
+		Villager = create VILLAGER VILLAGER_INFO_TIBETAN_FORESTER_MALE at [Hole1] + [0, -1.5, 0]
+	elsif Sex == 2
+		Villager = create VILLAGER VILLAGER_INFO_TIBETAN_HOUSEWIFE_FEMALE at [Hole1] + [0, -1.5, 0]
+	end if
+	if IsSkeleton != 0
+		enable Villager skeleton
+	end if
+	begin loop
+		SPEED of Villager = Speed / 10
+		move Villager position to [Hole2] radius 0
+		wait until get distance from [Villager] to [Hole2] < 0.2 or 10 seconds
+		delete Villager
+		until not Villager exists
+		until Villager is HELD
+	end loop
+	if Villager exists
+		if IsSkeleton == 1
+			AncestorsCaught++
+			delete Villager with fade
+		else
+			VillagersCaught++
+			start say sound HELP_TEXT_THROW_BLOKE_16
+			wait until not Villager is HELD
+			wait until not Villager is FLYING
+			delete Villager with fade
+		end if
+	end if
+end script PopUpVillagerRun
+
+begin script WhackAVillagerIntro
+	StartPos = marker at [1089.787, 4.908, 2153.487]
+	StartFoc = marker at [1046.907, 4.471, 2186.58]
+	GravediggerPos = marker at [1068.183, 3.169, 2179.175]
+	GravediggerTalk = marker at [1074.656, 2.68, 2173.469]
+	Gravedigger = create VILLAGER VILLAGER_INFO_TIBETAN_FORESTER_MALE at [GravediggerPos]
+	LivingDead = 0
+	LivingDead2 = 0
+start
+	SPEED of Gravedigger = 0.1
+	begin cinema
+		start music MUSIC_TYPE_SCRIPT_GENERIC_04
+		move camera position to [1094.377, 10.926, 2140.987] time 4
+		move camera focus to [1079.95, 3.002, 2159.298] time 4
+		wait until 3 seconds
+		move camera position to [StartPos] time 6
+		move camera focus to [StartFoc] time 6
+		wait until 3 seconds
+		move camera position to [1084.55, 3.934, 2158.427] time 6
+		move camera focus to [1070.897, 3.253, 2169.148] time 6
+		wait until 4 seconds
+		move camera position to [1085.136, 6.095, 2171.216] time 6
+		move camera focus to [1047.831, 2.768, 2166.839] time 6
+		move Gravedigger position to [GravediggerTalk] radius 0
+		wait until 4 seconds
+		move camera position to [1078.986, 3.994, 2173.862] time 6
+		wait until 2 seconds
+		move camera focus to [836.979, -11.106, 2103.715] time 6
+		wait until 2 seconds
+		set Gravedigger focus to (camera position)
+		disable villager sound
+		LivingDead = create VILLAGER VILLAGER_INFO_TIBETAN_FORESTER_MALE at [1079.218, 2.68, 2162.031]
+		enable LivingDead skeleton
+		LivingDead2 = create VILLAGER VILLAGER_INFO_TIBETAN_FORESTER_MALE at [1071.862, 2.68, 2162.443]
+		enable LivingDead2 skeleton
+		LivingDead2 play ANM_P_CRAWL_INJURED loop -1
+		SPEED of LivingDead = 0.08
+		set LivingDead focus to [1069.05, 2.68, 2163.587]
+		say HELP_TEXT_WHACKAVILLAGER_10
+		Gravedigger play ANM_P_STAND_DESPAIR_1 loop 1
+		wait until read
+		move LivingDead position to [1069.05, 2.68, 2163.587] radius 0
+		set LivingDead anim ANM_P_WALK_INJURED
+		say HELP_TEXT_WHACKAVILLAGER_20
+		set camera position to [1075.844, 4, 2167.164]
+		set camera focus to [1082.554, 2.783, 2143.134]
+		move camera position to [1071.221, 4, 2165.873] time 12
+		move camera focus to [1077.931, 2.783, 2141.843] time 8
+		wait until read
+		say HELP_TEXT_WHACKAVILLAGER_30
+		wait until camera ready
+		set camera position to [1078.986, 3.994, 2173.862]
+		set camera focus to [836.979, -11.106, 2103.715]
+		Gravedigger play ANM_P_TALK1_MALE loop 2
+		delete LivingDead
+		delete LivingDead2
+		move camera position to [1078.648, 3.994, 2174.803] time 12
+		move camera focus to [854.072, -11.106, 2060.552] time 12
+		say HELP_TEXT_WHACKAVILLAGER_40
+		say HELP_TEXT_WHACKAVILLAGER_50 with interaction
+		Gravedigger play ANM_P_TALK1_MALE loop 2
+		wait until read
+		move Gravedigger position to [GravediggerPos] radius 0
+		set fade red 0 green 0 blue 0 time 1
+		wait until fade ready
+		set camera position to [1088.982, 7.607, 2153.791]
+		set camera focus to [1074.03, 2.917, 2165.872]
+		clear dialogue
+		set fade in time 2
+		wait until fade ready
+		eject evil spirit
+		say HELP_TEXT_WHACKAVILLAGER_60
+		wait until read
+		eject good spirit
+		say HELP_TEXT_WHACKAVILLAGER_70
+		wait until read
+		say HELP_TEXT_WHACKAVILLAGER_80
+		wait until read
+		stop music
+		wait until camera ready
+		delete Gravedigger with fade
+	end cinema
+end script WhackAVillagerIntro
+
+begin script WhackAVillagerRepeatIntro
+	StartPos = marker at [1078.986, 3.994, 2173.862]
+	StartFoc = marker at [836.979, -11.106, 2103.715]
+	GravediggerTalk = marker at [1074.656, 2.68, 2173.469]
+	Gravedigger = create VILLAGER VILLAGER_INFO_TIBETAN_FORESTER_MALE at [GravediggerTalk]
+start
+	begin cinema
+		set fade red 0 green 0 blue 0 time 1
+		wait until fade ready
+		start music MUSIC_TYPE_SCRIPT_FUNERAL
+		set camera position to [StartPos]
+		set camera focus to [StartFoc]
+		set fade in time 2
+		wait until fade ready
+		say HELP_TEXT_WHACKAVILLAGER_90
+		wait until read
+		say HELP_TEXT_WHACKAVILLAGER_100
+		wait until read
+		set fade red 0 green 0 blue 0 time 1
+		stop music
+		wait until fade ready
+		set camera position to [1087.326, 15.144, 2149.039]
+		set camera focus to [1074.134, 3.196, 2163.869]
+	end cinema
+	set fade in time 2
+	wait until fade ready
+	delete Gravedigger
+end script WhackAVillagerRepeatIntro
+
+begin script WhackAVillagerTooManyRealVillagers
+	StartPos = marker at [1078.986, 3.994, 2173.862]
+	StartFoc = marker at [836.979, -11.106, 2103.715]
+	GravediggerTalk = marker at [1074.656, 2.68, 2173.469]
+	Gravedigger = 0
+start
+	begin cinema
+		set fade red 0 green 0 blue 0 time 1
+		wait until fade ready
+		Gravedigger = create VILLAGER VILLAGER_INFO_TIBETAN_FORESTER_MALE at [GravediggerTalk]
+		set camera position to [StartPos]
+		set camera focus to [StartFoc]
+		set fade in time 2
+		wait until fade ready
+		say HELP_TEXT_WHACKAVILLAGER_110
+		wait until read
+		say HELP_TEXT_WHACKAVILLAGER_120
+		wait until read
+		set fade red 0 green 0 blue 0 time 1
+		wait until fade ready
+		set camera position to [1087.326, 15.144, 2149.039]
+		set camera focus to [1074.134, 3.196, 2163.869]
+	end cinema
+	set fade in time 2
+	wait until fade ready
+	delete Gravedigger
+end script WhackAVillagerTooManyRealVillagers
+
+begin script WhackAVillagerNotEnoughAncestors
+	StartPos = marker at [1078.986, 3.994, 2173.862]
+	StartFoc = marker at [836.979, -11.106, 2103.715]
+	GravediggerTalk = marker at [1074.656, 2.68, 2173.469]
+	Gravedigger = 0
+start
+	begin cinema
+		set fade red 0 green 0 blue 0 time 1
+		wait until fade ready
+		Gravedigger = create VILLAGER VILLAGER_INFO_TIBETAN_FORESTER_MALE at [GravediggerTalk]
+		set camera position to [StartPos]
+		set camera focus to [StartFoc]
+		set fade in time 2
+		wait until fade ready
+		say HELP_TEXT_WHACKAVILLAGER_130
+		wait until read
+		say HELP_TEXT_WHACKAVILLAGER_140
+		wait until read
+		say HELP_TEXT_WHACKAVILLAGER_150
+		wait until read
+		set fade red 0 green 0 blue 0 time 1
+		wait until fade ready
+		set camera position to [1087.326, 15.144, 2149.039]
+		set camera focus to [1074.134, 3.196, 2163.869]
+	end cinema
+	set fade in time 2
+	wait until fade ready
+	delete Gravedigger
+end script WhackAVillagerNotEnoughAncestors
+
+begin script WhackAVillagerOutro
+	StartPos = marker at [1078.986, 3.994, 2173.862]
+	StartFoc = marker at [836.979, -11.106, 2103.715]
+	Skeleton1Pos = marker at [1078.782, 2.439, 2159.112]
+	Skeleton2Pos = marker at [1083.771, 1.508, 2159.406]
+	Skeleton3Pos = marker at [1078.021, 2.303, 2158.597]
+	Skeleton4Pos = marker at [1077.124, 2.68, 2164.446]
+	Skeleton5Pos = marker at [1065.324, 2.68, 2164.908]
+	Skeleton6Pos = marker at [1070.175, 2.8, 2171.954]
+	Skeleton7Pos = marker at [1063.147, 2.68, 2169.451]
+	Skeleton8Pos = marker at [1064.376, 2.68, 2172.313]
+	Skeleton9Pos = marker at [1065.484, 2.68, 2171.823]
+	Skeleton10Pos = marker at [1059.577, 2.68, 2171.283]
+	Skeleton11Pos = marker at [1068.47, 2.68, 2165.292]
+	Skeleton12Pos = marker at [1080.51, 1.832, 2157.375]
+	Skeleton13Pos = marker at [1067.778, 2.68, 2167.147]
+	Skeleton14Pos = marker at [1068.878, 3.096, 2177.38]
+	Skeleton15Pos = marker at [1073.53, 2.68, 2171.038]
+	Skeleton1 = 0
+	Skeleton2 = 0
+	Skeleton3 = 0
+	Skeleton4 = 0
+	Skeleton5 = 0
+	Skeleton6 = 0
+	Skeleton7 = 0
+	Skeleton8 = 0
+	Skeleton9 = 0
+	Skeleton10 = 0
+	Skeleton11 = 0
+	Skeleton12 = 0
+	Skeleton13 = 0
+	Skeleton14 = 0
+	Skeleton15 = 0
+	GravediggerPos = marker at [1058.25, 2.68, 2173.182]
+	Gravedigger = 0
+	Pop = -2
+	FirePos = marker at [1059.145, 2.68, 2170.447]
+	Campfire = 0
+	Dust = 0
+	RewardPos = marker at [1067.344, 2.68, 2170.29]
+start
+	begin cinema
+		set fade red 0 green 0 blue 0 time 1
+		wait until fade ready
+		Campfire = create OBJECT MOBILE_STATIC_INFO_COUNTRY_LANTERN at [FirePos]
+		Gravedigger = create VILLAGER VILLAGER_INFO_TIBETAN_FORESTER_MALE at [GravediggerPos]
+		ALTITUDE of Gravedigger = -2
+		Skeleton1 = create VILLAGER VILLAGER_INFO_TIBETAN_FORESTER_MALE at [Skeleton1Pos]
+		enable Skeleton1 skeleton
+		set Skeleton1 focus to [1094.917, 5.806, 2149.032]
+		Skeleton2 = create VILLAGER VILLAGER_INFO_TIBETAN_FORESTER_MALE at [Skeleton2Pos]
+		enable Skeleton2 skeleton
+		set Skeleton2 focus to [1094.917, 5.806, 2149.032]
+		Skeleton3 = create VILLAGER VILLAGER_INFO_TIBETAN_FORESTER_MALE at [Skeleton3Pos]
+		enable Skeleton3 skeleton
+		set Skeleton3 focus to [1065.189, 4.309, 2170.599]
+		Skeleton4 = create VILLAGER VILLAGER_INFO_TIBETAN_FORESTER_MALE at [Skeleton4Pos]
+		enable Skeleton4 skeleton
+		set Skeleton4 focus to [1094.917, 5.806, 2149.032]
+		Skeleton5 = create VILLAGER VILLAGER_INFO_TIBETAN_FORESTER_MALE at [Skeleton5Pos]
+		enable Skeleton5 skeleton
+		set Skeleton5 focus to [1094.917, 5.806, 2149.032]
+		Skeleton6 = create VILLAGER VILLAGER_INFO_TIBETAN_FORESTER_MALE at [Skeleton6Pos]
+		enable Skeleton6 skeleton
+		set Skeleton6 focus to [1065.189, 4.309, 2170.599]
+		Skeleton7 = create VILLAGER VILLAGER_INFO_TIBETAN_FORESTER_MALE at [Skeleton7Pos]
+		enable Skeleton7 skeleton
+		set Skeleton7 focus to [1065.189, 4.309, 2170.599]
+		Skeleton8 = create VILLAGER VILLAGER_INFO_TIBETAN_FORESTER_MALE at [Skeleton8Pos]
+		enable Skeleton8 skeleton
+		set Skeleton8 focus to [1065.189, 4.309, 2170.599]
+		Skeleton9 = create VILLAGER VILLAGER_INFO_TIBETAN_FORESTER_MALE at [Skeleton9Pos]
+		enable Skeleton9 skeleton
+		set Skeleton9 focus to [1065.189, 4.309, 2170.599]
+		Skeleton10 = create VILLAGER VILLAGER_INFO_TIBETAN_FORESTER_MALE at [Skeleton10Pos]
+		enable Skeleton10 skeleton
+		set Skeleton10 focus to [1065.189, 4.309, 2170.599]
+		Skeleton11 = create VILLAGER VILLAGER_INFO_TIBETAN_FORESTER_MALE at [Skeleton11Pos]
+		enable Skeleton11 skeleton
+		set Skeleton11 focus to [1094.917, 5.806, 2149.032]
+		Skeleton12 = create VILLAGER VILLAGER_INFO_TIBETAN_FORESTER_MALE at [Skeleton12Pos]
+		enable Skeleton12 skeleton
+		set Skeleton12 focus to [1094.917, 5.806, 2149.032]
+		Skeleton13 = create VILLAGER VILLAGER_INFO_TIBETAN_FORESTER_MALE at [Skeleton13Pos]
+		enable Skeleton13 skeleton
+		set Skeleton13 focus to [1094.917, 5.806, 2149.032]
+		Skeleton14 = create VILLAGER VILLAGER_INFO_TIBETAN_FORESTER_MALE at [Skeleton14Pos]
+		enable Skeleton14 skeleton
+		set Skeleton14 focus to [1065.189, 4.309, 2170.599]
+		Skeleton15 = create VILLAGER VILLAGER_INFO_TIBETAN_FORESTER_MALE at [Skeleton15Pos]
+		enable Skeleton15 skeleton
+		set Skeleton15 focus to [1094.917, 5.806, 2149.032]
+		set camera position to [1094.917, 5.806, 2149.032]
+		set camera focus to [1080.836, 2.835, 2159.248]
+		start music MUSIC_TYPE_SCRIPT_FUNERAL
+		set fade in time 2
+		move camera position to [1069.779, 3.92, 2157.928] time 10
+		move camera focus to [1052.114, 7.104, 2279.533] time 40
+		wait until fade ready
+		run background script YankedDown(Skeleton2, Skeleton2Pos)
+		wait until 1 seconds
+		run background script YankedDown(Skeleton12, Skeleton12Pos)
+		wait until 1 seconds
+		run background script YankedDown(Skeleton1, Skeleton1Pos)
+		wait until 1 seconds
+		run background script YankedDown(Skeleton3, Skeleton3Pos)
+		wait until 1 seconds
+		run background script YankedDown(Skeleton4, Skeleton4Pos)
+		wait until 1 seconds
+		run background script YankedDown(Skeleton15, Skeleton15Pos)
+		wait until 1 seconds
+		run background script YankedDown(Skeleton11, Skeleton11Pos)
+		wait until 1 seconds
+		run background script YankedDown(Skeleton6, Skeleton6Pos)
+		wait until 1 seconds
+		move camera position to [1065.189, 4.309, 2170.599] time 6
+		move camera focus to [1056.854, 2.713, 2176.647] time 6
+		run background script YankedDown(Skeleton5, Skeleton5Pos)
+		wait until 1 seconds
+		run background script YankedDown(Skeleton13, Skeleton13Pos)
+		wait until 1 seconds
+		run background script YankedDown(Skeleton9, Skeleton9Pos)
+		wait until 1 seconds
+		run background script YankedDown(Skeleton7, Skeleton7Pos)
+		run background script YankedDown(Skeleton14, Skeleton14Pos)
+		move camera position to [1063.867, 4.244, 2173.157] time 4
+		move camera focus to [1052.897, 3.41, 2168.543] time 4
+		run background script YankedDown(Skeleton8, Skeleton8Pos)
+		wait until 1 seconds
+		run background script YankedDown(Skeleton10, Skeleton10Pos)
+		Dust = create special effect SPOT_VISUAL_SMOKE at [GravediggerPos] time 4
+		while ALTITUDE of Gravedigger <= 0
+			Pop = Pop + 0.05
+			ALTITUDE of Gravedigger = Pop
+		end while
+		move Gravedigger position to [1059.042, 2.68, 2172.376] radius 0
+		wait until 1 seconds
+		set Gravedigger focus to (camera position)
+		Gravedigger play ANM_P_TALK1_MALE loop 2
+		say HELP_TEXT_WHACKAVILLAGER_160
+		wait until read
+		say HELP_TEXT_WHACKAVILLAGER_170
+		wait until read
+		stop music
+	end cinema
+	run script GiveSpellDispenserReward(RewardPos, variable CREATURE_SPELL_COMPASSION, 0, 0, 0)
+end script WhackAVillagerOutro
+
+begin script WhackAVillager
+	Skeleton = 0
+	LeftPositions[7]
+	RightPositions[7]
+	Holes[6]
+	SkeletonTotal = 0
+	Exit = 0
+	HighlightPos = marker at [1054.151, 2.68, 2183.19]
+	FirstTime = 1
+	ChallengeCompleted = 0
+	Time = 0
+	Highlight = 0
+	Gravedigger = 0
+	WhackAVillagerDYKPos = marker at [1087.44, 0.366, 2158.793]
+	KillGame = 0
+start
+	LeftPositions[0] = marker at [1079.241, 1.235, 2154.617]
+	LeftPositions[1] = marker at [1074.791, 1.591, 2155.94]
+	LeftPositions[2] = marker at [1072.899, 2.68, 2160.211]
+	LeftPositions[3] = marker at [1061.685, 2.68, 2163.393]
+	LeftPositions[4] = marker at [1056.322, 2.68, 2173.218]
+	LeftPositions[5] = marker at [1084.987, 0, 2152.45]
+	LeftPositions[6] = marker at [1065.08, 1.591, 2155.971]
+	RightPositions[0] = marker at [1084.098, 1.591, 2163.776]
+	RightPositions[1] = marker at [1078.983, 2.68, 2166.986]
+	RightPositions[2] = marker at [1074.17, 2.779, 2175.651]
+	RightPositions[3] = marker at [1067.184, 3.044, 2181.724]
+	RightPositions[4] = marker at [1086.844, 0.848, 2162.102]
+	RightPositions[5] = marker at [1056.834, 2.785, 2188.384]
+	RightPositions[6] = marker at [1071.242, 2.68, 2191.486]
+	Holes[0] = marker at [1083.905, 1.644, 2162.507]
+	Holes[1] = marker at [1067.143, 2.68, 2160.13]
+	Holes[2] = marker at [1062.352, 2.68, 2166.809]
+	Holes[3] = marker at [1071.834, 2.785, 2173.365]
+	Holes[4] = marker at [1064.193, 2.743, 2176.778]
+	Holes[5] = marker at [1055.288, 2.68, 2182.45]
+	while ChallengeCompleted == 0
+		Exit = 0
+		while Exit == 0
+			Time = get game time
+			if Time > 22 or Time < 7.3
+				Highlight = create highlight CHALLENGE_WHACK_A_VILLAGER HIGHLIGHT_CHALLENGE at [HighlightPos]
+				run script ChallengeHighlightNotifyBetweenTimes(Highlight, Highlight, variable HELP_TEXT_GENERAL_CHALLENGE_START_04, 22, 7.3)
+				if Highlight active
+					Exit = 1
+				end if
+			end if
+			if Highlight exists
+				delete Highlight with fade
+				Highlight = 0
+			end if
+		end while
+		if FirstTime == 1
+			run script WhackAVillagerIntro
+			run background script DidYouKnow(WhackAVillagerDYKPos, variable HELP_TEXT_WHACKAVILLAGER_DYK, variable DYK_MISC)
+			FirstTime = 0
+		else
+			run script WhackAVillagerRepeatIntro
+		end if
+		enable countdown timer down with 30 seconds
+		start music MUSIC_TYPE_SCRIPT_SKELETON_GRAB
+		set countdown timer draw SCRIPT_COUNTDOWN_DRAW_BOTTOM_RIGHT
+		AncestorsCaught = 0
+		VillagersCaught = 0
+		SkeletonTotal = 0
+		KillGame = 0
+		while get countdown timer time > 0 and KillGame == 0
+			if in widescreen
+				KillGame = 1
+			end if
+			if number from 1 to 10 == 1
+				Skeleton = 0
+			else
+				Skeleton = 1
+				SkeletonTotal++
+			end if
+			if number from 1 to 5 == 1
+				run background script PopUpVillager(Holes[number from 0 to 5], Skeleton)
+			else
+				if number from 1 to 10 <= 5
+					run background script PopUpVillagerRun(LeftPositions[number from 0 to 6], RightPositions[number from 0 to 10], Skeleton)
+				else
+					run background script PopUpVillagerRun(RightPositions[number from 0 to 6], LeftPositions[number from 0 to 10], Skeleton)
+				end if
+			end if
+			wait until 1 seconds
+		end while
+		stop music
+		disable countdown timer
+		wait until 4 seconds
+		if KillGame == 0
+			if AncestorsCaught < 17
+				if VillagersCaught >= 3
+					run script WhackAVillagerTooManyRealVillagers
+				else
+					run script WhackAVillagerNotEnoughAncestors
+				end if
+			else
+				run script WhackAVillagerOutro
+				ChallengeCompleted = 1
+				KCWhackingComplete = 1
+			end if
+			set game time 7.3
+		end if
+	end while
+	run background script DeleteDYK(WhackAVillagerDYKPos)
+end script WhackAVillager
+

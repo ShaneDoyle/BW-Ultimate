@@ -1,0 +1,1047 @@
+//LHVM Challenge source version 8
+//Decompiled with CHLASM tool by Daniels118
+
+global CropCompleted
+global OverWatered
+global LippyWaterCheck
+global FieldHalfWay
+global CropScoreboard1
+global CropScoreboard2
+global RMScoreboard1
+global RMScoreboard2
+global Romeo
+global Juliet
+global FatherCrop
+global Crop1Total
+global Crop2Total
+global Resolution
+global BackgroundCameraMoveComplete
+global StopTheHalfwayMadness
+
+begin script ForceWater(CropField)
+	LeashType = 0
+start
+	begin loop
+		if CropField clicked
+			clear clicked object
+			LeashType = variable get MyCreature leash type
+			if LeashType == 3 and get MyCreature spell SPELL_WATER_LEVEL_1 skill == 1 and get distance from [MyCreature] to [CropField] < 100
+				force MyCreature CREATURE_SPRINKLE_MAGIC_WATER_ON_CROPS CropField
+				wait until MyCreature played or 10 seconds
+				release MyCreature
+			end if
+			release MyCreature
+		end if
+	end loop
+end script ForceWater
+
+begin script UpdatingSnap
+	CropTotal = 0
+	CropFormula = 0
+	LastCropTotal = 0
+start
+	CropTotal = (Crop1Total + Crop2Total) + 2
+	while CropCompleted < 2
+		CropTotal = Crop1Total + Crop2Total
+		if CropTotal != LastCropTotal
+			CropFormula = CropTotal / 10
+			update snapshot CHALLENGE_SPECIAL_CROPS success CropFormula alignment 0 HELP_TEXT_CREATURE_ISLE_TITLE_14 StandardReminder (variable HELP_TEXT_CI_REMINDER_11)
+			LastCropTotal = CropTotal
+		end if
+	end while
+end script UpdatingSnap
+
+begin script ClearUpMess(CampfirePos, LippyBloke)
+start
+	wait until 2 seconds
+	delete fire at [CampfirePos] radius 50
+	wait until 2 seconds
+	disable LippyBloke indestructible
+	enable LippyBloke pickup
+	enable LippyBloke hurt by fire
+	disable Romeo indestructible
+	enable Romeo pickup
+	enable Romeo hurt by fire
+end script ClearUpMess
+
+begin script PlayScene(SceneNum, LippyBloke)
+	BangOrFrazzle = 0
+	CampfirePos = marker at [2886.95, 52.6683, 2767.34]
+	Schmokin = 0
+	SchmokinToo = 0
+	AboveLippy = 0
+start
+	if SceneNum == 0
+		start say sound HELP_TEXT_SPECIAL_CROPS_SCENE1_10 at [Romeo]
+		wait until not say sound HELP_TEXT_SPECIAL_CROPS_SCENE1_10 playing
+		start say sound HELP_TEXT_SPECIAL_CROPS_SCENE1_20 at [LippyBloke]
+		wait until not say sound HELP_TEXT_SPECIAL_CROPS_SCENE1_20 playing
+		start say sound HELP_TEXT_SPECIAL_CROPS_SCENE1_30 at [LippyBloke]
+		wait until not say sound HELP_TEXT_SPECIAL_CROPS_SCENE1_30 playing
+		start say sound HELP_TEXT_SPECIAL_CROPS_SCENE1_40 at [Romeo]
+		BangOrFrazzle = create OBJECT MOBILE_STATIC_INFO_COUNTRY_LANTERN at [CampfirePos]
+		delete BangOrFrazzle with explosion
+		BangOrFrazzle = cast SPELL_FIREBALL_LEVEL_1 spell at [CampfirePos] from [CampfirePos] radius 1 time 1 curl 0 without reaction
+		Schmokin = create special effect SPOT_VISUAL_SMOKE on LippyBloke time 10
+		SchmokinToo = create special effect SPOT_VISUAL_SMOKE on Romeo time 10
+		wait until not say sound HELP_TEXT_SPECIAL_CROPS_SCENE1_40 playing
+	elsif SceneNum == 1
+		start say sound HELP_TEXT_SPECIAL_CROPS_SCENE2_10 at [Romeo]
+		wait until not say sound HELP_TEXT_SPECIAL_CROPS_SCENE2_10 playing
+		start say sound HELP_TEXT_SPECIAL_CROPS_SCENE2_20 at [LippyBloke]
+		wait until not say sound HELP_TEXT_SPECIAL_CROPS_SCENE2_20 playing
+		start say sound HELP_TEXT_SPECIAL_CROPS_SCENE2_30 at [Romeo]
+		wait until not say sound HELP_TEXT_SPECIAL_CROPS_SCENE2_30 playing
+		start say sound HELP_TEXT_SPECIAL_CROPS_SCENE2_40 at [LippyBloke]
+		wait until not say sound HELP_TEXT_SPECIAL_CROPS_SCENE2_40 playing
+		start say sound HELP_TEXT_SPECIAL_CROPS_SCENE2_50 at [Romeo]
+		BangOrFrazzle = create OBJECT MOBILE_STATIC_INFO_COUNTRY_LANTERN at [CampfirePos]
+		delete BangOrFrazzle with explosion
+		BangOrFrazzle = cast SPELL_FIREBALL_LEVEL_1 spell at [CampfirePos] from [CampfirePos] radius 1 time 1 curl 0 without reaction
+		Schmokin = create special effect SPOT_VISUAL_SMOKE on LippyBloke time 10
+		SchmokinToo = create special effect SPOT_VISUAL_SMOKE on Romeo time 10
+		wait until not say sound HELP_TEXT_SPECIAL_CROPS_SCENE2_50 playing
+	elsif SceneNum == 2
+		start say sound HELP_TEXT_SPECIAL_CROPS_SCENE3_10 at [Romeo]
+		wait until not say sound HELP_TEXT_SPECIAL_CROPS_SCENE3_10 playing
+		start say sound HELP_TEXT_SPECIAL_CROPS_SCENE3_20 at [LippyBloke]
+		wait until not say sound HELP_TEXT_SPECIAL_CROPS_SCENE3_20 playing
+		start say sound HELP_TEXT_SPECIAL_CROPS_SCENE3_30 at [Romeo]
+		wait until not say sound HELP_TEXT_SPECIAL_CROPS_SCENE3_30 playing
+		start say sound HELP_TEXT_SPECIAL_CROPS_SCENE3_40 at [LippyBloke]
+		wait until not say sound HELP_TEXT_SPECIAL_CROPS_SCENE3_40 playing
+		BangOrFrazzle = create OBJECT MOBILE_STATIC_INFO_COUNTRY_LANTERN at [CampfirePos]
+		delete BangOrFrazzle with explosion
+		BangOrFrazzle = cast SPELL_FIREBALL_LEVEL_1 spell at [CampfirePos] from [CampfirePos] radius 1 time 1 curl 0 without reaction
+		Schmokin = create special effect SPOT_VISUAL_SMOKE on LippyBloke time 10
+		SchmokinToo = create special effect SPOT_VISUAL_SMOKE on Romeo time 10
+	elsif SceneNum == 3
+		start say sound HELP_TEXT_SPECIAL_CROPS_SCENE4_10 at [LippyBloke]
+		wait until not say sound HELP_TEXT_SPECIAL_CROPS_SCENE4_10 playing
+		start say sound HELP_TEXT_SPECIAL_CROPS_SCENE4_20 at [Romeo]
+		wait until not say sound HELP_TEXT_SPECIAL_CROPS_SCENE4_20 playing
+		start say sound HELP_TEXT_SPECIAL_CROPS_SCENE4_30 at [LippyBloke]
+		wait until not say sound HELP_TEXT_SPECIAL_CROPS_SCENE4_30 playing
+		start say sound HELP_TEXT_SPECIAL_CROPS_SCENE4_40 at [Romeo]
+		wait until not say sound HELP_TEXT_SPECIAL_CROPS_SCENE4_40 playing
+		start say sound HELP_TEXT_SPECIAL_CROPS_SCENE4_50 at [LippyBloke]
+		wait until not say sound HELP_TEXT_SPECIAL_CROPS_SCENE4_50 playing
+		BangOrFrazzle = create OBJECT MOBILE_STATIC_INFO_COUNTRY_LANTERN at [CampfirePos]
+		delete BangOrFrazzle with explosion
+		BangOrFrazzle = cast SPELL_FIREBALL_LEVEL_1 spell at [CampfirePos] from [CampfirePos] radius 1 time 1 curl 0 without reaction
+		Schmokin = create special effect SPOT_VISUAL_SMOKE on LippyBloke time 10
+		SchmokinToo = create special effect SPOT_VISUAL_SMOKE on Romeo time 10
+	elsif SceneNum == 4
+		start say sound HELP_TEXT_SPECIAL_CROPS_SCENE5_10 at [Romeo]
+		wait until not say sound HELP_TEXT_SPECIAL_CROPS_SCENE5_10 playing
+		start say sound HELP_TEXT_SPECIAL_CROPS_SCENE5_20 at [Romeo]
+		wait until not say sound HELP_TEXT_SPECIAL_CROPS_SCENE5_20 playing
+		start say sound HELP_TEXT_SPECIAL_CROPS_SCENE5_30 at [LippyBloke]
+		wait until not say sound HELP_TEXT_SPECIAL_CROPS_SCENE5_30 playing
+		AboveLippy = marker at [LippyBloke]
+		ALTITUDE of AboveLippy = 50
+		BangOrFrazzle = create special effect SPOT_VISUAL_LIGHTNING_SINGLE_STRIKE on LippyBloke time 1
+		add BangOrFrazzle target on AboveLippy
+		Schmokin = create special effect SPOT_VISUAL_SMOKE on LippyBloke time 10
+		wait until 2 seconds
+	end if
+end script PlayScene
+
+begin script PlayJoke(JokeNum, LippyBloke)
+start
+	if JokeNum == 0
+		start say sound HELP_TEXT_SPECIAL_CROPS_JOKE1_01 at [LippyBloke]
+		wait until not say sound HELP_TEXT_SPECIAL_CROPS_JOKE1_01 playing
+		start say sound HELP_TEXT_SPECIAL_CROPS_JOKE1_02 at [Romeo]
+		wait until not say sound HELP_TEXT_SPECIAL_CROPS_JOKE1_02 playing
+	elsif JokeNum == 1
+		start say sound HELP_TEXT_SPECIAL_CROPS_JOKE2_01 at [LippyBloke]
+		wait until not say sound HELP_TEXT_SPECIAL_CROPS_JOKE2_01 playing
+		start say sound HELP_TEXT_SPECIAL_CROPS_JOKE2_02 at [Romeo]
+		wait until not say sound HELP_TEXT_SPECIAL_CROPS_JOKE2_02 playing
+	elsif JokeNum == 2
+		start say sound HELP_TEXT_SPECIAL_CROPS_JOKE3_01 at [LippyBloke]
+		wait until not say sound HELP_TEXT_SPECIAL_CROPS_JOKE3_01 playing
+		start say sound HELP_TEXT_SPECIAL_CROPS_JOKE3_02 at [Romeo]
+		wait until not say sound HELP_TEXT_SPECIAL_CROPS_JOKE3_02 playing
+	elsif JokeNum == 3
+		start say sound HELP_TEXT_SPECIAL_CROPS_JOKE4_01 at [LippyBloke]
+		wait until not say sound HELP_TEXT_SPECIAL_CROPS_JOKE4_01 playing
+		start say sound HELP_TEXT_SPECIAL_CROPS_JOKE4_02 at [Romeo]
+		wait until not say sound HELP_TEXT_SPECIAL_CROPS_JOKE4_02 playing
+	elsif JokeNum == 4
+		start say sound HELP_TEXT_SPECIAL_CROPS_JOKE5_01 at [LippyBloke]
+		wait until not say sound HELP_TEXT_SPECIAL_CROPS_JOKE5_01 playing
+		start say sound HELP_TEXT_SPECIAL_CROPS_JOKE5_02 at [Romeo]
+		wait until not say sound HELP_TEXT_SPECIAL_CROPS_JOKE5_02 playing
+	end if
+end script PlayJoke
+
+begin script RomeoReward
+	Reward = 0
+	RewardPos = marker at [2937.69, 55.61, 2789.13]
+	Town = get TOWN at [1233.08, 3.35, 2008.27] radius 100
+	MiracleDispenserDYKPos = marker at [2884.781, 55.61, 2730.366]
+	RewardInf = 0
+start
+	run background script DidYouKnow(MiracleDispenserDYKPos, variable HELP_TEXT_DYK_90, variable DYK_MISC)
+	Reward = create with angle 0 and scale 1 SCRIPT_OBJECT_TYPE_SPELL_DISPENSER ABODE_INFO_NORSE_SPELL_DISPENSER at [RewardPos]
+	set Reward magic properties CREATURE_SPELL_COMPASSION time 0
+	enable Reward active
+	set Reward time to 60 seconds
+	attach Reward to Town
+	RewardInf = create influence at [Reward] radius 5
+	release RewardInf
+	begin dialogue
+		eject good spirit
+		make good spirit point at [Reward]
+		say single line HELP_TEXT_SPECIAL_CROPS_400
+		wait until read
+		stop good spirit pointing
+	end dialogue
+end script RomeoReward
+
+begin script RomeoMeetsFather
+	RomeoFlees = marker at [2873.06, 59.6012, 2796.84]
+start
+	HEALTH of FatherCrop = 1
+	disable FatherCrop set on fire
+	HEALTH of Romeo = 1
+	disable Romeo set on fire
+	Resolution = 1
+	if Juliet exists and not Juliet is FLYING and not Juliet is HELD_ANY
+		Juliet play ANM_P_MOURNING loop 10
+	end if
+	move FatherCrop position to [FatherCrop] radius 0
+	set FatherCrop focus to [Romeo]
+	move Romeo position to [Romeo] radius 0
+	set Romeo focus to [FatherCrop]
+	wait until 0.5 seconds
+	FatherCrop play ANM_P_TALKING_AND_POINTING loop 1
+	start say sound HELP_TEXT_SPECIAL_CROPS_ENDLINE_40 at [FatherCrop]
+	wait until not say sound HELP_TEXT_SPECIAL_CROPS_ENDLINE_40 playing
+	Romeo play ANM_P_FRIGHT_JUMP loop 1
+	start say sound HELP_TEXT_SPECIAL_CROPS_ENDLINE_50 at [Romeo]
+	wait until Romeo played
+	Romeo play ANM_P_FRIGHT_DUCK loop 1
+	wait until not say sound HELP_TEXT_SPECIAL_CROPS_ENDLINE_50 playing
+	move Romeo position to [RomeoFlees] radius 0
+	SPEED of Romeo = 0.6
+	set FatherCrop focus to (camera position)
+	start say sound HELP_TEXT_SPECIAL_CROPS_ENDLINE_60 at [FatherCrop]
+	wait until not say sound HELP_TEXT_SPECIAL_CROPS_ENDLINE_60 playing
+	run script RomeoReward
+end script RomeoMeetsFather
+
+begin script RomeoMeetsJuliet
+	Distance = 0
+	HotSpot1 = 0
+	HotSpot2 = 0
+start
+	Resolution = 1
+	HEALTH of Juliet = 1
+	disable Juliet set on fire
+	HEALTH of Romeo = 1
+	disable Romeo set on fire
+	if FatherCrop exists and not FatherCrop is FLYING and not FatherCrop is HELD_ANY
+		FatherCrop play ANM_P_MOURNING loop 10
+	end if
+	Distance = get distance from [Romeo] to [Juliet]
+	Distance = Distance / 2
+	HotSpot1 = marker at (get target from [Romeo] to [Juliet] distance Distance angle 180)
+	HotSpot2 = marker at [HotSpot1] + ([-0.6, 0.55])
+	move Romeo position to [HotSpot1] radius 0
+	SPEED of Romeo = 0.5
+	move Juliet position to [HotSpot2] radius 0
+	SPEED of Juliet = 0.5
+	wait until get distance from [Juliet] to [HotSpot2] < 1 or 20 seconds
+	wait until get distance from [Romeo] to [HotSpot1] < 1 or 20 seconds
+	wait until 0.5 seconds
+	set Romeo focus to [Juliet]
+	set Juliet focus to [Romeo]
+	wait until 0.5 seconds
+	Romeo play ANM_P_HUG loop 1
+	Juliet play ANM_P_HUG loop 1
+	wait until Romeo played or 20 seconds
+	wait until Juliet played or 20 seconds
+	set Romeo focus to (camera position)
+	start say sound HELP_TEXT_SPECIAL_CROPS_ENDLINE_90 at [Romeo]
+	wait until not say sound HELP_TEXT_SPECIAL_CROPS_ENDLINE_90 playing
+	set Romeo focus to [Juliet]
+	wait until 0.5 seconds
+	Romeo play ANM_P_HUG loop 1
+	Juliet play ANM_P_HUG loop 1
+	wait until 2 seconds
+	run script RomeoReward
+end script RomeoMeetsJuliet
+
+begin script StealthRomeo(LippyBloke)
+	RomeoPos = marker at [2887.14, 52.6473, 2765.37]
+	CampfirePos = marker at [2886.95, 52.6683, 2767.34]
+	JulietPos = marker at [2963.59, 43.2647, 2690.7]
+	FatherPos = marker at [2964.06, 43.2438, 2689.46]
+	LastTimeOfDay = 0
+	PlayerPresent = 0
+	PresentTimer = create timer for 0 seconds
+	FarmhousePos = marker at [2963.87, 43.0789, 2693.22]
+	Farmhouse = get HOUSE at [FarmhousePos]
+	MoveRomeoTimer = create timer for 0 seconds
+	RomeoDead = 0
+	JulietDead = 0
+	FatherDead = 0
+	OutsideTimer = create timer for 0 seconds
+	JokeNum = 0
+	JokeTimer = create timer for 0 seconds
+	SceneNum = 0
+	ScenePlayed = 0
+	JokesToday = 0
+	JulietExists = 0
+	Return = 0
+	StealthComplete = 0
+start
+	Romeo = create VILLAGER MALE at [RomeoPos]
+	set Romeo focus to [CampfirePos]
+	begin loop
+		if get game time < LastTimeOfDay and SpiritActive == 0
+			ScenePlayed = 0
+			JokesToday = 0
+			wait until 2 seconds
+		end if
+		LastTimeOfDay = get game time
+		if Farmhouse clicked and JulietExists == 0
+			clear clicked object
+			Juliet = create VILLAGER FEMALE at [FarmhousePos]
+			move Juliet position to [JulietPos] radius 0
+			if FatherDead == 0
+				FatherCrop = create VILLAGER MALE at [FarmhousePos]
+				AGE of FatherCrop = 40
+				move FatherCrop position to [FatherPos] radius 0
+				if dialogue ready
+					start say sound HELP_TEXT_SPECIAL_CROPS_ENDLINE_30 at [FatherCrop]
+					wait until not say sound HELP_TEXT_SPECIAL_CROPS_ENDLINE_30 playing
+				end if
+				set OutsideTimer time to 10 seconds
+			end if
+			JulietExists = 1
+		elsif JulietExists == 1
+			if not Juliet exists or HEALTH of Juliet <= 0
+				begin dialogue
+					eject evil spirit
+					say single line HELP_TEXT_SPECIAL_CROPS_ENDLINE_80
+					wait until read
+				end dialogue
+				JulietDead = 1
+			elsif FatherDead == 0 and (not FatherCrop exists or HEALTH of FatherCrop <= 0)
+				begin dialogue
+					eject evil spirit
+					say single line HELP_TEXT_SPECIAL_CROPS_ENDLINE_70
+					wait until read
+				end dialogue
+				FatherDead = 1
+			elsif get OutsideTimer time remaining <= 0
+				if not Juliet is HELD_ANY and not Juliet is FLYING and Return == 0
+					move Juliet position to [FarmhousePos] radius 0
+					if FatherDead == 0
+						move FatherCrop position to [FarmhousePos] radius 0
+					end if
+					Return = 1
+				elsif Return == 1 and get distance from [Juliet] to [FarmhousePos] < 1
+					JulietExists = 0
+					delete Juliet with fade
+					if FatherDead == 0
+						if FatherCrop is FLYING or FatherCrop is HELD_ANY
+							wait until not FatherCrop is FLYING and not FatherCrop is HELD_ANY
+							if not FatherCrop exists or HEALTH of FatherCrop <= 0
+								begin dialogue
+									eject evil spirit
+									say single line HELP_TEXT_SPECIAL_CROPS_ENDLINE_70
+									wait until read
+								end dialogue
+								FatherDead = 1
+							end if
+						end if
+						delete FatherCrop with fade
+					end if
+					Return = 0
+				end if
+			end if
+		end if
+		if not Romeo exists or HEALTH of Romeo <= 0
+			begin dialogue
+				eject evil spirit
+				say single line HELP_TEXT_SPECIAL_CROPS_ENDLINE_20
+				wait until read
+			end dialogue
+			RomeoDead = 1
+		elsif Romeo is HELD or Romeo is FLYING
+			if Romeo is HELD
+				start say sound HELP_TEXT_SPECIAL_CROPS_ENDLINE_100 at [Romeo]
+				wait until not say sound HELP_TEXT_SPECIAL_CROPS_ENDLINE_100 playing
+			end if
+			wait until not Romeo is HELD and not Romeo is FLYING
+		elsif get distance from [Romeo] to [FatherCrop] < 50 and not FatherCrop is HELD_ANY and not FatherCrop is FLYING and not FatherCrop in MyCreature hand and not Romeo is HELD_ANY and not Romeo is FLYING and not Romeo in MyCreature hand and HEALTH of Romeo > 0 and HEALTH of FatherCrop > 0
+			enable FatherCrop indestructible
+			disable FatherCrop pickup
+			enable Romeo indestructible
+			disable Romeo pickup
+			run script RomeoMeetsFather
+			StealthComplete = 1
+		elsif get distance from [Romeo] to [Juliet] < 50 and not Juliet is HELD_ANY and not Juliet is FLYING and not Juliet in MyCreature hand and HEALTH of Juliet > 0 and not Romeo is HELD_ANY and not Romeo is FLYING and not Romeo in MyCreature hand and HEALTH of Romeo > 0
+			enable Juliet indestructible
+			disable Juliet pickup
+			enable Romeo indestructible
+			disable Romeo pickup
+			run script RomeoMeetsJuliet
+			StealthComplete = 1
+		elsif not get distance from [Romeo] to [RomeoPos] < 2 and get MoveRomeoTimer time remaining <= 0 and Resolution == 0
+			move Romeo position to [RomeoPos] radius 0
+			set MoveRomeoTimer time to 20 seconds
+		elsif get distance from (camera position) to [Romeo] < 150 and PlayerPresent == 0
+			set PresentTimer time to 30 seconds
+			PlayerPresent = 1
+		elsif get PresentTimer time remaining <= 0 and PlayerPresent == 1
+			if get distance from (camera position) to [Romeo] < 150
+				PlayerPresent = 2
+			else
+				PlayerPresent = 0
+			end if
+		elsif PlayerPresent == 2
+			if LippyBloke exists and HEALTH of LippyBloke > 0
+				if ScenePlayed == 0 and SceneNum < 5
+					enable LippyBloke indestructible
+					disable LippyBloke pickup
+					disable LippyBloke hurt by fire
+					enable Romeo indestructible
+					disable Romeo pickup
+					disable Romeo hurt by fire
+					run script PlayScene(SceneNum, LippyBloke)
+					run background script ClearUpMess(CampfirePos, LippyBloke)
+					SceneNum++
+					ScenePlayed = 1
+					set JokeTimer time to 10 seconds
+				elsif SceneNum >= 5 and ScenePlayed == 0
+					ScenePlayed = 1
+				elsif ScenePlayed == 1 and get JokeTimer time remaining <= 0
+					if JokesToday < 2 and JokeNum < 5
+						run script PlayJoke(JokeNum, LippyBloke)
+						set JokeTimer time to 10 seconds
+						JokeNum++
+						JokesToday++
+					else
+						start say sound HELP_TEXT_SPECIAL_CROPS_ENDLINE_10 at [LippyBloke]
+						wait until not say sound HELP_TEXT_SPECIAL_CROPS_ENDLINE_10 playing
+						ScenePlayed = 2
+					end if
+				end if
+			end if
+		end if
+		until RomeoDead == 1 or JulietDead == 1 or StealthComplete == 1
+	end loop
+	if Juliet exists
+		delete Juliet with fade
+	end if
+	if FatherCrop exists
+		delete FatherCrop with fade
+	end if
+	if Romeo exists
+		delete Romeo with fade
+	end if
+end script StealthRomeo
+
+begin script LippyBloke(CropField1, CropField2)
+	LippyBlokePos = marker at [2885.26, 52.8986, 2767.04]
+	LippyFirePos = marker at [2886.95, 52.6683, 2767.34]
+	LippyFire = create OBJECT MOBILE_STATIC_INFO_BONFIRE at [LippyFirePos]
+	LippyBloke = create VILLAGER MARAUDER at [LippyBlokePos]
+	DayNumber = 0
+	LastTimeOfDay = 0
+	LastVisitDay = 0
+	ObjectInHand = 0
+	LastCrop1Health = 0
+	LastCrop2Health = 0
+	PooComment = 0
+	LongTrialComment = 0
+	DamagedComment = 0
+	VillagerComment = 0
+	SubType = 0
+	OnTheMoveTimer = create timer for 0 seconds
+	Resettle = 0
+	LippyBlokeDead = 0
+	StillHeld = 0
+start
+	set LippyBloke focus to [LippyFirePos]
+	LippyBloke play ANM_P_SITTING_DOWN1_SITTING loop -1
+	run background script StealthRomeo(LippyBloke)
+	begin loop
+		wait until 1 seconds
+		if get game time < LastTimeOfDay and SpiritActive == 0
+			DayNumber++
+			LippyWaterCheck = 0
+			wait until 2 seconds
+		end if
+		LastTimeOfDay = get game time
+		if StillHeld == 1
+			if not LippyBloke is HELD and not LippyBloke in MyCreature hand
+				StillHeld = 0
+			end if
+		end if
+		if not LippyBloke exists or HEALTH of LippyBloke <= 0
+			begin dialogue
+				eject good spirit
+				say HELP_TEXT_SPECIAL_CROPS_160
+				wait until 1 seconds
+				eject evil spirit
+				wait until read
+				say HELP_TEXT_SPECIAL_CROPS_170
+				wait until 1 seconds
+				send good spirit home
+				wait until read
+				send evil spirit home
+			end dialogue
+			LippyBlokeDead = 1
+		elsif (LippyBloke is HELD or LippyBloke in MyCreature hand) and StillHeld == 0
+			StillHeld = 1
+			start say sound HELP_TEXT_SPECIAL_CROPS_180 at [LippyBloke]
+			wait until not say sound HELP_TEXT_SPECIAL_CROPS_180 playing
+			if LippyBloke is HELD
+				start say sound HELP_TEXT_SPECIAL_CROPS_190 at [LippyBloke]
+				wait until not say sound HELP_TEXT_SPECIAL_CROPS_190 playing
+			end if
+		elsif get distance from (camera position) to [LippyBloke] < 150 and [LippyBloke] viewed
+			if DayNumber - LastVisitDay > 1
+				start say sound HELP_TEXT_SPECIAL_CROPS_200 at [LippyBloke]
+				wait until not say sound HELP_TEXT_SPECIAL_CROPS_200 playing
+			elsif DayNumber >= 5 and LongTrialComment == 0
+				start say sound HELP_TEXT_SPECIAL_CROPS_210 at [LippyBloke]
+				wait until not say sound HELP_TEXT_SPECIAL_CROPS_210 playing
+				LongTrialComment = 1
+			elsif DayNumber >= 10 and LongTrialComment == 1
+				start say sound HELP_TEXT_SPECIAL_CROPS_220 at [LippyBloke]
+				wait until not say sound HELP_TEXT_SPECIAL_CROPS_220 playing
+				LongTrialComment = 2
+			end if
+			LastVisitDay = DayNumber
+			if OverWatered == 1
+				start say sound HELP_TEXT_SPECIAL_CROPS_230 at [LippyBloke]
+				wait until not say sound HELP_TEXT_SPECIAL_CROPS_230 playing
+				OverWatered = 0
+			end if
+			ObjectInHand = get object held
+			if VillagerComment == 0 and ObjectInHand type VILLAGER and (get distance from [ObjectInHand] to [CropField1] < 50 or get distance from [ObjectInHand] to [CropField2] < 50) and ObjectInHand != Romeo and ObjectInHand != Juliet and ObjectInHand != FatherCrop
+				start say sound HELP_TEXT_SPECIAL_CROPS_240 at [LippyBloke]
+				wait until not say sound HELP_TEXT_SPECIAL_CROPS_240 playing
+				start say sound HELP_TEXT_SPECIAL_CROPS_250 at [LippyBloke]
+				wait until not say sound HELP_TEXT_SPECIAL_CROPS_250 playing
+				VillagerComment = 1
+			end if
+			if PooComment == 0 and ObjectInHand type POO and (get distance from [ObjectInHand] to [CropField1] < 50 or get distance from [ObjectInHand] to [CropField2] < 50)
+				start say sound HELP_TEXT_SPECIAL_CROPS_260 at [LippyBloke]
+				wait until not say sound HELP_TEXT_SPECIAL_CROPS_260 playing
+				PooComment = 1
+			end if
+			if DamagedComment == 0 and HEALTH of CropField1 < LastCrop1Health
+				start say sound HELP_TEXT_SPECIAL_CROPS_270 at [LippyBloke]
+				wait until not say sound HELP_TEXT_SPECIAL_CROPS_270 playing
+				DamagedComment = 1
+			elsif DamagedComment == 0 and HEALTH of CropField2 < LastCrop2Health
+				start say sound HELP_TEXT_SPECIAL_CROPS_270 at [LippyBloke]
+				wait until not say sound HELP_TEXT_SPECIAL_CROPS_270 playing
+				DamagedComment = 1
+			end if
+			LastCrop2Health = HEALTH of CropField2
+			if LippyWaterCheck == 1
+				if get game time > 21 and DayNumber > 0
+					start say sound HELP_TEXT_SPECIAL_CROPS_280 at [LippyBloke]
+					wait until not say sound HELP_TEXT_SPECIAL_CROPS_280 playing
+				end if
+				LippyWaterCheck = 2
+			end if
+			if not get distance from [LippyBloke] to [LippyBlokePos] < 2 and not LippyBloke is HELD_ANY and not LippyBloke in MyCreature hand and get OnTheMoveTimer time remaining <= 0
+				move LippyBloke position to [LippyBlokePos] radius 0
+				set OnTheMoveTimer time to 10 seconds
+				Resettle = 1
+			elsif get distance from [LippyBloke] to [LippyBlokePos] < 2 and Resettle == 1
+				wait until 1 seconds
+				set LippyBloke focus to [LippyFirePos]
+				wait until 0.5 seconds
+				LippyBloke play ANM_P_SITTING_DOWN1_SITTING loop -1
+				Resettle = 0
+			end if
+		end if
+		until CropCompleted >= 2 or LippyBlokeDead == 1
+	end loop
+end script LippyBloke
+
+begin script Bodgin
+	BodgePos = marker at [2934.31, 55.61, 2788.33]
+	SpellSeed = 0
+	Turd = 0
+	BodgeRock = create OBJECT ROCK at [BodgePos]
+	BodgeRock2 = create OBJECT ROCK at [BodgePos] + ([5, 5])
+	BodgeRock3 = create OBJECT ROCK at [BodgePos] + ([10, 10])
+start
+	SCALE of BodgeRock2 = 0.75
+	SCALE of BodgeRock3 = 0.5
+	begin loop
+		if BodgeRock3 is HELD
+			set game time 8.59
+			wait until not BodgeRock3 is HELD
+		end if
+		if BodgeRock2 is HELD
+			set game time 23.59
+			wait until not BodgeRock2 is HELD
+		end if
+		if BodgeRock is HELD
+			SpellSeed = create ONE_SHOT SPELL_SEED_TYPE_WATER at [BodgePos]
+			Turd = create POO at [BodgePos] + ([-5, -5])
+			wait until not BodgeRock is HELD
+		end if
+		until CropCompleted > 1
+	end loop
+end script Bodgin
+
+begin script CropStatus(Crop, Field)
+	CropHeight = 0
+	WateredToday = 0
+	ManureAdded = 0
+	ManureAddedFlag = 0
+	Manure = 0
+	LastTimeOfDay = 0
+	Fireworks = 0
+	FindWaterSpell = 0
+	SpellInHand = 0
+	MyHalfWayFlag = 0
+	FieldScore = 0
+	RandomSay = 0
+	DayNum = 0
+start
+	while CropHeight < 4
+		wait until 1 seconds
+		if ManureAdded == 1
+			ManureAddedFlag = 1
+			ManureAdded = 2
+		end if
+		if get game time < LastTimeOfDay and SpiritActive == 0
+			DayNum++
+			wait until 2 seconds
+			if WateredToday == 0
+				if CropHeight > 0
+					CropHeight--
+					HEIGHT of Crop -= 0.2
+					if Field == 1
+						Crop1Total--
+					else
+						Crop2Total--
+					end if
+				end if
+			elsif WateredToday < 3
+				CropHeight++
+				HEIGHT of Crop += 0.2
+				if Field == 1
+					Crop1Total++
+				else
+					Crop2Total++
+				end if
+			else
+			end if
+			WateredToday = 0
+			if ManureAddedFlag == 1
+				CropHeight = CropHeight + 1
+				HEIGHT of Crop = (HEIGHT of Crop) + 0.2
+				ManureAddedFlag = 0
+				if Field == 1
+					Crop1Total++
+				else
+					Crop2Total++
+				end if
+			end if
+			if MyHalfWayFlag == 0 and CropHeight > 1
+				FieldHalfWay++
+				MyHalfWayFlag = 1
+			elsif MyHalfWayFlag == 1 and CropHeight <= 2
+				FieldHalfWay--
+				MyHalfWayFlag = 0
+			end if
+			FieldScore = CropHeight * 2 + 2
+			if Field == 1
+				set CropScoreboard1 score FieldScore
+			else
+				set CropScoreboard2 score FieldScore
+			end if
+		end if
+		LastTimeOfDay = get game time
+		FindWaterSpell = get spell SPELL_WATER_LEVEL_1 at [Crop] radius 15
+		if FindWaterSpell exists
+			SpellInHand = get object held
+			if WateredToday < 2
+				begin dialogue
+					eject good spirit
+					RandomSay = variable constant from HELP_TEXT_SPECIAL_CROPS_291 to HELP_TEXT_SPECIAL_CROPS_294
+					say single line constant RandomSay
+					wait until read
+					send good spirit home
+				end dialogue
+			else
+				begin dialogue
+					eject good spirit
+					say HELP_TEXT_SPECIAL_CROPS_300
+					wait until read
+					say HELP_TEXT_SPECIAL_CROPS_310
+					wait until read
+					send good spirit home
+				end dialogue
+				OverWatered = 1
+			end if
+			while SpellInHand exists
+			end while
+			WateredToday++
+			if LippyWaterCheck == 0
+				LippyWaterCheck = 1
+			end if
+			wait until 2 seconds
+		end if
+		if ManureAdded == 0 or ManureAdded == 2
+			Manure = get POO at [Crop] radius 10
+			if Manure exists
+				if ManureAdded == 0
+					begin dialogue
+						eject evil spirit
+						say HELP_TEXT_SPECIAL_CROPS_320
+						wait until read
+						say HELP_TEXT_SPECIAL_CROPS_330
+						wait until read
+						send evil spirit home
+					end dialogue
+					delete Manure with fade
+					wait until not Manure exists
+				elsif ManureAdded > 1
+					begin dialogue
+						eject evil spirit
+						say HELP_TEXT_SPECIAL_CROPS_340
+						wait until read
+						say HELP_TEXT_SPECIAL_CROPS_350
+						wait until read
+						send evil spirit home
+					end dialogue
+					delete Manure with fade
+					wait until not Manure exists
+				end if
+				ManureAdded++
+			end if
+		end if
+	end while
+	if Field == 1
+		set CropScoreboard1 score 10
+	else
+		set CropScoreboard2 score 10
+	end if
+	StopTheHalfwayMadness = 1
+	wait until get distance from (camera position) to [Crop] < 100 and get game time > 8 and get game time < 21
+	Fireworks = create special effect SPOT_VISUAL_TOWN_FIREWORKS at [Crop] time 60
+	CropCompleted++
+	if CropCompleted == 1
+		begin dialogue
+			eject good spirit
+			make good spirit point at [Crop]
+			say single line HELP_TEXT_SPECIAL_CROPS_360
+			wait until read
+			stop good spirit pointing
+			send good spirit home
+		end dialogue
+	else
+		begin dialogue
+			eject good spirit
+			make good spirit point at [Crop]
+			say single line HELP_TEXT_SPECIAL_CROPS_370
+			wait until read
+			stop good spirit pointing
+			send good spirit home
+		end dialogue
+	end if
+end script CropStatus
+
+begin script MoveCameraWhileWaitingForIntereaction
+start
+	begin known cinema
+		wait until 2 seconds
+		move camera focus to [2974.03, 48.6687, 2720.37] time 2
+		wait until 2 seconds
+		BackgroundCameraMoveComplete = 1
+	end known cinema
+end script MoveCameraWhileWaitingForIntereaction
+
+begin script DeltHorse(Horse)
+start
+	wait until 10 seconds
+	delete Horse with fade
+	delete CropScoreboard1
+	delete CropScoreboard2
+	delete RMScoreboard1
+	delete RMScoreboard2
+end script DeltHorse
+
+begin script HorseAnims(Horse)
+	AnimCycle = 0
+start
+	begin loop
+		if Horse played
+			if AnimCycle == 0
+				force Horse CREATURE_SIT Horse
+				AnimCycle++
+			else
+				force Horse CREATURE_WAVE_AT_PLAYER Horse
+				AnimCycle = 0
+			end if
+		end if
+	end loop
+end script HorseAnims
+
+begin script SpecialCrops
+	CropField1Pos = marker at [2901.34, 55.61, 2790.84]
+	CropField1 = 0
+	CropField2Pos = marker at [2900.93, 55.61, 2730.67]
+	CropField2 = 0
+	Horse = 0
+	HorsePos1 = marker at [2941.05, 43.55, 2685.41]
+	SpecialCropsDYKPos = marker at [2975.212, 40.815, 2710.065]
+	BeginPos = 0
+	BeginFoc = 0
+	Highlight = 0
+	ReadyMade1 = 0
+	ReadyMade2 = 0
+	RMPos1 = marker at [2960.8, 42.8172, 2710.19]
+	RMPos2 = marker at [2960.15, 43.55, 2660.69]
+	ViewRMsPos = marker at [2936.8, 54.1707, 2646.55]
+	ViewRMsFoc = marker at [2955.47, 43.9378, 2662.13]
+	HalfWayCinema = 0
+	ObjectInHand = 0
+	CropScoreboard1Pos = marker at [2885.93, 56.4711, 2790.58]
+	CropScoreboard2Pos = marker at [2883.27, 55.61, 2732.05]
+	RMScoreboard1Pos = marker at [2960.32, 41.383, 2726.02]
+	RMScoreboard2Pos = marker at [2960.79, 42.8512, 2646.56]
+	Fireworks = 0
+	Lantern1 = 0
+	LanternPos1 = marker at [2950.86, 42.88, 2692.61]
+	Lantern2 = 0
+	LanternPos2 = marker at [2884.5, 55.61, 2726.06]
+	Lantern3 = 0
+	LanternPos3 = marker at [2886.14, 54.8013, 2785.69]
+	EndingPos = marker at [2869.581, 80.263, 2800.056]
+	EndingFoc = marker at [2899.237, 56.139, 2776.221]
+start
+	DojoReminderSpecialCrops = 1
+	Lantern1 = create OBJECT MOBILE_STATIC_INFO_STREET_LANTERN at [LanternPos1]
+	Lantern2 = create OBJECT MOBILE_STATIC_INFO_STREET_LANTERN at [LanternPos2]
+	Lantern3 = create OBJECT MOBILE_STATIC_INFO_STREET_LANTERN at [LanternPos3]
+	CropCompleted = 0
+	CropField1 = create with angle 0 and scale 1 SCRIPT_OBJECT_TYPE_SPECIAL_FIELD FIELD_INFO_TYPE_SPECIAL_CROP at [CropField1Pos]
+	SCALE of CropField1 = 2
+	HEIGHT of CropField1 = 0.2
+	disable CropField1 pickup
+	CropScoreboard1 = create highlight CHALLENGE_NONE SCRIPT_HIGHLIGHT_INFO_SCOREBOARD_BIG at [CropScoreboard1Pos]
+	enable CropScoreboard1 indestructible
+	set CropScoreboard1 focus to [CropField1]
+	set CropScoreboard1 score 2
+	CropField2 = create with angle 0 and scale 1 SCRIPT_OBJECT_TYPE_SPECIAL_FIELD FIELD_INFO_TYPE_SPECIAL_CROP at [CropField2Pos]
+	SCALE of CropField2 = 2
+	HEIGHT of CropField2 = 0.2
+	disable CropField2 pickup
+	CropScoreboard2 = create highlight CHALLENGE_NONE SCRIPT_HIGHLIGHT_INFO_SCOREBOARD_BIG at [CropScoreboard2Pos]
+	enable CropScoreboard2 indestructible
+	set CropScoreboard2 focus to [CropField2]
+	set CropScoreboard2 score 2
+	ReadyMade1 = create with angle 0 and scale 1 SCRIPT_OBJECT_TYPE_SPECIAL_FIELD FIELD_INFO_TYPE_SPECIAL_CROP at [RMPos1]
+	SCALE of ReadyMade1 = 2
+	HEIGHT of ReadyMade1 = 1
+	disable ReadyMade1 pickup
+	enable ReadyMade1 indestructible
+	RMScoreboard1 = create highlight CHALLENGE_NONE SCRIPT_HIGHLIGHT_INFO_SCOREBOARD_BIG at [RMScoreboard1Pos]
+	enable RMScoreboard1 indestructible
+	set RMScoreboard1 focus to [ReadyMade1]
+	set RMScoreboard1 score 10
+	ReadyMade2 = create with angle 0 and scale 1 SCRIPT_OBJECT_TYPE_SPECIAL_FIELD FIELD_INFO_TYPE_SPECIAL_CROP at [RMPos2]
+	SCALE of ReadyMade2 = 2
+	HEIGHT of ReadyMade2 = 1
+	disable ReadyMade2 pickup
+	enable ReadyMade2 indestructible
+	RMScoreboard2 = create highlight CHALLENGE_NONE SCRIPT_HIGHLIGHT_INFO_SCOREBOARD_BIG at [RMScoreboard2Pos]
+	enable RMScoreboard2 indestructible
+	set RMScoreboard2 focus to [ReadyMade2]
+	set RMScoreboard2 score 10
+	Horse = create DUMB_CREATURE CREATURE_TYPE_HORSE at [HorsePos1]
+	set Horse name HELP_TEXT_NAME_HORSE_01
+	disable Horse can be leashed to
+	disable Horse hurt by fire
+	SCALE of Horse = 0.8
+	Highlight = create highlight CHALLENGE_SPECIAL_CROPS HIGHLIGHT_TRIAL at [HorsePos1]
+	ALTITUDE of Highlight = 15
+	run background script HorseAnims(Horse)
+	run script TrialNotify(Highlight)
+	stop script "HorseAnims"
+	begin cinema
+		BeginPos = marker at (camera position)
+		BeginFoc = marker at (camera focus)
+		move camera position to [Horse] + [12, 5, 12] time 3
+		move camera focus to [Horse] + [0, 7, 0] time 2
+		set Horse focus to [Horse] + [12, 5, 12]
+		wait until camera ready
+		snapshot CHALLENGE_SPECIAL_CROPS quest success 0 alignment 0 HELP_TEXT_CREATURE_ISLE_TITLE_14 StandardReminder (variable HELP_TEXT_CI_REMINDER_11)
+		disable creature sound
+		say HELP_TEXT_SPECIAL_CROPS_10 by Horse
+		Horse play ANM_A_HORSE_DEADRHS loop 1
+		wait until read
+		say HELP_TEXT_SPECIAL_CROPS_20 by Horse
+		wait until read
+		say HELP_TEXT_SPECIAL_CROPS_30 by Horse
+		wait until read
+		wait until Horse played
+		force Horse POINT_AT CropField1Pos
+		wait until 2 seconds
+		move camera focus to [2904.08, 55.8806, 2727.1] time 4
+		wait until 1.2 seconds
+		move camera position to [2919.04, 61.8726, 2712.09] time 3
+		wait until 1 seconds
+		say HELP_TEXT_SPECIAL_CROPS_40 by Horse
+		wait until read
+		move camera position to [2924.46, 62.6485, 2774.95] time 2
+		move camera focus to [2906.71, 55.9081, 2787.28] time 2
+		wait until camera ready
+		say HELP_TEXT_SPECIAL_CROPS_50 with interaction by Horse
+		wait until read
+		wait until 1 seconds
+		set Horse focus to [Horse] + [12, 5, 12]
+		set camera position to [Horse] + [12, 5, 12]
+		set camera focus to [Horse] + [0, 7, 0]
+		wait until 1 seconds
+		say HELP_TEXT_SPECIAL_CROPS_60 by Horse
+		force Horse CREATURE_FART Horse
+		wait until read
+		wait until Horse played
+		run background script MoveCameraWhileWaitingForIntereaction
+		move camera position to [2985.26, 54.7391, 2731.6] time 4
+		say HELP_TEXT_SPECIAL_CROPS_70 with interaction by Horse
+		wait until BackgroundCameraMoveComplete == 1
+		BackgroundCameraMoveComplete = 0
+		wait until read
+		wait until camera ready
+		set fade red 0 green 0 blue 0 time 1
+		wait until 1 seconds
+		set camera position to [EndingPos]
+		set camera focus to [EndingFoc]
+		delete Horse with fade
+		set fade in time 1
+		wait until 1 seconds
+		run background script DidYouKnow(SpecialCropsDYKPos, variable HELP_TEXT_CROPS_DYK, variable DYK_MISC)
+	end cinema with dialogue
+		eject evil spirit
+		eject good spirit
+		make good spirit point at [CropScoreboard1]
+		say HELP_TEXT_SPECIAL_CROPS_380
+		wait until read
+		say HELP_TEXT_SPECIAL_CROPS_390
+		wait until read
+		stop good spirit pointing
+		send good spirit home
+	end dialogue
+	run background script LippyBloke(CropField1, CropField2)
+	run background script CropStatus(CropField1, 1)
+	run background script CropStatus(CropField2, 2)
+	while CropCompleted < 2
+		wait until 5 seconds
+		if FieldHalfWay > 1 and HalfWayCinema == 0
+			if get distance from (camera position) to [CropField1Pos] < 150 and [CropField1Pos] viewed
+				if get game time > 8 and get game time < 20 and StopTheHalfwayMadness == 0
+					ObjectInHand = get object held
+					if not ObjectInHand exists
+						begin cinema
+							BeginPos = marker at (camera position)
+							BeginFoc = marker at (camera focus)
+							set fade red 0 green 0 blue 0 time 1.5
+							wait until 1 seconds
+							Horse = create DUMB_CREATURE CREATURE_TYPE_HORSE at [HorsePos1]
+							set Horse name HELP_TEXT_NAME_HORSE_01
+							disable Horse can be leashed to
+							SCALE of Horse = 0.8
+							set camera position to [Horse] + [12, 5, 12]
+							set camera focus to [Horse] + [0, 7, 0]
+							set Horse focus to [Horse] + [12, 5, 12]
+							set fade in time 3
+							wait until 2 seconds
+							wait until camera ready
+							disable creature sound
+							Horse play ANM_A_COW_DEAD_ON_RHS loop 1
+							say HELP_TEXT_SPECIAL_CROPS_80 by Horse
+							wait until read
+							wait until Horse played
+							say HELP_TEXT_SPECIAL_CROPS_90 by Horse
+							wait until read
+							say HELP_TEXT_SPECIAL_CROPS_100 by Horse
+							wait until read
+							say HELP_TEXT_SPECIAL_CROPS_110 with interaction by Horse
+							Horse play ANM_A_HORSE_DEADRHS loop 1
+							wait until read
+							wait until 1 seconds
+							set fade red 0 green 0 blue 0 time 1.5
+							wait until 1 seconds
+							set camera position to [BeginPos]
+							set camera focus to [BeginFoc]
+							delete Horse with fade
+							set fade in time 3
+							wait until 2 seconds
+						end cinema
+						HalfWayCinema = 1
+					end if
+				end if
+			end if
+		end if
+	end while
+	begin cinema
+		BeginPos = marker at (camera position)
+		BeginFoc = marker at (camera focus)
+		set fade red 0 green 0 blue 0 time 1.5
+		wait until 1 seconds
+		Horse = create DUMB_CREATURE CREATURE_TYPE_HORSE at [HorsePos1]
+		set Horse name HELP_TEXT_NAME_HORSE_01
+		run script SetupCreatureIsleCreature(Horse)
+		SCALE of Horse = 0.8
+		set camera position to [Horse] + [12, 5, 12]
+		set camera focus to [Horse] + [0, 7, 0]
+		set Horse focus to [Horse] + [12, 5, 12]
+		set fade in time 3
+		wait until 2 seconds
+		wait until camera ready
+		disable creature sound
+		Horse play ANM_A_COW_DEAD_ON_RHS loop 1
+		say HELP_TEXT_SPECIAL_CROPS_120 by Horse
+		wait until read
+		wait until Horse played
+		Fireworks = create special effect SPOT_VISUAL_TOWN_FIREWORKS at [CropField1Pos] time 60
+		Fireworks = create special effect SPOT_VISUAL_TOWN_FIREWORKS at [CropField2Pos] time 60
+		set camera position to [2947.11, 87.4823, 2704.52]
+		set camera focus to [2869.91, 56.6326, 2777.98]
+		say HELP_TEXT_SPECIAL_CROPS_130 with interaction by Horse
+		wait until read
+		say HELP_TEXT_SPECIAL_CROPS_135 by Horse
+		wait until read
+		say HELP_TEXT_SPECIAL_CROPS_140 by Horse
+		wait until read
+		set camera position to [Horse] + [12, 5, 12]
+		set camera focus to [Horse] + [0, 7, 0]
+		say HELP_TEXT_SPECIAL_CROPS_150 with interaction by Horse
+		wait until read
+		wait until 1 seconds
+		enable CropField1 pickup
+		release CropField1
+		enable CropField2 pickup
+		release CropField2
+		enable ReadyMade1 pickup
+		release ReadyMade1
+		enable ReadyMade2 pickup
+		release ReadyMade2
+	end cinema with widescreen
+	run background script DeltHorse(Horse)
+	run script Dojo(Horse)
+	DojoReminderSpecialCrops = 0
+	run background script DeleteDYK(SpecialCropsDYKPos)
+end script SpecialCrops
+

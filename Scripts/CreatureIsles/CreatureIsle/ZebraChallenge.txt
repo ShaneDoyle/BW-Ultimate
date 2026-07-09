@@ -1,0 +1,866 @@
+//LHVM Challenge source version 8
+//Decompiled with CHLASM tool by Daniels118
+
+global BallistaTrialTriggered
+global BallistaTrialComplete
+global Target1Completed
+global Target2Completed
+global Target3Completed
+global ShroomSparkle1
+global ShroomSparkle2
+global ShroomSparkle3
+global QuitCam
+global Ballista
+global MissedCount
+global ZebraBusy
+global YetAnotherCameraMoveComplete
+
+begin script ReadThatLine
+start
+	begin known dialogue
+		say single line HELP_TEXT_ZEBRA_TRIAL_120
+		wait until read
+		clear dialogue
+	end known dialogue
+end script ReadThatLine
+
+begin script MoveBallistaToPos(ThePos, Time)
+	NoSteps = 0
+	DestAngle = 0
+	DestPitch = 0
+	RelPos = 0
+	XPos = 0
+	ZPos = 0
+	Distance2D = 0
+	Height = 0
+	CurrentPitch = 0
+	CurrentAngle = 0
+	AngleStep = 0
+	PitchStep = 0
+	AngleDifference = 0
+start
+	RelPos = marker at [ThePos]
+	NoSteps = 10 * Time
+	if NoSteps <= 0
+		NoSteps = 1
+	end if
+	set RelPos position to [ThePos] - [Ballista]
+	XPos = XPOS of RelPos
+	ZPos = ZPOS of RelPos
+	DestAngle = arctan2 XPos over ZPos
+	Height = ALTITUDE of RelPos
+	ZPos *= ZPos
+	XPos *= XPos
+	XPos += ZPos
+	Distance2D = sqrt XPos
+	DestPitch = arctan2 Height over Distance2D
+	CurrentPitch = XANGLE of Ballista
+	CurrentAngle = ANGLE of Ballista
+	AngleDifference = DestAngle - CurrentAngle
+	if AngleDifference < -180
+		AngleDifference += 360
+	elsif AngleDifference > 180
+		AngleDifference -= 360
+	end if
+	AngleStep = AngleDifference / NoSteps
+	PitchStep = (DestPitch - CurrentPitch) / NoSteps
+	while NoSteps > 0
+		NoSteps--
+		ANGLE of Ballista += AngleStep
+		XANGLE of Ballista += PitchStep
+	end while
+end script MoveBallistaToPos
+
+begin script SetBallistaToPos(ThePos)
+	DestAngle = 0
+	DestPitch = 0
+	RelPos = 0
+	XPos = 0
+	ZPos = 0
+	Distance2D = 0
+	Height = 0
+start
+	RelPos = marker at [ThePos] - [Ballista]
+	XPos = XPOS of RelPos
+	ZPos = ZPOS of RelPos
+	DestAngle = arctan2 XPos over ZPos
+	ANGLE of Ballista = DestAngle
+	Height = ALTITUDE of RelPos
+	ZPos *= ZPos
+	XPos *= XPos
+	XPos += ZPos
+	Distance2D = sqrt XPos
+	DestPitch = arctan2 Height over Distance2D
+	XANGLE of Ballista = DestPitch
+end script SetBallistaToPos
+
+begin script AppraisalInFlight(Bloke, Target1, Target2, Target3, CannonPos, Velocity, LastFocus)
+	LastAltitude = 0
+	DestinationComment = 0
+	BlokeMarker = 0
+	Distance = 0
+	LandingPos = 0
+start
+	begin known dialogue
+		LandingPos = marker at (landing position of Bloke velocity heading [LastFocus] speed Velocity)
+		while Bloke is FLYING and DestinationComment == 0 and QuitCam == 0
+			if DestinationComment == 0
+				LastAltitude = ALTITUDE of Bloke
+				wait until 0.2 seconds
+				if LastAltitude > ALTITUDE of Bloke
+					stop sound LH_SAMPLE_DONKEYFIRED
+					if get distance from [LandingPos] to [CannonPos] < 60 and Velocity > 100
+						start say sound HELP_TEXT_ZEBRA_TRIAL_MAN_FLYING_PAST_10
+						wait until not say sound HELP_TEXT_ZEBRA_TRIAL_MAN_FLYING_PAST_10 playing
+						DestinationComment = 1
+					elsif get distance from [LandingPos] to [Target1] < 30 and Target1Completed == 0 or get distance from [LandingPos] to [Target2] < 30 and Target2Completed == 0 or get distance from [LandingPos] to [Target3] < 30 and Target3Completed == 0
+						start say sound HELP_TEXT_ZEBRA_TRIAL_MAN_FLYING_PAST_01
+						wait until not say sound HELP_TEXT_ZEBRA_TRIAL_MAN_FLYING_PAST_01 playing
+						DestinationComment = 1
+					elsif get distance from [LandingPos] to [Target1] < 100 and Target1Completed == 0 or get distance from [LandingPos] to [Target2] < 200 and Target2Completed == 0 or get distance from [LandingPos] to [Target3] < 200 and Target3Completed == 0
+						start say sound HELP_TEXT_ZEBRA_TRIAL_MAN_FLYING_PAST_02
+						wait until not say sound HELP_TEXT_ZEBRA_TRIAL_MAN_FLYING_PAST_02 playing
+						DestinationComment = 1
+					else
+						MissedCount++
+						if MissedCount > 4
+							eject evil spirit
+							say single line HELP_TEXT_ESCAPE_TO_QUIT_40
+							wait until read
+							send evil spirit home
+							MissedCount = 0
+						else
+							start say sound HELP_TEXT_ZEBRA_TRIAL_MAN_FLYING_PAST_03
+							wait until not say sound HELP_TEXT_ZEBRA_TRIAL_MAN_FLYING_PAST_03 playing
+						end if
+						DestinationComment = 1
+					end if
+				end if
+			end if
+		end while
+	end known dialogue
+end script AppraisalInFlight
+
+begin script ZebraShot(Bloke, Velocity)
+	Comment = 0
+	BurnVelocity = 100
+	SmokeTick = 0
+	SmokeTrail = 0
+	Impact = 0
+start
+	wait until ALTITUDE of Bloke > 10 or 2 seconds
+	while Bloke is FLYING
+		if ALTITUDE of Bloke < 10
+			Impact = 1
+		end if
+		SmokeTick++
+		if SmokeTick >= 0 and Impact == 0 and Velocity > BurnVelocity
+			SmokeTrail = create special effect SPOT_VISUAL_OBJECT_APPEAR at [Bloke] time 0.5
+			SmokeTick = 0
+		end if
+		if get distance from [Bloke] to (camera position) < 100 and Comment == 0
+			start say sound constant from HELP_TEXT_ZEBRA_TRIAL_MAN_FLYING_PAST_05 to HELP_TEXT_ZEBRA_TRIAL_MAN_FLYING_PAST_09 at [Bloke]
+			Comment = 1
+		end if
+	end while
+	delete Bloke
+end script ZebraShot
+
+begin script AwaitingTrialTrigger(Zebra, ZebraPos, CannonPos)
+	ZebraGunPowder = 200
+	ZebraAim = 0
+	Bloke = 0
+	GunPowder = 0
+	DistanceToCamera = 0
+	ShowOffShotPos = marker at [3324.42, 137.002, 1966.12]
+	CreatePos = marker at [2662.28, 45.6599, 2685.23]
+start
+	begin loop
+		ENERGY of Zebra = 1
+		move Zebra position to [ZebraPos] radius 0
+		wait until get distance from [Zebra] to [ZebraPos] < 1 or 20 seconds
+		wait until 2 seconds
+		force Zebra CREATURE_POINT_AT_CAMERA Zebra
+		wait until Zebra played
+		force Zebra CREATURE_STOMP Zebra
+		wait until Zebra played
+		if get distance from (camera position) to [CannonPos] < 100
+			ZebraAim = marker at [ShowOffShotPos] + [0, 100, 0]
+			run script MoveBallistaToPos(ZebraAim, 3)
+			open Ballista
+			Bloke = create VILLAGER VILLAGER_INFO_MULE_HEAD at [CreatePos]
+			ALTITUDE of Bloke = 15
+			set Bloke velocity heading [ZebraAim] speed ZebraGunPowder angular x 0 y 0 z 0
+		else
+			DistanceToCamera = get distance from [CannonPos] to (camera position)
+			DistanceToCamera = DistanceToCamera / 2
+			ZebraAim = marker at (camera position)
+			ZebraAim = marker at [ZebraAim] + [0, 100, 0]
+			run script MoveBallistaToPos(ZebraAim, 3)
+			open Ballista
+			Bloke = create VILLAGER VILLAGER_INFO_MULE_HEAD at [CreatePos]
+			ALTITUDE of Bloke = 15
+			set Bloke velocity heading [ZebraAim] speed DistanceToCamera angular x 0 y 0 z 0
+		end if
+		run background script ZebraShot(Bloke, DistanceToCamera)
+		force Zebra POINT_AT Bloke
+		wait until Zebra played
+		force Zebra CREATURE_BE_SAD Zebra
+		wait until Zebra played
+		wait until not Bloke is FLYING
+		wait until 1 seconds
+		delete Bloke with fade
+		close Ballista
+		wait until 5 seconds
+		until BallistaTrialTriggered != 0
+	end loop
+end script AwaitingTrialTrigger
+
+begin script ZebraSupport(Zebra, ZebraRestPos, CannonPos)
+	AnimNum = 0
+start
+	move Zebra position to [ZebraRestPos] radius 0
+	wait until get distance from [Zebra] to [ZebraRestPos] < 10 or 30 seconds
+	wait until 2 seconds
+	set Zebra focus to [CannonPos]
+	wait until 2 seconds
+	force Zebra CREATURE_SIT Zebra
+	wait until Zebra played
+	begin loop
+		if Zebra played and ZebraBusy == 0
+			if AnimNum == 0
+				force Zebra CREATURE_POINT_AT_CAMERA Zebra
+				AnimNum = 1
+			elsif AnimNum == 1
+				Zebra play ANM_SWALLOW_FLAP loop 1
+				AnimNum = 2
+			elsif AnimNum == 2
+				Zebra play ANM_A_COW_DEAD_ON_RHS loop 1
+				AnimNum = 3
+			elsif AnimNum == 3
+				force Zebra CREATURE_SIT Zebra
+				AnimNum = 0
+			end if
+		end if
+		until BallistaTrialComplete == 1
+	end loop
+end script ZebraSupport
+
+begin script DeleteZebra(Zebra, Bloke)
+start
+	wait until 10 seconds
+	delete Zebra with fade
+	delete Bloke with fade
+end script DeleteZebra
+
+begin script YetAnotherMoveCameraAwaitingInteraction(Target3)
+start
+	begin known cinema
+		wait until 2 seconds
+		move camera position to [Target3] + [100, 66, 100] time 3
+		wait until 3 seconds
+		YetAnotherCameraMoveComplete = 1
+	end known cinema
+end script YetAnotherMoveCameraAwaitingInteraction
+
+begin script ZebraChallenge
+	Zebra = 0
+	ZebraPos = marker at [2646.79, 32.16, 2704.8]
+	ZebraRestPos = marker at [2691.21, 36.1015, 2619.6]
+	Bloke = 0
+	BlokePos = marker at [2655.81, 32.5473, 2694.04]
+	CannonPos = marker at [2662.28, 32.6599, 2685.23]
+	LastPos = marker at [2662.28, 43.8496, 2685.23]
+	LastFocus = marker at [3323.22, 113.949, 1978.63]
+	Highlight = 0
+	GameOver = 0
+	TriggerRock = 0
+	RockPos = marker at [2662.28, 32.6599, 2685.23]
+	GunPowder = 0
+	Velocity = 0
+	Spangle = 0
+	FSize = 2
+	Fencing = 0
+	FiredTimer = create timer for 0 seconds
+	ZebraChallengeDYKPos = marker at [1164.375, 6.488, 2158.174]
+	SeeBallistaPos = marker at [2580.01, 83.6611, 2706.27]
+	SeeBallistaFoc = marker at [2660.11, 31.7961, 2674.76]
+	Target1 = marker at [2649.36, 68.3845, 3021.77]
+	Herb1 = create FLOWER FLOWERS_INFO_SUN at [Target1]
+	Target2 = marker at [3360.58, 74.5192, 1898.02]
+	Herb2 = create FLOWER FLOWERS_INFO_SUN at [Target2]
+	Target3 = marker at [1809.48, 99.83, 1845.57]
+	Herb3 = create FLOWER FLOWERS_INFO_SUN at [Target3]
+	Herb1Effect = 0
+	Herb2Effect = 0
+	Herb3Effect = 0
+	Cauldron = 0
+	CauldronPos = marker at [2639.85, 32.16, 2704.16]
+	SmokeTick = 0
+	SmokeTrail = 0
+	Impact = 0
+	RandomComment = 0
+	BlokeLoaded = 0
+	LoadMeComment = 0
+	ReminderTimer = create timer for 0 seconds
+	GunPowderStrength = 0.2
+	BurnVelocity = 100
+	PowerUp = 0
+	WaitCam = 0
+	BlokeInfluence = 0
+	CamPos = 1
+	SeeZebraPos = marker at [2629.52, 36.8093, 2704.01]
+	SeeZebraFoc = marker at [2645.92, 38.5376, 2699.53]
+	ZebraStartPos = marker at [2722.07, 40.3727, 2695.34]
+	BlokePickUpPos = marker at [2724.07, 40.3727, 2697.34]
+	InitCamPos = marker at [2635.99, 42.9536, 2729.49]
+	InitCamFoc = marker at [2759.01, 35.5325, 2606.13]
+	HerbPos = 0
+	TotalHerbage = 0
+	BlokeLastSeen = 0
+	BlokeLodged = 0
+	StillMovingTimer = create timer for 0 seconds
+	ZebraStruck = 0
+	ZebraHeight = 0
+	TextEnum = 0
+	Lantern = 0
+	LanternPos = marker at [2657.96, 32.6913, 2694.14]
+	NewHighPos = marker at [2644.91, 32.16, 2695.46]
+	CommentCounter = 5
+	OneInFive = 5
+	LastOne = variable HELP_TEXT_ZEBRA_TRIAL_MAN_SHOUTS_01
+	BlokeSmoke = 0
+start
+	Target1Completed = 0
+	Target2Completed = 0
+	Target3Completed = 0
+	BallistaTrialTriggered = 0
+	BallistaTrialComplete = 0
+	Lantern = create OBJECT MOBILE_STATIC_INFO_STREET_LANTERN at [LanternPos]
+	Zebra = create DUMB_CREATURE CREATURE_TYPE_ZEBRA at [ZebraPos]
+	set Zebra name HELP_TEXT_NAME_ZEBRA_01
+	disable Zebra set on fire
+	run script SetupCreatureIsleCreature(Zebra)
+	SCALE of Zebra = 0.8
+	teach Zebra MAGICAL SPELL_WOOD TRUE percentage 1
+	Ballista = create ANIM_OBJECT ANIMATED_STATIC_INFO_BALISTA at [CannonPos]
+	enable Ballista indestructible
+	run background script AwaitingTrialTrigger(Zebra, ZebraPos, CannonPos)
+	wait until ZebraReadyToStart == 1
+	disable Herb1 pickup
+	disable Herb1 moveable
+	enable Herb1 indestructible
+	ShroomSparkle1 = create special effect SPOT_VISUAL_HIGHLIGHT_ON_OBJECT on Herb1 time -1
+	disable Herb2 pickup
+	disable Herb2 moveable
+	enable Herb2 indestructible
+	ShroomSparkle2 = create special effect SPOT_VISUAL_HIGHLIGHT_ON_OBJECT on Herb2 time -1
+	disable Herb3 pickup
+	disable Herb3 moveable
+	enable Herb3 indestructible
+	ShroomSparkle3 = create special effect SPOT_VISUAL_HIGHLIGHT_ON_OBJECT on Herb3 time -1
+	Herb1Effect = create alex special effect SPOT_VISUAL_ALEX_HULAHOOP at [Herb1]
+	Herb2Effect = create alex special effect SPOT_VISUAL_ALEX_HULAHOOP at [Herb2]
+	Herb3Effect = create alex special effect SPOT_VISUAL_ALEX_HULAHOOP at [Herb3]
+	HEIGHT of Herb1Effect = 15
+	DENSITY of Herb1Effect = 5
+	HEIGHT of Herb2Effect = 15
+	DENSITY of Herb2Effect = 5
+	HEIGHT of Herb3Effect = 15
+	DENSITY of Herb3Effect = 5
+	set Herb1Effect colour red 10 green 100 blue 255
+	set Herb2Effect colour red 10 green 100 blue 255
+	set Herb3Effect colour red 10 green 100 blue 255
+	DojoReminderZebraBallista = 1
+	Highlight = create highlight CHALLENGE_BALLISTA_BLOKE HIGHLIGHT_TRIAL at [NewHighPos]
+	ALTITUDE of Highlight = 20
+	run script TrialNotify(Highlight)
+	wait until Highlight clicked
+	BallistaTrialTriggered = 1
+	begin cinema
+		set fade red 0 green 0 blue 0 time 2
+		disable creature sound
+		move Zebra position to [ZebraStartPos] radius 0
+		wait until 2 seconds
+		set camera position to [InitCamPos]
+		set camera focus to [InitCamFoc]
+		set Zebra position to [ZebraStartPos]
+		Bloke = create VILLAGER VILLAGER_INFO_MULE_HEAD at [BlokePickUpPos]
+		force Zebra CREATURE_HOLD_OBJECT Bloke
+		wait until Bloke in Zebra hand
+		set Zebra focus to (camera position)
+		set fade in time 2
+		move camera position to [SeeZebraPos] time 6
+		move camera focus to [SeeZebraFoc] time 6
+		move Zebra position to [ZebraPos] radius 0
+		wait until 2 seconds
+		snapshot CHALLENGE_BALLISTA_BLOKE quest success 0 alignment 0 HELP_TEXT_CREATURE_ISLE_TITLE_08 StandardReminder (variable HELP_TEXT_CI_REMINDER_06)
+		wait until get distance from [Zebra] to [ZebraPos] < 2
+		wait until 1 seconds
+		set Zebra focus to (camera position)
+		say HELP_TEXT_ZEBRA_TRIAL_10 by Zebra
+		wait until 1 seconds
+		Zebra play ANM_A_HORSE_DEADRHS loop 1
+		wait until read
+		say HELP_TEXT_ZEBRA_TRIAL_20 by Zebra
+		set Zebra focus to [Bloke]
+		wait until read
+		close dialogue
+		start say sound HELP_TEXT_ZEBRA_TRIAL_MAN_FLYING_PAST_10 at [Bloke]
+		set Zebra focus to [SeeZebraPos]
+		wait until 2 seconds
+		Zebra play ANM_A_HORSE_EAT1 loop 1
+		wait until 2 seconds
+		wait until not Bloke is FLYING
+		move Bloke position to [BlokePos] radius 0
+		SPEED of Bloke = 0.5
+		wait until Zebra played
+		while not get distance from [Bloke] to [BlokePos] < 1
+			set Zebra focus to [Bloke]
+		end while
+		wait until 0.5 seconds
+		set Bloke focus to (camera position)
+		move camera position to [2652.44, 33.5176, 2696.75] time 3
+		move camera focus to [2655.93, 33.5198, 2694.14] time 2
+		wait until 1 seconds
+		set Bloke focus to [2652.44, 33.5176, 2696.75]
+		wait until read
+		wait until camera ready
+		set Bloke focus to (camera position)
+		say HELP_TEXT_ZEBRA_TRIAL_30
+		Bloke play ANM_P_TALK1_MALE loop 1
+		wait until read
+		wait until Bloke played
+		say HELP_TEXT_ZEBRA_TRIAL_40
+		Bloke play ANM_P_SHRUG_SHOULDERS loop 1
+		wait until read
+		wait until Bloke played
+		say HELP_TEXT_ZEBRA_TRIAL_50 with interaction
+		Bloke play ANM_P_TALK1_MALE loop 2
+		wait until read
+		set camera position to [Target1] + [15, 10, 15]
+		set camera focus to [Target1]
+		say HELP_TEXT_ZEBRA_TRIAL_60
+		wait until 2 seconds
+		move camera position to [Target1] + [100, 66, 100] time 3
+		wait until read
+		set camera position to [Target2] + [13, 15, -15]
+		set camera focus to [Target2]
+		say HELP_TEXT_ZEBRA_TRIAL_70
+		wait until 2 seconds
+		move camera position to [Target2] + [100, 150, -100] time 3
+		wait until read
+		set camera position to [Target3] + [15, 10, 15]
+		set camera focus to [Target3]
+		delete Bloke
+		run background script YetAnotherMoveCameraAwaitingInteraction(Target3)
+		say HELP_TEXT_ZEBRA_TRIAL_80 with interaction
+		wait until YetAnotherCameraMoveComplete == 1
+		YetAnotherCameraMoveComplete = 0
+		wait until read
+		set camera position to [SeeBallistaPos]
+		set camera focus to [SeeBallistaFoc]
+		run background script DidYouKnow(ZebraChallengeDYKPos, variable HELP_TEXT_BALLISTA_DYK, variable DYK_MISC)
+	end cinema
+	run background script ZebraSupport(Zebra, ZebraRestPos, CannonPos)
+	begin loop
+		QuitCam = 0
+		Bloke = create VILLAGER VILLAGER_INFO_MULE_HEAD at [BlokePos]
+		enable Bloke indestructible
+		BlokeInfluence = create influence on Bloke radius 5
+		BlokeSmoke = create special effect SPOT_VISUAL_OBJECT_APPEAR on Bloke time 1
+		clear clicked object
+		WaitCam = 0
+		while WaitCam == 0
+			if not Bloke exists
+				Bloke = create VILLAGER VILLAGER_INFO_MULE_HEAD at [BlokePos]
+				enable Bloke indestructible
+				BlokeInfluence = create influence on Bloke radius 5
+			elsif get distance from (camera position) to [CannonPos] < 150 and [CannonPos] viewed
+				WaitCam = 1
+			end if
+		end while
+		while BlokeLoaded == 0
+			if get distance from [Bloke] to [CannonPos] < 10 and not Bloke is HELD
+				delete Bloke with fade
+				delete BlokeInfluence
+				ZebraStruck = 0
+				BlokeLoaded = 1
+			elsif not Bloke exists
+				Bloke = create VILLAGER VILLAGER_INFO_MULE_HEAD at [BlokePos]
+				enable Bloke indestructible
+				BlokeInfluence = create influence on Bloke radius 5
+			elsif not get distance from [Bloke] to [CannonPos] < 100
+				delete Bloke
+				Bloke = create VILLAGER VILLAGER_INFO_MULE_HEAD at [BlokePos]
+				enable Bloke indestructible
+				BlokeInfluence = create influence on Bloke radius 5
+			elsif Bloke is HELD and LoadMeComment == 0
+				if OneInFive > 4
+					begin dialogue
+						say single line HELP_TEXT_ZEBRA_TRIAL_100
+						wait until read or not Bloke is HELD
+					end dialogue
+					OneInFive = 0
+				else
+					OneInFive++
+				end if
+				LoadMeComment = 1
+			elsif LoadMeComment == 1
+				if not Bloke is HELD and not get distance from [Bloke] to [CannonPos] < 5
+					LoadMeComment = 0
+				end if
+			end if
+			if get ReminderTimer time remaining <= 0 and not Bloke is HELD and get distance from (camera position) to [CannonPos] < 150 and [CannonPos] viewed
+				begin dialogue
+					eject evil spirit
+					make evil spirit point at [Bloke]
+					say single line HELP_TEXT_ZEBRA_TRIAL_110
+					wait until read or Bloke is HELD
+					stop evil spirit pointing
+					send evil spirit home
+				end dialogue
+				set ReminderTimer time to 30 seconds
+			end if
+		end while
+		BlokeLoaded = 0
+		LoadMeComment = 0
+		delete ShroomSparkle1
+		delete ShroomSparkle2
+		delete ShroomSparkle3
+		begin camera
+			set fade red 0 green 0 blue 0 time 2
+			set camera position to [LastPos]
+			set camera focus to [LastFocus]
+			delete Ballista
+			HEIGHT of Herb2Effect = 75
+			DENSITY of Herb2Effect = 25
+			begin cannon
+				set fade in time 2
+				wait until 1 seconds
+				CommentCounter++
+				if CommentCounter > 4
+					run background script ReadThatLine
+					CommentCounter = 0
+				end if
+				PowerUp = 0
+				wait until mouse left button down or key KB_ESC down
+				start sound LH_SAMPLE_BALLISTAPULLEDBACK
+				if key KB_ESC down
+					QuitCam = 1
+				end if
+				while mouse left button down and PowerUp < 1
+					PowerUp += 0.035
+					set cannon strength PowerUp
+				end while
+			end cannon
+			stop sound LH_SAMPLE_BALLISTAPULLEDBACK
+			HEIGHT of Herb2Effect = 15
+			DENSITY of Herb2Effect = 5
+		end camera
+		ShroomSparkle1 = create special effect SPOT_VISUAL_HIGHLIGHT_ON_OBJECT on Herb1 time -1
+		ShroomSparkle2 = create special effect SPOT_VISUAL_HIGHLIGHT_ON_OBJECT on Herb2 time -1
+		ShroomSparkle3 = create special effect SPOT_VISUAL_HIGHLIGHT_ON_OBJECT on Herb3 time -1
+		Velocity = PowerUp * 150
+		begin cinema
+			LastPos = marker at (camera position)
+			LastFocus = marker at (camera focus)
+			CamPos = marker at (camera position)
+			if QuitCam == 0
+				Bloke = create VILLAGER VILLAGER_INFO_MULE_HEAD at [CamPos]
+				ALTITUDE of Bloke = ALTITUDE of CamPos
+				set Bloke velocity heading [LastFocus] speed Velocity angular x 0 y 0 z 0
+				start sound LH_SAMPLE_BALLISTAFIRED
+				start sound LH_SAMPLE_DONKEYFIRED
+				run background script AppraisalInFlight(Bloke, Target1, Target2, Target3, CannonPos, Velocity, LastFocus)
+				set FiredTimer time to 2 seconds
+				if Velocity > BurnVelocity
+					start say sound HELP_TEXT_ZEBRA_TRIAL_MAN_FLYING_PAST_06 at [Bloke]
+				end if
+				while get distance from [Bloke] to (camera position) < 100 and get FiredTimer time remaining > 0
+					if Velocity > BurnVelocity
+						SmokeTrail = create special effect SPOT_VISUAL_OBJECT_APPEAR at [Bloke] time 0.5
+					end if
+					if Zebra hit
+						clear hit object
+						ZebraStruck = 1
+					end if
+				end while
+				HEALTH of Bloke = 1
+				set camera heading follow Bloke distance 11
+			end if
+			Ballista = create ANIM_OBJECT ANIMATED_STATIC_INFO_BALISTA at [CannonPos]
+			enable Ballista indestructible
+			run script SetBallistaToPos(LastFocus)
+			if QuitCam == 0
+				BlokeLastSeen = marker at [Bloke]
+			end if
+			set StillMovingTimer time to 4 seconds
+			BlokeLodged = 0
+			while Bloke is FLYING and QuitCam == 0 and BlokeLodged == 0
+				if Zebra hit
+					clear hit object
+					ZebraStruck = 1
+				end if
+				if HEALTH of Bloke < 0.9 and not say sound constant LastOne playing
+					HEALTH of Bloke = 1
+					LastOne = variable constant from HELP_TEXT_ZEBRA_TRIAL_MAN_SHOUTS_01 to HELP_TEXT_ZEBRA_TRIAL_MAN_SHOUTS_06
+					start say sound constant LastOne
+					Impact = 1
+				end if
+				SmokeTick++
+				if SmokeTick >= 0 and Impact == 0 and Velocity > BurnVelocity
+					SmokeTrail = create special effect SPOT_VISUAL_OBJECT_APPEAR at [Bloke] time 0.5
+					SmokeTick = 0
+				end if
+				if key KB_ESC down
+					QuitCam = 1
+				end if
+				if get StillMovingTimer time remaining <= 0
+					if get distance from [Bloke] to [BlokeLastSeen] < 5
+						BlokeLodged = 1
+					end if
+					BlokeLastSeen = marker at [Bloke]
+					set StillMovingTimer time to 10 seconds
+				end if
+			end while
+			Impact = 0
+			if QuitCam == 0
+				if Bloke is FLYING
+					FLYING of Bloke = 0
+				end if
+				stop sound LH_SAMPLE_DONKEYFIRED
+				if get distance from [Bloke] to [Target1] < 30
+					if Target1Completed == 1
+						say single line HELP_TEXT_ZEBRA_TRIAL_130 with interaction
+						wait until read
+					else
+						delete Herb1Effect
+						HerbPos = marker at (get target from [Bloke] to [Herb1] distance 1 angle 180)
+						move Bloke position to [HerbPos] radius 0
+						wait until get distance from [Bloke] to [HerbPos] < 1
+						wait until 1 seconds
+						set Bloke focus to [Herb1]
+						Bloke play ANM_P_PROD_CAMPFIRE loop 1
+						wait until Bloke played
+						delete ShroomSparkle1
+						delete Herb1 with fade
+						say HELP_TEXT_ZEBRA_TRIAL_140
+						Bloke play ANM_P_CLAP_1 loop 1
+						wait until Bloke played
+						wait until read
+						if TotalHerbage == 0
+							update snapshot CHALLENGE_BALLISTA_BLOKE success 0.3 alignment 0 HELP_TEXT_CREATURE_ISLE_TITLE_08 StandardReminder (variable HELP_TEXT_CI_REMINDER_06)
+							say HELP_TEXT_ZEBRA_TRIAL_250 with interaction
+							wait until read
+						elsif TotalHerbage == 1
+							update snapshot CHALLENGE_BALLISTA_BLOKE success 0.6 alignment 0 HELP_TEXT_CREATURE_ISLE_TITLE_08 StandardReminder (variable HELP_TEXT_CI_REMINDER_06)
+							say HELP_TEXT_ZEBRA_TRIAL_260 with interaction
+							wait until read
+						end if
+						TotalHerbage++
+						Target1Completed = 1
+						GameOver++
+					end if
+				elsif get distance from [Bloke] to [Target2] < 70
+					if Target2Completed == 1
+						say single line HELP_TEXT_ZEBRA_TRIAL_150 with interaction
+						wait until read
+					else
+						delete Herb2Effect
+						HerbPos = marker at (get target from [Bloke] to [Herb2] distance 1 angle 180)
+						move Bloke position to [HerbPos] radius 0
+						wait until get distance from [Bloke] to [HerbPos] < 1
+						wait until 1 seconds
+						set Bloke focus to [Herb2]
+						Bloke play ANM_P_PROD_CAMPFIRE loop 1
+						wait until Bloke played
+						delete ShroomSparkle2
+						delete Herb2 with fade
+						say HELP_TEXT_ZEBRA_TRIAL_140
+						Bloke play ANM_P_CLAP_1 loop 1
+						wait until Bloke played
+						wait until read
+						if TotalHerbage == 0
+							update snapshot CHALLENGE_BALLISTA_BLOKE success 0.3 alignment 0 HELP_TEXT_CREATURE_ISLE_TITLE_08 StandardReminder (variable HELP_TEXT_CI_REMINDER_06)
+							say HELP_TEXT_ZEBRA_TRIAL_250 with interaction
+							wait until read
+						elsif TotalHerbage == 1
+							update snapshot CHALLENGE_BALLISTA_BLOKE success 0.6 alignment 0 HELP_TEXT_CREATURE_ISLE_TITLE_08 StandardReminder (variable HELP_TEXT_CI_REMINDER_06)
+							say HELP_TEXT_ZEBRA_TRIAL_260 with interaction
+							wait until read
+						end if
+						TotalHerbage++
+						GameOver++
+						Target2Completed = 1
+					end if
+				elsif get distance from [Bloke] to [Target3] < 30
+					if Target3Completed == 1
+						say single line HELP_TEXT_ZEBRA_TRIAL_150 with interaction
+						wait until read
+					else
+						delete Herb3Effect
+						HerbPos = marker at (get target from [Bloke] to [Herb3] distance 1 angle 180)
+						move Bloke position to [HerbPos] radius 0
+						wait until get distance from [Bloke] to [HerbPos] < 1
+						wait until 1 seconds
+						set Bloke focus to [Herb3]
+						Bloke play ANM_P_PROD_CAMPFIRE loop 1
+						wait until Bloke played
+						delete ShroomSparkle3
+						delete Herb3 with fade
+						say HELP_TEXT_ZEBRA_TRIAL_140
+						Bloke play ANM_P_CLAP_1 loop 1
+						wait until Bloke played
+						wait until read
+						if TotalHerbage == 0
+							update snapshot CHALLENGE_BALLISTA_BLOKE success 0.3 alignment 0 HELP_TEXT_CREATURE_ISLE_TITLE_08 StandardReminder (variable HELP_TEXT_CI_REMINDER_06)
+							say HELP_TEXT_ZEBRA_TRIAL_250 with interaction
+							wait until read
+						elsif TotalHerbage == 1
+							update snapshot CHALLENGE_BALLISTA_BLOKE success 0.6 alignment 0 HELP_TEXT_CREATURE_ISLE_TITLE_08 StandardReminder (variable HELP_TEXT_CI_REMINDER_06)
+							say HELP_TEXT_ZEBRA_TRIAL_260 with interaction
+							wait until read
+						end if
+						TotalHerbage++
+						GameOver++
+						Target3Completed = 1
+					end if
+				elsif Bloke exists
+					move Bloke position to [Bloke] radius 0
+					set Bloke focus to (camera position)
+					Bloke play ANM_P_SHRUG_SHOULDERS loop 1
+					RandomComment = number from 0 to 10
+					if RandomComment < 5
+						say single line HELP_TEXT_ZEBRA_TRIAL_160 with interaction
+						wait until read
+					elsif RandomComment > 4 and RandomComment < 8
+						say single line HELP_TEXT_ZEBRA_TRIAL_170 with interaction
+						wait until read
+					else
+						say single line HELP_TEXT_ZEBRA_TRIAL_180 with interaction
+						wait until read
+					end if
+					close dialogue
+					wait until Bloke played or 3 seconds
+					if ZebraStruck == 1
+						ZebraBusy = 1
+						ZebraHeight = (HEIGHT of Zebra) * 0.8
+						set camera position to [Zebra] + [15, 10, 15]
+						set camera focus to [Zebra] + [0, ZebraHeight, 0]
+						set Zebra focus to [Zebra] + [15, 10, 15]
+						wait until 1 seconds
+						Zebra play ANM_A_COW_DEAD loop 1
+						TextEnum = variable constant from HELP_TEXT_ZEBRA_HIT_BY_MAN_01 to HELP_TEXT_ZEBRA_HIT_BY_MAN_03
+						say single line constant TextEnum by Zebra
+						wait until Zebra played
+						ZebraBusy = 0
+						wait until 1 seconds
+					end if
+				else
+					say single line HELP_TEXT_ZEBRA_TRIAL_190 with interaction
+					wait until read
+				end if
+			end if
+			if GameOver < 3
+				set camera position to [2639.58, 52.6599, 2715.6]
+				set camera focus to [2658.31, 32.934, 2686.19]
+			end if
+			ZebraStruck = 0
+		end cinema
+		if Spangle exists
+			delete Spangle
+		end if
+		if QuitCam == 0
+			Spangle = create special effect SPOT_VISUAL_COMMAND_SUCCEED at [Bloke] time 10
+		end if
+		delete Bloke with fade
+		wait until 2 seconds
+		until GameOver >= 3
+	end loop
+	BallistaTrialComplete = 1
+	begin cinema
+		disable creature sound
+		set fade red 0 green 0 blue 0 time 1.5
+		wait until 1.5 seconds
+		set camera position to [2669.561, 51.045, 2718.527]
+		set camera focus to [2670.258, 38.884, 2662.771]
+		run script SetBallistaToPos(Target2)
+		set fade in time 3
+		wait until 1 seconds
+		set Zebra focus to (camera position)
+		wait until 2 seconds
+		Zebra play ANM_A_COW_DEAD_ON_RHS loop 1
+		say HELP_TEXT_ZEBRA_TRIAL_200 by Zebra
+		wait until read
+		say HELP_TEXT_ZEBRA_TRIAL_210 by Zebra
+		wait until read
+		set fade red 0 green 0 blue 0 time 1.5
+		wait until 1 seconds
+		close dialogue
+		Cauldron = create MOBILE_OBJECT MOBILE_OBJECT_CAULDRON at [CauldronPos]
+		set Zebra position to [Cauldron] + ([3, 3])
+		set Zebra focus to [Cauldron]
+		Bloke = create VILLAGER VILLAGER_INFO_MULE_HEAD at [Cauldron] + ([8, 3])
+		set Bloke focus to [Cauldron]
+		set camera position to [2615.514, 45.802, 2718.782]
+		set camera focus to [2670.416, 33.637, 2709.005]
+		set fade in time 3
+		wait until 2 seconds
+		teach Zebra MAGICAL SPELL_HEAL_LEVEL_2 TRUE percentage 1
+		force Zebra CREATURE_CAST_HEAL_SPELL_PU1 Cauldron
+		wait until 5 seconds
+		move camera position to [2615.885, 43.854, 2709.224] time 12
+		move camera focus to [2669.022, 34.693, 2711.358] time 12
+		Bloke play ANM_P_DANCE_STAND loop 10
+		wait until Zebra played
+		wait until 2 seconds
+		Zebra play ANM_A_COW_DEAD loop 2
+		wait until Zebra played
+		move camera position to [2626.05, 37.162, 2712.24] time 10
+		move camera focus to [2679.276, 35.033, 2706.364] time 10
+		force Zebra CREATURE_HURL Cauldron with Bloke
+		wait until Bloke in Zebra hand
+		wait until not Bloke in Zebra hand
+		wait until get distance from [Bloke] to [Cauldron] < 1 or 4 seconds
+		SmokeTrail = create special effect SPOT_VISUAL_OBJECT_APPEAR at [Bloke] time 1.5
+		start sound constant 389 AUDIO_SFX_BANK_TYPE_EDITOR
+		delete Bloke
+		wait until Zebra played
+		set Zebra focus to [Cauldron]
+		wait until 1 seconds
+		force Zebra CREATURE_SCRATCH Zebra
+		wait until Zebra played
+		set camera position to [2637.383, 35.403, 2714.086]
+		set camera focus to [2666.172, 35.558, 2654.719]
+		wait until 3 seconds
+		Bloke = create VILLAGER MARAUDER at [Cauldron]
+		set camera focus follow Bloke
+		set Bloke velocity heading [CannonPos] + [0, 100, 0] speed 10 angular x 0 y 0 z 0
+		Zebra play ANM_A_COW_DEAD_ON_RHS loop 1
+		wait until not Bloke is FLYING or 10 seconds
+		move Bloke position to [Bloke] radius 0
+		move camera position to [Bloke] + [4, 2, 4] time 3
+		move camera focus to [Bloke] time 3
+		wait until camera ready
+		set Bloke focus to (camera position)
+		Bloke play ANM_P_THANK_YOU loop 3
+		say single line HELP_TEXT_ZEBRA_TRIAL_220
+		wait until read
+		wait until 1 seconds
+		set camera position to [Zebra] + [-12, 5, -12]
+		set camera focus to [Zebra] + [0, 7, 0]
+		set Zebra focus to (camera position)
+		say HELP_TEXT_ZEBRA_TRIAL_230 with interaction by Zebra
+		wait until read
+		eject good spirit
+		say HELP_TEXT_ZEBRA_TRIAL_240
+		wait until read
+		send good spirit home
+	end cinema with widescreen
+	DojoReminderZebraBallista = 0
+	run background script DeleteZebra(Zebra, Bloke)
+	run script Dojo(Zebra)
+	run background script DeleteDYK(ZebraChallengeDYKPos)
+end script ZebraChallenge
+

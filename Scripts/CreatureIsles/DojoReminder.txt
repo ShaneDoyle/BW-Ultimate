@@ -1,0 +1,264 @@
+//LHVM Challenge source version 8
+//Decompiled with CHLASM tool by Daniels118
+
+begin challenge help script DojoReminderNotify(Highlight, Location, AdvisorSpeakEnum)
+	RemindTimer = create timer for 30 seconds
+start
+	begin loop
+		if OutroFinished == 0
+			if get distance from (camera position) to [Highlight] < 100 and Highlight viewed
+				if get RemindTimer time remaining <= 0
+					if get FightSwapTimer time remaining <= 0 and CreaturesAreFighting == 0 and CreaturesAreSwapping == 0 and DontDoDojoReminder == 0
+						begin dialogue
+							if good spirit speaks constant AdvisorSpeakEnum
+								eject good spirit
+								make good spirit point at [Highlight] in world
+							else
+								eject evil spirit
+								make evil spirit point at [Highlight] in world
+							end if
+							say single line constant AdvisorSpeakEnum
+							wait until read
+						end dialogue
+					end if
+					set RemindTimer time to 30 seconds
+				end if
+			end if
+		end if
+		until Highlight clicked or Location clicked
+	end loop
+	enable Highlight active
+end script DojoReminderNotify
+
+begin script DojoReminder
+	Lion = 0
+	SilverScroll = 0
+	FinishedWith = 0
+	ScrollPos = marker at [1196.405, 60.97, 977.208]
+start
+	SilverScroll = create highlight CHALLENGE_DOJO_REMINDER HIGHLIGHT_CHALLENGE at [ScrollPos]
+	ALTITUDE of SilverScroll = 1
+	begin loop
+		FinishedWith = 0
+		run script DojoReminderNotify(SilverScroll, ScrollPos, variable HELP_TEXT_RUFUS_REMINDER_SCROLL)
+		disable SilverScroll active
+		wait until SilverScroll clicked
+		clear clicked object
+		begin loop
+			begin cinema
+				enable highlight draw
+				start music MUSIC_TYPE_SCRIPT_CREATURE_GUIDE
+				Lion = create DUMB_CREATURE CREATURE_TYPE_LION at [1448.264, 2.565, 2022.214]
+				disable Lion navigation
+				SCALE of Lion = 2
+				set Lion position to [1165.058, 56.95, 955.993]
+				set Lion focus to [1310.179, 87.741, 1066.408]
+				move Lion position to [1197.909, 56.646, 977.592] radius 0
+				move camera position to [1216.713, 88.018, 990.378] time 6
+				move camera focus to [1090.779, 72.343, 906.033] time 6
+				wait until 2 seconds
+				Lion play ANM_SWALLOW_FLAP loop 1
+				wait until Lion played
+				wait until camera ready
+				if OutroFinished == 0
+					say HELP_TEXT_DOJO_REMINDER_10 by Lion
+					wait until read
+					if DojoReminderGraduationBody != 1
+						say HELP_TEXT_DOJO_REMINDER_20 by Lion
+						wait until read
+					end if
+					if DojoReminderSoccerSkills == 1
+						set camera position to [2675.162, 85.179, 2687.684]
+						set camera focus to [2772.277, 36.213, 2575.5]
+						move camera position to [2713.678, 84.074, 2693.223] time 30
+						move camera focus to [2782.248, 37.534, 2569.985] time 30
+						say HELP_TEXT_DOJO_REMINDER_30 by Lion
+						wait until read
+					end if
+					if DojoReminderTheRaces == 1
+						set camera position to [1404.749, 209.099, 1128.414]
+						set camera focus to [1566.697, 78.283, 1230.278]
+						move camera position to [1456.878, 167.317, 1161.203] time 30
+						move camera focus to [1563.383, 78.299, 1228.194] time 30
+						say HELP_TEXT_DOJO_REMINDER_40 by Lion
+						wait until read
+					end if
+					if DojoReminderMissionariesLeave == 1
+						set camera position to [738.786, 47.709, 1113.239]
+						set camera focus to [662.434, 2.014, 1082.566]
+						move camera position to [705.58, 23.231, 1074.525] time 30
+						move camera focus to [649.738, 1.478, 1089.433] time 30
+						say HELP_TEXT_DOJO_REMINDER_50 by Lion
+						wait until read
+					end if
+					if DojoReminderGreedyHermit == 1
+						set camera position to [811.441, 67.383, 2000.422]
+						set camera focus to [852.186, 54.791, 2025.633]
+						move camera position to [797.417, 67.383, 2022.76] time 20
+						move camera focus to [844.854, 54.914, 2023.635] time 20
+						say HELP_TEXT_DOJO_REMINDER_60 by Lion
+						wait until read
+					end if
+					if DojoReminderHerding == 1
+						set camera position to [1151.65, 12.936, 2116.682]
+						set camera focus to [1165.393, 6.111, 2140.954]
+						move camera position to [1125.505, 18.674, 2179.53] time 5
+						move camera position to [1125.505, 18.674, 2179.53] time 5
+						say HELP_TEXT_DOJO_REMINDER_70 by Lion
+						wait until read
+					end if
+					if DojoReminderWolfTrial == 1
+						set camera position to [1601.287, 114.222, 2504.868]
+						set camera focus to [1557.313, 54.589, 2396.835]
+						move camera position to [1622.23, 82.305, 2460.217] time 20
+						move camera focus to [1546.246, 54.953, 2398.225] time 20
+						say HELP_TEXT_DOJO_REMINDER_220 by Lion
+						wait until read
+					end if
+					if DojoReminderKingOfTheCastle == 1
+						set camera position to [1155.566, 52.087, 2165.093]
+						set camera focus to [1117.802, 5.095, 2269.317]
+						move camera position to [1220.474, 52.087, 2241.884] time 12
+						move camera focus to [1116.237, 5.159, 2279.171] time 12
+						say HELP_TEXT_DOJO_REMINDER_80 by Lion
+						wait until read
+					end if
+					if DojoReminderSpecialCrops == 1
+						set camera position to [3015.438, 76.726, 2764.884]
+						set camera focus to [2961.571, 43.466, 2696.354]
+						move camera position to [2936.557, 65.948, 2761.72] time 20
+						move camera focus to [2958.239, 43.505, 2687.417] time 20
+						say HELP_TEXT_DOJO_REMINDER_90 by Lion
+						wait until read
+					end if
+					if DojoReminderSmashBuildings == 1
+						set camera position to [2747.554, 168.394, 2214.358]
+						set camera focus to [2815.623, 61.734, 2325.5]
+						move camera position to [2891.44, 149.429, 2169.334] time 20
+						move camera focus to [2787.199, 48.579, 2343.305] time 20
+						say HELP_TEXT_DOJO_REMINDER_100 by Lion
+						wait until read
+					end if
+					if DojoReminderBuildBuildings == 1
+						set camera position to [2999.206, 140.382, 2102.276]
+						set camera focus to [2882.27, 27.311, 2055.677]
+						move camera position to [2971.405, 113.499, 2091.197] time 20
+						move camera focus to [2882.27, 27.311, 2055.677] time 20
+						say HELP_TEXT_DOJO_REMINDER_110 by Lion
+						wait until read
+					end if
+					if DojoReminderCreatureTapper == 1
+						set camera position to [2997.047, 150.764, 2206.891]
+						set camera focus to [3089.351, -19.728, 2387.457]
+						move camera position to [3011.613, 123.865, 2235.377] time 20
+						move camera focus to [3103.916, -46.628, 2415.944] time 20
+						say HELP_TEXT_DOJO_REMINDER_230 by Lion
+						wait until read
+					end if
+					if DojoReminderZebraBallista == 1
+						set camera position to [2579.429, 72.132, 2608.914]
+						set camera focus to [2675.593, 36.127, 2710.253]
+						move camera position to [2607.804, 72.132, 2638.815] time 20
+						move camera focus to [2669.709, 33.574, 2704.052] time 20
+						say HELP_TEXT_DOJO_REMINDER_120 by Lion
+						wait until read
+					end if
+					if DojoReminderTykesNest == 1
+						set camera position to [1157.998, 142.617, 1339.046]
+						set camera focus to [1147.626, 128.891, 1280.946]
+						move camera position to [1121.826, 142.617, 1328.836] time 20
+						move camera focus to [1159.066, 129.463, 1286.263] time 20
+						say HELP_TEXT_DOJO_REMINDER_240 by Lion
+						wait until read
+					end if
+					if DojoReminderTykesTraining == 1
+						set camera position to [1008.016, 196.881, 1137.488]
+						set camera focus to [1089.135, 135.532, 1202.307]
+						move camera position to [1002.025, 196.881, 1179.606] time 20
+						move camera focus to [1089.83, 135.433, 1200.568] time 20
+						say HELP_TEXT_DOJO_REMINDER_140
+						wait until read
+					end if
+					if DojoReminderPigEating == 1
+						set camera position to [1265.058, 155.395, 1342.077]
+						set camera focus to [1279.003, 130.384, 1397.071]
+						move camera position to [1305.859, 138.562, 1372.957] time 20
+						move camera focus to [1271.93, 133.247, 1408.055] time 20
+						say HELP_TEXT_DOJO_REMINDER_150 by Lion
+						wait until read
+					end if
+					if DojoReminderRhinoFight == 1
+						set camera position to [2818.478, 44.998, 1200.771]
+						set camera focus to [2800.908, 38.557, 1214.048]
+						move camera position to [2806.82, 42.088, 1201.559] time 20
+						move camera focus to [2791.053, 35.648, 1216.933] time 20
+						say HELP_TEXT_DOJO_REMINDER_170 by Lion
+						wait until read
+					end if
+					if DojoReminderMarbles == 1
+						set camera position to [1241.396, 142.216, 2721.063]
+						set camera focus to [1476.923, 13.714, 2649.55]
+						move camera position to [1395.229, 147.139, 2878.646] time 20
+						move camera focus to [1511.011, 14.541, 2652.583] time 20
+						say HELP_TEXT_DOJO_REMINDER_180 by Lion
+						wait until read
+					end if
+					if DojoReminderBowling == 1
+						set camera position to [546.265, 97.842, 1290.648]
+						set camera focus to [703.003, 49.206, 1293.509]
+						move camera position to [394.793, 97.842, 1287.882] time 20
+						move camera focus to [551.531, 49.206, 1290.743] time 20
+						say HELP_TEXT_DOJO_REMINDER_160 by Lion
+						wait until read
+					end if
+					if DojoReminderGraduationSpirit == 1
+						set camera position to [3704.0908, 225.4155, 2848.2996]
+						set camera focus to [3494.3281, 59.7103, 2819.5518]
+						move camera position to [3671.421, 221.9387, 3044.8442] time 20
+						move camera position to [3531.2234, 92.2989, 2902.5564] time 20
+						say HELP_TEXT_DOJO_REMINDER_210 by Lion
+						wait until read
+					end if
+					if DojoReminderGraduationBody == 1
+						set camera position to [4333.739, 281.451, 3975.41]
+						set camera focus to [4453, 67.133, 4081.136]
+						move camera position to [4413.82, 281.451, 3923.647] time 20
+						move camera focus to [4450.599, 67.134, 4078.722] time 20
+						say HELP_TEXT_DOJO_REMINDER_130 by Lion
+						wait until read
+					end if
+					set camera position to [1216.713, 88.018, 990.378]
+					set camera focus to [1090.779, 72.343, 906.033]
+					say HELP_TEXT_DOJO_REMINDER_190 by Lion
+					wait until read
+				else
+					say HELP_TEXT_RUFUS_END_OF_GAME_10 by Lion
+					wait until read
+					say HELP_TEXT_RUFUS_END_OF_GAME_20 by Lion
+					wait until read
+					say HELP_TEXT_RUFUS_END_OF_GAME_30 by Lion
+					wait until read
+					say HELP_TEXT_RUFUS_END_OF_GAME_40 by Lion
+					wait until read
+					say HELP_TEXT_RUFUS_END_OF_GAME_50 by Lion
+					wait until read
+				end if
+				stop music
+				set fade red 0 green 0 blue 0 time 1
+				wait until fade ready
+				delete Lion
+				set camera position to [1283.428, 187.476, 1035.979]
+				set camera focus to [1183.994, 96.593, 964.76]
+			end cinema
+			wait until widescreen transition complete
+			set fade in time 1
+			wait until fade ready
+			FinishedWith = 1
+			until key KB_ESC down or FinishedWith == 1
+		end loop
+		if Lion exists
+			delete Lion
+		end if
+	end loop
+end script DojoReminder
+

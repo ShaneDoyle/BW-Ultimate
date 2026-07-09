@@ -1,0 +1,1577 @@
+//------------------------------------------------------------------------------------------------------------------------
+// Create starting towns if Tribe has been selected.
+//------------------------------------------------------------------------------------------------------------------------
+begin script CustomTribeSelector
+
+	HomeTown = get town with id 0
+	Land5Town = get town with id 1
+start
+
+end script CustomTribeSelector
+
+/*
+	// For Land 5, also replace extra missionary town.
+	if LandNumber == 5 and Land5Town not exists
+
+		// Default + Norse.
+		if TribeSelected == variable TRIBE_SELECTED_NONE or TribeSelected == variable TRIBE_SELECTED_NORSE
+			begin cinema
+				// Town 1
+				run map script line "CREATE_TOWN(1, \"1552.81,3771.13\", \"PLAYER_ONE\", 7, \"NORSE\")"
+				run map script line "CREATE_PLANNED_ABODE(1, \"1552.81,3771.13\", \"NORSE_ABODE_TOWN_CENTRE\", -3907, 1000, 0, 0)"
+				run map script line "CREATE_PLANNED_ABODE(1, \"1530.77,3741.63\", \"NORSE_ABODE_C\", 5684, 1000, 0, 0)"
+				run map script line "CREATE_PLANNED_ABODE(1, \"1544.00,3735.15\", \"NORSE_ABODE_C\", -349, 1118, 0, 0)"
+				run map script line "CREATE_PLANNED_ABODE(1, \"1631.88,3773.46\", \"NORSE_ABODE_GRAVEYARD\", 4262, 1000, 0, 0)"
+				run map script line "CREATE_PLANNED_ABODE(1, \"1526.58,3793.82\", \"NORSE_ABODE_A\", -1952, 1000, 0, 0)"
+				run map script line "CREATE_PLANNED_ABODE(1, \"1523.45,3749.02\", \"NORSE_ABODE_A\", -628, 1000, 0, 0)"
+				run map script line "CREATE_PLANNED_ABODE(1, \"1556.40,3738.60\", \"NORSE_ABODE_A\", 6215, 1000, 0, 0)"
+				run map script line "CREATE_PLANNED_ABODE(1, \"1518.27,3781.98\", \"NORSE_ABODE_E\", 1501, 879, 0, 0)"
+				run map script line "CREATE_PLANNED_ABODE(1, \"1468.82,3837.01\", \"NORSE_ABODE_WONDER\", 279, 1000, 0, 0)"
+				run map script line "CREATE_PLANNED_ABODE(1, \"1584.89,3770.99\", \"NORSE_ABODE_CRECHE\", 5096, 1000, 0, 0)"
+				run map script line "CREATE_PLANNED_ABODE(1, \"1539.42,3807.83\", \"NORSE_ABODE_STORAGE_PIT\", 559, 1000, 0, 0)"
+			end cinema
+		
+		// Celtic.
+		elsif TribeSelected == variable TRIBE_SELECTED_CELTIC
+			begin cinema
+				// Town 1
+				run map script line "CREATE_TOWN(1, \"1552.81,3771.13\", \"PLAYER_ONE\", 7, \"CELTIC\")"
+				run map script line "CREATE_PLANNED_ABODE(1, \"1552.81,3771.13\", \"CELTIC_ABODE_TOWN_CENTRE\", -3907, 1000, 0, 0)"
+				run map script line "CREATE_PLANNED_ABODE(1, \"1530.77,3741.63\", \"CELTIC_ABODE_C\", 5684, 1000, 0, 0)"
+				run map script line "CREATE_PLANNED_ABODE(1, \"1544.00,3735.15\", \"CELTIC_ABODE_C\", -349, 1118, 0, 0)"
+				run map script line "CREATE_PLANNED_ABODE(1, \"1631.88,3773.46\", \"CELTIC_ABODE_GRAVEYARD\", 4262, 1000, 0, 0)"
+				run map script line "CREATE_PLANNED_ABODE(1, \"1526.58,3793.82\", \"CELTIC_ABODE_A\", -1952, 1000, 0, 0)"
+				run map script line "CREATE_PLANNED_ABODE(1, \"1523.45,3749.02\", \"CELTIC_ABODE_A\", -628, 1000, 0, 0)"
+				run map script line "CREATE_PLANNED_ABODE(1, \"1556.40,3738.60\", \"CELTIC_ABODE_A\", 6215, 1000, 0, 0)"
+				run map script line "CREATE_PLANNED_ABODE(1, \"1518.27,3781.98\", \"CELTIC_ABODE_E\", 1501, 879, 0, 0)"
+				run map script line "CREATE_PLANNED_ABODE(1, \"1468.82,3837.01\", \"CELTIC_ABODE_WONDER\", 279, 1000, 0, 0)"
+				run map script line "CREATE_PLANNED_ABODE(1, \"1584.89,3770.99\", \"CELTIC_ABODE_CRECHE\", 5096, 1000, 0, 0)"
+				run map script line "CREATE_PLANNED_ABODE(1, \"1539.42,3807.83\", \"CELTIC_ABODE_STORAGE_PIT\", 559, 1000, 0, 0)"
+			end cinema
+			
+			// Aztec.
+		elsif TribeSelected == variable TRIBE_SELECTED_AZTEC
+			begin cinema
+				// Town 1
+				run map script line "CREATE_TOWN(1, \"1552.81,3771.13\", \"PLAYER_ONE\", 7, \"AZTEC\")"
+				run map script line "CREATE_PLANNED_ABODE(1, \"1552.81,3771.13\", \"AZTEC_ABODE_TOWN_CENTRE\", -3907, 1000, 0, 0)"
+				run map script line "CREATE_PLANNED_ABODE(1, \"1530.77,3741.63\", \"AZTEC_ABODE_C\", 5684, 1000, 0, 0)"
+				run map script line "CREATE_PLANNED_ABODE(1, \"1544.00,3735.15\", \"AZTEC_ABODE_C\", -349, 1118, 0, 0)"
+				run map script line "CREATE_PLANNED_ABODE(1, \"1631.88,3773.46\", \"AZTEC_ABODE_GRAVEYARD\", 4262, 1000, 0, 0)"
+				run map script line "CREATE_PLANNED_ABODE(1, \"1526.58,3793.82\", \"AZTEC_ABODE_A\", -1952, 1000, 0, 0)"
+				run map script line "CREATE_PLANNED_ABODE(1, \"1523.45,3749.02\", \"AZTEC_ABODE_A\", -628, 1000, 0, 0)"
+				run map script line "CREATE_PLANNED_ABODE(1, \"1556.40,3738.60\", \"AZTEC_ABODE_A\", 6215, 1000, 0, 0)"
+				run map script line "CREATE_PLANNED_ABODE(1, \"1518.27,3781.98\", \"AZTEC_ABODE_E\", 1501, 879, 0, 0)"
+				run map script line "CREATE_PLANNED_ABODE(1, \"1468.82,3837.01\", \"AZTEC_ABODE_WONDER\", 279, 1000, 0, 0)"
+				run map script line "CREATE_PLANNED_ABODE(1, \"1584.89,3770.99\", \"AZTEC_ABODE_CRECHE\", 5096, 1000, 0, 0)"
+				run map script line "CREATE_PLANNED_ABODE(1, \"1539.42,3807.83\", \"AZTEC_ABODE_STORAGE_PIT\", 559, 1000, 0, 0)"
+			end cinema
+			
+		// Indian.
+		elsif TribeSelected == variable TRIBE_SELECTED_INDIAN
+			begin cinema
+				// Town 1
+				run map script line "CREATE_TOWN(1, \"1552.81,3771.13\", \"PLAYER_ONE\", 7, \"INDIAN\")"
+				run map script line "CREATE_PLANNED_ABODE(1, \"1552.81,3771.13\", \"INDIAN_ABODE_TOWN_CENTRE\", -3907, 1000, 0, 0)"
+				run map script line "CREATE_PLANNED_ABODE(1, \"1530.77,3741.63\", \"INDIAN_ABODE_C\", 5684, 1000, 0, 0)"
+				run map script line "CREATE_PLANNED_ABODE(1, \"1544.00,3735.15\", \"INDIAN_ABODE_C\", -349, 1118, 0, 0)"
+				run map script line "CREATE_PLANNED_ABODE(1, \"1631.88,3773.46\", \"INDIAN_ABODE_GRAVEYARD\", 4262, 1000, 0, 0)"
+				run map script line "CREATE_PLANNED_ABODE(1, \"1526.58,3793.82\", \"INDIAN_ABODE_A\", -1952, 1000, 0, 0)"
+				run map script line "CREATE_PLANNED_ABODE(1, \"1523.45,3749.02\", \"INDIAN_ABODE_A\", -628, 1000, 0, 0)"
+				run map script line "CREATE_PLANNED_ABODE(1, \"1556.40,3738.60\", \"INDIAN_ABODE_A\", 6215, 1000, 0, 0)"
+				run map script line "CREATE_PLANNED_ABODE(1, \"1518.27,3781.98\", \"INDIAN_ABODE_E\", 1501, 879, 0, 0)"
+				run map script line "CREATE_PLANNED_ABODE(1, \"1468.82,3837.01\", \"INDIAN_ABODE_WONDER\", 279, 1000, 0, 0)"
+				run map script line "CREATE_PLANNED_ABODE(1, \"1584.89,3770.99\", \"INDIAN_ABODE_CRECHE\", 5096, 1000, 0, 0)"
+				run map script line "CREATE_PLANNED_ABODE(1, \"1539.42,3807.83\", \"INDIAN_ABODE_STORAGE_PIT\", 559, 1000, 0, 0)"
+			end cinema
+			
+		// Greek.
+		elsif TribeSelected == variable TRIBE_SELECTED_GREEK
+			begin cinema
+				// Town 1
+				run map script line "CREATE_TOWN(1, \"1552.81,3771.13\", \"PLAYER_ONE\", 7, \"GREEK\")"
+				run map script line "CREATE_PLANNED_ABODE(1, \"1552.81,3771.13\", \"GREEK_ABODE_TOWN_CENTRE\", -3907, 1000, 0, 0)"
+				run map script line "CREATE_PLANNED_ABODE(1, \"1530.77,3741.63\", \"GREEK_ABODE_C\", 5684, 1000, 0, 0)"
+				run map script line "CREATE_PLANNED_ABODE(1, \"1544.00,3735.15\", \"GREEK_ABODE_C\", -349, 1118, 0, 0)"
+				run map script line "CREATE_PLANNED_ABODE(1, \"1631.88,3773.46\", \"GREEK_ABODE_GRAVEYARD\", 4262, 1000, 0, 0)"
+				run map script line "CREATE_PLANNED_ABODE(1, \"1526.58,3793.82\", \"GREEK_ABODE_A\", -1952, 1000, 0, 0)"
+				run map script line "CREATE_PLANNED_ABODE(1, \"1523.45,3749.02\", \"GREEK_ABODE_A\", -628, 1000, 0, 0)"
+				run map script line "CREATE_PLANNED_ABODE(1, \"1556.40,3738.60\", \"GREEK_ABODE_A\", 6215, 1000, 0, 0)"
+				run map script line "CREATE_PLANNED_ABODE(1, \"1518.27,3781.98\", \"GREEK_ABODE_E\", 1501, 879, 0, 0)"
+				run map script line "CREATE_PLANNED_ABODE(1, \"1468.82,3837.01\", \"GREEK_ABODE_WONDER\", 279, 1000, 0, 0)"
+				run map script line "CREATE_PLANNED_ABODE(1, \"1584.89,3770.99\", \"GREEK_ABODE_CRECHE\", 5096, 1000, 0, 0)"
+				run map script line "CREATE_PLANNED_ABODE(1, \"1539.42,3807.83\", \"GREEK_ABODE_STORAGE_PIT\", 559, 1000, 0, 0)"
+			end cinema
+
+		// Japanese.
+		elsif TribeSelected == variable TRIBE_SELECTED_JAPANESE
+			begin cinema
+				// Town 1
+				run map script line "CREATE_TOWN(1, \"1552.81,3771.13\", \"PLAYER_ONE\", 7, \"JAPANESE\")"
+				run map script line "CREATE_PLANNED_ABODE(1, \"1552.81,3771.13\", \"JAPANESE_ABODE_TOWN_CENTRE\", -3907, 1000, 0, 0)"
+				run map script line "CREATE_PLANNED_ABODE(1, \"1530.77,3741.63\", \"JAPANESE_ABODE_C\", 5684, 1000, 0, 0)"
+				run map script line "CREATE_PLANNED_ABODE(1, \"1544.00,3735.15\", \"JAPANESE_ABODE_C\", -349, 1118, 0, 0)"
+				run map script line "CREATE_PLANNED_ABODE(1, \"1631.88,3773.46\", \"JAPANESE_ABODE_GRAVEYARD\", 4262, 1000, 0, 0)"
+				run map script line "CREATE_PLANNED_ABODE(1, \"1526.58,3793.82\", \"JAPANESE_ABODE_A\", -1952, 1000, 0, 0)"
+				run map script line "CREATE_PLANNED_ABODE(1, \"1523.45,3749.02\", \"JAPANESE_ABODE_A\", -628, 1000, 0, 0)"
+				run map script line "CREATE_PLANNED_ABODE(1, \"1556.40,3738.60\", \"JAPANESE_ABODE_A\", 6215, 1000, 0, 0)"
+				run map script line "CREATE_PLANNED_ABODE(1, \"1518.27,3781.98\", \"JAPANESE_ABODE_E\", 1501, 879, 0, 0)"
+				run map script line "CREATE_PLANNED_ABODE(1, \"1468.82,3837.01\", \"JAPANESE_ABODE_WONDER\", 279, 1000, 0, 0)"
+				run map script line "CREATE_PLANNED_ABODE(1, \"1584.89,3770.99\", \"JAPANESE_ABODE_CRECHE\", 5096, 1000, 0, 0)"
+				run map script line "CREATE_PLANNED_ABODE(1, \"1539.42,3807.83\", \"JAPANESE_ABODE_STORAGE_PIT\", 559, 1000, 0, 0)"
+			end cinema
+
+		// Egyptian.
+		elsif TribeSelected == variable TRIBE_SELECTED_EGYPTIAN
+			begin cinema
+				// Town 1
+				run map script line "CREATE_TOWN(1, \"1552.81,3771.13\", \"PLAYER_ONE\", 7, \"EGYPTIAN\")"
+				run map script line "CREATE_PLANNED_ABODE(1, \"1552.81,3771.13\", \"EGYPTIAN_ABODE_TOWN_CENTRE\", -3907, 1000, 0, 0)"
+				run map script line "CREATE_PLANNED_ABODE(1, \"1530.77,3741.63\", \"EGYPTIAN_ABODE_C\", 5684, 1000, 0, 0)"
+				run map script line "CREATE_PLANNED_ABODE(1, \"1544.00,3735.15\", \"EGYPTIAN_ABODE_C\", -349, 1118, 0, 0)"
+				run map script line "CREATE_PLANNED_ABODE(1, \"1631.88,3773.46\", \"EGYPTIAN_ABODE_GRAVEYARD\", 4262, 1000, 0, 0)"
+				run map script line "CREATE_PLANNED_ABODE(1, \"1526.58,3793.82\", \"EGYPTIAN_ABODE_A\", -1952, 1000, 0, 0)"
+				run map script line "CREATE_PLANNED_ABODE(1, \"1523.45,3749.02\", \"EGYPTIAN_ABODE_A\", -628, 1000, 0, 0)"
+				run map script line "CREATE_PLANNED_ABODE(1, \"1556.40,3738.60\", \"EGYPTIAN_ABODE_A\", 6215, 1000, 0, 0)"
+				run map script line "CREATE_PLANNED_ABODE(1, \"1518.27,3781.98\", \"EGYPTIAN_ABODE_E\", 1501, 879, 0, 0)"
+				run map script line "CREATE_PLANNED_ABODE(1, \"1468.82,3837.01\", \"EGYPTIAN_ABODE_WONDER\", 279, 1000, 0, 0)"
+				run map script line "CREATE_PLANNED_ABODE(1, \"1584.89,3770.99\", \"EGYPTIAN_ABODE_CRECHE\", 5096, 1000, 0, 0)"
+				run map script line "CREATE_PLANNED_ABODE(1, \"1539.42,3807.83\", \"EGYPTIAN_ABODE_STORAGE_PIT\", 559, 1000, 0, 0)"
+			end cinema
+
+		// Tibetan.
+		elsif TribeSelected == variable TRIBE_SELECTED_TIBETAN
+			begin cinema
+				// Town 1
+				run map script line "CREATE_TOWN(1, \"1552.81,3771.13\", \"PLAYER_ONE\", 7, \"TIBETAN\")"
+				run map script line "CREATE_PLANNED_ABODE(1, \"1552.81,3771.13\", \"TIBETAN_ABODE_TOWN_CENTRE\", -3907, 1000, 0, 0)"
+				run map script line "CREATE_PLANNED_ABODE(1, \"1530.77,3741.63\", \"TIBETAN_ABODE_C\", 5684, 1000, 0, 0)"
+				run map script line "CREATE_PLANNED_ABODE(1, \"1544.00,3735.15\", \"TIBETAN_ABODE_C\", -349, 1118, 0, 0)"
+				run map script line "CREATE_PLANNED_ABODE(1, \"1631.88,3773.46\", \"TIBETAN_ABODE_GRAVEYARD\", 4262, 1000, 0, 0)"
+				run map script line "CREATE_PLANNED_ABODE(1, \"1526.58,3793.82\", \"TIBETAN_ABODE_A\", -1952, 1000, 0, 0)"
+				run map script line "CREATE_PLANNED_ABODE(1, \"1523.45,3749.02\", \"TIBETAN_ABODE_A\", -628, 1000, 0, 0)"
+				run map script line "CREATE_PLANNED_ABODE(1, \"1556.40,3738.60\", \"TIBETAN_ABODE_A\", 6215, 1000, 0, 0)"
+				run map script line "CREATE_PLANNED_ABODE(1, \"1518.27,3781.98\", \"TIBETAN_ABODE_E\", 1501, 879, 0, 0)"
+				run map script line "CREATE_PLANNED_ABODE(1, \"1468.82,3837.01\", \"TIBETAN_ABODE_WONDER\", 279, 1000, 0, 0)"
+				run map script line "CREATE_PLANNED_ABODE(1, \"1584.89,3770.99\", \"TIBETAN_ABODE_CRECHE\", 5096, 1000, 0, 0)"
+				run map script line "CREATE_PLANNED_ABODE(1, \"1539.42,3807.83\", \"TIBETAN_ABODE_STORAGE_PIT\", 559, 1000, 0, 0)"
+			end cinema
+		
+		// African.
+		elsif TribeSelected == variable TRIBE_SELECTED_AFRICAN
+			begin cinema
+				// Town 1
+				run map script line "CREATE_TOWN(1, \"1552.81,3771.13\", \"PLAYER_ONE\", 7, \"AFRICAN\")"
+				run map script line "CREATE_PLANNED_ABODE(1, \"1552.81,3771.13\", \"AFRICAN_ABODE_TOWN_CENTRE\", -3907, 1000, 0, 0)"
+				run map script line "CREATE_PLANNED_ABODE(1, \"1530.77,3741.63\", \"AFRICAN_ABODE_C\", 5684, 1000, 0, 0)"
+				run map script line "CREATE_PLANNED_ABODE(1, \"1544.00,3735.15\", \"AFRICAN_ABODE_C\", -349, 1118, 0, 0)"
+				run map script line "CREATE_PLANNED_ABODE(1, \"1631.88,3773.46\", \"AFRICAN_ABODE_GRAVEYARD\", 4262, 1000, 0, 0)"
+				run map script line "CREATE_PLANNED_ABODE(1, \"1526.58,3793.82\", \"AFRICAN_ABODE_A\", -1952, 1000, 0, 0)"
+				run map script line "CREATE_PLANNED_ABODE(1, \"1523.45,3749.02\", \"AFRICAN_ABODE_A\", -628, 1000, 0, 0)"
+				run map script line "CREATE_PLANNED_ABODE(1, \"1556.40,3738.60\", \"AFRICAN_ABODE_A\", 6215, 1000, 0, 0)"
+				run map script line "CREATE_PLANNED_ABODE(1, \"1518.27,3781.98\", \"AFRICAN_ABODE_E\", 1501, 879, 0, 0)"
+				run map script line "CREATE_PLANNED_ABODE(1, \"1468.82,3837.01\", \"AFRICAN_ABODE_WONDER\", 279, 1000, 0, 0)"
+				run map script line "CREATE_PLANNED_ABODE(1, \"1584.89,3770.99\", \"AFRICAN_ABODE_CRECHE\", 5096, 1000, 0, 0)"
+				run map script line "CREATE_PLANNED_ABODE(1, \"1539.42,3807.83\", \"AFRICAN_ABODE_STORAGE_PIT\", 559, 1000, 0, 0)"
+			end cinema
+		end if
+		
+		// Generic town stuff.
+		begin cinema
+			run map script line "CREATE_NEW_TOWN_SPELL(1, \"LIGHTNING_BOLT\")"
+			run map script line "SET_TOWN_BELIEF(1, \"PLAYER_ONE\", 2.000000)"
+			run map script line "CREATE_SPELL_DISPENSER(1, \"1761.14,3489.05\", \"NORSE_ABODE_SPELL_DISPENSER\", \"FIRE_PU2\", 5.454066, 0.991000, 600.0)"
+			run map script line "CREATE_NEW_TOWN_FIELD(1, \"1585.00,3735.00\", 0, 0.000000)"
+			run map script line "CREATE_NEW_TOWN_FIELD(1, \"1595.00,3735.00\", 0, 0.000000)"
+			run map script line "CREATE_NEW_TOWN_FIELD(1, \"1585.00,3745.00\", 0, 0.000000)"
+			run map script line "CREATE_NEW_TOWN_FIELD(1, \"1595.00,3745.00\", 0, 0.000000)"
+			run map script line "CREATE_NEW_TOWN_FIELD(1, \"1515.00,3765.00\", 0, 0.000000)"
+			run map script line "CREATE_NEW_TOWN_FIELD(1, \"1505.00,3765.00\", 0, 0.000000)"
+			run map script line "CREATE_NEW_TOWN_FIELD(1, \"1505.00,3755.00\", 0, 0.000000)"
+			run map script line "CREATE_NEW_TOWN_FIELD(1, \"1515.00,3755.00\", 0, 0.000000)"
+			run map script line "CREATE_TOWN_FISH_FARM(1, \"1595.00,3845.00\", 0)"
+			run map script line "CREATE_TOWN_FISH_FARM(1, \"1635.00,3805.00\", 0)"
+			run map script line "CREATE_PLANNED_CITADEL(0, \"1554.08,3394.72\", 0, \"PLAYER_ONE\", -1674, 1000)"
+		end cinema
+	end if
+	
+	// Custom Tribe Feature! 
+	if HomeTown not exists
+	
+		if LandNumber == 1
+		
+			// Default + Norse.
+			if TribeSelected == variable TRIBE_SELECTED_NONE or TribeSelected == variable TRIBE_SELECTED_NORSE
+				begin cinema
+					run map script line "CREATE_TOWN(0, \"1865.61,2641.24\", \"PLAYER_ONE\", 7, \"NORSE\")"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1922.48,2717.17\", \"NORSE_ABODE_WONDER\", 916, 250, 0, 0)"
+					run map script line "CREATE_ABODE(0, \"1755.09,2692.52\", \"NORSE_ABODE_C\", 4710, 990, 0, 0)"
+					run map script line "CREATE_VILLAGER_POS(\"1762.85,2692.48\", \"1755.09,2692.52\", \"NORSE_FORESTER\", 21)"
+					run map script line "CREATE_VILLAGER_POS(\"1762.85,2692.48\", \"1755.09,2692.52\", \"NORSE_HOUSEWIFE\", 24)"
+					run map script line "CREATE_VILLAGER_POS(\"1762.85,2692.48\", \"1748.45,2679.58\", \"NORSE_FORESTER\", 6)"
+					run map script line "CREATE_VILLAGER_POS(\"1762.85,2692.48\", \"1748.45,2679.58\", \"NORSE_HOUSEWIFE\", 6)"
+					run map script line "CREATE_ABODE(0, \"1780.38,2713.34\", \"NORSE_ABODE_E\", 6282, 1000, 0, 0)"
+					run map script line "CREATE_VILLAGER_POS(\"1780.31,2701.47\", \"1777.37,2712.23\", \"NORSE_HOUSEWIFE\", 3)"
+					run map script line "CREATE_VILLAGER_POS(\"1780.31,2701.47\", \"1777.37,2712.23\", \"NORSE_HOUSEWIFE\", 36)"
+					run map script line "CREATE_VILLAGER_POS(\"1780.31,2701.47\", \"1792.69,2711.49\", \"NORSE_FORESTER\", 13)"
+					run map script line "CREATE_VILLAGER_POS(\"1780.31,2701.47\", \"1792.69,2711.49\", \"NORSE_HOUSEWIFE\", 18)"
+					run map script line "CREATE_VILLAGER_POS(\"1780.31,2701.47\", \"1855.38,2682.31\", \"NORSE_HOUSEWIFE\", 8)"
+					run map script line "CREATE_ABODE(0, \"1857.80,2665.53\", \"NORSE_ABODE_F\", 1177, 888, 0, 0)"
+					run map script line "CREATE_VILLAGER_POS(\"1854.55,2666.99\", \"1857.80,2665.53\", \"NORSE_FORESTER\", 13)"
+					run map script line "CREATE_VILLAGER_POS(\"1854.55,2666.99\", \"1857.80,2665.53\", \"NORSE_HOUSEWIFE\", 48)"
+					run map script line "CREATE_VILLAGER_POS(\"1854.55,2666.99\", \"1857.80,2665.53\", \"NORSE_HOUSEWIFE\", 1)"
+					run map script line "CREATE_ABODE(0, \"1804.73,2650.97\", \"NORSE_ABODE_A\", 6217, 1000, 0, 0)"
+					run map script line "CREATE_VILLAGER_POS(\"1805.03,2653.93\", \"1804.73,2650.97\", \"NORSE_FORESTER\", 1)"
+					run map script line "CREATE_VILLAGER_POS(\"1805.03,2653.93\", \"1794.44,2646.56\", \"NORSE_HOUSEWIFE\", 24)"
+					run map script line "CREATE_ABODE(0, \"1785.21,2652.58\", \"NORSE_ABODE_F\", 5756, 888, 0, 0)"
+					run map script line "CREATE_VILLAGER_POS(\"1787.08,2655.61\", \"1748.45,2679.58\", \"NORSE_HOUSEWIFE\", 6)"
+					run map script line "CREATE_VILLAGER_POS(\"1787.08,2655.61\", \"1794.44,2646.56\", \"NORSE_FORESTER\", 13)"
+					run map script line "CREATE_ABODE(0, \"1653.14,2654.09\", \"NORSE_ABODE_E\", 0, 1000, 0, 0)"
+					run map script line "CREATE_VILLAGER_POS(\"1653.09,2642.21\", \"1777.37,2712.23\", \"NORSE_FORESTER\", 5)"
+					run map script line "CREATE_VILLAGER_POS(\"1653.09,2642.21\", \"1777.37,2712.23\", \"NORSE_FORESTER\", 5)"
+					run map script line "CREATE_VILLAGER_POS(\"1653.09,2642.21\", \"1653.14,2654.09\", \"NORSE_FORESTER\", 13)"
+					run map script line "CREATE_VILLAGER_POS(\"1653.09,2642.21\", \"1653.14,2654.09\", \"NORSE_HOUSEWIFE\", 3)"
+					run map script line "CREATE_VILLAGER_POS(\"1653.09,2642.21\", \"1777.43,2657.55\", \"NORSE_FORESTER\", 20)"
+					run map script line "CREATE_VILLAGER_POS(\"1653.09,2642.21\", \"1850.25,2673.09\", \"NORSE_HOUSEWIFE\", 30)"
+					run map script line "CREATE_ABODE(0, \"1678.23,2736.70\", \"NORSE_ABODE_GRAVEYARD\", 0, 1000, 0, 0)"
+					run map script line "CREATE_ABODE(0, \"1713.83,2592.59\", \"NORSE_ABODE_C\", 1588, 1000, 0, 0)"
+					run map script line "CREATE_VILLAGER_POS(\"1705.99,2592.48\", \"1804.73,2650.97\", \"NORSE_FORESTER\", 13)"
+					run map script line "CREATE_VILLAGER_POS(\"1705.99,2592.48\", \"1713.83,2592.59\", \"NORSE_FORESTER\", 5)"
+					run map script line "CREATE_VILLAGER_POS(\"1705.99,2592.48\", \"1713.83,2592.59\", \"NORSE_HOUSEWIFE\", 8)"
+					run map script line "CREATE_VILLAGER_POS(\"1705.99,2592.48\", \"1771.88,2663.35\", \"NORSE_FORESTER\", 35)"
+					run map script line "CREATE_ABODE(0, \"1864.99,2769.27\", \"NORSE_ABODE_C\", 2486, 1000, 0, 0)"
+					run map script line "CREATE_VILLAGER_POS(\"1860.19,2763.07\", \"1804.73,2650.97\", \"NORSE_HOUSEWIFE\", 6)"
+					run map script line "CREATE_VILLAGER_POS(\"1860.19,2763.07\", \"1864.99,2769.27\", \"NORSE_FORESTER\", 24)"
+					run map script line "CREATE_VILLAGER_POS(\"1860.19,2763.07\", \"1864.99,2769.27\", \"NORSE_HOUSEWIFE\", 30)"
+					run map script line "CREATE_ABODE(0, \"1826.79,2641.36\", \"NORSE_ABODE_STORAGE_PIT\", 3730, 1000, 20000, 30000)"
+					run map script line "CREATE_ABODE(0, \"1757.01,2667.32\", \"NORSE_ABODE_D\", 5039, 1000, 0, 0)"
+					run map script line "CREATE_VILLAGER_POS(\"1763.75,2664.55\", \"1757.01,2667.32\", \"NORSE_HOUSEWIFE\", 8)"
+					run map script line "CREATE_VILLAGER_POS(\"1763.75,2664.55\", \"1757.01,2667.32\", \"NORSE_HOUSEWIFE\", 17)"
+					run map script line "CREATE_VILLAGER_POS(\"1763.75,2664.55\", \"1846.95,2665.14\", \"NORSE_FORESTER\", 13)"
+					run map script line "CREATE_VILLAGER_POS(\"1763.75,2664.55\", \"1846.95,2665.14\", \"NORSE_HOUSEWIFE\", 8)"
+					run map script line "CREATE_VILLAGER_POS(\"1763.75,2664.55\", \"1855.38,2682.31\", \"NORSE_FORESTER\", 30)"
+					run map script line "CREATE_TOWN_CENTRE(0, \"1805.22,2691.31\", \"NORSE_ABODE_TOWN_CENTRE\", 6282, 990, 0)"
+					run map script line "CREATE_ABODE(0, \"1764.86,2652.64\", \"NORSE_ABODE_A\", 5366, 1000, 0, 0)"
+					run map script line "CREATE_VILLAGER_POS(\"1767.29,2654.37\", \"1757.01,2667.32\", \"NORSE_FORESTER\", 13)"
+					run map script line "CREATE_VILLAGER_POS(\"1767.29,2654.37\", \"1764.86,2652.64\", \"NORSE_FORESTER\", 28)"
+					run map script line "CREATE_VILLAGER_POS(\"1767.29,2654.37\", \"1764.86,2652.64\", \"NORSE_HOUSEWIFE\", 8)"
+					run map script line "CREATE_ABODE(0, \"1850.84,2693.52\", \"NORSE_ABODE_F\", 1963, 1000, 0, 0)"
+					run map script line "CREATE_VILLAGER_POS(\"1847.09,2692.09\", \"1850.84,2693.52\", \"NORSE_FORESTER\", 13)"
+					run map script line "CREATE_VILLAGER_POS(\"1847.09,2692.09\", \"1850.84,2693.52\", \"NORSE_HOUSEWIFE\", 8)"
+					run map script line "CREATE_ABODE(0, \"1850.25,2673.09\", \"NORSE_ABODE_A\", 1439, 1000, 0, 0)"
+					run map script line "CREATE_VILLAGER_POS(\"1847.31,2673.59\", \"1785.21,2652.58\", \"NORSE_HOUSEWIFE\", 8)"
+					run map script line "CREATE_VILLAGER_POS(\"1847.31,2673.59\", \"1850.25,2673.09\", \"NORSE_FORESTER\", 13)"
+					run map script line "CREATE_ABODE(0, \"1868.01,2730.12\", \"NORSE_ABODE_CRECHE\", 4907, 1000, 0, 0)"
+					run map script line "CREATE_ABODE(0, \"1852.86,2705.21\", \"NORSE_ABODE_B\", 1700, 1000, 0, 0)"
+					run map script line "CREATE_VILLAGER_POS(\"1848.87,2704.80\", \"1785.21,2652.58\", \"NORSE_FORESTER\", 5)"
+					run map script line "CREATE_VILLAGER_POS(\"1848.87,2704.80\", \"1852.52,2705.18\", \"NORSE_FORESTER\", 27)"
+					run map script line "CREATE_VILLAGER_POS(\"1848.87,2704.80\", \"1852.86,2705.21\", \"NORSE_HOUSEWIFE\", 50)"
+				end cinema
+				
+			// Celtic
+			elsif TribeSelected == variable TRIBE_SELECTED_CELTIC
+				begin cinema
+					run map script line "CREATE_TOWN(0, \"1865.61,2641.24\", \"PLAYER_ONE\", 7, \"CELTIC\")"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1922.48,2717.17\", \"CELTIC_ABODE_WONDER\", 916, 250, 0, 0)"
+					run map script line "CREATE_ABODE(0, \"1755.09,2692.52\", \"CELTIC_ABODE_C\", 4710, 990, 0, 0)"
+					run map script line "CREATE_VILLAGER_POS(\"1762.85,2692.48\", \"1755.09,2692.52\", \"CELTIC_FORESTER\", 21)"
+					run map script line "CREATE_VILLAGER_POS(\"1762.85,2692.48\", \"1755.09,2692.52\", \"CELTIC_HOUSEWIFE\", 24)"
+					run map script line "CREATE_VILLAGER_POS(\"1762.85,2692.48\", \"1748.45,2679.58\", \"CELTIC_FORESTER\", 6)"
+					run map script line "CREATE_VILLAGER_POS(\"1762.85,2692.48\", \"1748.45,2679.58\", \"CELTIC_HOUSEWIFE\", 6)"
+					run map script line "CREATE_ABODE(0, \"1780.38,2713.34\", \"CELTIC_ABODE_E\", 6282, 1000, 0, 0)"
+					run map script line "CREATE_VILLAGER_POS(\"1780.31,2701.47\", \"1777.37,2712.23\", \"CELTIC_HOUSEWIFE\", 3)"
+					run map script line "CREATE_VILLAGER_POS(\"1780.31,2701.47\", \"1777.37,2712.23\", \"CELTIC_HOUSEWIFE\", 36)"
+					run map script line "CREATE_VILLAGER_POS(\"1780.31,2701.47\", \"1792.69,2711.49\", \"CELTIC_FORESTER\", 13)"
+					run map script line "CREATE_VILLAGER_POS(\"1780.31,2701.47\", \"1792.69,2711.49\", \"CELTIC_HOUSEWIFE\", 18)"
+					run map script line "CREATE_VILLAGER_POS(\"1780.31,2701.47\", \"1855.38,2682.31\", \"CELTIC_HOUSEWIFE\", 8)"
+					run map script line "CREATE_ABODE(0, \"1857.80,2665.53\", \"CELTIC_ABODE_F\", 1177, 888, 0, 0)"
+					run map script line "CREATE_VILLAGER_POS(\"1854.55,2666.99\", \"1857.80,2665.53\", \"CELTIC_FORESTER\", 13)"
+					run map script line "CREATE_VILLAGER_POS(\"1854.55,2666.99\", \"1857.80,2665.53\", \"CELTIC_HOUSEWIFE\", 48)"
+					run map script line "CREATE_VILLAGER_POS(\"1854.55,2666.99\", \"1857.80,2665.53\", \"CELTIC_HOUSEWIFE\", 1)"
+					run map script line "CREATE_ABODE(0, \"1804.73,2650.97\", \"CELTIC_ABODE_A\", 6217, 1000, 0, 0)"
+					run map script line "CREATE_VILLAGER_POS(\"1805.03,2653.93\", \"1804.73,2650.97\", \"CELTIC_FORESTER\", 1)"
+					run map script line "CREATE_VILLAGER_POS(\"1805.03,2653.93\", \"1794.44,2646.56\", \"CELTIC_HOUSEWIFE\", 24)"
+					run map script line "CREATE_ABODE(0, \"1785.21,2652.58\", \"CELTIC_ABODE_F\", 5756, 888, 0, 0)"
+					run map script line "CREATE_VILLAGER_POS(\"1787.08,2655.61\", \"1748.45,2679.58\", \"CELTIC_HOUSEWIFE\", 6)"
+					run map script line "CREATE_VILLAGER_POS(\"1787.08,2655.61\", \"1794.44,2646.56\", \"CELTIC_FORESTER\", 13)"
+					run map script line "CREATE_ABODE(0, \"1653.14,2654.09\", \"CELTIC_ABODE_E\", 0, 1000, 0, 0)"
+					run map script line "CREATE_VILLAGER_POS(\"1653.09,2642.21\", \"1777.37,2712.23\", \"CELTIC_FORESTER\", 5)"
+					run map script line "CREATE_VILLAGER_POS(\"1653.09,2642.21\", \"1777.37,2712.23\", \"CELTIC_FORESTER\", 5)"
+					run map script line "CREATE_VILLAGER_POS(\"1653.09,2642.21\", \"1653.14,2654.09\", \"CELTIC_FORESTER\", 13)"
+					run map script line "CREATE_VILLAGER_POS(\"1653.09,2642.21\", \"1653.14,2654.09\", \"CELTIC_HOUSEWIFE\", 3)"
+					run map script line "CREATE_VILLAGER_POS(\"1653.09,2642.21\", \"1777.43,2657.55\", \"CELTIC_FORESTER\", 20)"
+					run map script line "CREATE_VILLAGER_POS(\"1653.09,2642.21\", \"1850.25,2673.09\", \"CELTIC_HOUSEWIFE\", 30)"
+					run map script line "CREATE_ABODE(0, \"1678.23,2736.70\", \"CELTIC_ABODE_GRAVEYARD\", 0, 1000, 0, 0)"
+					run map script line "CREATE_ABODE(0, \"1713.83,2592.59\", \"CELTIC_ABODE_C\", 1588, 1000, 0, 0)"
+					run map script line "CREATE_VILLAGER_POS(\"1705.99,2592.48\", \"1804.73,2650.97\", \"CELTIC_FORESTER\", 13)"
+					run map script line "CREATE_VILLAGER_POS(\"1705.99,2592.48\", \"1713.83,2592.59\", \"CELTIC_FORESTER\", 5)"
+					run map script line "CREATE_VILLAGER_POS(\"1705.99,2592.48\", \"1713.83,2592.59\", \"CELTIC_HOUSEWIFE\", 8)"
+					run map script line "CREATE_VILLAGER_POS(\"1705.99,2592.48\", \"1771.88,2663.35\", \"CELTIC_FORESTER\", 35)"
+					run map script line "CREATE_ABODE(0, \"1864.99,2769.27\", \"CELTIC_ABODE_C\", 2486, 1000, 0, 0)"
+					run map script line "CREATE_VILLAGER_POS(\"1860.19,2763.07\", \"1804.73,2650.97\", \"CELTIC_HOUSEWIFE\", 6)"
+					run map script line "CREATE_VILLAGER_POS(\"1860.19,2763.07\", \"1864.99,2769.27\", \"CELTIC_FORESTER\", 24)"
+					run map script line "CREATE_VILLAGER_POS(\"1860.19,2763.07\", \"1864.99,2769.27\", \"CELTIC_HOUSEWIFE\", 30)"
+					run map script line "CREATE_ABODE(0, \"1826.79,2641.36\", \"CELTIC_ABODE_STORAGE_PIT\", 3730, 1000, 20000, 30000)"
+					run map script line "CREATE_ABODE(0, \"1757.01,2667.32\", \"CELTIC_ABODE_D\", 5039, 1000, 0, 0)"
+					run map script line "CREATE_VILLAGER_POS(\"1763.75,2664.55\", \"1757.01,2667.32\", \"CELTIC_HOUSEWIFE\", 8)"
+					run map script line "CREATE_VILLAGER_POS(\"1763.75,2664.55\", \"1757.01,2667.32\", \"CELTIC_HOUSEWIFE\", 17)"
+					run map script line "CREATE_VILLAGER_POS(\"1763.75,2664.55\", \"1846.95,2665.14\", \"CELTIC_FORESTER\", 13)"
+					run map script line "CREATE_VILLAGER_POS(\"1763.75,2664.55\", \"1846.95,2665.14\", \"CELTIC_HOUSEWIFE\", 8)"
+					run map script line "CREATE_VILLAGER_POS(\"1763.75,2664.55\", \"1855.38,2682.31\", \"CELTIC_FORESTER\", 30)"
+					run map script line "CREATE_TOWN_CENTRE(0, \"1805.22,2691.31\", \"CELTIC_ABODE_TOWN_CENTRE\", 6282, 990, 0)"
+					run map script line "CREATE_ABODE(0, \"1764.86,2652.64\", \"CELTIC_ABODE_A\", 5366, 1000, 0, 0)"
+					run map script line "CREATE_VILLAGER_POS(\"1767.29,2654.37\", \"1757.01,2667.32\", \"CELTIC_FORESTER\", 13)"
+					run map script line "CREATE_VILLAGER_POS(\"1767.29,2654.37\", \"1764.86,2652.64\", \"CELTIC_FORESTER\", 28)"
+					run map script line "CREATE_VILLAGER_POS(\"1767.29,2654.37\", \"1764.86,2652.64\", \"CELTIC_HOUSEWIFE\", 8)"
+					run map script line "CREATE_ABODE(0, \"1850.84,2693.52\", \"CELTIC_ABODE_F\", 1963, 1000, 0, 0)"
+					run map script line "CREATE_VILLAGER_POS(\"1847.09,2692.09\", \"1850.84,2693.52\", \"CELTIC_FORESTER\", 13)"
+					run map script line "CREATE_VILLAGER_POS(\"1847.09,2692.09\", \"1850.84,2693.52\", \"CELTIC_HOUSEWIFE\", 8)"
+					run map script line "CREATE_ABODE(0, \"1850.25,2673.09\", \"CELTIC_ABODE_A\", 1439, 1000, 0, 0)"
+					run map script line "CREATE_VILLAGER_POS(\"1847.31,2673.59\", \"1785.21,2652.58\", \"CELTIC_HOUSEWIFE\", 8)"
+					run map script line "CREATE_VILLAGER_POS(\"1847.31,2673.59\", \"1850.25,2673.09\", \"CELTIC_FORESTER\", 13)"
+					run map script line "CREATE_ABODE(0, \"1868.01,2730.12\", \"CELTIC_ABODE_CRECHE\", 4907, 1000, 0, 0)"
+					run map script line "CREATE_ABODE(0, \"1852.86,2705.21\", \"CELTIC_ABODE_B\", 1700, 1000, 0, 0)"
+					run map script line "CREATE_VILLAGER_POS(\"1848.87,2704.80\", \"1785.21,2652.58\", \"CELTIC_FORESTER\", 5)"
+					run map script line "CREATE_VILLAGER_POS(\"1848.87,2704.80\", \"1852.52,2705.18\", \"CELTIC_FORESTER\", 27)"
+					run map script line "CREATE_VILLAGER_POS(\"1848.87,2704.80\", \"1852.86,2705.21\", \"CELTIC_HOUSEWIFE\", 50)"
+				end cinema
+			
+			// Aztec
+			elsif TribeSelected == variable TRIBE_SELECTED_AZTEC
+				begin cinema
+					run map script line "CREATE_TOWN(0, \"1865.61,2641.24\", \"PLAYER_ONE\", 7, \"AZTEC\")"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1922.48,2717.17\", \"AZTEC_ABODE_WONDER\", 916, 250, 0, 0)"
+					run map script line "CREATE_ABODE(0, \"1755.09,2692.52\", \"AZTEC_ABODE_C\", 4710, 990, 0, 0)"
+					run map script line "CREATE_VILLAGER_POS(\"1762.85,2692.48\", \"1755.09,2692.52\", \"AZTEC_FORESTER\", 21)"
+					run map script line "CREATE_VILLAGER_POS(\"1762.85,2692.48\", \"1755.09,2692.52\", \"AZTEC_HOUSEWIFE\", 24)"
+					run map script line "CREATE_VILLAGER_POS(\"1762.85,2692.48\", \"1748.45,2679.58\", \"AZTEC_FORESTER\", 6)"
+					run map script line "CREATE_VILLAGER_POS(\"1762.85,2692.48\", \"1748.45,2679.58\", \"AZTEC_HOUSEWIFE\", 6)"
+					run map script line "CREATE_ABODE(0, \"1780.38,2713.34\", \"AZTEC_ABODE_E\", 6282, 1000, 0, 0)"
+					run map script line "CREATE_VILLAGER_POS(\"1780.31,2701.47\", \"1777.37,2712.23\", \"AZTEC_HOUSEWIFE\", 3)"
+					run map script line "CREATE_VILLAGER_POS(\"1780.31,2701.47\", \"1777.37,2712.23\", \"AZTEC_HOUSEWIFE\", 36)"
+					run map script line "CREATE_VILLAGER_POS(\"1780.31,2701.47\", \"1792.69,2711.49\", \"AZTEC_FORESTER\", 13)"
+					run map script line "CREATE_VILLAGER_POS(\"1780.31,2701.47\", \"1792.69,2711.49\", \"AZTEC_HOUSEWIFE\", 18)"
+					run map script line "CREATE_VILLAGER_POS(\"1780.31,2701.47\", \"1855.38,2682.31\", \"AZTEC_HOUSEWIFE\", 8)"
+					run map script line "CREATE_ABODE(0, \"1857.80,2665.53\", \"AZTEC_ABODE_F\", 1177, 888, 0, 0)"
+					run map script line "CREATE_VILLAGER_POS(\"1854.55,2666.99\", \"1857.80,2665.53\", \"AZTEC_FORESTER\", 13)"
+					run map script line "CREATE_VILLAGER_POS(\"1854.55,2666.99\", \"1857.80,2665.53\", \"AZTEC_HOUSEWIFE\", 48)"
+					run map script line "CREATE_VILLAGER_POS(\"1854.55,2666.99\", \"1857.80,2665.53\", \"AZTEC_HOUSEWIFE\", 1)"
+					run map script line "CREATE_ABODE(0, \"1804.73,2650.97\", \"AZTEC_ABODE_A\", 6217, 1000, 0, 0)"
+					run map script line "CREATE_VILLAGER_POS(\"1805.03,2653.93\", \"1804.73,2650.97\", \"AZTEC_FORESTER\", 1)"
+					run map script line "CREATE_VILLAGER_POS(\"1805.03,2653.93\", \"1794.44,2646.56\", \"AZTEC_HOUSEWIFE\", 24)"
+					run map script line "CREATE_ABODE(0, \"1785.21,2652.58\", \"AZTEC_ABODE_F\", 5756, 888, 0, 0)"
+					run map script line "CREATE_VILLAGER_POS(\"1787.08,2655.61\", \"1748.45,2679.58\", \"AZTEC_HOUSEWIFE\", 6)"
+					run map script line "CREATE_VILLAGER_POS(\"1787.08,2655.61\", \"1794.44,2646.56\", \"AZTEC_FORESTER\", 13)"
+					run map script line "CREATE_ABODE(0, \"1653.14,2654.09\", \"AZTEC_ABODE_E\", 0, 1000, 0, 0)"
+					run map script line "CREATE_VILLAGER_POS(\"1653.09,2642.21\", \"1777.37,2712.23\", \"AZTEC_FORESTER\", 5)"
+					run map script line "CREATE_VILLAGER_POS(\"1653.09,2642.21\", \"1777.37,2712.23\", \"AZTEC_FORESTER\", 5)"
+					run map script line "CREATE_VILLAGER_POS(\"1653.09,2642.21\", \"1653.14,2654.09\", \"AZTEC_FORESTER\", 13)"
+					run map script line "CREATE_VILLAGER_POS(\"1653.09,2642.21\", \"1653.14,2654.09\", \"AZTEC_HOUSEWIFE\", 3)"
+					run map script line "CREATE_VILLAGER_POS(\"1653.09,2642.21\", \"1777.43,2657.55\", \"AZTEC_FORESTER\", 20)"
+					run map script line "CREATE_VILLAGER_POS(\"1653.09,2642.21\", \"1850.25,2673.09\", \"AZTEC_HOUSEWIFE\", 30)"
+					run map script line "CREATE_ABODE(0, \"1678.23,2736.70\", \"AZTEC_ABODE_GRAVEYARD\", 0, 1000, 0, 0)"
+					run map script line "CREATE_ABODE(0, \"1713.83,2592.59\", \"AZTEC_ABODE_C\", 1588, 1000, 0, 0)"
+					run map script line "CREATE_VILLAGER_POS(\"1705.99,2592.48\", \"1804.73,2650.97\", \"AZTEC_FORESTER\", 13)"
+					run map script line "CREATE_VILLAGER_POS(\"1705.99,2592.48\", \"1713.83,2592.59\", \"AZTEC_FORESTER\", 5)"
+					run map script line "CREATE_VILLAGER_POS(\"1705.99,2592.48\", \"1713.83,2592.59\", \"AZTEC_HOUSEWIFE\", 8)"
+					run map script line "CREATE_VILLAGER_POS(\"1705.99,2592.48\", \"1771.88,2663.35\", \"AZTEC_FORESTER\", 35)"
+					run map script line "CREATE_ABODE(0, \"1864.99,2769.27\", \"AZTEC_ABODE_C\", 2486, 1000, 0, 0)"
+					run map script line "CREATE_VILLAGER_POS(\"1860.19,2763.07\", \"1804.73,2650.97\", \"AZTEC_HOUSEWIFE\", 6)"
+					run map script line "CREATE_VILLAGER_POS(\"1860.19,2763.07\", \"1864.99,2769.27\", \"AZTEC_FORESTER\", 24)"
+					run map script line "CREATE_VILLAGER_POS(\"1860.19,2763.07\", \"1864.99,2769.27\", \"AZTEC_HOUSEWIFE\", 30)"
+					run map script line "CREATE_ABODE(0, \"1826.79,2641.36\", \"AZTEC_ABODE_STORAGE_PIT\", 3730, 1000, 20000, 30000)"
+					run map script line "CREATE_ABODE(0, \"1757.01,2667.32\", \"AZTEC_ABODE_D\", 5039, 1000, 0, 0)"
+					run map script line "CREATE_VILLAGER_POS(\"1763.75,2664.55\", \"1757.01,2667.32\", \"AZTEC_HOUSEWIFE\", 8)"
+					run map script line "CREATE_VILLAGER_POS(\"1763.75,2664.55\", \"1757.01,2667.32\", \"AZTEC_HOUSEWIFE\", 17)"
+					run map script line "CREATE_VILLAGER_POS(\"1763.75,2664.55\", \"1846.95,2665.14\", \"AZTEC_FORESTER\", 13)"
+					run map script line "CREATE_VILLAGER_POS(\"1763.75,2664.55\", \"1846.95,2665.14\", \"AZTEC_HOUSEWIFE\", 8)"
+					run map script line "CREATE_VILLAGER_POS(\"1763.75,2664.55\", \"1855.38,2682.31\", \"AZTEC_FORESTER\", 30)"
+					run map script line "CREATE_TOWN_CENTRE(0, \"1805.22,2691.31\", \"AZTEC_ABODE_TOWN_CENTRE\", 6282, 990, 0)"
+					run map script line "CREATE_ABODE(0, \"1764.86,2652.64\", \"AZTEC_ABODE_A\", 5366, 1000, 0, 0)"
+					run map script line "CREATE_VILLAGER_POS(\"1767.29,2654.37\", \"1757.01,2667.32\", \"AZTEC_FORESTER\", 13)"
+					run map script line "CREATE_VILLAGER_POS(\"1767.29,2654.37\", \"1764.86,2652.64\", \"AZTEC_FORESTER\", 28)"
+					run map script line "CREATE_VILLAGER_POS(\"1767.29,2654.37\", \"1764.86,2652.64\", \"AZTEC_HOUSEWIFE\", 8)"
+					run map script line "CREATE_ABODE(0, \"1850.84,2693.52\", \"AZTEC_ABODE_F\", 1963, 1000, 0, 0)"
+					run map script line "CREATE_VILLAGER_POS(\"1847.09,2692.09\", \"1850.84,2693.52\", \"AZTEC_FORESTER\", 13)"
+					run map script line "CREATE_VILLAGER_POS(\"1847.09,2692.09\", \"1850.84,2693.52\", \"AZTEC_HOUSEWIFE\", 8)"
+					run map script line "CREATE_ABODE(0, \"1850.25,2673.09\", \"AZTEC_ABODE_A\", 1439, 1000, 0, 0)"
+					run map script line "CREATE_VILLAGER_POS(\"1847.31,2673.59\", \"1785.21,2652.58\", \"AZTEC_HOUSEWIFE\", 8)"
+					run map script line "CREATE_VILLAGER_POS(\"1847.31,2673.59\", \"1850.25,2673.09\", \"AZTEC_FORESTER\", 13)"
+					run map script line "CREATE_ABODE(0, \"1868.01,2730.12\", \"AZTEC_ABODE_CRECHE\", 4907, 1000, 0, 0)"
+					run map script line "CREATE_ABODE(0, \"1852.86,2705.21\", \"AZTEC_ABODE_B\", 1700, 1000, 0, 0)"
+					run map script line "CREATE_VILLAGER_POS(\"1848.87,2704.80\", \"1785.21,2652.58\", \"AZTEC_FORESTER\", 5)"
+					run map script line "CREATE_VILLAGER_POS(\"1848.87,2704.80\", \"1852.52,2705.18\", \"AZTEC_FORESTER\", 27)"
+					run map script line "CREATE_VILLAGER_POS(\"1848.87,2704.80\", \"1852.86,2705.21\", \"AZTEC_HOUSEWIFE\", 50)"
+				end cinema
+				
+			// Indian
+			elsif TribeSelected == variable TRIBE_SELECTED_INDIAN
+				begin cinema
+					run map script line "CREATE_TOWN(0, \"1865.61,2641.24\", \"PLAYER_ONE\", 7, \"INDIAN\")"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1922.48,2717.17\", \"INDIAN_ABODE_WONDER\", 916, 250, 0, 0)"
+					run map script line "CREATE_ABODE(0, \"1755.09,2692.52\", \"INDIAN_ABODE_C\", 4710, 990, 0, 0)"
+					run map script line "CREATE_VILLAGER_POS(\"1762.85,2692.48\", \"1755.09,2692.52\", \"INDIAN_FORESTER\", 21)"
+					run map script line "CREATE_VILLAGER_POS(\"1762.85,2692.48\", \"1755.09,2692.52\", \"INDIAN_HOUSEWIFE\", 24)"
+					run map script line "CREATE_VILLAGER_POS(\"1762.85,2692.48\", \"1748.45,2679.58\", \"INDIAN_FORESTER\", 6)"
+					run map script line "CREATE_VILLAGER_POS(\"1762.85,2692.48\", \"1748.45,2679.58\", \"INDIAN_HOUSEWIFE\", 6)"
+					run map script line "CREATE_ABODE(0, \"1780.38,2713.34\", \"INDIAN_ABODE_E\", 6282, 1000, 0, 0)"
+					run map script line "CREATE_VILLAGER_POS(\"1780.31,2701.47\", \"1777.37,2712.23\", \"INDIAN_HOUSEWIFE\", 3)"
+					run map script line "CREATE_VILLAGER_POS(\"1780.31,2701.47\", \"1777.37,2712.23\", \"INDIAN_HOUSEWIFE\", 36)"
+					run map script line "CREATE_VILLAGER_POS(\"1780.31,2701.47\", \"1792.69,2711.49\", \"INDIAN_FORESTER\", 13)"
+					run map script line "CREATE_VILLAGER_POS(\"1780.31,2701.47\", \"1792.69,2711.49\", \"INDIAN_HOUSEWIFE\", 18)"
+					run map script line "CREATE_VILLAGER_POS(\"1780.31,2701.47\", \"1855.38,2682.31\", \"INDIAN_HOUSEWIFE\", 8)"
+					run map script line "CREATE_ABODE(0, \"1857.80,2665.53\", \"INDIAN_ABODE_F\", 1177, 888, 0, 0)"
+					run map script line "CREATE_VILLAGER_POS(\"1854.55,2666.99\", \"1857.80,2665.53\", \"INDIAN_FORESTER\", 13)"
+					run map script line "CREATE_VILLAGER_POS(\"1854.55,2666.99\", \"1857.80,2665.53\", \"INDIAN_HOUSEWIFE\", 48)"
+					run map script line "CREATE_VILLAGER_POS(\"1854.55,2666.99\", \"1857.80,2665.53\", \"INDIAN_HOUSEWIFE\", 1)"
+					run map script line "CREATE_ABODE(0, \"1804.73,2650.97\", \"INDIAN_ABODE_A\", 6217, 1000, 0, 0)"
+					run map script line "CREATE_VILLAGER_POS(\"1805.03,2653.93\", \"1804.73,2650.97\", \"INDIAN_FORESTER\", 1)"
+					run map script line "CREATE_VILLAGER_POS(\"1805.03,2653.93\", \"1794.44,2646.56\", \"INDIAN_HOUSEWIFE\", 24)"
+					run map script line "CREATE_ABODE(0, \"1785.21,2652.58\", \"INDIAN_ABODE_F\", 5756, 888, 0, 0)"
+					run map script line "CREATE_VILLAGER_POS(\"1787.08,2655.61\", \"1748.45,2679.58\", \"INDIAN_HOUSEWIFE\", 6)"
+					run map script line "CREATE_VILLAGER_POS(\"1787.08,2655.61\", \"1794.44,2646.56\", \"INDIAN_FORESTER\", 13)"
+					run map script line "CREATE_ABODE(0, \"1653.14,2654.09\", \"INDIAN_ABODE_E\", 0, 1000, 0, 0)"
+					run map script line "CREATE_VILLAGER_POS(\"1653.09,2642.21\", \"1777.37,2712.23\", \"INDIAN_FORESTER\", 5)"
+					run map script line "CREATE_VILLAGER_POS(\"1653.09,2642.21\", \"1777.37,2712.23\", \"INDIAN_FORESTER\", 5)"
+					run map script line "CREATE_VILLAGER_POS(\"1653.09,2642.21\", \"1653.14,2654.09\", \"INDIAN_FORESTER\", 13)"
+					run map script line "CREATE_VILLAGER_POS(\"1653.09,2642.21\", \"1653.14,2654.09\", \"INDIAN_HOUSEWIFE\", 3)"
+					run map script line "CREATE_VILLAGER_POS(\"1653.09,2642.21\", \"1777.43,2657.55\", \"INDIAN_FORESTER\", 20)"
+					run map script line "CREATE_VILLAGER_POS(\"1653.09,2642.21\", \"1850.25,2673.09\", \"INDIAN_HOUSEWIFE\", 30)"
+					run map script line "CREATE_ABODE(0, \"1678.23,2736.70\", \"INDIAN_ABODE_GRAVEYARD\", 0, 1000, 0, 0)"
+					run map script line "CREATE_ABODE(0, \"1713.83,2592.59\", \"INDIAN_ABODE_C\", 1588, 1000, 0, 0)"
+					run map script line "CREATE_VILLAGER_POS(\"1705.99,2592.48\", \"1804.73,2650.97\", \"INDIAN_FORESTER\", 13)"
+					run map script line "CREATE_VILLAGER_POS(\"1705.99,2592.48\", \"1713.83,2592.59\", \"INDIAN_FORESTER\", 5)"
+					run map script line "CREATE_VILLAGER_POS(\"1705.99,2592.48\", \"1713.83,2592.59\", \"INDIAN_HOUSEWIFE\", 8)"
+					run map script line "CREATE_VILLAGER_POS(\"1705.99,2592.48\", \"1771.88,2663.35\", \"INDIAN_FORESTER\", 35)"
+					run map script line "CREATE_ABODE(0, \"1864.99,2769.27\", \"INDIAN_ABODE_C\", 2486, 1000, 0, 0)"
+					run map script line "CREATE_VILLAGER_POS(\"1860.19,2763.07\", \"1804.73,2650.97\", \"INDIAN_HOUSEWIFE\", 6)"
+					run map script line "CREATE_VILLAGER_POS(\"1860.19,2763.07\", \"1864.99,2769.27\", \"INDIAN_FORESTER\", 24)"
+					run map script line "CREATE_VILLAGER_POS(\"1860.19,2763.07\", \"1864.99,2769.27\", \"INDIAN_HOUSEWIFE\", 30)"
+					run map script line "CREATE_ABODE(0, \"1826.79,2641.36\", \"INDIAN_ABODE_STORAGE_PIT\", 3730, 1000, 20000, 30000)"
+					run map script line "CREATE_ABODE(0, \"1757.01,2667.32\", \"INDIAN_ABODE_D\", 5039, 1000, 0, 0)"
+					run map script line "CREATE_VILLAGER_POS(\"1763.75,2664.55\", \"1757.01,2667.32\", \"INDIAN_HOUSEWIFE\", 8)"
+					run map script line "CREATE_VILLAGER_POS(\"1763.75,2664.55\", \"1757.01,2667.32\", \"INDIAN_HOUSEWIFE\", 17)"
+					run map script line "CREATE_VILLAGER_POS(\"1763.75,2664.55\", \"1846.95,2665.14\", \"INDIAN_FORESTER\", 13)"
+					run map script line "CREATE_VILLAGER_POS(\"1763.75,2664.55\", \"1846.95,2665.14\", \"INDIAN_HOUSEWIFE\", 8)"
+					run map script line "CREATE_VILLAGER_POS(\"1763.75,2664.55\", \"1855.38,2682.31\", \"INDIAN_FORESTER\", 30)"
+					run map script line "CREATE_TOWN_CENTRE(0, \"1805.22,2691.31\", \"INDIAN_ABODE_TOWN_CENTRE\", 6282, 990, 0)"
+					run map script line "CREATE_ABODE(0, \"1764.86,2652.64\", \"INDIAN_ABODE_A\", 5366, 1000, 0, 0)"
+					run map script line "CREATE_VILLAGER_POS(\"1767.29,2654.37\", \"1757.01,2667.32\", \"INDIAN_FORESTER\", 13)"
+					run map script line "CREATE_VILLAGER_POS(\"1767.29,2654.37\", \"1764.86,2652.64\", \"INDIAN_FORESTER\", 28)"
+					run map script line "CREATE_VILLAGER_POS(\"1767.29,2654.37\", \"1764.86,2652.64\", \"INDIAN_HOUSEWIFE\", 8)"
+					run map script line "CREATE_ABODE(0, \"1850.84,2693.52\", \"INDIAN_ABODE_F\", 1963, 1000, 0, 0)"
+					run map script line "CREATE_VILLAGER_POS(\"1847.09,2692.09\", \"1850.84,2693.52\", \"INDIAN_FORESTER\", 13)"
+					run map script line "CREATE_VILLAGER_POS(\"1847.09,2692.09\", \"1850.84,2693.52\", \"INDIAN_HOUSEWIFE\", 8)"
+					run map script line "CREATE_ABODE(0, \"1850.25,2673.09\", \"INDIAN_ABODE_A\", 1439, 1000, 0, 0)"
+					run map script line "CREATE_VILLAGER_POS(\"1847.31,2673.59\", \"1785.21,2652.58\", \"INDIAN_HOUSEWIFE\", 8)"
+					run map script line "CREATE_VILLAGER_POS(\"1847.31,2673.59\", \"1850.25,2673.09\", \"INDIAN_FORESTER\", 13)"
+					run map script line "CREATE_ABODE(0, \"1868.01,2730.12\", \"INDIAN_ABODE_CRECHE\", 4907, 1000, 0, 0)"
+					run map script line "CREATE_ABODE(0, \"1852.86,2705.21\", \"INDIAN_ABODE_B\", 1700, 1000, 0, 0)"
+					run map script line "CREATE_VILLAGER_POS(\"1848.87,2704.80\", \"1785.21,2652.58\", \"INDIAN_FORESTER\", 5)"
+					run map script line "CREATE_VILLAGER_POS(\"1848.87,2704.80\", \"1852.52,2705.18\", \"INDIAN_FORESTER\", 27)"
+					run map script line "CREATE_VILLAGER_POS(\"1848.87,2704.80\", \"1852.86,2705.21\", \"INDIAN_HOUSEWIFE\", 50)"
+				end cinema
+				
+			// Greek
+			elsif TribeSelected == variable TRIBE_SELECTED_GREEK
+				begin cinema
+					run map script line "CREATE_TOWN(0, \"1865.61,2641.24\", \"PLAYER_ONE\", 7, \"GREEK\")"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1922.48,2717.17\", \"GREEK_ABODE_WONDER\", 916, 250, 0, 0)"
+					run map script line "CREATE_ABODE(0, \"1755.09,2692.52\", \"GREEK_ABODE_C\", 4710, 990, 0, 0)"
+					run map script line "CREATE_VILLAGER_POS(\"1762.85,2692.48\", \"1755.09,2692.52\", \"GREEK_FORESTER\", 21)"
+					run map script line "CREATE_VILLAGER_POS(\"1762.85,2692.48\", \"1755.09,2692.52\", \"GREEK_HOUSEWIFE\", 24)"
+					run map script line "CREATE_VILLAGER_POS(\"1762.85,2692.48\", \"1748.45,2679.58\", \"GREEK_FORESTER\", 6)"
+					run map script line "CREATE_VILLAGER_POS(\"1762.85,2692.48\", \"1748.45,2679.58\", \"GREEK_HOUSEWIFE\", 6)"
+					run map script line "CREATE_ABODE(0, \"1780.38,2713.34\", \"GREEK_ABODE_E\", 6282, 1000, 0, 0)"
+					run map script line "CREATE_VILLAGER_POS(\"1780.31,2701.47\", \"1777.37,2712.23\", \"GREEK_HOUSEWIFE\", 3)"
+					run map script line "CREATE_VILLAGER_POS(\"1780.31,2701.47\", \"1777.37,2712.23\", \"GREEK_HOUSEWIFE\", 36)"
+					run map script line "CREATE_VILLAGER_POS(\"1780.31,2701.47\", \"1792.69,2711.49\", \"GREEK_FORESTER\", 13)"
+					run map script line "CREATE_VILLAGER_POS(\"1780.31,2701.47\", \"1792.69,2711.49\", \"GREEK_HOUSEWIFE\", 18)"
+					run map script line "CREATE_VILLAGER_POS(\"1780.31,2701.47\", \"1855.38,2682.31\", \"GREEK_HOUSEWIFE\", 8)"
+					run map script line "CREATE_ABODE(0, \"1857.80,2665.53\", \"GREEK_ABODE_F\", 1177, 888, 0, 0)"
+					run map script line "CREATE_VILLAGER_POS(\"1854.55,2666.99\", \"1857.80,2665.53\", \"GREEK_FORESTER\", 13)"
+					run map script line "CREATE_VILLAGER_POS(\"1854.55,2666.99\", \"1857.80,2665.53\", \"GREEK_HOUSEWIFE\", 48)"
+					run map script line "CREATE_VILLAGER_POS(\"1854.55,2666.99\", \"1857.80,2665.53\", \"GREEK_HOUSEWIFE\", 1)"
+					run map script line "CREATE_ABODE(0, \"1804.73,2650.97\", \"GREEK_ABODE_A\", 6217, 1000, 0, 0)"
+					run map script line "CREATE_VILLAGER_POS(\"1805.03,2653.93\", \"1804.73,2650.97\", \"GREEK_FORESTER\", 1)"
+					run map script line "CREATE_VILLAGER_POS(\"1805.03,2653.93\", \"1794.44,2646.56\", \"GREEK_HOUSEWIFE\", 24)"
+					run map script line "CREATE_ABODE(0, \"1785.21,2652.58\", \"GREEK_ABODE_F\", 5756, 888, 0, 0)"
+					run map script line "CREATE_VILLAGER_POS(\"1787.08,2655.61\", \"1748.45,2679.58\", \"GREEK_HOUSEWIFE\", 6)"
+					run map script line "CREATE_VILLAGER_POS(\"1787.08,2655.61\", \"1794.44,2646.56\", \"GREEK_FORESTER\", 13)"
+					run map script line "CREATE_ABODE(0, \"1653.14,2654.09\", \"GREEK_ABODE_E\", 0, 1000, 0, 0)"
+					run map script line "CREATE_VILLAGER_POS(\"1653.09,2642.21\", \"1777.37,2712.23\", \"GREEK_FORESTER\", 5)"
+					run map script line "CREATE_VILLAGER_POS(\"1653.09,2642.21\", \"1777.37,2712.23\", \"GREEK_FORESTER\", 5)"
+					run map script line "CREATE_VILLAGER_POS(\"1653.09,2642.21\", \"1653.14,2654.09\", \"GREEK_FORESTER\", 13)"
+					run map script line "CREATE_VILLAGER_POS(\"1653.09,2642.21\", \"1653.14,2654.09\", \"GREEK_HOUSEWIFE\", 3)"
+					run map script line "CREATE_VILLAGER_POS(\"1653.09,2642.21\", \"1777.43,2657.55\", \"GREEK_FORESTER\", 20)"
+					run map script line "CREATE_VILLAGER_POS(\"1653.09,2642.21\", \"1850.25,2673.09\", \"GREEK_HOUSEWIFE\", 30)"
+					run map script line "CREATE_ABODE(0, \"1678.23,2736.70\", \"GREEK_ABODE_GRAVEYARD\", 0, 1000, 0, 0)"
+					run map script line "CREATE_ABODE(0, \"1713.83,2592.59\", \"GREEK_ABODE_C\", 1588, 1000, 0, 0)"
+					run map script line "CREATE_VILLAGER_POS(\"1705.99,2592.48\", \"1804.73,2650.97\", \"GREEK_FORESTER\", 13)"
+					run map script line "CREATE_VILLAGER_POS(\"1705.99,2592.48\", \"1713.83,2592.59\", \"GREEK_FORESTER\", 5)"
+					run map script line "CREATE_VILLAGER_POS(\"1705.99,2592.48\", \"1713.83,2592.59\", \"GREEK_HOUSEWIFE\", 8)"
+					run map script line "CREATE_VILLAGER_POS(\"1705.99,2592.48\", \"1771.88,2663.35\", \"GREEK_FORESTER\", 35)"
+					run map script line "CREATE_ABODE(0, \"1864.99,2769.27\", \"GREEK_ABODE_C\", 2486, 1000, 0, 0)"
+					run map script line "CREATE_VILLAGER_POS(\"1860.19,2763.07\", \"1804.73,2650.97\", \"GREEK_HOUSEWIFE\", 6)"
+					run map script line "CREATE_VILLAGER_POS(\"1860.19,2763.07\", \"1864.99,2769.27\", \"GREEK_FORESTER\", 24)"
+					run map script line "CREATE_VILLAGER_POS(\"1860.19,2763.07\", \"1864.99,2769.27\", \"GREEK_HOUSEWIFE\", 30)"
+					run map script line "CREATE_ABODE(0, \"1826.79,2641.36\", \"GREEK_ABODE_STORAGE_PIT\", 3730, 1000, 20000, 30000)"
+					run map script line "CREATE_ABODE(0, \"1757.01,2667.32\", \"GREEK_ABODE_D\", 5039, 1000, 0, 0)"
+					run map script line "CREATE_VILLAGER_POS(\"1763.75,2664.55\", \"1757.01,2667.32\", \"GREEK_HOUSEWIFE\", 8)"
+					run map script line "CREATE_VILLAGER_POS(\"1763.75,2664.55\", \"1757.01,2667.32\", \"GREEK_HOUSEWIFE\", 17)"
+					run map script line "CREATE_VILLAGER_POS(\"1763.75,2664.55\", \"1846.95,2665.14\", \"GREEK_FORESTER\", 13)"
+					run map script line "CREATE_VILLAGER_POS(\"1763.75,2664.55\", \"1846.95,2665.14\", \"GREEK_HOUSEWIFE\", 8)"
+					run map script line "CREATE_VILLAGER_POS(\"1763.75,2664.55\", \"1855.38,2682.31\", \"GREEK_FORESTER\", 30)"
+					run map script line "CREATE_TOWN_CENTRE(0, \"1805.22,2691.31\", \"GREEK_ABODE_TOWN_CENTRE\", 6282, 990, 0)"
+					run map script line "CREATE_ABODE(0, \"1764.86,2652.64\", \"GREEK_ABODE_A\", 5366, 1000, 0, 0)"
+					run map script line "CREATE_VILLAGER_POS(\"1767.29,2654.37\", \"1757.01,2667.32\", \"GREEK_FORESTER\", 13)"
+					run map script line "CREATE_VILLAGER_POS(\"1767.29,2654.37\", \"1764.86,2652.64\", \"GREEK_FORESTER\", 28)"
+					run map script line "CREATE_VILLAGER_POS(\"1767.29,2654.37\", \"1764.86,2652.64\", \"GREEK_HOUSEWIFE\", 8)"
+					run map script line "CREATE_ABODE(0, \"1850.84,2693.52\", \"GREEK_ABODE_F\", 1963, 1000, 0, 0)"
+					run map script line "CREATE_VILLAGER_POS(\"1847.09,2692.09\", \"1850.84,2693.52\", \"GREEK_FORESTER\", 13)"
+					run map script line "CREATE_VILLAGER_POS(\"1847.09,2692.09\", \"1850.84,2693.52\", \"GREEK_HOUSEWIFE\", 8)"
+					run map script line "CREATE_ABODE(0, \"1850.25,2673.09\", \"GREEK_ABODE_A\", 1439, 1000, 0, 0)"
+					run map script line "CREATE_VILLAGER_POS(\"1847.31,2673.59\", \"1785.21,2652.58\", \"GREEK_HOUSEWIFE\", 8)"
+					run map script line "CREATE_VILLAGER_POS(\"1847.31,2673.59\", \"1850.25,2673.09\", \"GREEK_FORESTER\", 13)"
+					run map script line "CREATE_ABODE(0, \"1868.01,2730.12\", \"GREEK_ABODE_CRECHE\", 4907, 1000, 0, 0)"
+					run map script line "CREATE_ABODE(0, \"1852.86,2705.21\", \"GREEK_ABODE_B\", 1700, 1000, 0, 0)"
+					run map script line "CREATE_VILLAGER_POS(\"1848.87,2704.80\", \"1785.21,2652.58\", \"GREEK_FORESTER\", 5)"
+					run map script line "CREATE_VILLAGER_POS(\"1848.87,2704.80\", \"1852.52,2705.18\", \"GREEK_FORESTER\", 27)"
+					run map script line "CREATE_VILLAGER_POS(\"1848.87,2704.80\", \"1852.86,2705.21\", \"GREEK_HOUSEWIFE\", 50)"
+				end cinema
+				
+			// Japanese
+			elsif TribeSelected == variable TRIBE_SELECTED_JAPANESE
+				begin cinema
+					run map script line "CREATE_TOWN(0, \"1865.61,2641.24\", \"PLAYER_ONE\", 7, \"JAPANESE\")"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1922.48,2717.17\", \"JAPANESE_ABODE_WONDER\", 916, 250, 0, 0)"
+					run map script line "CREATE_ABODE(0, \"1755.09,2692.52\", \"JAPANESE_ABODE_C\", 4710, 990, 0, 0)"
+					run map script line "CREATE_VILLAGER_POS(\"1762.85,2692.48\", \"1755.09,2692.52\", \"JAPANESE_FORESTER\", 21)"
+					run map script line "CREATE_VILLAGER_POS(\"1762.85,2692.48\", \"1755.09,2692.52\", \"JAPANESE_HOUSEWIFE\", 24)"
+					run map script line "CREATE_VILLAGER_POS(\"1762.85,2692.48\", \"1748.45,2679.58\", \"JAPANESE_FORESTER\", 6)"
+					run map script line "CREATE_VILLAGER_POS(\"1762.85,2692.48\", \"1748.45,2679.58\", \"JAPANESE_HOUSEWIFE\", 6)"
+					run map script line "CREATE_ABODE(0, \"1780.38,2713.34\", \"JAPANESE_ABODE_E\", 6282, 1000, 0, 0)"
+					run map script line "CREATE_VILLAGER_POS(\"1780.31,2701.47\", \"1777.37,2712.23\", \"JAPANESE_HOUSEWIFE\", 3)"
+					run map script line "CREATE_VILLAGER_POS(\"1780.31,2701.47\", \"1777.37,2712.23\", \"JAPANESE_HOUSEWIFE\", 36)"
+					run map script line "CREATE_VILLAGER_POS(\"1780.31,2701.47\", \"1792.69,2711.49\", \"JAPANESE_FORESTER\", 13)"
+					run map script line "CREATE_VILLAGER_POS(\"1780.31,2701.47\", \"1792.69,2711.49\", \"JAPANESE_HOUSEWIFE\", 18)"
+					run map script line "CREATE_VILLAGER_POS(\"1780.31,2701.47\", \"1855.38,2682.31\", \"JAPANESE_HOUSEWIFE\", 8)"
+					run map script line "CREATE_ABODE(0, \"1857.80,2665.53\", \"JAPANESE_ABODE_F\", 1177, 888, 0, 0)"
+					run map script line "CREATE_VILLAGER_POS(\"1854.55,2666.99\", \"1857.80,2665.53\", \"JAPANESE_FORESTER\", 13)"
+					run map script line "CREATE_VILLAGER_POS(\"1854.55,2666.99\", \"1857.80,2665.53\", \"JAPANESE_HOUSEWIFE\", 48)"
+					run map script line "CREATE_VILLAGER_POS(\"1854.55,2666.99\", \"1857.80,2665.53\", \"JAPANESE_HOUSEWIFE\", 1)"
+					run map script line "CREATE_ABODE(0, \"1804.73,2650.97\", \"JAPANESE_ABODE_A\", 6217, 1000, 0, 0)"
+					run map script line "CREATE_VILLAGER_POS(\"1805.03,2653.93\", \"1804.73,2650.97\", \"JAPANESE_FORESTER\", 1)"
+					run map script line "CREATE_VILLAGER_POS(\"1805.03,2653.93\", \"1794.44,2646.56\", \"JAPANESE_HOUSEWIFE\", 24)"
+					run map script line "CREATE_ABODE(0, \"1785.21,2652.58\", \"JAPANESE_ABODE_F\", 5756, 888, 0, 0)"
+					run map script line "CREATE_VILLAGER_POS(\"1787.08,2655.61\", \"1748.45,2679.58\", \"JAPANESE_HOUSEWIFE\", 6)"
+					run map script line "CREATE_VILLAGER_POS(\"1787.08,2655.61\", \"1794.44,2646.56\", \"JAPANESE_FORESTER\", 13)"
+					run map script line "CREATE_ABODE(0, \"1653.14,2654.09\", \"JAPANESE_ABODE_E\", 0, 1000, 0, 0)"
+					run map script line "CREATE_VILLAGER_POS(\"1653.09,2642.21\", \"1777.37,2712.23\", \"JAPANESE_FORESTER\", 5)"
+					run map script line "CREATE_VILLAGER_POS(\"1653.09,2642.21\", \"1777.37,2712.23\", \"JAPANESE_FORESTER\", 5)"
+					run map script line "CREATE_VILLAGER_POS(\"1653.09,2642.21\", \"1653.14,2654.09\", \"JAPANESE_FORESTER\", 13)"
+					run map script line "CREATE_VILLAGER_POS(\"1653.09,2642.21\", \"1653.14,2654.09\", \"JAPANESE_HOUSEWIFE\", 3)"
+					run map script line "CREATE_VILLAGER_POS(\"1653.09,2642.21\", \"1777.43,2657.55\", \"JAPANESE_FORESTER\", 20)"
+					run map script line "CREATE_VILLAGER_POS(\"1653.09,2642.21\", \"1850.25,2673.09\", \"JAPANESE_HOUSEWIFE\", 30)"
+					run map script line "CREATE_ABODE(0, \"1678.23,2736.70\", \"JAPANESE_ABODE_GRAVEYARD\", 0, 1000, 0, 0)"
+					run map script line "CREATE_ABODE(0, \"1713.83,2592.59\", \"JAPANESE_ABODE_C\", 1588, 1000, 0, 0)"
+					run map script line "CREATE_VILLAGER_POS(\"1705.99,2592.48\", \"1804.73,2650.97\", \"JAPANESE_FORESTER\", 13)"
+					run map script line "CREATE_VILLAGER_POS(\"1705.99,2592.48\", \"1713.83,2592.59\", \"JAPANESE_FORESTER\", 5)"
+					run map script line "CREATE_VILLAGER_POS(\"1705.99,2592.48\", \"1713.83,2592.59\", \"JAPANESE_HOUSEWIFE\", 8)"
+					run map script line "CREATE_VILLAGER_POS(\"1705.99,2592.48\", \"1771.88,2663.35\", \"JAPANESE_FORESTER\", 35)"
+					run map script line "CREATE_ABODE(0, \"1864.99,2769.27\", \"JAPANESE_ABODE_C\", 2486, 1000, 0, 0)"
+					run map script line "CREATE_VILLAGER_POS(\"1860.19,2763.07\", \"1804.73,2650.97\", \"JAPANESE_HOUSEWIFE\", 6)"
+					run map script line "CREATE_VILLAGER_POS(\"1860.19,2763.07\", \"1864.99,2769.27\", \"JAPANESE_FORESTER\", 24)"
+					run map script line "CREATE_VILLAGER_POS(\"1860.19,2763.07\", \"1864.99,2769.27\", \"JAPANESE_HOUSEWIFE\", 30)"
+					run map script line "CREATE_ABODE(0, \"1826.79,2641.36\", \"JAPANESE_ABODE_STORAGE_PIT\", 3730, 1000, 20000, 30000)"
+					run map script line "CREATE_ABODE(0, \"1757.01,2667.32\", \"JAPANESE_ABODE_D\", 5039, 1000, 0, 0)"
+					run map script line "CREATE_VILLAGER_POS(\"1763.75,2664.55\", \"1757.01,2667.32\", \"JAPANESE_HOUSEWIFE\", 8)"
+					run map script line "CREATE_VILLAGER_POS(\"1763.75,2664.55\", \"1757.01,2667.32\", \"JAPANESE_HOUSEWIFE\", 17)"
+					run map script line "CREATE_VILLAGER_POS(\"1763.75,2664.55\", \"1846.95,2665.14\", \"JAPANESE_FORESTER\", 13)"
+					run map script line "CREATE_VILLAGER_POS(\"1763.75,2664.55\", \"1846.95,2665.14\", \"JAPANESE_HOUSEWIFE\", 8)"
+					run map script line "CREATE_VILLAGER_POS(\"1763.75,2664.55\", \"1855.38,2682.31\", \"JAPANESE_FORESTER\", 30)"
+					run map script line "CREATE_TOWN_CENTRE(0, \"1805.22,2691.31\", \"JAPANESE_ABODE_TOWN_CENTRE\", 6282, 990, 0)"
+					run map script line "CREATE_ABODE(0, \"1764.86,2652.64\", \"JAPANESE_ABODE_A\", 5366, 1000, 0, 0)"
+					run map script line "CREATE_VILLAGER_POS(\"1767.29,2654.37\", \"1757.01,2667.32\", \"JAPANESE_FORESTER\", 13)"
+					run map script line "CREATE_VILLAGER_POS(\"1767.29,2654.37\", \"1764.86,2652.64\", \"JAPANESE_FORESTER\", 28)"
+					run map script line "CREATE_VILLAGER_POS(\"1767.29,2654.37\", \"1764.86,2652.64\", \"JAPANESE_HOUSEWIFE\", 8)"
+					run map script line "CREATE_ABODE(0, \"1850.84,2693.52\", \"JAPANESE_ABODE_F\", 1963, 1000, 0, 0)"
+					run map script line "CREATE_VILLAGER_POS(\"1847.09,2692.09\", \"1850.84,2693.52\", \"JAPANESE_FORESTER\", 13)"
+					run map script line "CREATE_VILLAGER_POS(\"1847.09,2692.09\", \"1850.84,2693.52\", \"JAPANESE_HOUSEWIFE\", 8)"
+					run map script line "CREATE_ABODE(0, \"1850.25,2673.09\", \"JAPANESE_ABODE_A\", 1439, 1000, 0, 0)"
+					run map script line "CREATE_VILLAGER_POS(\"1847.31,2673.59\", \"1785.21,2652.58\", \"JAPANESE_HOUSEWIFE\", 8)"
+					run map script line "CREATE_VILLAGER_POS(\"1847.31,2673.59\", \"1850.25,2673.09\", \"JAPANESE_FORESTER\", 13)"
+					run map script line "CREATE_ABODE(0, \"1868.01,2730.12\", \"JAPANESE_ABODE_CRECHE\", 4907, 1000, 0, 0)"
+					run map script line "CREATE_ABODE(0, \"1852.86,2705.21\", \"JAPANESE_ABODE_B\", 1700, 1000, 0, 0)"
+					run map script line "CREATE_VILLAGER_POS(\"1848.87,2704.80\", \"1785.21,2652.58\", \"JAPANESE_FORESTER\", 5)"
+					run map script line "CREATE_VILLAGER_POS(\"1848.87,2704.80\", \"1852.52,2705.18\", \"JAPANESE_FORESTER\", 27)"
+					run map script line "CREATE_VILLAGER_POS(\"1848.87,2704.80\", \"1852.86,2705.21\", \"JAPANESE_HOUSEWIFE\", 50)"
+				end cinema
+			
+			// Egyptian
+			elsif TribeSelected == variable TRIBE_SELECTED_EGYPTIAN
+				begin cinema
+					run map script line "CREATE_TOWN(0, \"1865.61,2641.24\", \"PLAYER_ONE\", 7, \"EGYPTIAN\")"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1922.48,2717.17\", \"EGYPTIAN_ABODE_WONDER\", 916, 250, 0, 0)"
+					run map script line "CREATE_ABODE(0, \"1755.09,2692.52\", \"EGYPTIAN_ABODE_C\", 4710, 990, 0, 0)"
+					run map script line "CREATE_VILLAGER_POS(\"1762.85,2692.48\", \"1755.09,2692.52\", \"EGYPTIAN_FORESTER\", 21)"
+					run map script line "CREATE_VILLAGER_POS(\"1762.85,2692.48\", \"1755.09,2692.52\", \"EGYPTIAN_HOUSEWIFE\", 24)"
+					run map script line "CREATE_VILLAGER_POS(\"1762.85,2692.48\", \"1748.45,2679.58\", \"EGYPTIAN_FORESTER\", 6)"
+					run map script line "CREATE_VILLAGER_POS(\"1762.85,2692.48\", \"1748.45,2679.58\", \"EGYPTIAN_HOUSEWIFE\", 6)"
+					run map script line "CREATE_ABODE(0, \"1780.38,2713.34\", \"EGYPTIAN_ABODE_E\", 6282, 1000, 0, 0)"
+					run map script line "CREATE_VILLAGER_POS(\"1780.31,2701.47\", \"1777.37,2712.23\", \"EGYPTIAN_HOUSEWIFE\", 3)"
+					run map script line "CREATE_VILLAGER_POS(\"1780.31,2701.47\", \"1777.37,2712.23\", \"EGYPTIAN_HOUSEWIFE\", 36)"
+					run map script line "CREATE_VILLAGER_POS(\"1780.31,2701.47\", \"1792.69,2711.49\", \"EGYPTIAN_FORESTER\", 13)"
+					run map script line "CREATE_VILLAGER_POS(\"1780.31,2701.47\", \"1792.69,2711.49\", \"EGYPTIAN_HOUSEWIFE\", 18)"
+					run map script line "CREATE_VILLAGER_POS(\"1780.31,2701.47\", \"1855.38,2682.31\", \"EGYPTIAN_HOUSEWIFE\", 8)"
+					run map script line "CREATE_ABODE(0, \"1857.80,2665.53\", \"EGYPTIAN_ABODE_F\", 1177, 888, 0, 0)"
+					run map script line "CREATE_VILLAGER_POS(\"1854.55,2666.99\", \"1857.80,2665.53\", \"EGYPTIAN_FORESTER\", 13)"
+					run map script line "CREATE_VILLAGER_POS(\"1854.55,2666.99\", \"1857.80,2665.53\", \"EGYPTIAN_HOUSEWIFE\", 48)"
+					run map script line "CREATE_VILLAGER_POS(\"1854.55,2666.99\", \"1857.80,2665.53\", \"EGYPTIAN_HOUSEWIFE\", 1)"
+					run map script line "CREATE_ABODE(0, \"1804.73,2650.97\", \"EGYPTIAN_ABODE_A\", 6217, 1000, 0, 0)"
+					run map script line "CREATE_VILLAGER_POS(\"1805.03,2653.93\", \"1804.73,2650.97\", \"EGYPTIAN_FORESTER\", 1)"
+					run map script line "CREATE_VILLAGER_POS(\"1805.03,2653.93\", \"1794.44,2646.56\", \"EGYPTIAN_HOUSEWIFE\", 24)"
+					run map script line "CREATE_ABODE(0, \"1785.21,2652.58\", \"EGYPTIAN_ABODE_F\", 5756, 888, 0, 0)"
+					run map script line "CREATE_VILLAGER_POS(\"1787.08,2655.61\", \"1748.45,2679.58\", \"EGYPTIAN_HOUSEWIFE\", 6)"
+					run map script line "CREATE_VILLAGER_POS(\"1787.08,2655.61\", \"1794.44,2646.56\", \"EGYPTIAN_FORESTER\", 13)"
+					run map script line "CREATE_ABODE(0, \"1653.14,2654.09\", \"EGYPTIAN_ABODE_E\", 0, 1000, 0, 0)"
+					run map script line "CREATE_VILLAGER_POS(\"1653.09,2642.21\", \"1777.37,2712.23\", \"EGYPTIAN_FORESTER\", 5)"
+					run map script line "CREATE_VILLAGER_POS(\"1653.09,2642.21\", \"1777.37,2712.23\", \"EGYPTIAN_FORESTER\", 5)"
+					run map script line "CREATE_VILLAGER_POS(\"1653.09,2642.21\", \"1653.14,2654.09\", \"EGYPTIAN_FORESTER\", 13)"
+					run map script line "CREATE_VILLAGER_POS(\"1653.09,2642.21\", \"1653.14,2654.09\", \"EGYPTIAN_HOUSEWIFE\", 3)"
+					run map script line "CREATE_VILLAGER_POS(\"1653.09,2642.21\", \"1777.43,2657.55\", \"EGYPTIAN_FORESTER\", 20)"
+					run map script line "CREATE_VILLAGER_POS(\"1653.09,2642.21\", \"1850.25,2673.09\", \"EGYPTIAN_HOUSEWIFE\", 30)"
+					run map script line "CREATE_ABODE(0, \"1678.23,2736.70\", \"EGYPTIAN_ABODE_GRAVEYARD\", 0, 1000, 0, 0)"
+					run map script line "CREATE_ABODE(0, \"1713.83,2592.59\", \"EGYPTIAN_ABODE_C\", 1588, 1000, 0, 0)"
+					run map script line "CREATE_VILLAGER_POS(\"1705.99,2592.48\", \"1804.73,2650.97\", \"EGYPTIAN_FORESTER\", 13)"
+					run map script line "CREATE_VILLAGER_POS(\"1705.99,2592.48\", \"1713.83,2592.59\", \"EGYPTIAN_FORESTER\", 5)"
+					run map script line "CREATE_VILLAGER_POS(\"1705.99,2592.48\", \"1713.83,2592.59\", \"EGYPTIAN_HOUSEWIFE\", 8)"
+					run map script line "CREATE_VILLAGER_POS(\"1705.99,2592.48\", \"1771.88,2663.35\", \"EGYPTIAN_FORESTER\", 35)"
+					run map script line "CREATE_ABODE(0, \"1864.99,2769.27\", \"EGYPTIAN_ABODE_C\", 2486, 1000, 0, 0)"
+					run map script line "CREATE_VILLAGER_POS(\"1860.19,2763.07\", \"1804.73,2650.97\", \"EGYPTIAN_HOUSEWIFE\", 6)"
+					run map script line "CREATE_VILLAGER_POS(\"1860.19,2763.07\", \"1864.99,2769.27\", \"EGYPTIAN_FORESTER\", 24)"
+					run map script line "CREATE_VILLAGER_POS(\"1860.19,2763.07\", \"1864.99,2769.27\", \"EGYPTIAN_HOUSEWIFE\", 30)"
+					run map script line "CREATE_ABODE(0, \"1826.79,2641.36\", \"EGYPTIAN_ABODE_STORAGE_PIT\", 3730, 1000, 20000, 30000)"
+					run map script line "CREATE_ABODE(0, \"1757.01,2667.32\", \"EGYPTIAN_ABODE_D\", 5039, 1000, 0, 0)"
+					run map script line "CREATE_VILLAGER_POS(\"1763.75,2664.55\", \"1757.01,2667.32\", \"EGYPTIAN_HOUSEWIFE\", 8)"
+					run map script line "CREATE_VILLAGER_POS(\"1763.75,2664.55\", \"1757.01,2667.32\", \"EGYPTIAN_HOUSEWIFE\", 17)"
+					run map script line "CREATE_VILLAGER_POS(\"1763.75,2664.55\", \"1846.95,2665.14\", \"EGYPTIAN_FORESTER\", 13)"
+					run map script line "CREATE_VILLAGER_POS(\"1763.75,2664.55\", \"1846.95,2665.14\", \"EGYPTIAN_HOUSEWIFE\", 8)"
+					run map script line "CREATE_VILLAGER_POS(\"1763.75,2664.55\", \"1855.38,2682.31\", \"EGYPTIAN_FORESTER\", 30)"
+					run map script line "CREATE_TOWN_CENTRE(0, \"1805.22,2691.31\", \"EGYPTIAN_ABODE_TOWN_CENTRE\", 6282, 990, 0)"
+					run map script line "CREATE_ABODE(0, \"1764.86,2652.64\", \"EGYPTIAN_ABODE_A\", 5366, 1000, 0, 0)"
+					run map script line "CREATE_VILLAGER_POS(\"1767.29,2654.37\", \"1757.01,2667.32\", \"EGYPTIAN_FORESTER\", 13)"
+					run map script line "CREATE_VILLAGER_POS(\"1767.29,2654.37\", \"1764.86,2652.64\", \"EGYPTIAN_FORESTER\", 28)"
+					run map script line "CREATE_VILLAGER_POS(\"1767.29,2654.37\", \"1764.86,2652.64\", \"EGYPTIAN_HOUSEWIFE\", 8)"
+					run map script line "CREATE_ABODE(0, \"1850.84,2693.52\", \"EGYPTIAN_ABODE_F\", 1963, 1000, 0, 0)"
+					run map script line "CREATE_VILLAGER_POS(\"1847.09,2692.09\", \"1850.84,2693.52\", \"EGYPTIAN_FORESTER\", 13)"
+					run map script line "CREATE_VILLAGER_POS(\"1847.09,2692.09\", \"1850.84,2693.52\", \"EGYPTIAN_HOUSEWIFE\", 8)"
+					run map script line "CREATE_ABODE(0, \"1850.25,2673.09\", \"EGYPTIAN_ABODE_A\", 1439, 1000, 0, 0)"
+					run map script line "CREATE_VILLAGER_POS(\"1847.31,2673.59\", \"1785.21,2652.58\", \"EGYPTIAN_HOUSEWIFE\", 8)"
+					run map script line "CREATE_VILLAGER_POS(\"1847.31,2673.59\", \"1850.25,2673.09\", \"EGYPTIAN_FORESTER\", 13)"
+					run map script line "CREATE_ABODE(0, \"1868.01,2730.12\", \"EGYPTIAN_ABODE_CRECHE\", 4907, 1000, 0, 0)"
+					run map script line "CREATE_ABODE(0, \"1852.86,2705.21\", \"EGYPTIAN_ABODE_B\", 1700, 1000, 0, 0)"
+					run map script line "CREATE_VILLAGER_POS(\"1848.87,2704.80\", \"1785.21,2652.58\", \"EGYPTIAN_FORESTER\", 5)"
+					run map script line "CREATE_VILLAGER_POS(\"1848.87,2704.80\", \"1852.52,2705.18\", \"EGYPTIAN_FORESTER\", 27)"
+					run map script line "CREATE_VILLAGER_POS(\"1848.87,2704.80\", \"1852.86,2705.21\", \"EGYPTIAN_HOUSEWIFE\", 50)"
+				end cinema
+				
+			// Tibetan
+			elsif TribeSelected == variable TRIBE_SELECTED_TIBETAN
+				begin cinema
+					run map script line "CREATE_TOWN(0, \"1865.61,2641.24\", \"PLAYER_ONE\", 7, \"TIBETAN\")"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1922.48,2717.17\", \"TIBETAN_ABODE_WONDER\", 916, 250, 0, 0)"
+					run map script line "CREATE_ABODE(0, \"1755.09,2692.52\", \"TIBETAN_ABODE_C\", 4710, 990, 0, 0)"
+					run map script line "CREATE_VILLAGER_POS(\"1762.85,2692.48\", \"1755.09,2692.52\", \"TIBETAN_FORESTER\", 21)"
+					run map script line "CREATE_VILLAGER_POS(\"1762.85,2692.48\", \"1755.09,2692.52\", \"TIBETAN_HOUSEWIFE\", 24)"
+					run map script line "CREATE_VILLAGER_POS(\"1762.85,2692.48\", \"1748.45,2679.58\", \"TIBETAN_FORESTER\", 6)"
+					run map script line "CREATE_VILLAGER_POS(\"1762.85,2692.48\", \"1748.45,2679.58\", \"TIBETAN_HOUSEWIFE\", 6)"
+					run map script line "CREATE_ABODE(0, \"1780.38,2713.34\", \"TIBETAN_ABODE_E\", 6282, 1000, 0, 0)"
+					run map script line "CREATE_VILLAGER_POS(\"1780.31,2701.47\", \"1777.37,2712.23\", \"TIBETAN_HOUSEWIFE\", 3)"
+					run map script line "CREATE_VILLAGER_POS(\"1780.31,2701.47\", \"1777.37,2712.23\", \"TIBETAN_HOUSEWIFE\", 36)"
+					run map script line "CREATE_VILLAGER_POS(\"1780.31,2701.47\", \"1792.69,2711.49\", \"TIBETAN_FORESTER\", 13)"
+					run map script line "CREATE_VILLAGER_POS(\"1780.31,2701.47\", \"1792.69,2711.49\", \"TIBETAN_HOUSEWIFE\", 18)"
+					run map script line "CREATE_VILLAGER_POS(\"1780.31,2701.47\", \"1855.38,2682.31\", \"TIBETAN_HOUSEWIFE\", 8)"
+					run map script line "CREATE_ABODE(0, \"1857.80,2665.53\", \"TIBETAN_ABODE_F\", 1177, 888, 0, 0)"
+					run map script line "CREATE_VILLAGER_POS(\"1854.55,2666.99\", \"1857.80,2665.53\", \"TIBETAN_FORESTER\", 13)"
+					run map script line "CREATE_VILLAGER_POS(\"1854.55,2666.99\", \"1857.80,2665.53\", \"TIBETAN_HOUSEWIFE\", 48)"
+					run map script line "CREATE_VILLAGER_POS(\"1854.55,2666.99\", \"1857.80,2665.53\", \"TIBETAN_HOUSEWIFE\", 1)"
+					run map script line "CREATE_ABODE(0, \"1804.73,2650.97\", \"TIBETAN_ABODE_A\", 6217, 1000, 0, 0)"
+					run map script line "CREATE_VILLAGER_POS(\"1805.03,2653.93\", \"1804.73,2650.97\", \"TIBETAN_FORESTER\", 1)"
+					run map script line "CREATE_VILLAGER_POS(\"1805.03,2653.93\", \"1794.44,2646.56\", \"TIBETAN_HOUSEWIFE\", 24)"
+					run map script line "CREATE_ABODE(0, \"1785.21,2652.58\", \"TIBETAN_ABODE_F\", 5756, 888, 0, 0)"
+					run map script line "CREATE_VILLAGER_POS(\"1787.08,2655.61\", \"1748.45,2679.58\", \"TIBETAN_HOUSEWIFE\", 6)"
+					run map script line "CREATE_VILLAGER_POS(\"1787.08,2655.61\", \"1794.44,2646.56\", \"TIBETAN_FORESTER\", 13)"
+					run map script line "CREATE_ABODE(0, \"1653.14,2654.09\", \"TIBETAN_ABODE_E\", 0, 1000, 0, 0)"
+					run map script line "CREATE_VILLAGER_POS(\"1653.09,2642.21\", \"1777.37,2712.23\", \"TIBETAN_FORESTER\", 5)"
+					run map script line "CREATE_VILLAGER_POS(\"1653.09,2642.21\", \"1777.37,2712.23\", \"TIBETAN_FORESTER\", 5)"
+					run map script line "CREATE_VILLAGER_POS(\"1653.09,2642.21\", \"1653.14,2654.09\", \"TIBETAN_FORESTER\", 13)"
+					run map script line "CREATE_VILLAGER_POS(\"1653.09,2642.21\", \"1653.14,2654.09\", \"TIBETAN_HOUSEWIFE\", 3)"
+					run map script line "CREATE_VILLAGER_POS(\"1653.09,2642.21\", \"1777.43,2657.55\", \"TIBETAN_FORESTER\", 20)"
+					run map script line "CREATE_VILLAGER_POS(\"1653.09,2642.21\", \"1850.25,2673.09\", \"TIBETAN_HOUSEWIFE\", 30)"
+					run map script line "CREATE_ABODE(0, \"1678.23,2736.70\", \"TIBETAN_ABODE_GRAVEYARD\", 0, 1000, 0, 0)"
+					run map script line "CREATE_ABODE(0, \"1713.83,2592.59\", \"TIBETAN_ABODE_C\", 1588, 1000, 0, 0)"
+					run map script line "CREATE_VILLAGER_POS(\"1705.99,2592.48\", \"1804.73,2650.97\", \"TIBETAN_FORESTER\", 13)"
+					run map script line "CREATE_VILLAGER_POS(\"1705.99,2592.48\", \"1713.83,2592.59\", \"TIBETAN_FORESTER\", 5)"
+					run map script line "CREATE_VILLAGER_POS(\"1705.99,2592.48\", \"1713.83,2592.59\", \"TIBETAN_HOUSEWIFE\", 8)"
+					run map script line "CREATE_VILLAGER_POS(\"1705.99,2592.48\", \"1771.88,2663.35\", \"TIBETAN_FORESTER\", 35)"
+					run map script line "CREATE_ABODE(0, \"1864.99,2769.27\", \"TIBETAN_ABODE_C\", 2486, 1000, 0, 0)"
+					run map script line "CREATE_VILLAGER_POS(\"1860.19,2763.07\", \"1804.73,2650.97\", \"TIBETAN_HOUSEWIFE\", 6)"
+					run map script line "CREATE_VILLAGER_POS(\"1860.19,2763.07\", \"1864.99,2769.27\", \"TIBETAN_FORESTER\", 24)"
+					run map script line "CREATE_VILLAGER_POS(\"1860.19,2763.07\", \"1864.99,2769.27\", \"TIBETAN_HOUSEWIFE\", 30)"
+					run map script line "CREATE_ABODE(0, \"1826.79,2641.36\", \"TIBETAN_ABODE_STORAGE_PIT\", 3730, 1000, 20000, 30000)"
+					run map script line "CREATE_ABODE(0, \"1757.01,2667.32\", \"TIBETAN_ABODE_D\", 5039, 1000, 0, 0)"
+					run map script line "CREATE_VILLAGER_POS(\"1763.75,2664.55\", \"1757.01,2667.32\", \"TIBETAN_HOUSEWIFE\", 8)"
+					run map script line "CREATE_VILLAGER_POS(\"1763.75,2664.55\", \"1757.01,2667.32\", \"TIBETAN_HOUSEWIFE\", 17)"
+					run map script line "CREATE_VILLAGER_POS(\"1763.75,2664.55\", \"1846.95,2665.14\", \"TIBETAN_FORESTER\", 13)"
+					run map script line "CREATE_VILLAGER_POS(\"1763.75,2664.55\", \"1846.95,2665.14\", \"TIBETAN_HOUSEWIFE\", 8)"
+					run map script line "CREATE_VILLAGER_POS(\"1763.75,2664.55\", \"1855.38,2682.31\", \"TIBETAN_FORESTER\", 30)"
+					run map script line "CREATE_TOWN_CENTRE(0, \"1805.22,2691.31\", \"TIBETAN_ABODE_TOWN_CENTRE\", 6282, 990, 0)"
+					run map script line "CREATE_ABODE(0, \"1764.86,2652.64\", \"TIBETAN_ABODE_A\", 5366, 1000, 0, 0)"
+					run map script line "CREATE_VILLAGER_POS(\"1767.29,2654.37\", \"1757.01,2667.32\", \"TIBETAN_FORESTER\", 13)"
+					run map script line "CREATE_VILLAGER_POS(\"1767.29,2654.37\", \"1764.86,2652.64\", \"TIBETAN_FORESTER\", 28)"
+					run map script line "CREATE_VILLAGER_POS(\"1767.29,2654.37\", \"1764.86,2652.64\", \"TIBETAN_HOUSEWIFE\", 8)"
+					run map script line "CREATE_ABODE(0, \"1850.84,2693.52\", \"TIBETAN_ABODE_F\", 1963, 1000, 0, 0)"
+					run map script line "CREATE_VILLAGER_POS(\"1847.09,2692.09\", \"1850.84,2693.52\", \"TIBETAN_FORESTER\", 13)"
+					run map script line "CREATE_VILLAGER_POS(\"1847.09,2692.09\", \"1850.84,2693.52\", \"TIBETAN_HOUSEWIFE\", 8)"
+					run map script line "CREATE_ABODE(0, \"1850.25,2673.09\", \"TIBETAN_ABODE_A\", 1439, 1000, 0, 0)"
+					run map script line "CREATE_VILLAGER_POS(\"1847.31,2673.59\", \"1785.21,2652.58\", \"TIBETAN_HOUSEWIFE\", 8)"
+					run map script line "CREATE_VILLAGER_POS(\"1847.31,2673.59\", \"1850.25,2673.09\", \"TIBETAN_FORESTER\", 13)"
+					run map script line "CREATE_ABODE(0, \"1868.01,2730.12\", \"TIBETAN_ABODE_CRECHE\", 4907, 1000, 0, 0)"
+					run map script line "CREATE_ABODE(0, \"1852.86,2705.21\", \"TIBETAN_ABODE_B\", 1700, 1000, 0, 0)"
+					run map script line "CREATE_VILLAGER_POS(\"1848.87,2704.80\", \"1785.21,2652.58\", \"TIBETAN_FORESTER\", 5)"
+					run map script line "CREATE_VILLAGER_POS(\"1848.87,2704.80\", \"1852.52,2705.18\", \"TIBETAN_FORESTER\", 27)"
+					run map script line "CREATE_VILLAGER_POS(\"1848.87,2704.80\", \"1852.86,2705.21\", \"TIBETAN_HOUSEWIFE\", 50)"
+				end cinema
+				
+			// African
+			elsif TribeSelected == variable TRIBE_SELECTED_AFRICAN
+				begin cinema
+					run map script line "CREATE_TOWN(0, \"1865.61,2641.24\", \"PLAYER_ONE\", 7, \"AFRICAN\")"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1922.48,2717.17\", \"AFRICAN_ABODE_WONDER\", 916, 250, 0, 0)"
+					run map script line "CREATE_ABODE(0, \"1755.09,2692.52\", \"AFRICAN_ABODE_C\", 4710, 990, 0, 0)"
+					run map script line "CREATE_VILLAGER_POS(\"1762.85,2692.48\", \"1755.09,2692.52\", \"AFRICAN_FORESTER\", 21)"
+					run map script line "CREATE_VILLAGER_POS(\"1762.85,2692.48\", \"1755.09,2692.52\", \"AFRICAN_HOUSEWIFE\", 24)"
+					run map script line "CREATE_VILLAGER_POS(\"1762.85,2692.48\", \"1748.45,2679.58\", \"AFRICAN_FORESTER\", 6)"
+					run map script line "CREATE_VILLAGER_POS(\"1762.85,2692.48\", \"1748.45,2679.58\", \"AFRICAN_HOUSEWIFE\", 6)"
+					run map script line "CREATE_ABODE(0, \"1780.38,2713.34\", \"AFRICAN_ABODE_E\", 6282, 1000, 0, 0)"
+					run map script line "CREATE_VILLAGER_POS(\"1780.31,2701.47\", \"1777.37,2712.23\", \"AFRICAN_HOUSEWIFE\", 3)"
+					run map script line "CREATE_VILLAGER_POS(\"1780.31,2701.47\", \"1777.37,2712.23\", \"AFRICAN_HOUSEWIFE\", 36)"
+					run map script line "CREATE_VILLAGER_POS(\"1780.31,2701.47\", \"1792.69,2711.49\", \"AFRICAN_FORESTER\", 13)"
+					run map script line "CREATE_VILLAGER_POS(\"1780.31,2701.47\", \"1792.69,2711.49\", \"AFRICAN_HOUSEWIFE\", 18)"
+					run map script line "CREATE_VILLAGER_POS(\"1780.31,2701.47\", \"1855.38,2682.31\", \"AFRICAN_HOUSEWIFE\", 8)"
+					run map script line "CREATE_ABODE(0, \"1857.80,2665.53\", \"AFRICAN_ABODE_F\", 1177, 888, 0, 0)"
+					run map script line "CREATE_VILLAGER_POS(\"1854.55,2666.99\", \"1857.80,2665.53\", \"AFRICAN_FORESTER\", 13)"
+					run map script line "CREATE_VILLAGER_POS(\"1854.55,2666.99\", \"1857.80,2665.53\", \"AFRICAN_HOUSEWIFE\", 48)"
+					run map script line "CREATE_VILLAGER_POS(\"1854.55,2666.99\", \"1857.80,2665.53\", \"AFRICAN_HOUSEWIFE\", 1)"
+					run map script line "CREATE_ABODE(0, \"1804.73,2650.97\", \"AFRICAN_ABODE_A\", 6217, 1000, 0, 0)"
+					run map script line "CREATE_VILLAGER_POS(\"1805.03,2653.93\", \"1804.73,2650.97\", \"AFRICAN_FORESTER\", 1)"
+					run map script line "CREATE_VILLAGER_POS(\"1805.03,2653.93\", \"1794.44,2646.56\", \"AFRICAN_HOUSEWIFE\", 24)"
+					run map script line "CREATE_ABODE(0, \"1785.21,2652.58\", \"AFRICAN_ABODE_F\", 5756, 888, 0, 0)"
+					run map script line "CREATE_VILLAGER_POS(\"1787.08,2655.61\", \"1748.45,2679.58\", \"AFRICAN_HOUSEWIFE\", 6)"
+					run map script line "CREATE_VILLAGER_POS(\"1787.08,2655.61\", \"1794.44,2646.56\", \"AFRICAN_FORESTER\", 13)"
+					run map script line "CREATE_ABODE(0, \"1653.14,2654.09\", \"AFRICAN_ABODE_E\", 0, 1000, 0, 0)"
+					run map script line "CREATE_VILLAGER_POS(\"1653.09,2642.21\", \"1777.37,2712.23\", \"AFRICAN_FORESTER\", 5)"
+					run map script line "CREATE_VILLAGER_POS(\"1653.09,2642.21\", \"1777.37,2712.23\", \"AFRICAN_FORESTER\", 5)"
+					run map script line "CREATE_VILLAGER_POS(\"1653.09,2642.21\", \"1653.14,2654.09\", \"AFRICAN_FORESTER\", 13)"
+					run map script line "CREATE_VILLAGER_POS(\"1653.09,2642.21\", \"1653.14,2654.09\", \"AFRICAN_HOUSEWIFE\", 3)"
+					run map script line "CREATE_VILLAGER_POS(\"1653.09,2642.21\", \"1777.43,2657.55\", \"AFRICAN_FORESTER\", 20)"
+					run map script line "CREATE_VILLAGER_POS(\"1653.09,2642.21\", \"1850.25,2673.09\", \"AFRICAN_HOUSEWIFE\", 30)"
+					run map script line "CREATE_ABODE(0, \"1678.23,2736.70\", \"AFRICAN_ABODE_GRAVEYARD\", 0, 1000, 0, 0)"
+					run map script line "CREATE_ABODE(0, \"1713.83,2592.59\", \"AFRICAN_ABODE_C\", 1588, 1000, 0, 0)"
+					run map script line "CREATE_VILLAGER_POS(\"1705.99,2592.48\", \"1804.73,2650.97\", \"AFRICAN_FORESTER\", 13)"
+					run map script line "CREATE_VILLAGER_POS(\"1705.99,2592.48\", \"1713.83,2592.59\", \"AFRICAN_FORESTER\", 5)"
+					run map script line "CREATE_VILLAGER_POS(\"1705.99,2592.48\", \"1713.83,2592.59\", \"AFRICAN_HOUSEWIFE\", 8)"
+					run map script line "CREATE_VILLAGER_POS(\"1705.99,2592.48\", \"1771.88,2663.35\", \"AFRICAN_FORESTER\", 35)"
+					run map script line "CREATE_ABODE(0, \"1864.99,2769.27\", \"AFRICAN_ABODE_C\", 2486, 1000, 0, 0)"
+					run map script line "CREATE_VILLAGER_POS(\"1860.19,2763.07\", \"1804.73,2650.97\", \"AFRICAN_HOUSEWIFE\", 6)"
+					run map script line "CREATE_VILLAGER_POS(\"1860.19,2763.07\", \"1864.99,2769.27\", \"AFRICAN_FORESTER\", 24)"
+					run map script line "CREATE_VILLAGER_POS(\"1860.19,2763.07\", \"1864.99,2769.27\", \"AFRICAN_HOUSEWIFE\", 30)"
+					run map script line "CREATE_ABODE(0, \"1826.79,2641.36\", \"AFRICAN_ABODE_STORAGE_PIT\", 3730, 1000, 20000, 30000)"
+					run map script line "CREATE_ABODE(0, \"1757.01,2667.32\", \"AFRICAN_ABODE_D\", 5039, 1000, 0, 0)"
+					run map script line "CREATE_VILLAGER_POS(\"1763.75,2664.55\", \"1757.01,2667.32\", \"AFRICAN_HOUSEWIFE\", 8)"
+					run map script line "CREATE_VILLAGER_POS(\"1763.75,2664.55\", \"1757.01,2667.32\", \"AFRICAN_HOUSEWIFE\", 17)"
+					run map script line "CREATE_VILLAGER_POS(\"1763.75,2664.55\", \"1846.95,2665.14\", \"AFRICAN_FORESTER\", 13)"
+					run map script line "CREATE_VILLAGER_POS(\"1763.75,2664.55\", \"1846.95,2665.14\", \"AFRICAN_HOUSEWIFE\", 8)"
+					run map script line "CREATE_VILLAGER_POS(\"1763.75,2664.55\", \"1855.38,2682.31\", \"AFRICAN_FORESTER\", 30)"
+					run map script line "CREATE_TOWN_CENTRE(0, \"1805.22,2691.31\", \"AFRICAN_ABODE_TOWN_CENTRE\", 6282, 990, 0)"
+					run map script line "CREATE_ABODE(0, \"1764.86,2652.64\", \"AFRICAN_ABODE_A\", 5366, 1000, 0, 0)"
+					run map script line "CREATE_VILLAGER_POS(\"1767.29,2654.37\", \"1757.01,2667.32\", \"AFRICAN_FORESTER\", 13)"
+					run map script line "CREATE_VILLAGER_POS(\"1767.29,2654.37\", \"1764.86,2652.64\", \"AFRICAN_FORESTER\", 28)"
+					run map script line "CREATE_VILLAGER_POS(\"1767.29,2654.37\", \"1764.86,2652.64\", \"AFRICAN_HOUSEWIFE\", 8)"
+					run map script line "CREATE_ABODE(0, \"1850.84,2693.52\", \"AFRICAN_ABODE_F\", 1963, 1000, 0, 0)"
+					run map script line "CREATE_VILLAGER_POS(\"1847.09,2692.09\", \"1850.84,2693.52\", \"AFRICAN_FORESTER\", 13)"
+					run map script line "CREATE_VILLAGER_POS(\"1847.09,2692.09\", \"1850.84,2693.52\", \"AFRICAN_HOUSEWIFE\", 8)"
+					run map script line "CREATE_ABODE(0, \"1850.25,2673.09\", \"AFRICAN_ABODE_A\", 1439, 1000, 0, 0)"
+					run map script line "CREATE_VILLAGER_POS(\"1847.31,2673.59\", \"1785.21,2652.58\", \"AFRICAN_HOUSEWIFE\", 8)"
+					run map script line "CREATE_VILLAGER_POS(\"1847.31,2673.59\", \"1850.25,2673.09\", \"AFRICAN_FORESTER\", 13)"
+					run map script line "CREATE_ABODE(0, \"1868.01,2730.12\", \"AFRICAN_ABODE_CRECHE\", 4907, 1000, 0, 0)"
+					run map script line "CREATE_ABODE(0, \"1852.86,2705.21\", \"AFRICAN_ABODE_B\", 1700, 1000, 0, 0)"
+					run map script line "CREATE_VILLAGER_POS(\"1848.87,2704.80\", \"1785.21,2652.58\", \"AFRICAN_FORESTER\", 5)"
+					run map script line "CREATE_VILLAGER_POS(\"1848.87,2704.80\", \"1852.52,2705.18\", \"AFRICAN_FORESTER\", 27)"
+					run map script line "CREATE_VILLAGER_POS(\"1848.87,2704.80\", \"1852.86,2705.21\", \"AFRICAN_HOUSEWIFE\", 50)"
+				end cinema
+			end if 
+			
+			// Generic town stuff.
+			begin cinema
+				run map script line "SET_TOWN_BELIEF(0, \"PLAYER_ONE\", 9.238012)"
+				run map script line "CREATE_NEW_TOWN_FIELD(0, \"1735.00,2695.00\", 2, 0.000000)"
+				run map script line "CREATE_NEW_TOWN_FIELD(0, \"1825.00,2755.00\", 0, 0.000000)"
+				run map script line "CREATE_NEW_TOWN_FIELD(0, \"1835.00,2755.00\", 0, 0.000000)"
+				run map script line "CREATE_NEW_TOWN_FIELD(0, \"1835.00,2745.00\", 0, 0.000000)"
+				run map script line "CREATE_NEW_TOWN_FIELD(0, \"1825.00,2745.00\", 0, 0.000000)"
+				run map script line "CREATE_NEW_TOWN_FIELD(0, \"1735.00,2705.00\", 0, 0.000000)"
+				run map script line "CREATE_NEW_TOWN_FIELD(0, \"1745.00,2705.00\", 0, 0.000000)"
+				run map script line "CREATE_NEW_TOWN_FIELD(0, \"1755.00,2705.00\", 0, 0.000000)"
+				run map script line "CREATE_NEW_TOWN_FIELD(0, \"1625.00,2655.00\", 0, 0.000000)"
+				run map script line "CREATE_NEW_TOWN_FIELD(0, \"1635.00,2655.00\", 0, 0.000000)"
+				run map script line "CREATE_NEW_TOWN_FIELD(0, \"1635.00,2665.00\", 0, 0.000000)"
+				run map script line "CREATE_NEW_TOWN_FIELD(0, \"1625.00,2665.00\", 0, 0.000000)"
+				run map script line "CREATE_NEW_TOWN_FIELD(0, \"1705.00,2615.00\", 0, 0.000000)"
+				run map script line "CREATE_NEW_TOWN_FIELD(0, \"1705.00,2605.00\", 0, 0.000000)"
+				run map script line "CREATE_NEW_TOWN_FIELD(0, \"1715.00,2615.00\", 0, 0.000000)"
+				run map script line "CREATE_NEW_TOWN_FIELD(0, \"1725.00,2615.00\", 0, 0.000000)"
+				run map script line "CREATE_NEW_TOWN_FIELD(0, \"1725.00,2605.00\", 0, 0.000000)"
+				run map script line "CREATE_TOWN_FISH_FARM(0, \"1845.00,2425.00\", 0)"
+				run map script line "CREATE_TOWN_FISH_FARM(0, \"1755.00,2475.00\", 0)"
+				run map script line "CREATE_TOWN_FISH_FARM(0, \"1775.00,2485.00\", 0)"
+				run map script line "CREATE_TOWN_FISH_FARM(0, \"1795.00,2495.00\", 0)"
+				run map script line "CREATE_TOWN_FISH_FARM(0, \"1815.00,2505.00\", 0)"
+				run map script line "CREATE_PLANNED_CITADEL(0, \"1915.05,2508.89\", 0, \"PLAYER_ONE\", 36000, 1000)"
+			end cinema
+		end if
+		
+		
+	
+		// Land 2.
+		if LandNumber == 2
+			// Create now town type.
+	
+			// Default + Norse.
+			if TribeSelected == variable TRIBE_SELECTED_NONE or TribeSelected == variable TRIBE_SELECTED_NORSE
+				begin cinema
+					run map script line "CREATE_TOWN(0, \"3231.53,3396.45\", \"PLAYER_ONE\", 7, \"NORSE\")"
+				end cinema
+				
+			// Celtic
+			elsif TribeSelected == variable TRIBE_SELECTED_CELTIC
+				begin cinema
+					run map script line "CREATE_TOWN(0, \"3231.53,3396.45\", \"PLAYER_ONE\", 7, \"CELTIC\")"
+				end cinema
+			
+			// Aztec
+			elsif TribeSelected == variable TRIBE_SELECTED_AZTEC
+				begin cinema
+					run map script line "CREATE_TOWN(0, \"3231.53,3396.45\", \"PLAYER_ONE\", 7, \"AZTEC\")"
+				end cinema
+				
+			// Indian
+			elsif TribeSelected == variable TRIBE_SELECTED_INDIAN
+				begin cinema
+					run map script line "CREATE_TOWN(0, \"3231.53,3396.45\", \"PLAYER_ONE\", 7, \"INDIAN\")"
+				end cinema
+				
+			// Greek
+			elsif TribeSelected == variable TRIBE_SELECTED_GREEK
+				begin cinema
+					run map script line "CREATE_TOWN(0, \"3231.53,3396.45\", \"PLAYER_ONE\", 7, \"GREEK\")"
+				end cinema
+				
+			// Japanese
+			elsif TribeSelected == variable TRIBE_SELECTED_JAPANESE
+				begin cinema
+					run map script line "CREATE_TOWN(0, \"3231.53,3396.45\", \"PLAYER_ONE\", 7, \"JAPANESE\")"
+				end cinema
+			
+			// Egyptian
+			elsif TribeSelected == variable TRIBE_SELECTED_EGYPTIAN
+				begin cinema
+					run map script line "CREATE_TOWN(0, \"3231.53,3396.45\", \"PLAYER_ONE\", 7, \"EGYPTIAN\")"
+				end cinema
+				
+			// Tibetan
+			elsif TribeSelected == variable TRIBE_SELECTED_TIBETAN
+				begin cinema
+					run map script line "CREATE_TOWN(0, \"3231.53,3396.45\", \"PLAYER_ONE\", 7, \"TIBETAN\")"
+				end cinema
+				
+			// African
+			elsif TribeSelected == variable TRIBE_SELECTED_AFRICAN
+				begin cinema
+					run map script line "CREATE_TOWN(0, \"3231.53,3396.45\", \"PLAYER_ONE\", 7, \"AFRICAN\")"
+				end cinema
+			end if 
+			
+			// Generic town stuff.
+			begin cinema
+				run map script line	"SET_TOWN_BELIEF(0, \"PLAYER_ONE\", 1.000000)"
+				run map script line "SET_TOWN_CONGREGATION_POS(0, \"3260.00,3400.00\")"
+				run map script line "CREATE_NEW_TOWN_FIELD(0, \"3264.61,3432.65\", 2, 0.000000)"
+				run map script line "CREATE_NEW_TOWN_FIELD(0, \"3252.30,3431.16\", 2, 0.000000)"
+				run map script line "CREATE_NEW_TOWN_FIELD(0, \"3240.83,3429.81\", 2, 0.000000)"
+				run map script line "CREATE_NEW_TOWN_FIELD(0, \"3253.54,3443.24\", 2, 0.000000)"
+				run map script line "CREATE_NEW_TOWN_FIELD(0, \"3265.17,3445.01\", 0, 0.000000)"
+				run map script line "CREATE_NEW_TOWN_FIELD(0, \"3241.29,3443.34\", 0, 0.000000)"
+				run map script line "CREATE_NEW_TOWN_FIELD(0, \"3263.05,3223.67\", 0, 0.000000)"
+				run map script line "CREATE_NEW_TOWN_FIELD(0, \"3261.80,3235.35\", 0, 0.000000)"
+				run map script line "CREATE_NEW_TOWN_FIELD(0, \"3262.93,3249.69\", 0, 0.000000)"
+				run map script line "CREATE_NEW_TOWN_FIELD(0, \"3254.14,3223.97\", 0, 0.000000)"
+				run map script line "CREATE_NEW_TOWN_FIELD(0, \"3253.19,3236.87\", 0, 0.000000)"
+				run map script line "CREATE_NEW_TOWN_FIELD(0, \"3253.48,3246.91\", 0, 0.000000)"
+				run map script line "CREATE_NEW_TOWN_FIELD(0, \"3262.97,3259.48\", 0, 0.000000)"
+				run map script line "CREATE_TOWN_FISH_FARM(0, \"3035.00,3195.00\", 0)"
+				run map script line "CREATE_TOWN_FISH_FARM(0, \"3095.00,3155.00\", 0)"
+				run map script line "CREATE_TOWN_FISH_FARM(0, \"3055.00,3185.00\", 0)"
+				run map script line "CREATE_TOWN_FISH_FARM(0, \"2945.00,3085.00\", 0)"
+				run map script line "CREATE_TOWN_FISH_FARM(0, \"2955.00,3095.00\", 0)"
+				run map script line "CREATE_TOWN_FISH_FARM(0, \"3045.00,3185.00\", 0)"
+				run map script line "CREATE_TOWN_FISH_FARM(0, \"3065.00,3175.00\", 0)"
+				run map script line "CREATE_TOWN_FISH_FARM(0, \"3105.00,3145.00\", 0)"
+				run map script line "CREATE_TOWN_FISH_FARM(0, \"3115.00,3145.00\", 0)"
+				run map script line "CREATE_TOWN_FISH_FARM(0, \"3155.00,3125.00\", 0)"
+				run map script line "CREATE_TOWN_FISH_FARM(0, \"3165.00,3125.00\", 0)"
+				run map script line "CREATE_PLANNED_CITADEL(0, \"3361.26,3241.85\", 0, \"PLAYER_ONE\", 4254, 1000)"
+			end cinema
+		end if
+		
+		
+		// Land 3.
+		if LandNumber == 3
+		
+			// Create now town type.
+			
+			// Norse.
+			if TribeSelected == variable TRIBE_SELECTED_NORSE
+				begin cinema
+					run map script line "CREATE_TOWN(0, \"3108.09,3116.82\", \"PLAYER_ONE\", 0, \"NORSE\")"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3108.09,3116.82\", \"NORSE_ABODE_TOWN_CENTRE\", 4710, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3094.51,3146.60\", \"NORSE_ABODE_A\", 7677, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3205.64,3025.32\", \"NORSE_ABODE_A\", 4886, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3108.89,3148.25\", \"NORSE_ABODE_A\", 4605, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3109.07,3067.59\", \"NORSE_ABODE_A\", 3351, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3136.59,3072.83\", \"NORSE_ABODE_A\", -349, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3134.70,3078.06\", \"NORSE_ABODE_B\", -1184, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3115.50,3094.11\", \"NORSE_ABODE_B\", -907, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3113.84,3066.24\", \"NORSE_ABODE_B\", -2930, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3105.05,3060.76\", \"NORSE_ABODE_C\", 3769, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3210.50,3021.63\", \"NORSE_ABODE_D\", -1116, 939, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3078.98,3097.33\", \"NORSE_ABODE_D\", 1674, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3219.99,3008.66\", \"NORSE_ABODE_E\", -1116, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3124.31,3084.39\", \"NORSE_ABODE_C\", -907, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3118.55,3164.28\", \"NORSE_ABODE_C\", -2094, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3115.80,3152.04\", \"NORSE_ABODE_F\", -1883, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3113.73,3138.74\", \"NORSE_ABODE_F\", -1815, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3071.96,3253.69\", \"NORSE_ABODE_CRECHE\", -2023, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3081.89,3140.16\", \"NORSE_ABODE_CRECHE\", -5374, 1000, 0, 0)"
+				end cinema
+				
+			// Default + Celtic
+			elsif TribeSelected == variable TRIBE_SELECTED_NONE or TribeSelected == variable TRIBE_SELECTED_CELTIC
+				begin cinema
+					run map script line "CREATE_TOWN(0, \"3108.09,3116.82\", \"PLAYER_ONE\", 0, \"CELTIC\")"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3108.09,3116.82\", \"CELTIC_ABODE_TOWN_CENTRE\", 4710, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3094.51,3146.60\", \"CELTIC_ABODE_A\", 7677, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3205.64,3025.32\", \"CELTIC_ABODE_A\", 4886, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3108.89,3148.25\", \"CELTIC_ABODE_A\", 4605, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3109.07,3067.59\", \"CELTIC_ABODE_A\", 3351, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3136.59,3072.83\", \"CELTIC_ABODE_A\", -349, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3134.70,3078.06\", \"CELTIC_ABODE_B\", -1184, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3115.50,3094.11\", \"CELTIC_ABODE_B\", -907, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3113.84,3066.24\", \"CELTIC_ABODE_B\", -2930, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3105.05,3060.76\", \"CELTIC_ABODE_C\", 3769, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3210.50,3021.63\", \"CELTIC_ABODE_D\", -1116, 939, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3078.98,3097.33\", \"CELTIC_ABODE_D\", 1674, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3219.99,3008.66\", \"CELTIC_ABODE_E\", -1116, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3124.31,3084.39\", \"CELTIC_ABODE_C\", -907, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3118.55,3164.28\", \"CELTIC_ABODE_C\", -2094, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3115.80,3152.04\", \"CELTIC_ABODE_F\", -1883, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3113.73,3138.74\", \"CELTIC_ABODE_F\", -1815, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3071.96,3253.69\", \"CELTIC_ABODE_CRECHE\", -2023, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3081.89,3140.16\", \"CELTIC_ABODE_CRECHE\", -5374, 1000, 0, 0)"
+				end cinema
+				
+			// Aztec.
+			elsif TribeSelected == variable TRIBE_SELECTED_AZTEC
+				begin cinema
+					run map script line "CREATE_TOWN(0, \"3108.09,3116.82\", \"PLAYER_ONE\", 0, \"AZTEC\")"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3108.09,3116.82\", \"AZTEC_ABODE_TOWN_CENTRE\", 4710, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3094.51,3146.60\", \"AZTEC_ABODE_A\", 7677, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3205.64,3025.32\", \"AZTEC_ABODE_A\", 4886, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3108.89,3148.25\", \"AZTEC_ABODE_A\", 4605, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3109.07,3067.59\", \"AZTEC_ABODE_A\", 3351, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3136.59,3072.83\", \"AZTEC_ABODE_A\", -349, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3134.70,3078.06\", \"AZTEC_ABODE_B\", -1184, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3115.50,3094.11\", \"AZTEC_ABODE_B\", -907, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3113.84,3066.24\", \"AZTEC_ABODE_B\", -2930, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3105.05,3060.76\", \"AZTEC_ABODE_C\", 3769, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3210.50,3021.63\", \"AZTEC_ABODE_D\", -1116, 939, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3078.98,3097.33\", \"AZTEC_ABODE_D\", 1674, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3219.99,3008.66\", \"AZTEC_ABODE_E\", -1116, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3124.31,3084.39\", \"AZTEC_ABODE_C\", -907, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3118.55,3164.28\", \"AZTEC_ABODE_C\", -2094, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3115.80,3152.04\", \"AZTEC_ABODE_F\", -1883, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3113.73,3138.74\", \"AZTEC_ABODE_F\", -1815, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3071.96,3253.69\", \"AZTEC_ABODE_CRECHE\", -2023, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3081.89,3140.16\", \"AZTEC_ABODE_CRECHE\", -5374, 1000, 0, 0)"
+				end cinema
+				
+			// Indian.
+			elsif TribeSelected == variable TRIBE_SELECTED_INDIAN
+				begin cinema
+					run map script line "CREATE_TOWN(0, \"3108.09,3116.82\", \"PLAYER_ONE\", 0, \"INDIAN\")"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3108.09,3116.82\", \"INDIAN_ABODE_TOWN_CENTRE\", 4710, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3094.51,3146.60\", \"INDIAN_ABODE_A\", 7677, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3205.64,3025.32\", \"INDIAN_ABODE_A\", 4886, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3108.89,3148.25\", \"INDIAN_ABODE_A\", 4605, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3109.07,3067.59\", \"INDIAN_ABODE_A\", 3351, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3136.59,3072.83\", \"INDIAN_ABODE_A\", -349, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3134.70,3078.06\", \"INDIAN_ABODE_B\", -1184, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3115.50,3094.11\", \"INDIAN_ABODE_B\", -907, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3113.84,3066.24\", \"INDIAN_ABODE_B\", -2930, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3105.05,3060.76\", \"INDIAN_ABODE_C\", 3769, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3210.50,3021.63\", \"INDIAN_ABODE_D\", -1116, 939, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3078.98,3097.33\", \"INDIAN_ABODE_D\", 1674, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3219.99,3008.66\", \"INDIAN_ABODE_E\", -1116, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3124.31,3084.39\", \"INDIAN_ABODE_C\", -907, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3118.55,3164.28\", \"INDIAN_ABODE_C\", -2094, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3115.80,3152.04\", \"INDIAN_ABODE_F\", -1883, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3113.73,3138.74\", \"INDIAN_ABODE_F\", -1815, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3071.96,3253.69\", \"INDIAN_ABODE_CRECHE\", -2023, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3081.89,3140.16\", \"INDIAN_ABODE_CRECHE\", -5374, 1000, 0, 0)"
+				end cinema
+				
+				
+			// Greek.
+			elsif TribeSelected == variable TRIBE_SELECTED_GREEK
+				begin cinema
+					run map script line "CREATE_TOWN(0, \"3108.09,3116.82\", \"PLAYER_ONE\", 0, \"GREEK\")"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3108.09,3116.82\", \"GREEK_ABODE_TOWN_CENTRE\", 4710, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3094.51,3146.60\", \"GREEK_ABODE_A\", 7677, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3205.64,3025.32\", \"GREEK_ABODE_A\", 4886, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3108.89,3148.25\", \"GREEK_ABODE_A\", 4605, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3109.07,3067.59\", \"GREEK_ABODE_A\", 3351, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3136.59,3072.83\", \"GREEK_ABODE_A\", -349, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3134.70,3078.06\", \"GREEK_ABODE_B\", -1184, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3115.50,3094.11\", \"GREEK_ABODE_B\", -907, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3113.84,3066.24\", \"GREEK_ABODE_B\", -2930, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3105.05,3060.76\", \"GREEK_ABODE_C\", 3769, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3210.50,3021.63\", \"GREEK_ABODE_D\", -1116, 939, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3078.98,3097.33\", \"GREEK_ABODE_D\", 1674, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3219.99,3008.66\", \"GREEK_ABODE_E\", -1116, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3124.31,3084.39\", \"GREEK_ABODE_C\", -907, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3118.55,3164.28\", \"GREEK_ABODE_C\", -2094, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3115.80,3152.04\", \"GREEK_ABODE_F\", -1883, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3113.73,3138.74\", \"GREEK_ABODE_F\", -1815, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3071.96,3253.69\", \"GREEK_ABODE_CRECHE\", -2023, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3081.89,3140.16\", \"GREEK_ABODE_CRECHE\", -5374, 1000, 0, 0)"
+				end cinema
+				
+			// Japanese.
+			elsif TribeSelected == variable TRIBE_SELECTED_JAPANESE
+				begin cinema
+					run map script line "CREATE_TOWN(0, \"3108.09,3116.82\", \"PLAYER_ONE\", 0, \"JAPANESE\")"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3108.09,3116.82\", \"JAPANESE_ABODE_TOWN_CENTRE\", 4710, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3094.51,3146.60\", \"JAPANESE_ABODE_A\", 7677, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3205.64,3025.32\", \"JAPANESE_ABODE_A\", 4886, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3108.89,3148.25\", \"JAPANESE_ABODE_A\", 4605, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3109.07,3067.59\", \"JAPANESE_ABODE_A\", 3351, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3136.59,3072.83\", \"JAPANESE_ABODE_A\", -349, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3134.70,3078.06\", \"JAPANESE_ABODE_B\", -1184, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3115.50,3094.11\", \"JAPANESE_ABODE_B\", -907, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3113.84,3066.24\", \"JAPANESE_ABODE_B\", -2930, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3105.05,3060.76\", \"JAPANESE_ABODE_C\", 3769, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3210.50,3021.63\", \"JAPANESE_ABODE_D\", -1116, 939, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3078.98,3097.33\", \"JAPANESE_ABODE_D\", 1674, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3219.99,3008.66\", \"JAPANESE_ABODE_E\", -1116, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3124.31,3084.39\", \"JAPANESE_ABODE_C\", -907, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3118.55,3164.28\", \"JAPANESE_ABODE_C\", -2094, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3115.80,3152.04\", \"JAPANESE_ABODE_F\", -1883, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3113.73,3138.74\", \"JAPANESE_ABODE_F\", -1815, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3071.96,3253.69\", \"JAPANESE_ABODE_CRECHE\", -2023, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3081.89,3140.16\", \"JAPANESE_ABODE_CRECHE\", -5374, 1000, 0, 0)"
+				end cinema 
+			
+			// Egyptian.
+			elsif TribeSelected == variable TRIBE_SELECTED_EGYPTIAN
+				begin cinema
+					run map script line "CREATE_TOWN(0, \"3108.09,3116.82\", \"PLAYER_ONE\", 0, \"EGYPTIAN\")"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3108.09,3116.82\", \"EGYPTIAN_ABODE_TOWN_CENTRE\", 4710, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3094.51,3146.60\", \"EGYPTIAN_ABODE_A\", 7677, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3205.64,3025.32\", \"EGYPTIAN_ABODE_A\", 4886, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3108.89,3148.25\", \"EGYPTIAN_ABODE_A\", 4605, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3109.07,3067.59\", \"EGYPTIAN_ABODE_A\", 3351, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3136.59,3072.83\", \"EGYPTIAN_ABODE_A\", -349, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3134.70,3078.06\", \"EGYPTIAN_ABODE_B\", -1184, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3115.50,3094.11\", \"EGYPTIAN_ABODE_B\", -907, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3113.84,3066.24\", \"EGYPTIAN_ABODE_B\", -2930, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3105.05,3060.76\", \"EGYPTIAN_ABODE_C\", 3769, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3210.50,3021.63\", \"EGYPTIAN_ABODE_D\", -1116, 939, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3078.98,3097.33\", \"EGYPTIAN_ABODE_D\", 1674, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3219.99,3008.66\", \"EGYPTIAN_ABODE_E\", -1116, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3124.31,3084.39\", \"EGYPTIAN_ABODE_C\", -907, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3118.55,3164.28\", \"EGYPTIAN_ABODE_C\", -2094, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3115.80,3152.04\", \"EGYPTIAN_ABODE_F\", -1883, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3113.73,3138.74\", \"EGYPTIAN_ABODE_F\", -1815, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3071.96,3253.69\", \"EGYPTIAN_ABODE_CRECHE\", -2023, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3081.89,3140.16\", \"EGYPTIAN_ABODE_CRECHE\", -5374, 1000, 0, 0)"
+				end cinema 
+				
+			// Tibetan.
+			elsif TribeSelected == variable TRIBE_SELECTED_TIBETAN
+				begin cinema
+					run map script line "CREATE_TOWN(0, \"3108.09,3116.82\", \"PLAYER_ONE\", 0, \"TIBETAN\")"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3108.09,3116.82\", \"TIBETAN_ABODE_TOWN_CENTRE\", 4710, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3094.51,3146.60\", \"TIBETAN_ABODE_A\", 7677, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3205.64,3025.32\", \"TIBETAN_ABODE_A\", 4886, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3108.89,3148.25\", \"TIBETAN_ABODE_A\", 4605, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3109.07,3067.59\", \"TIBETAN_ABODE_A\", 3351, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3136.59,3072.83\", \"TIBETAN_ABODE_A\", -349, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3134.70,3078.06\", \"TIBETAN_ABODE_B\", -1184, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3115.50,3094.11\", \"TIBETAN_ABODE_B\", -907, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3113.84,3066.24\", \"TIBETAN_ABODE_B\", -2930, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3105.05,3060.76\", \"TIBETAN_ABODE_C\", 3769, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3210.50,3021.63\", \"TIBETAN_ABODE_D\", -1116, 939, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3078.98,3097.33\", \"TIBETAN_ABODE_D\", 1674, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3219.99,3008.66\", \"TIBETAN_ABODE_E\", -1116, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3124.31,3084.39\", \"TIBETAN_ABODE_C\", -907, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3118.55,3164.28\", \"TIBETAN_ABODE_C\", -2094, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3115.80,3152.04\", \"TIBETAN_ABODE_F\", -1883, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3113.73,3138.74\", \"TIBETAN_ABODE_F\", -1815, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3071.96,3253.69\", \"TIBETAN_ABODE_CRECHE\", -2023, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3081.89,3140.16\", \"TIBETAN_ABODE_CRECHE\", -5374, 1000, 0, 0)"
+				end cinema 
+				
+			// African.
+			elsif TribeSelected == variable TRIBE_SELECTED_AFRICAN
+				begin cinema
+					run map script line "CREATE_TOWN(0, \"3108.09,3116.82\", \"PLAYER_ONE\", 0, \"AFRICAN\")"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3108.09,3116.82\", \"AFRICAN_ABODE_TOWN_CENTRE\", 4710, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3094.51,3146.60\", \"AFRICAN_ABODE_A\", 7677, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3205.64,3025.32\", \"AFRICAN_ABODE_A\", 4886, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3108.89,3148.25\", \"AFRICAN_ABODE_A\", 4605, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3109.07,3067.59\", \"AFRICAN_ABODE_A\", 3351, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3136.59,3072.83\", \"AFRICAN_ABODE_A\", -349, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3134.70,3078.06\", \"AFRICAN_ABODE_B\", -1184, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3115.50,3094.11\", \"AFRICAN_ABODE_B\", -907, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3113.84,3066.24\", \"AFRICAN_ABODE_B\", -2930, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3105.05,3060.76\", \"AFRICAN_ABODE_C\", 3769, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3210.50,3021.63\", \"AFRICAN_ABODE_D\", -1116, 939, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3078.98,3097.33\", \"AFRICAN_ABODE_D\", 1674, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3219.99,3008.66\", \"AFRICAN_ABODE_E\", -1116, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3124.31,3084.39\", \"AFRICAN_ABODE_C\", -907, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3118.55,3164.28\", \"AFRICAN_ABODE_C\", -2094, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3115.80,3152.04\", \"AFRICAN_ABODE_F\", -1883, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3113.73,3138.74\", \"AFRICAN_ABODE_F\", -1815, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3071.96,3253.69\", \"AFRICAN_ABODE_CRECHE\", -2023, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"3081.89,3140.16\", \"AFRICAN_ABODE_CRECHE\", -5374, 1000, 0, 0)"
+				end cinema
+			end if
+			
+			// Generic town stuff.
+			begin cinema
+				run map script line "CREATE_NEW_TOWN_SPELL(0, \"FIRE\")"
+				run map script line "CREATE_NEW_TOWN_SPELL(0, \"HEAL\")"
+				run map script line "CREATE_NEW_TOWN_SPELL(0, \"FOOD\")"
+				run map script line "CREATE_NEW_TOWN_SPELL(0, \"STORM\")"
+				run map script line "CREATE_NEW_TOWN_SPELL(0, \"WATER\")"
+				run map script line "SET_TOWN_BELIEF(0, \"PLAYER_ONE\", 0.894551)"
+				run map script line "SET_TOWN_CONGREGATION_POS(0, \"3100.00,3080.00\")"
+				run map script line "CREATE_NEW_TOWN_FIELD(0, \"3100.66,2963.03\", 0, 0.000000)"
+				run map script line "CREATE_NEW_TOWN_FIELD(0, \"3059.76,3280.18\", 0, 0.000000)"
+				run map script line "CREATE_NEW_TOWN_FIELD(0, \"3074.25,3275.39\", 0, -0.628000)"
+				run map script line "CREATE_PLANNED_CITADEL(0, \"3259.37,3139.49\", 0, \"PLAYER_ONE\", 0, 1000)"
+				run map script line "CREATE_SPELL_DISPENSER(0, \"3014.44,3155.89\", \"CELTIC_ABODE_SPELL_DISPENSER\", \"WOOD\", 0.000000, 1.000000, 600.0)"
+			end cinema
+		end if
+		
+		// Land 4.
+		if LandNumber == 4
+	
+			// Default + Norse.
+			if TribeSelected == variable TRIBE_SELECTED_NONE or TribeSelected == variable TRIBE_SELECTED_NORSE
+				begin cinema
+					run map script line "CREATE_TOWN(0, \"2245.58,2662.99\", \"PLAYER_ONE\", 7, \"NORSE\")"
+					run map script line "CREATE_PLANNED_ABODE(0, \"2209.14,2670.75\", \"NORSE_ABODE_E\", 1345, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"2249.47,2611.56\", \"NORSE_ABODE_F\", -246, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"2281.08,2683.55\", \"NORSE_ABODE_WORKSHOP\", -499, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"2245.58,2662.99\", \"NORSE_ABODE_TOWN_CENTRE\", 6605, 1000, 0, 0)"
+				end cinema
+				
+			// Celtic
+			elsif TribeSelected == variable TRIBE_SELECTED_CELTIC
+				begin cinema
+					run map script line "CREATE_TOWN(0, \"2245.58,2662.99\", \"PLAYER_ONE\", 7, \"CELTIC\")"
+					run map script line "CREATE_PLANNED_ABODE(0, \"2209.14,2670.75\", \"CELTIC_ABODE_E\", 1345, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"2249.47,2611.56\", \"CELTIC_ABODE_F\", -246, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"2281.08,2683.55\", \"CELTIC_ABODE_WORKSHOP\", -499, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"2245.58,2662.99\", \"CELTIC_ABODE_TOWN_CENTRE\", 6605, 1000, 0, 0)"
+				end cinema
+			
+			// Aztec
+			elsif TribeSelected == variable TRIBE_SELECTED_AZTEC
+				begin cinema
+					run map script line "CREATE_TOWN(0, \"2245.58,2662.99\", \"PLAYER_ONE\", 7, \"AZTEC\")"
+					run map script line "CREATE_PLANNED_ABODE(0, \"2209.14,2670.75\", \"AZTEC_ABODE_E\", 1345, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"2249.47,2611.56\", \"AZTEC_ABODE_F\", -246, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"2281.08,2683.55\", \"AZTEC_ABODE_WORKSHOP\", -499, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"2245.58,2662.99\", \"AZTEC_ABODE_TOWN_CENTRE\", 6605, 1000, 0, 0)"
+				end cinema
+				
+			// Indian
+			elsif TribeSelected == variable TRIBE_SELECTED_INDIAN
+				begin cinema
+					run map script line "CREATE_TOWN(0, \"2245.58,2662.99\", \"PLAYER_ONE\", 7, \"INDIAN\")"
+					run map script line "CREATE_PLANNED_ABODE(0, \"2209.14,2670.75\", \"INDIAN_ABODE_E\", 1345, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"2249.47,2611.56\", \"INDIAN_ABODE_F\", -246, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"2281.08,2683.55\", \"INDIAN_ABODE_WORKSHOP\", -499, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"2245.58,2662.99\", \"INDIAN_ABODE_TOWN_CENTRE\", 6605, 1000, 0, 0)"
+				end cinema
+				
+			// Greek
+			elsif TribeSelected == variable TRIBE_SELECTED_GREEK
+				begin cinema
+					run map script line "CREATE_TOWN(0, \"2245.58,2662.99\", \"PLAYER_ONE\", 7, \"GREEK\")"
+					run map script line "CREATE_PLANNED_ABODE(0, \"2209.14,2670.75\", \"GREEK_ABODE_E\", 1345, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"2249.47,2611.56\", \"GREEK_ABODE_F\", -246, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"2281.08,2683.55\", \"GREEK_ABODE_WORKSHOP\", -499, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"2245.58,2662.99\", \"GREEK_ABODE_TOWN_CENTRE\", 6605, 1000, 0, 0)"
+				end cinema
+				
+			// Japanese
+			elsif TribeSelected == variable TRIBE_SELECTED_JAPANESE
+				begin cinema
+					run map script line "CREATE_TOWN(0, \"2245.58,2662.99\", \"PLAYER_ONE\", 7, \"JAPANESE\")"
+					run map script line "CREATE_PLANNED_ABODE(0, \"2209.14,2670.75\", \"JAPANESE_ABODE_E\", 1345, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"2249.47,2611.56\", \"JAPANESE_ABODE_F\", -246, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"2281.08,2683.55\", \"JAPANESE_ABODE_WORKSHOP\", -499, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"2245.58,2662.99\", \"JAPANESE_ABODE_TOWN_CENTRE\", 6605, 1000, 0, 0)"
+				end cinema
+			
+			// Egyptian
+			elsif TribeSelected == variable TRIBE_SELECTED_EGYPTIAN
+				begin cinema
+					run map script line "CREATE_TOWN(0, \"2245.58,2662.99\", \"PLAYER_ONE\", 7, \"EGYPTIAN\")"
+					run map script line "CREATE_PLANNED_ABODE(0, \"2209.14,2670.75\", \"EGYPTIAN_ABODE_E\", 1345, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"2249.47,2611.56\", \"EGYPTIAN_ABODE_F\", -246, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"2281.08,2683.55\", \"EGYPTIAN_ABODE_WORKSHOP\", -499, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"2245.58,2662.99\", \"EGYPTIAN_ABODE_TOWN_CENTRE\", 6605, 1000, 0, 0)"
+				end cinema
+				
+			// Tibetan
+			elsif TribeSelected == variable TRIBE_SELECTED_TIBETAN
+				begin cinema
+					run map script line "CREATE_TOWN(0, \"2245.58,2662.99\", \"PLAYER_ONE\", 7, \"TIBETAN\")"
+					run map script line "CREATE_PLANNED_ABODE(0, \"2209.14,2670.75\", \"TIBETAN_ABODE_E\", 1345, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"2249.47,2611.56\", \"TIBETAN_ABODE_F\", -246, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"2281.08,2683.55\", \"TIBETAN_ABODE_WORKSHOP\", -499, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"2245.58,2662.99\", \"TIBETAN_ABODE_TOWN_CENTRE\", 6605, 1000, 0, 0)"
+				end cinema
+				
+			// African
+			elsif TribeSelected == variable TRIBE_SELECTED_AFRICAN
+				begin cinema
+					run map script line "CREATE_TOWN(0, \"2245.58,2662.99\", \"PLAYER_ONE\", 7, \"AFRICAN\")"
+					run map script line "CREATE_PLANNED_ABODE(0, \"2209.14,2670.75\", \"AFRICAN_ABODE_E\", 1345, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"2249.47,2611.56\", \"AFRICAN_ABODE_F\", -246, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"2281.08,2683.55\", \"AFRICAN_ABODE_WORKSHOP\", -499, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"2245.58,2662.99\", \"AFRICAN_ABODE_TOWN_CENTRE\", 6605, 1000, 0, 0)"
+				end cinema
+			end if 
+			
+			// Generic town stuff.
+			begin cinema
+				run map script line "CREATE_NEW_TOWN_SPELL(0, \"HEAL_PU1\")"
+				run map script line "CREATE_NEW_TOWN_SPELL(0, \"FOOD\")"
+				run map script line "CREATE_NEW_TOWN_SPELL(0, \"SHIELD\")"
+				run map script line "CREATE_NEW_TOWN_SPELL(0, \"WOOD\")"
+				run map script line "CREATE_NEW_TOWN_SPELL(0, \"WATER_PU1\")"
+				run map script line "SET_TOWN_BELIEF(0, \"PLAYER_ONE\", 1.499984)"
+				run map script line "SET_TOWN_BELIEF(0, \"NEUTRAL\", 0.500000)"
+				
+				run map script line "CREATE_NEW_TOWN_FIELD(0, \"2154.99,2634.85\", 0, 0.000000)"
+				run map script line "CREATE_NEW_TOWN_FIELD(0, \"2155.20,2625.21\", 0, 0.000000)"
+				run map script line "CREATE_NEW_TOWN_FIELD(0, \"2295.03,2674.82\", 0, 0.000000)"
+				run map script line "CREATE_NEW_TOWN_FIELD(0, \"2295.14,2664.52\", 0, 0.000000)"
+				run map script line "CREATE_NEW_TOWN_FIELD(0, \"2295.31,2655.09\", 0, 0.000000)"
+				run map script line "CREATE_TOWN_FISH_FARM(0, \"2185.00,2565.00\", 0)"
+				run map script line "CREATE_TOWN_FISH_FARM(0, \"2205.00,2555.00\", 0)"
+				run map script line "CREATE_TOWN_FISH_FARM(0, \"2205.00,2565.00\", 0)"
+				run map script line "CREATE_TOWN_FISH_FARM(0, \"2195.00,2575.00\", 0)"
+				run map script line "CREATE_PLANNED_CITADEL(0, \"2292.83,2576.86\", 0, \"PLAYER_ONE\", 35511, 1000)"
+			end cinema
+		end if
+			
+
+		end if
+		
+		// Land 5.
+		if LandNumber == 5
+		
+			// Default + Norse.
+			if TribeSelected == variable TRIBE_SELECTED_NONE or TribeSelected == variable TRIBE_SELECTED_NORSE
+				begin cinema
+					// Town 0
+					run map script line "CREATE_TOWN(0, \"1294.81,3551.24\", \"PLAYER_ONE\", 7, \"NORSE\")"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1294.81,3551.24\", \"NORSE_ABODE_TOWN_CENTRE\", -628, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1311.03,3372.21\", \"NORSE_ABODE_TOTEM\", 5375, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1332.53,3570.10\", \"NORSE_ABODE_E\", 5302, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1295.65,3363.93\", \"NORSE_ABODE_A\", 5236, 976, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1291.10,3376.64\", \"NORSE_ABODE_B\", -1503, 967, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1318.52,3514.42\", \"NORSE_ABODE_A\", 1531, 999, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1293.49,3370.19\", \"NORSE_ABODE_A\", -1465, 939, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1281.34,3588.81\", \"NORSE_ABODE_CRECHE\", 6407, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1253.93,3552.31\", \"NORSE_ABODE_A\", 4407, 1059, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1305.78,3513.16\", \"NORSE_ABODE_A\", 2121, 1059, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1317.30,3576.08\", \"NORSE_ABODE_B\", 2384, 879, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1303.13,3358.32\", \"NORSE_ABODE_B\", -395, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1257.28,3562.12\", \"NORSE_ABODE_C\", 4092, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1264.69,3574.55\", \"NORSE_ABODE_D\", 3815, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1307.87,3582.31\", \"NORSE_ABODE_B\", 2657, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1298.77,3586.56\", \"NORSE_ABODE_A\", 2851, 1059, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1328.84,3535.27\", \"NORSE_ABODE_D\", 1047, 1000, 0, 0)"
+				end cinema
+			
+			// Celtic.
+			elsif TribeSelected == variable TRIBE_SELECTED_CELTIC
+				begin cinema
+					// Town 0
+					run map script line "CREATE_TOWN(0, \"1294.81,3551.24\", \"PLAYER_ONE\", 7, \"CELTIC\")"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1294.81,3551.24\", \"CELTIC_ABODE_TOWN_CENTRE\", -628, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1311.03,3372.21\", \"CELTIC_ABODE_TOTEM\", 5375, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1332.53,3570.10\", \"CELTIC_ABODE_E\", 5302, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1295.65,3363.93\", \"CELTIC_ABODE_A\", 5236, 976, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1291.10,3376.64\", \"CELTIC_ABODE_B\", -1503, 967, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1318.52,3514.42\", \"CELTIC_ABODE_A\", 1531, 999, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1293.49,3370.19\", \"CELTIC_ABODE_A\", -1465, 939, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1281.34,3588.81\", \"CELTIC_ABODE_CRECHE\", 6407, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1253.93,3552.31\", \"CELTIC_ABODE_A\", 4407, 1059, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1305.78,3513.16\", \"CELTIC_ABODE_A\", 2121, 1059, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1317.30,3576.08\", \"CELTIC_ABODE_B\", 2384, 879, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1303.13,3358.32\", \"CELTIC_ABODE_B\", -395, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1257.28,3562.12\", \"CELTIC_ABODE_C\", 4092, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1264.69,3574.55\", \"CELTIC_ABODE_D\", 3815, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1307.87,3582.31\", \"CELTIC_ABODE_B\", 2657, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1298.77,3586.56\", \"CELTIC_ABODE_A\", 2851, 1059, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1328.84,3535.27\", \"CELTIC_ABODE_D\", 1047, 1000, 0, 0)"
+				end cinema
+				
+			// Aztec.
+			elsif TribeSelected == variable TRIBE_SELECTED_AZTEC
+				begin cinema
+					// Town 0
+					run map script line "CREATE_TOWN(0, \"1294.81,3551.24\", \"PLAYER_ONE\", 7, \"AZTEC\")"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1294.81,3551.24\", \"AZTEC_ABODE_TOWN_CENTRE\", -628, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1311.03,3372.21\", \"AZTEC_ABODE_TOTEM\", 5375, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1332.53,3570.10\", \"AZTEC_ABODE_E\", 5302, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1295.65,3363.93\", \"AZTEC_ABODE_A\", 5236, 976, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1291.10,3376.64\", \"AZTEC_ABODE_B\", -1503, 967, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1318.52,3514.42\", \"AZTEC_ABODE_A\", 1531, 999, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1293.49,3370.19\", \"AZTEC_ABODE_A\", -1465, 939, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1281.34,3588.81\", \"AZTEC_ABODE_CRECHE\", 6407, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1253.93,3552.31\", \"AZTEC_ABODE_A\", 4407, 1059, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1305.78,3513.16\", \"AZTEC_ABODE_A\", 2121, 1059, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1317.30,3576.08\", \"AZTEC_ABODE_B\", 2384, 879, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1303.13,3358.32\", \"AZTEC_ABODE_B\", -395, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1257.28,3562.12\", \"AZTEC_ABODE_C\", 4092, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1264.69,3574.55\", \"AZTEC_ABODE_D\", 3815, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1307.87,3582.31\", \"AZTEC_ABODE_B\", 2657, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1298.77,3586.56\", \"AZTEC_ABODE_A\", 2851, 1059, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1328.84,3535.27\", \"AZTEC_ABODE_D\", 1047, 1000, 0, 0)"
+				end cinema
+				
+			// Indian.
+			elsif TribeSelected == variable TRIBE_SELECTED_INDIAN
+				begin cinema
+					// Town 0
+					run map script line "CREATE_TOWN(0, \"1294.81,3551.24\", \"PLAYER_ONE\", 7, \"INDIAN\")"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1294.81,3551.24\", \"INDIAN_ABODE_TOWN_CENTRE\", -628, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1311.03,3372.21\", \"INDIAN_ABODE_TOTEM\", 5375, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1332.53,3570.10\", \"INDIAN_ABODE_E\", 5302, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1295.65,3363.93\", \"INDIAN_ABODE_A\", 5236, 976, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1291.10,3376.64\", \"INDIAN_ABODE_B\", -1503, 967, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1318.52,3514.42\", \"INDIAN_ABODE_A\", 1531, 999, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1293.49,3370.19\", \"INDIAN_ABODE_A\", -1465, 939, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1281.34,3588.81\", \"INDIAN_ABODE_CRECHE\", 6407, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1253.93,3552.31\", \"INDIAN_ABODE_A\", 4407, 1059, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1305.78,3513.16\", \"INDIAN_ABODE_A\", 2121, 1059, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1317.30,3576.08\", \"INDIAN_ABODE_B\", 2384, 879, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1303.13,3358.32\", \"INDIAN_ABODE_B\", -395, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1257.28,3562.12\", \"INDIAN_ABODE_C\", 4092, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1264.69,3574.55\", \"INDIAN_ABODE_D\", 3815, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1307.87,3582.31\", \"INDIAN_ABODE_B\", 2657, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1298.77,3586.56\", \"INDIAN_ABODE_A\", 2851, 1059, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1328.84,3535.27\", \"INDIAN_ABODE_D\", 1047, 1000, 0, 0)"
+				end cinema
+				
+			// Greek.
+			elsif TribeSelected == variable TRIBE_SELECTED_GREEK
+				begin cinema
+					// Town 0
+					run map script line "CREATE_TOWN(0, \"1294.81,3551.24\", \"PLAYER_ONE\", 7, \"GREEK\")"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1294.81,3551.24\", \"GREEK_ABODE_TOWN_CENTRE\", -628, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1311.03,3372.21\", \"GREEK_ABODE_TOTEM\", 5375, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1332.53,3570.10\", \"GREEK_ABODE_E\", 5302, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1295.65,3363.93\", \"GREEK_ABODE_A\", 5236, 976, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1291.10,3376.64\", \"GREEK_ABODE_B\", -1503, 967, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1318.52,3514.42\", \"GREEK_ABODE_A\", 1531, 999, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1293.49,3370.19\", \"GREEK_ABODE_A\", -1465, 939, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1281.34,3588.81\", \"GREEK_ABODE_CRECHE\", 6407, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1253.93,3552.31\", \"GREEK_ABODE_A\", 4407, 1059, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1305.78,3513.16\", \"GREEK_ABODE_A\", 2121, 1059, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1317.30,3576.08\", \"GREEK_ABODE_B\", 2384, 879, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1303.13,3358.32\", \"GREEK_ABODE_B\", -395, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1257.28,3562.12\", \"GREEK_ABODE_C\", 4092, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1264.69,3574.55\", \"GREEK_ABODE_D\", 3815, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1307.87,3582.31\", \"GREEK_ABODE_B\", 2657, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1298.77,3586.56\", \"GREEK_ABODE_A\", 2851, 1059, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1328.84,3535.27\", \"GREEK_ABODE_D\", 1047, 1000, 0, 0)"
+				end cinema
+
+			// Japanese.
+			elsif TribeSelected == variable TRIBE_SELECTED_JAPANESE
+				begin cinema
+					// Town 0
+					run map script line "CREATE_TOWN(0, \"1294.81,3551.24\", \"PLAYER_ONE\", 7, \"JAPANESE\")"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1294.81,3551.24\", \"JAPANESE_ABODE_TOWN_CENTRE\", -628, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1311.03,3372.21\", \"JAPANESE_ABODE_TOTEM\", 5375, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1332.53,3570.10\", \"JAPANESE_ABODE_E\", 5302, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1295.65,3363.93\", \"JAPANESE_ABODE_A\", 5236, 976, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1291.10,3376.64\", \"JAPANESE_ABODE_B\", -1503, 967, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1318.52,3514.42\", \"JAPANESE_ABODE_A\", 1531, 999, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1293.49,3370.19\", \"JAPANESE_ABODE_A\", -1465, 939, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1281.34,3588.81\", \"JAPANESE_ABODE_CRECHE\", 6407, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1253.93,3552.31\", \"JAPANESE_ABODE_A\", 4407, 1059, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1305.78,3513.16\", \"JAPANESE_ABODE_A\", 2121, 1059, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1317.30,3576.08\", \"JAPANESE_ABODE_B\", 2384, 879, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1303.13,3358.32\", \"JAPANESE_ABODE_B\", -395, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1257.28,3562.12\", \"JAPANESE_ABODE_C\", 4092, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1264.69,3574.55\", \"JAPANESE_ABODE_D\", 3815, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1307.87,3582.31\", \"JAPANESE_ABODE_B\", 2657, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1298.77,3586.56\", \"JAPANESE_ABODE_A\", 2851, 1059, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1328.84,3535.27\", \"JAPANESE_ABODE_D\", 1047, 1000, 0, 0)"
+				end cinema
+
+			// Egyptian.
+			elsif TribeSelected == variable TRIBE_SELECTED_EGYPTIAN
+				begin cinema
+					// Town 0
+					run map script line "CREATE_TOWN(0, \"1294.81,3551.24\", \"PLAYER_ONE\", 7, \"EGYPTIAN\")"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1294.81,3551.24\", \"EGYPTIAN_ABODE_TOWN_CENTRE\", -628, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1311.03,3372.21\", \"EGYPTIAN_ABODE_TOTEM\", 5375, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1332.53,3570.10\", \"EGYPTIAN_ABODE_E\", 5302, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1295.65,3363.93\", \"EGYPTIAN_ABODE_A\", 5236, 976, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1291.10,3376.64\", \"EGYPTIAN_ABODE_B\", -1503, 967, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1318.52,3514.42\", \"EGYPTIAN_ABODE_A\", 1531, 999, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1293.49,3370.19\", \"EGYPTIAN_ABODE_A\", -1465, 939, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1281.34,3588.81\", \"EGYPTIAN_ABODE_CRECHE\", 6407, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1253.93,3552.31\", \"EGYPTIAN_ABODE_A\", 4407, 1059, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1305.78,3513.16\", \"EGYPTIAN_ABODE_A\", 2121, 1059, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1317.30,3576.08\", \"EGYPTIAN_ABODE_B\", 2384, 879, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1303.13,3358.32\", \"EGYPTIAN_ABODE_B\", -395, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1257.28,3562.12\", \"EGYPTIAN_ABODE_C\", 4092, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1264.69,3574.55\", \"EGYPTIAN_ABODE_D\", 3815, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1307.87,3582.31\", \"EGYPTIAN_ABODE_B\", 2657, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1298.77,3586.56\", \"EGYPTIAN_ABODE_A\", 2851, 1059, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1328.84,3535.27\", \"EGYPTIAN_ABODE_D\", 1047, 1000, 0, 0)"
+				end cinema
+
+			// Tibetan.
+			elsif TribeSelected == variable TRIBE_SELECTED_TIBETAN
+				begin cinema
+				
+					// Town 0
+					run map script line "CREATE_TOWN(0, \"1294.81,3551.24\", \"PLAYER_ONE\", 7, \"TIBETAN\")"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1294.81,3551.24\", \"TIBETAN_ABODE_TOWN_CENTRE\", -628, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1311.03,3372.21\", \"TIBETAN_ABODE_TOTEM\", 5375, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1332.53,3570.10\", \"TIBETAN_ABODE_E\", 5302, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1295.65,3363.93\", \"TIBETAN_ABODE_A\", 5236, 976, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1291.10,3376.64\", \"TIBETAN_ABODE_B\", -1503, 967, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1318.52,3514.42\", \"TIBETAN_ABODE_A\", 1531, 999, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1293.49,3370.19\", \"TIBETAN_ABODE_A\", -1465, 939, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1281.34,3588.81\", \"TIBETAN_ABODE_CRECHE\", 6407, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1253.93,3552.31\", \"TIBETAN_ABODE_A\", 4407, 1059, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1305.78,3513.16\", \"TIBETAN_ABODE_A\", 2121, 1059, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1317.30,3576.08\", \"TIBETAN_ABODE_B\", 2384, 879, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1303.13,3358.32\", \"TIBETAN_ABODE_B\", -395, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1257.28,3562.12\", \"TIBETAN_ABODE_C\", 4092, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1264.69,3574.55\", \"TIBETAN_ABODE_D\", 3815, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1307.87,3582.31\", \"TIBETAN_ABODE_B\", 2657, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1298.77,3586.56\", \"TIBETAN_ABODE_A\", 2851, 1059, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1328.84,3535.27\", \"TIBETAN_ABODE_D\", 1047, 1000, 0, 0)"
+				end cinema
+			
+			// African.
+			elsif TribeSelected == variable TRIBE_SELECTED_AFRICAN
+				begin cinema
+				
+					// Town 0
+					run map script line "CREATE_TOWN(0, \"1294.81,3551.24\", \"PLAYER_ONE\", 7, \"AFRICAN\")"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1294.81,3551.24\", \"AFRICAN_ABODE_TOWN_CENTRE\", -628, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1311.03,3372.21\", \"AFRICAN_ABODE_TOTEM\", 5375, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1332.53,3570.10\", \"AFRICAN_ABODE_E\", 5302, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1295.65,3363.93\", \"AFRICAN_ABODE_A\", 5236, 976, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1291.10,3376.64\", \"AFRICAN_ABODE_B\", -1503, 967, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1318.52,3514.42\", \"AFRICAN_ABODE_A\", 1531, 999, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1293.49,3370.19\", \"AFRICAN_ABODE_A\", -1465, 939, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1281.34,3588.81\", \"AFRICAN_ABODE_CRECHE\", 6407, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1253.93,3552.31\", \"AFRICAN_ABODE_A\", 4407, 1059, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1305.78,3513.16\", \"AFRICAN_ABODE_A\", 2121, 1059, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1317.30,3576.08\", \"AFRICAN_ABODE_B\", 2384, 879, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1303.13,3358.32\", \"AFRICAN_ABODE_B\", -395, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1257.28,3562.12\", \"AFRICAN_ABODE_C\", 4092, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1264.69,3574.55\", \"AFRICAN_ABODE_D\", 3815, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1307.87,3582.31\", \"AFRICAN_ABODE_B\", 2657, 1000, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1298.77,3586.56\", \"AFRICAN_ABODE_A\", 2851, 1059, 0, 0)"
+					run map script line "CREATE_PLANNED_ABODE(0, \"1328.84,3535.27\", \"AFRICAN_ABODE_D\", 1047, 1000, 0, 0)"
+				end cinema
+			end if
+			
+			// Generic town stuff.
+			begin cinema
+				run map script line "CREATE_NEW_TOWN_SPELL(0, \"FIRE\")"
+				run map script line "CREATE_NEW_TOWN_SPELL(0, \"HEAL\")"
+				run map script line "CREATE_NEW_TOWN_SPELL(0, \"HEAL_PU1\")"
+				run map script line "CREATE_NEW_TOWN_SPELL(0, \"TELEPORT\")"
+				run map script line "CREATE_NEW_TOWN_SPELL(0, \"STORM\")"
+				run map script line "CREATE_NEW_TOWN_SPELL(0, \"WATER\")"
+				run map script line "CREATE_NEW_TOWN_SPELL(0, \"WATER_PU1\")"
+				run map script line "SET_TOWN_BELIEF(0, \"PLAYER_ONE\", 2.000000)"
+				run map script line "SET_TOWN_CONGREGATION_POS(0, \"1291.00,3509.00\")"
+				run map script line "CREATE_NEW_TOWN_FIELD(0, \"1335.00,3315.00\", 2, 0.000000)"
+				run map script line "CREATE_NEW_TOWN_FIELD(0, \"1325.00,3315.00\", 2, 0.000000)"
+				run map script line "CREATE_NEW_TOWN_FIELD(0, \"1315.00,3315.00\", 2, 0.000000)"
+				run map script line "CREATE_NEW_TOWN_FIELD(0, \"1285.00,3325.00\", 2, 0.000000)"
+				run map script line "CREATE_NEW_TOWN_FIELD(0, \"1285.00,3335.00\", 2, 0.000000)"
+				run map script line "CREATE_NEW_TOWN_FIELD(0, \"1285.00,3345.00\", 2, 0.000000)"
+				run map script line "CREATE_TOWN_FISH_FARM(0, \"1235.00,3505.00\", 0)"
+				run map script line "CREATE_TOWN_FISH_FARM(0, \"1235.00,3495.00\", 0)"
+				run map script line "CREATE_TOWN_FISH_FARM(0, \"1245.00,3495.00\", 0)"
+				run map script line "CREATE_TOWN_FISH_FARM(0, \"1245.00,3485.00\", 0)"
+			end cinema
+		end if
+		
+		
+		// Land 5.
+		if LandNumber == 5
+		
+		end if
+		
+end script CustomTribeSelector
+
+
+*/
+
+// Do custom spells.
+/*
+HomeTown = get town with id 0
+if MiracleSelected == 1
+	disable spell SPELL_WOOD in HomeTown
+	disable spell SPELL_FOOD in HomeTown
+	disable spell SPELL_WATER_LEVEL_1 in HomeTown
+	enable spell SPELL_SHIELD in HomeTown
+	enable spell SPELL_STORM_LEVEL_3 in HomeTown
+	enable spell SPELL_FLOCK_FLYING in HomeTown
+	enable spell CREATURE_SPELL_ITCHY in HomeTown
+end if
+*/

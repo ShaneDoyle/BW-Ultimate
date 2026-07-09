@@ -1,0 +1,97 @@
+//challenge UndeadControl1
+
+begin script OldUndeadLand1Intro
+start
+end script OldUndeadLand1Intro
+
+
+begin script ShrinkTemple
+	P1Citadel = get CITADEL at player 1 temple position radius 100
+start
+	while 1 == 1
+		say "hi"
+		P1Citadel = get CITADEL at player 1 temple position radius 100
+		wait 0.1 seconds
+		SCALE of P1Citadel = 2
+	end while
+end script ShrinkTemple
+
+
+
+
+begin script UndeadControlCreature
+	i = 0
+	P1Creature = get player 1 creature
+	PlayerScoreboard = create highlight CHALLENGE_NONE SCRIPT_HIGHLIGHT_INFO_SCOREBOARD_BIG at [P1Creature]
+start
+
+	while 1 == 2
+		if key KB_E down
+			i += 45
+		end if
+		
+		if key KB_Q down
+			i -= 45
+		end if
+		
+		begin cinema
+			move camera position to [(get XPOS of PlayerScoreboard)-(40*(cos (i*2))/57.296),  240 ,(get ZPOS of PlayerScoreboard)-(40*(sin (i*2))/57.296)]	time 0.1		// Close up pos of parents still kissing
+			move camera focus to [PlayerScoreboard]	time 0.1		// Close up pos of parents still kissing
+			//move camera focus to (hand position)	+ [0, 20 , 0]	time 2		// Close up pos of parents still kissing
+			
+		end cinema
+		
+		
+	end while
+	
+end script UndeadControlCreature
+
+begin script UndeadControl1
+
+	Complete = 0
+	P1Citadel = get CITADEL at player 1 temple position radius 100
+	P1Creature = get player 1 creature
+	Ape1_StartPos = marker at [2199.64,0,1732.88]
+	Ape1 = 0
+	Ape2 = 0
+	Building = 0
+	
+start
+	//run background script ShrinkTemple
+	
+	begin cinema
+		set camera position to [1982.78, 30, 1744.76]
+		set camera focus to [P1Citadel] + [0, 5, 0]
+	end cinema
+	
+	run background script UndeadControlCreature
+	
+	
+	Building = get HOUSE at [2199.64,1732.88] radius 10
+		
+	set player 1 ally with player 2 percentage 1
+	BUILT of P1Citadel = 0.1
+	//delete P1Creature
+	
+	set game time 05
+	disable game time
+	
+	Ape1 = create CREATURE CREATURE_TYPE_APE at [Ape1_StartPos]
+	set Ape1 DEVELOPMENT_PHASE_FULLY_MATURE development
+	set player 2 creature to Ape1
+	ACTUAL_HEIGHT of Ape1 = 0.3
+	wait 0.3 seconds
+	
+	
+	release Ape1
+	
+	//wait 5 seconds
+
+	
+		
+	
+	//delete P1Creature
+	wait until Complete == 1
+	
+	
+end script UndeadControl1

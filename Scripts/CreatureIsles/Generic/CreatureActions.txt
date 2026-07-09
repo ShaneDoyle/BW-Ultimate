@@ -1,0 +1,267 @@
+//------------------------------------------------------------------------------------------------------------------------
+// This function is specific to creature isles it will activate the sign of the brotherhood and also
+// will make the creature unleashable to.
+//------------------------------------------------------------------------------------------------------------------------
+begin script SetupCreatureIsleCreature(TheCreature)
+	TempCreatureSubType=0
+start
+	disable TheCreature can be leashed to
+	enable TheCreature tattoo CREATURE_TATTOO_TYPE_THE_BROTHERHOOD
+	TempCreatureSubType=variable get TheCreature sub type
+	if TempCreatureSubType == variable CREATURE_TYPE_RHINO or TempCreatureSubType == variable CREATURE_TYPE_CROCODILE
+		enable TheCreature tattoo CREATURE_TATTOO_TYPE_FIGHTER
+	end if
+
+end script SetupCreatureIsleCreature
+
+//------------------------------------------------------------------------------------------------------------------------
+// This function is specific to creature isles it will DEACTIVATE the sign of the brotherhood.
+//------------------------------------------------------------------------------------------------------------------------
+begin script DisableCreatureIsleCreature(TheCreature)
+	TempCreatureSubType=0
+start
+	disable TheCreature tattoo CREATURE_TATTOO_TYPE_THE_BROTHERHOOD
+	TempCreatureSubType=variable get TheCreature sub type
+	if TempCreatureSubType == variable CREATURE_TYPE_RHINO or TempCreatureSubType == variable CREATURE_TYPE_CROCODILE
+		disable TheCreature tattoo CREATURE_TATTOO_TYPE_FIGHTER
+	end if
+
+end script DisableCreatureIsleCreature
+
+// ----------------------------------------------------------------------------
+// Makes the players creature drop any object he is holding
+// ----------------------------------------------------------------------------
+begin script CreatureDropsHeldObject(Creature)
+
+ObjectHeld				= 0
+
+start
+
+	if Creature exists
+		ObjectHeld = get held by Creature
+
+		if ObjectHeld exists								// Make creature drop what he is holding
+			force Creature CREATURE_PUT_DOWN ObjectHeld
+			wait until Creature played
+		end if
+	end if
+		
+end script CreatureDropsHeldObject
+
+// ----------------------------------------------------------------------------
+// Scales the players creature to the size specified
+// ----------------------------------------------------------------------------
+begin script ScaleCreature(Creature, NewSize)
+
+ScaleDone				= 0
+DoubleCheckTimer		= create timer for 10 seconds
+
+start
+
+	if Creature exists
+		while ScaleDone == 0 and get DoubleCheckTimer time remaining > 0
+			if SCALE of Creature < NewSize				// Scale creature up
+				SCALE of Creature += 0.1
+				if SCALE of Creature >= NewSize
+					SCALE of Creature = NewSize
+					ScaleDone = 1
+				end if
+			elsif SCALE of Creature > NewSize			// Scale creature down
+				SCALE of Creature -= 0.1
+				if SCALE of Creature <= NewSize
+					SCALE of Creature = NewSize
+					ScaleDone = 1
+				end if
+			else										// Leave creature alone
+				SCALE of Creature = NewSize
+				ScaleDone = 1
+			end if
+		end while
+
+		// Just to make sure the creatures size is his correct one
+		SCALE of Creature = NewSize
+	end if
+		
+end script ScaleCreature
+
+// ----------------------------------------------------------------------------
+// Keep the specified creatures health, exhaustion and enery levels high
+// ----------------------------------------------------------------------------
+begin script KeepCreatureHealthy(Creature)
+
+start
+
+	while Creature exists
+
+		if HEALTH of Creature < 1.0
+			HEALTH of Creature = 1.0
+		end if
+
+		if ENERGY of Creature < 1.0
+			ENERGY of Creature = 1.0
+		end if
+
+		if EXHAUSTION of Creature > 0.0
+			EXHAUSTION of Creature = 0.0
+		end if
+
+		wait 3 seconds
+
+	end while
+		
+end script KeepCreatureHealthy
+
+// ----------------------------------------------------------------------------
+// Make sure the creature doesn't get too hungry
+// ----------------------------------------------------------------------------
+/*begin script MaintainCreaturesHungerLevel(Creature)
+
+CreaturesHungerLevel	= 0
+
+start
+
+	CreaturesHungerLevel = get HUNGER of Creature
+
+	while Creature exists and script is running
+		if HUNGER of Creature != CreaturesHungerLevel
+			HUNGER of Creature = CreaturesHungerLevel
+		end if
+
+		wait 3 seconds
+
+	end while
+
+end script MaintainCreaturesHungerLevel*/
+
+
+// ----------------------------------------------------------------------------
+// Checks to see if there are any obstructions within the specified area and 
+// delete them.
+// The last perameter needs to be a global that tells the script when to end.
+// ----------------------------------------------------------------------------
+begin script CheckForObstructions(Pos, SearchSize, KeepCheckingWhileTrue)
+
+Object		= 0
+
+start
+	
+	// Keeps checking within the search size at the position for the objects listed 
+	// while the global variable is true.
+	while KeepCheckingWhileTrue == 1
+		
+		// Clear rocks
+		Object = get ROCK_OBJECT at [Pos] radius SearchSize excluding scripted
+		if Object exists
+			delete Object with fade
+		end if
+	
+		// Wait a gameturn
+		wait 0.1 seconds
+
+		// Clear Trees
+		Object = get TREE at [Pos] radius SearchSize excluding scripted
+		if Object exists
+			delete Object with fade
+		end if
+
+		wait 0.1 seconds
+
+		// Clear Dead trees
+		Object = get SCRIPT_OBJECT_TYPE_DEAD_TREE at [Pos] radius SearchSize excluding scripted
+		if Object exists
+			delete Object with fade
+		end if
+		
+		wait 0.1 seconds
+
+		// Clear Food or Wood
+		Object = get STORE at [Pos] radius SearchSize excluding scripted
+		if Object exists
+			delete Object with fade
+		end if
+
+		wait 0.1 seconds
+
+		// Clear Short Fences
+		Object = get OBJECT MOBILE_STATIC_INFO_CELT_FENCE_SHORT at [Pos] radius SearchSize excluding scripted
+		if Object exists
+			delete Object with fade
+		end if
+
+		wait 0.1 seconds
+
+		// Clear Tall Fences
+		Object = get OBJECT MOBILE_STATIC_INFO_CELT_FENCE_TALL at [Pos] radius SearchSize excluding scripted
+		if Object exists
+			delete Object with fade
+		end if
+
+		wait 0.1 seconds
+
+		// Clear Creature Poo
+		Object = get POO at [Pos] radius SearchSize excluding scripted
+		if Object exists
+			delete Object with fade
+		end if
+		
+		wait 0.1 seconds
+
+		// Clear Singing Stones
+		Object = get OBJECT SINGINGSTONE1 at [Pos] radius SearchSize excluding scripted
+		if Object exists
+			delete Object with fade
+		end if
+	
+		wait 0.1 seconds
+
+		// Clear the Cow gatestone
+		Object = get OBJECT MOBILE_STATIC_INFO_GATE_TOTEM_COW at [Pos] radius SearchSize excluding scripted
+		if Object exists
+			delete Object with fade
+		end if
+
+		wait 0.1 seconds
+
+		// Clear the Ape gatestone
+		Object = get OBJECT MOBILE_STATIC_INFO_GATE_TOTEM_APE at [Pos] radius SearchSize excluding scripted
+		if Object exists
+			delete Object with fade
+		end if
+
+		wait 0.1 seconds
+
+		// Clear the Tiger gatestone
+		Object = get OBJECT MOBILE_STATIC_INFO_GATE_TOTEM_TIGER at [Pos] radius SearchSize excluding scripted
+		if Object exists
+			delete Object with fade
+		end if
+
+		wait 0.1 seconds
+
+		// Clear any objects such as carts, barrels, mushrooms etc
+		Object = get MOBILE_OBJECT at [Pos] radius SearchSize excluding scripted
+		if Object exists
+			delete Object with fade
+		end if
+
+		wait 0.1 seconds
+
+		// Clear Scaffolds
+		Object = get SCAFFOLD at [Pos] radius SearchSize excluding scripted
+		if Object exists
+			delete Object with fade
+		end if
+
+		wait 0.1 seconds
+
+		// Clear Weeping stones
+		Object = get OBJECT MOBILE_STATIC_INFO_WEEPING_STONE at [Pos] radius SearchSize excluding scripted
+		if Object exists
+			delete Object with fade
+		end if
+
+		wait 0.1 seconds
+
+	end while
+
+end script CheckForObstructions

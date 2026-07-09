@@ -1,0 +1,542 @@
+//LHVM Challenge source version 8
+//Decompiled with CHLASM tool by Daniels118
+
+global SpiritTrialComplete
+global PigsFree
+global KillOgres
+global SafetyOn
+global FreezeMercy
+global AnotherBackgroundCameraMoveComplete
+
+begin script GhostFreeze(Ghost, EndPen, PigPen)
+	Freeze = 0
+	RandomSay = 0
+start
+	FreezeMercy = create timer for 0 seconds
+	begin loop
+		wait until 1 seconds
+		if MyCreature affected by spell CREATURE_SPELL_FREEZE
+		elsif get distance from [MyCreature] to [Ghost] < 20 and SafetyOn == 0 and not get distance from [MyCreature] to [EndPen] < 40 and not get distance from [MyCreature] to [PigPen] < 40 and get FreezeMercy time remaining <= 0
+			Freeze = cast CREATURE_SPELL_FREEZE spell on MyCreature from [Ghost] radius 0 time 15 curl 0
+			set FreezeMercy time to 20 seconds
+			begin dialogue
+				eject evil spirit
+				RandomSay = variable constant from HELP_TEXT_SPIRIT_TRIAL_141 to HELP_TEXT_SPIRIT_TRIAL_145
+				say single line constant RandomSay
+				wait until read
+				send evil spirit home
+			end dialogue
+			wait until 8 seconds
+		end if
+		if SafetyOn == 1 and Freeze exists
+			delete Freeze
+		end if
+		until SpiritTrialComplete == 2 or KillOgres == 1
+	end loop
+	if Freeze exists
+		delete Freeze
+	end if
+end script GhostFreeze
+
+begin script GhostMovement(Ghost, Pos1, Pos2, Pos3, Pos4, Pos5, EndPen, PigPen)
+	LoopNum = 0
+start
+	run background script GhostFreeze(Ghost, EndPen, PigPen)
+	begin loop
+		move Ghost position to [Pos1] radius 0
+		wait until get distance from [Ghost] to [Pos1] < 3 or 20 seconds
+		move Ghost position to [Pos2] radius 0
+		wait until get distance from [Ghost] to [Pos2] < 3 or 20 seconds
+		move Ghost position to [Pos3] radius 0
+		wait until get distance from [Ghost] to [Pos3] < 3 or 20 seconds
+		move Ghost position to [Pos4] radius 0
+		wait until get distance from [Ghost] to [Pos4] < 3 or 20 seconds
+		move Ghost position to [Pos5] radius 0
+		wait until get distance from [Ghost] to [Pos5] < 3 or 20 seconds
+		until SpiritTrialComplete == 2 or KillOgres == 1
+	end loop
+	delete Ghost
+end script GhostMovement
+
+begin script PigWatch(Pig, EndPen, PigPos)
+	Guardian = 0
+	Droppable = 0
+	Pigfluence = 0
+	PickedUp = 0
+	PingOut = 0
+	Pigfluence2 = 0
+start
+	while Guardian == 0 and SpiritTrialComplete == 0
+		if Pig in MyCreature hand and PickedUp == 0
+			disable MyCreature can drop
+			PickedUp = 1
+		end if
+		if not Pig exists
+			Pig = create MOBILE_OBJECT MOBILE_OBJECT_BROTHERHOOD_RING_3 at [PigPos]
+			Pigfluence2 = create anti influence on Pig radius 2
+			enable Pig indestructible
+			if PickedUp == 1
+				PickedUp = 0
+				enable MyCreature can drop
+			end if
+		end if
+		if PickedUp == 1
+			if get distance from [MyCreature] to [EndPen] < 50
+				enable MyCreature can drop
+				PickedUp = 2
+			elsif not Pig in MyCreature hand and not Pig is FLYING and not Pig is HELD
+				if not get distance from [Pig] to [EndPen] < 40 and not get distance from [Pig] to [PigPos] < 40
+					PingOut = create special effect SPOT_VISUAL_OBJECT_APPEAR at [Pig] time 0.5
+					set Pig position to [PigPos]
+					PickedUp = 0
+					enable MyCreature can drop
+				end if
+			end if
+		end if
+		if get distance from [Pig] to [EndPen] < 30
+			if not Pig exists
+				Pig = create ANIMAL ANIMAL_INFO_PIG at [PigPos]
+				Pigfluence = create anti influence on Pig radius 2
+				enable Pig indestructible
+			elsif not Pig is HELD and not Pig in MyCreature hand and not Pig is FLYING
+				Guardian = 1
+			elsif Droppable == 0
+				Droppable = 1
+			end if
+		end if
+	end while
+	if Guardian == 1
+		PigsFree++
+		if PigsFree == 1
+			begin dialogue
+				eject evil spirit
+				say single line HELP_TEXT_SPIRIT_TRIAL_150
+				wait until read
+				send evil spirit home
+			end dialogue
+		elsif PigsFree == 2
+			begin dialogue
+				eject evil spirit
+				say single line HELP_TEXT_SPIRIT_TRIAL_160
+				wait until read
+				send evil spirit home
+			end dialogue
+		end if
+	end if
+	delete Pig
+end script PigWatch
+
+begin script AnotherCameraMoveDuringInteractionPause
+start
+	begin known cinema
+		wait until 3 seconds
+		move camera position to [3656.384, 122.238, 2997.47] time 4
+		move camera focus to [3664.467, 105.645, 3027.507] time 4
+		wait until 4 seconds
+		AnotherBackgroundCameraMoveComplete = 1
+	end known cinema
+end script AnotherCameraMoveDuringInteractionPause
+
+begin script SpiritTrial
+	BeginPos = 0
+	BeginFoc = 0
+	Ghost1 = 0
+	Ghost2 = 0
+	Ghost3 = 0
+	Ghost4 = 0
+	Ghost5 = 0
+	Ghost6 = 0
+	Ghost7 = 0
+	Ghost8 = 0
+	Ghost9 = 0
+	Ghost10 = 0
+	Pig1 = 0
+	Pig2 = 0
+	Pig3 = 0
+	PigPen = marker at [3413.18, 12.942, 2664.97]
+	EndPen = marker at [3663.75, 105.439, 3020.45]
+	Restarted = 0
+	Waypoint1 = marker at [3319.8, 42.2571, 2700.13]
+	Waypoint2 = marker at [3334.49, 56.191, 2725.97]
+	Waypoint3 = marker at [3394.47, 53.2284, 2726.5]
+	Waypoint4 = marker at [3445.87, 41.7023, 2716.23]
+	Waypoint5 = marker at [3397.74, 57.3688, 2754.09]
+	Waypoint6 = marker at [3447.39, 47.1434, 2752.93]
+	Waypoint7 = marker at [3334.6, 68.9263, 2786.69]
+	Waypoint8 = marker at [3376.79, 68.1228, 2835.54]
+	Waypoint9 = marker at [3470.6, 64.1577, 2829.36]
+	Waypoint10 = marker at [3552.95, 62.2812, 2795.22]
+	Waypoint11 = marker at [3585.07, 72.0721, 2795.74]
+	Waypoint12 = marker at [3584.74, 122.168, 2884.89]
+	Waypoint13 = marker at [3556.44, 43.1103, 2746.73]
+	Waypoint14 = marker at [3606.37, 30.54, 2745.3]
+	Waypoint15 = marker at [3624.84, 111.22, 2953.19]
+	Waypoint16 = marker at [3655.04, 103.654, 3023.09]
+	Waypoint17 = marker at [3584.25, 75.1107, 3024.18]
+	Waypoint18 = marker at [3583.88, 73.03, 2973.05]
+	Waypoint19 = marker at [3514, 92.9991, 2973.91]
+	Waypoint20 = marker at [3522.77, 94.47, 2936.73]
+	Waypoint21 = marker at [3584.74, 115.91, 2954.62]
+	Waypoint22 = marker at [3525.94, 91.5832, 2885.06]
+	Waypoint23 = marker at [3455.9, 74.37, 2885.92]
+	Waypoint24 = marker at [3449.93, 70.0543, 2934.58]
+	Waypoint25 = marker at [3385.12, 74.0664, 2934.54]
+	Waypoint26 = marker at [3327.4, 62.9957, 2909.92]
+	Waypoint27 = marker at [3402.76, 76.4533, 2874.18]
+	Waypoint28 = marker at [3514.39, 26.8576, 2695.09]
+	MyStartPos = marker at [3363.58, 0, 2598.28]
+	SeeStartPos = marker at [3336.28, 21.788, 2547.32]
+	SeeStartFoc = marker at [3372.43, 11.7791, 2625.21]
+	BossPos = marker at [3754.31, 130.268, 2976.1]
+	MyGratsPos = marker at [3701.857, 127.436, 3019.5]
+	SeeGratsPos = marker at [3841.51, 151.875, 3066.06]
+	SeeGratsFoc = marker at [3746.33, 130.132, 2983.9]
+	MindTrialBossPos = marker at [3694.75, 127.093, 3013.37]
+	Boss = 0
+	Highlight = 0
+	Spangle = 0
+	PenHigh = marker at [3431.13, 319.076, 2751.69]
+	FSize = 1
+	Fencing = 0
+	Pig1Pos = marker at [3457.01, 15.075, 2675.67]
+	Pig2Pos = marker at [3455.01, 15.075, 2673.67]
+	Pig3Pos = marker at [3453.01, 15.075, 2671.67]
+	Pigfluence1 = 0
+	Pigfluence2 = 0
+	Pigfluence3 = 0
+	OldGameTime = 0
+	Lantern1 = create OBJECT MOBILE_STATIC_INFO_STREET_LANTERN at [3742.58, 131.32, 2971.18]
+	Lantern2 = create OBJECT MOBILE_STATIC_INFO_STREET_LANTERN at [3767.11, 129.826, 2979.82]
+	SpiritTrialDYKPos = marker at [3471.283, 15.96, 2686.982]
+	CancelSpirit = 0
+	CancelSpiritPos = marker at [3673.554, 106.378, 3030.353]
+start
+	DojoReminderGraduationSpirit = 1
+	KillOgres = 0
+	SpiritTrialComplete = 0
+	PigsFree = 0
+	Boss = create DUMB_CREATURE CREATURE_TYPE_LION at [BossPos]
+	set Boss name HELP_TEXT_NAME_LION_01
+	SCALE of Boss = 2
+	ALIGNMENT of Boss = 0
+	run script SetupCreatureIsleCreature(Boss)
+	STRENGTH of Boss = 1
+	Highlight = create highlight CHALLENGE_SPIRIT_TRIAL HIGHLIGHT_TRIAL at [BossPos] + ([5, 5])
+	ALTITUDE of Highlight = 30
+	run background script TrialNotifyWithScriptLockedCreature(Highlight)
+	FemaleCreatureOverride = 3
+	Ghost1 = create DUMB_CREATURE CREATURE_TYPE_OGRE at [Waypoint1]
+	set Ghost1 name HELP_TEXT_NAME_OGRE_01
+	SCALE of Ghost1 = 0.5
+	ALIGNMENT of Ghost1 = 1
+	Ghost2 = create DUMB_CREATURE CREATURE_TYPE_OGRE at [Waypoint2]
+	set Ghost2 name HELP_TEXT_NAME_OGRE_01
+	SCALE of Ghost2 = 0.5
+	ALIGNMENT of Ghost2 = 1
+	FemaleCreatureOverride = 3
+	Ghost3 = create DUMB_CREATURE CREATURE_TYPE_OGRE at [Waypoint3]
+	set Ghost3 name HELP_TEXT_NAME_OGRE_01
+	SCALE of Ghost3 = 0.5
+	ALIGNMENT of Ghost3 = 1
+	FemaleCreatureOverride = 3
+	Ghost4 = create DUMB_CREATURE CREATURE_TYPE_OGRE at [Waypoint23]
+	set Ghost4 name HELP_TEXT_NAME_OGRE_01
+	SCALE of Ghost4 = 0.5
+	ALIGNMENT of Ghost4 = 1
+	FemaleCreatureOverride = 3
+	Ghost5 = create DUMB_CREATURE CREATURE_TYPE_OGRE at [Waypoint20]
+	set Ghost5 name HELP_TEXT_NAME_OGRE_01
+	SCALE of Ghost5 = 0.5
+	ALIGNMENT of Ghost5 = 1
+	FemaleCreatureOverride = 3
+	Ghost6 = create DUMB_CREATURE CREATURE_TYPE_OGRE at [Waypoint20]
+	set Ghost6 name HELP_TEXT_NAME_OGRE_01
+	SCALE of Ghost6 = 0.5
+	ALIGNMENT of Ghost6 = 1
+	FemaleCreatureOverride = 3
+	Ghost7 = create DUMB_CREATURE CREATURE_TYPE_OGRE at [Waypoint11]
+	set Ghost7 name HELP_TEXT_NAME_OGRE_01
+	SCALE of Ghost7 = 0.5
+	ALIGNMENT of Ghost7 = 1
+	FemaleCreatureOverride = 3
+	Ghost8 = create DUMB_CREATURE CREATURE_TYPE_OGRE at [Waypoint10]
+	set Ghost8 name HELP_TEXT_NAME_OGRE_01
+	SCALE of Ghost8 = 0.5
+	ALIGNMENT of Ghost8 = 1
+	FemaleCreatureOverride = 3
+	Ghost9 = create DUMB_CREATURE CREATURE_TYPE_OGRE at [Waypoint26]
+	set Ghost9 name HELP_TEXT_NAME_OGRE_01
+	SCALE of Ghost9 = 0.5
+	ALIGNMENT of Ghost9 = 1
+	FemaleCreatureOverride = 3
+	Ghost10 = create DUMB_CREATURE CREATURE_TYPE_OGRE at [Waypoint10]
+	set Ghost10 name HELP_TEXT_NAME_OGRE_01
+	SCALE of Ghost10 = 0.5
+	ALIGNMENT of Ghost10 = 1
+	FemaleCreatureOverride = 0
+	wait 0.1 seconds
+	run background script GhostMovement(Ghost1, Waypoint1, Waypoint2, Waypoint3, Waypoint4, Waypoint28, EndPen, PigPen)
+	run background script GhostMovement(Ghost2, Waypoint2, Waypoint7, Waypoint9, Waypoint6, Waypoint4, EndPen, PigPen)
+	run background script GhostMovement(Ghost3, Waypoint3, Waypoint27, Waypoint9, Waypoint7, Waypoint2, EndPen, PigPen)
+	run background script GhostMovement(Ghost4, Waypoint23, Waypoint24, Waypoint25, Waypoint26, Waypoint27, EndPen, PigPen)
+	run background script GhostMovement(Ghost5, Waypoint20, Waypoint21, Waypoint22, Waypoint23, Waypoint24, EndPen, PigPen)
+	run background script GhostMovement(Ghost6, Waypoint20, Waypoint19, Waypoint17, Waypoint16, Waypoint15, EndPen, PigPen)
+	run background script GhostMovement(Ghost7, Waypoint11, Waypoint13, Waypoint14, Waypoint15, Waypoint21, EndPen, PigPen)
+	run background script GhostMovement(Ghost8, Waypoint10, Waypoint5, Waypoint7, Waypoint2, Waypoint4, EndPen, PigPen)
+	run background script GhostMovement(Ghost9, Waypoint26, Waypoint7, Waypoint8, Waypoint9, Waypoint27, EndPen, PigPen)
+	run background script GhostMovement(Ghost10, Waypoint10, Waypoint9, Waypoint8, Waypoint7, Waypoint5, EndPen, PigPen)
+	wait until Highlight clicked and ScriptLockedCreature == 0
+	Pig1 = create MOBILE_OBJECT MOBILE_OBJECT_BROTHERHOOD_RING_1 at [Pig1Pos]
+	Pigfluence1 = create anti influence on Pig1 radius 2
+	enable Pig1 indestructible
+	Pig2 = create MOBILE_OBJECT MOBILE_OBJECT_BROTHERHOOD_RING_2 at [Pig2Pos]
+	Pigfluence2 = create anti influence on Pig2 radius 2
+	enable Pig2 indestructible
+	Pig3 = create MOBILE_OBJECT MOBILE_OBJECT_BROTHERHOOD_RING_3 at [Pig3Pos]
+	Pigfluence3 = create anti influence on Pig3 radius 2
+	enable Pig3 indestructible
+	begin cinema
+		run background script DidYouKnow(SpiritTrialDYKPos, variable HELP_TEXT_MIND_DYK, variable DYK_MISC)
+		move camera position to [3743.366, 143.803, 2946.547] time 6
+		move camera focus to [3754.31, 151, 2976.1] time 6
+		set Boss focus to [3743.366, 143.803, 2946.547]
+		wait until camera ready
+		snapshot CHALLENGE_SPIRIT_TRIAL quest success 0 alignment 0 HELP_TEXT_CREATURE_ISLE_TITLE_20 StandardReminder (variable HELP_TEXT_CI_REMINDER_18)
+		move camera position to [3756.979, 140.671, 2944.94] time 6
+		move camera focus to [3754.31, 151, 2976.1] time 3
+		say HELP_TEXT_SPIRIT_TRIAL_10 by Boss
+		wait until read
+		set Boss focus to (camera position)
+		wait until camera ready
+		move camera position to [3797.33, 136.885, 2891.52] time 8
+		set Boss focus to (camera position)
+		say HELP_TEXT_SPIRIT_TRIAL_20 with interaction by Boss
+		wait until 1 seconds
+		set Boss focus to (camera position)
+		wait until 1 seconds
+		set Boss focus to (camera position)
+		wait until read
+		say HELP_TEXT_SPIRIT_TRIAL_30 by Boss
+		set camera position to [3473.01, 27.0782, 2651.39]
+		set camera focus to [3457.03, 15.5747, 2672.3]
+		wait until 2 seconds
+		move camera position to [3404.32, 125.204, 2685.42] time 8
+		move camera focus to [3435.37, 68.7361, 2863.4] time 8
+		wait until read
+		say HELP_TEXT_SPIRIT_TRIAL_40 by Boss
+		wait until read
+		wait until camera ready
+		move camera position to [3313.71, 131.834, 2950.48] time 10
+		move camera focus to [3448.53, 74.7265, 2919.9] time 10
+		say HELP_TEXT_SPIRIT_TRIAL_45 by Boss
+		wait until read
+		wait until 2 seconds
+		move camera position to [3633.96, 116.924, 3027.14] time 6
+		move camera focus to [3663.59, 105.815, 3020.56] time 6
+		say HELP_TEXT_SPIRIT_TRIAL_50 with interaction by Boss
+		wait until read
+		wait until camera ready
+		wait until 2 seconds
+		set fade red 0 green 0 blue 0 time 1.5
+		wait until 1.5 seconds
+		clear dialogue
+		set camera position to [SeeStartPos]
+		set camera focus to [SeeStartFoc]
+		set MyCreature position to [MyStartPos]
+		set MyCreature focus to [PigPen]
+		delete Boss
+		SpiritActive = 1
+		OldGameTime = get game time
+		set game time 1
+		set fade in time 2
+		wait until 1 seconds
+		say single line HELP_TEXT_SPIRIT_TRIAL_65 with interaction by Boss
+		wait until read
+		release MyCreature
+	end cinema
+	begin loop
+		if Restarted == 1
+			wait until Highlight clicked and ScriptLockedCreature == 0
+			SafetyOn = 0
+			Pig1 = create MOBILE_OBJECT MOBILE_OBJECT_BROTHERHOOD_RING_1 at [Pig1Pos]
+			Pigfluence1 = create anti influence on Pig1 radius 2
+			enable Pig1 indestructible
+			Pig2 = create MOBILE_OBJECT MOBILE_OBJECT_BROTHERHOOD_RING_2 at [Pig2Pos]
+			Pigfluence2 = create anti influence on Pig2 radius 2
+			enable Pig2 indestructible
+			Pig3 = create MOBILE_OBJECT MOBILE_OBJECT_BROTHERHOOD_RING_3 at [Pig3Pos]
+			Pigfluence3 = create anti influence on Pig3 radius 2
+			enable Pig3 indestructible
+			begin cinema
+				say HELP_TEXT_SPIRIT_TRIAL_30 by Boss
+				move camera position to [3473.01, 27.0782, 2651.39] time 5
+				move camera focus to [3457.03, 15.5747, 2672.3] time 5
+				wait until read
+				say HELP_TEXT_SPIRIT_TRIAL_40 by Boss
+				wait until camera ready
+				wait until 1 seconds
+				run background script AnotherCameraMoveDuringInteractionPause
+				move camera position to [3578.176, 233.649, 2607.7] time 5
+				move camera focus to [3596.31, 106.664, 2870.48] time 5
+				wait until read
+				say HELP_TEXT_SPIRIT_TRIAL_50 with interaction by Boss
+				wait until AnotherBackgroundCameraMoveComplete == 1
+				AnotherBackgroundCameraMoveComplete = 0
+				wait until read
+				wait until 1 seconds
+				set fade red 0 green 0 blue 0 time 1.5
+				wait until 1.5 seconds
+				clear dialogue
+				set camera position to [SeeStartPos]
+				set camera focus to [SeeStartFoc]
+				set MyCreature position to [MyStartPos]
+				set MyCreature focus to [PigPen]
+				delete Boss
+				SpiritActive = 1
+				OldGameTime = get game time
+				set game time 1
+				set fade in time 2
+				wait until 2 seconds
+				release MyCreature
+			end cinema
+		end if
+		Restarted = 0
+		CancelSpirit = create highlight CHALLENGE_NONE HIGHLIGHT_CANCEL_QUEST at [CancelSpiritPos]
+		ALTITUDE of CancelSpirit = 15
+		set countdown timer draw SCRIPT_COUNTDOWN_DRAW_BOTTOM_LEFT
+		enable countdown timer down with 450 seconds
+		PigsFree = 0
+		run background script PigWatch(Pig1, EndPen, Pig1Pos)
+		run background script PigWatch(Pig2, EndPen, Pig2Pos)
+		run background script PigWatch(Pig3, EndPen, Pig3Pos)
+		while SpiritTrialComplete == 0
+			if get countdown timer time <= 0 or CancelSpirit clicked
+				clear clicked object
+				SpiritTrialComplete = 1
+				Restarted = 1
+			elsif PigsFree == 3
+				SpiritTrialComplete = 1
+				Restarted = 0
+			end if
+		end while
+		delete CancelSpirit
+		disable countdown timer
+		set game time OldGameTime
+		SpiritActive = 0
+		enable MyCreature can drop
+		if Restarted == 0
+			KillOgres = 1
+			wait until get distance from (camera position) to [EndPen] < 300
+			begin cinema
+				BeginPos = marker at (camera position)
+				BeginFoc = marker at (camera focus)
+				set MyCreature position to [MyCreature]
+				move camera position to [MyCreature] + [25, 15, 25] time 3
+				move camera focus to [MyCreature] + [0, 10, 0] time 3
+				wait until 1 seconds
+				set MyCreature focus to [MyCreature] + [25, 15, 25]
+				wait until 1 seconds
+				MyCreature play ANM_A_COW_DEAD_ON_RHS loop 1
+				wait until camera ready
+				eject evil spirit
+				say single line HELP_TEXT_SPIRIT_TRIAL_70
+				wait until read
+				close dialogue
+				send evil spirit home
+				wait until MyCreature played
+				set fade red 0 green 0 blue 0 time 1.5
+				wait until 1.5 seconds
+				set camera position to [3723.02, 143.617, 3059.27]
+				set camera focus to [3722.08, 125.776, 2926.39]
+				move camera position to [3662.72, 138.651, 3028.51] time 20
+				move camera focus to [3779.72, 135.773, 2963.11] time 20
+				set MyCreature position to [MyGratsPos]
+				set MyCreature focus to [BossPos]
+				Boss = create DUMB_CREATURE CREATURE_TYPE_LION at [BossPos]
+				SCALE of Boss = 2
+				ALIGNMENT of Boss = 0
+				STRENGTH of Boss = 1
+				set Boss name HELP_TEXT_NAME_LION_01
+				run script SetupCreatureIsleCreature(Boss)
+				set Boss focus to [MyGratsPos]
+				set fade in time 2
+				wait until 2 seconds
+				update snapshot CHALLENGE_SPIRIT_TRIAL success 1 alignment 0 HELP_TEXT_CREATURE_ISLE_TITLE_20 StandardReminder (variable HELP_TEXT_CI_REMINDER_18)
+				say HELP_TEXT_SPIRIT_TRIAL_80 by Boss
+				wait until read
+				say HELP_TEXT_SPIRIT_TRIAL_90 with interaction by Boss
+				wait until read
+				clear dialogue
+			end cinema with widescreen
+			run script Dojo(Boss)
+			delete Boss
+			release MyCreature
+			SpiritTrialComplete = 2
+			DojoReminderGraduationSpirit = 0
+		else
+			SafetyOn = 1
+			if get distance from (camera position) to [EndPen] < 300
+				begin cinema
+					BeginPos = marker at (camera position)
+					BeginFoc = marker at (camera focus)
+					set MyCreature position to [MyCreature]
+					move camera position to [MyCreature] + [25, 15, 25] time 3
+					move camera focus to [MyCreature] + [0, 8, 0] time 3
+					wait until 1 seconds
+					set MyCreature focus to [MyCreature] + [25, 15, 25]
+					wait until 1 seconds
+					MyCreature play ANM_A_COW_DIE loop 1
+					wait until camera ready
+					eject evil spirit
+					say single line HELP_TEXT_SPIRIT_TRIAL_120
+					wait until read
+					send evil spirit home
+					wait until MyCreature played
+					set fade red 0 green 0 blue 0 time 1.5
+					wait until 1.5 seconds
+					clear dialogue
+					set camera position to [SeeStartPos]
+					set camera focus to [SeeStartFoc]
+					set MyCreature position to [MyStartPos]
+					set fade in time 2
+					wait until 2 seconds
+					eject good spirit
+					make good spirit point at [Highlight]
+					say single line HELP_TEXT_SPIRIT_TRIAL_130 with interaction
+					wait until read
+					stop good spirit pointing
+					send good spirit home
+					release MyCreature
+					SpiritTrialComplete = 0
+				end cinema
+			else
+				begin dialogue
+					eject good spirit
+					eject evil spirit
+					say HELP_TEXT_SPIRIT_TRIAL_120
+					wait until read
+					make good spirit point at [Highlight]
+					say HELP_TEXT_SPIRIT_TRIAL_130
+					wait until read
+					stop good spirit pointing
+					send good spirit home
+					send evil spirit home
+				end dialogue
+				SpiritTrialComplete = 0
+			end if
+		end if
+		if Pig1 exists
+			delete Pig1
+		end if
+		if Pig2 exists
+			delete Pig2
+		end if
+		if Pig3 exists
+			delete Pig3
+		end if
+		until SpiritTrialComplete == 2
+	end loop
+	delete Boss
+	run background script DeleteDYK(SpiritTrialDYKPos)
+end script SpiritTrial
+

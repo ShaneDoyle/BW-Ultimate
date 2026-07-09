@@ -1,0 +1,7 @@
+begin script HelloWorld
+start
+	begin dialogue
+		say "Hello World"
+		wait until read
+	end dialogue
+end script HelloWorld

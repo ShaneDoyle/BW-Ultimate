@@ -1,0 +1,1435 @@
+//LHVM Challenge source version 8
+//Decompiled with CHLASM tool by Daniels118
+
+global OutroLion
+global OutroCroc
+global CentreOfDojo
+global CaveOfDojo
+global OutroTree[10]
+global Forrester[5]
+global RainStormDone
+global SnowStormDone
+global ChoppingDownTrees
+global EveMultiplier = 0.8
+global TykeMultiplier = 0.3
+global EveActor
+global LionActor = 1
+global CrocActor = 2
+global TykeActor = 3
+
+define script OutroCreateCreature(Actor, CreatureType, Pos, Scale, Strength, Alignment)
+define script CreateTrees(Pos)
+define script LookFromInsideCreaturesHead(Height, Pos)
+define script OutroMoveCreatureFromDojoCave(Actor, CreatureType, Pos, FinalSize)
+define script GrowTree(Tree)
+define script LatinCreatures
+
+begin script Outro
+	OrigPos = 0
+	OrigFoc = 0
+	CreatureSubType = 0
+	CreatureTypeOfEve = 0
+	MyCreatureScale = 0
+	MyCreatureStrength = 0
+	MyCreatureHeight = 0
+	EveHeight = 0
+	EveInCavePos = 0
+	FinalSizeOfEve = 0
+	StrengthOfTyke = 0
+	FinalSizeOfTyke = 0
+	EveAtFinalPos = 0
+	LookPos = 0
+	MoveToPosFromDojo = 0
+	LionPos = 0
+	CrocPos = 0
+	CrocIntermediatePos = 0
+	CreateCrocPos = 0
+	MyCreatureStartPos = 0
+	MyCreaturePos = 0
+	CloseUpOfEve = 0
+	TykeFamilyPos = 0
+	ButterflyPos = 0
+	LionType = variable CREATURE_TYPE_LION
+	CrocType = variable CREATURE_TYPE_CROCODILE
+	DistanceBetweenParents = 0
+	CloseUpOfAmazedCreature = 0
+	LookFromBehindCreaturePos = 0
+	Waypoint1 = marker at [1149.712, 63.8254, 1023.4071]
+	Waypoint2 = marker at [1049.6321, 96.48, 1010.0731]
+	MyCreatureKissPos = marker at [974.3307, 118.098, 1112.279]
+	EveKissPos = marker at [997.6625, 114.9835, 1085.7649]
+	ViewOfTimePassingPos = marker at [1039.6024, 127.9512, 1156.5286]
+	ViewOfTimePassingFoc = marker at [1029.1703, 127.8407, 1146.0149]
+	TreeGrowingPos = marker at [1008.6032, 120.5293, 1118.9583]
+	ForresterPos = marker at [1044.835, 126.2139, 1184.1884]
+	MyCreatureShagPos = marker at [925.9283, 47.7218, 893.0206]
+	EveShagPos = marker at [952.7829, 55.4216, 898.0576]
+	TykeCreatePos = marker at [935.4192, 55.9921, 913.6005]
+start
+	CentreOfDojo = marker at [1253.2899, 57.5075, 1021.62]
+	CaveOfDojo = marker at [130, 61, 100]
+	LookPos = marker at [CentreOfDojo] + [0, 10, 0]
+	MoveToPosFromDojo = marker at (get target from [CaveOfDojo] to [CentreOfDojo] distance 45 angle 180)
+	LionPos = marker at (get target from [CaveOfDojo] to [CentreOfDojo] distance 35 angle 90)
+	CrocPos = marker at (get target from [CaveOfDojo] to [CentreOfDojo] distance 35 angle -90)
+	CrocIntermediatePos = marker at (get target from [CaveOfDojo] to [CentreOfDojo] distance 45 angle 0)
+	CreateCrocPos = marker at (get target from [CaveOfDojo] to [CentreOfDojo] distance 120 angle 0)
+	MyCreatureStartPos = marker at (get target from [CaveOfDojo] to [CentreOfDojo] distance 200 angle 0)
+	MyCreaturePos = marker at (get target from [CaveOfDojo] to [CentreOfDojo] distance 45 angle 0)
+	CloseUpOfEve = marker at (get target from [CaveOfDojo] to [CentreOfDojo] distance 20 angle 180)
+	CloseUpOfAmazedCreature = marker at (get target from [CaveOfDojo] to [CentreOfDojo] distance 20 angle 0)
+	EveInCavePos = marker at [CentreOfDojo] - [CaveOfDojo]
+	begin cinema
+		set fade red 0 green 0 blue 0 time 2
+		wait until fade ready
+		if TykeFree == 0
+			TykeFree = 4
+		end if
+		OrigPos = marker at (camera position)
+		OrigFoc = marker at (camera focus)
+		OldTyke = Tyke
+		MyCreature = get player 1 creature
+		CreatureSubType = variable get MyCreature sub type
+		MyCreatureScale = ACTUAL_HEIGHT of MyCreature
+		MyCreatureStrength = STRENGTH of MyCreature
+		FinalSizeOfEve = MyCreatureScale * EveMultiplier
+		FinalSizeOfTyke = MyCreatureScale * TykeMultiplier
+		StrengthOfTyke = MyCreatureStrength * TykeMultiplier
+		MyCreatureHeight = HEIGHT of MyCreature
+		MyCreatureHeight = MyCreatureHeight * 0.8
+		run script OutroCreateCreature(CrocActor, CrocType, CreateCrocPos, 2, 1, -0.5)
+		set OutroCroc focus to [CentreOfDojo]
+		set MyCreature position to [MyCreatureStartPos]
+		set MyCreature focus to [CaveOfDojo]
+		wait until 1 seconds
+		move OutroCroc position to [CrocIntermediatePos] radius 0
+		run background script OutroMoveCreatureFromDojoCave(LionActor, LionType, MoveToPosFromDojo, 2)
+		wait until 3 seconds
+		move MyCreature position to [MyCreaturePos] radius 0
+		LookFromBehindCreaturePos = marker at (get target from [CentreOfDojo] to [MyCreature] distance 30 angle 0)
+		set camera position to [LookFromBehindCreaturePos] + [0, MyCreatureHeight + MyCreatureHeight / 1.5, 0]
+		set camera focus to [MyCreature] + [0, MyCreatureHeight, 0]
+		set fade in time 2
+		wait until fade ready
+		move camera position to [CentreOfDojo] + [0, MyCreatureHeight, 0] time 3
+		move camera focus to [CentreOfDojo] + [0, MyCreatureHeight, 0] time 3
+		set fade red 255 green 255 blue 255 time 1
+		wait until fade ready
+		run background script LookFromInsideCreaturesHead(MyCreatureHeight, MyCreaturePos)
+		wait until get distance from [OutroCroc] to [CrocIntermediatePos] < 1 or 10 seconds
+		if not get distance from [OutroCroc] to [CrocIntermediatePos] < 2
+			set OutroCroc position to [CrocIntermediatePos]
+			set OutroCroc focus to [CaveOfDojo]
+		end if
+		set OutroCroc focus to [MyCreaturePos]
+		wait until 0.1 seconds
+		move OutroCroc position to [CrocPos] radius 0
+		wait until get distance from [OutroLion] to [MoveToPosFromDojo] < 1 or 10 seconds
+		if not get distance from [OutroLion] to [MoveToPosFromDojo] < 2
+			set OutroLion position to [MoveToPosFromDojo]
+			set OutroLion focus to [MyCreaturePos]
+		end if
+		set OutroLion focus to [MyCreaturePos]
+		wait until 0.1 seconds
+		move OutroLion position to [LionPos] radius 0
+		wait until get distance from [OutroCroc] to [CrocPos] < 1 or 10 seconds
+		if not get distance from [OutroCroc] to [CrocPos] < 2
+			set OutroCroc position to [CrocPos]
+			set OutroCroc focus to [MyCreaturePos]
+		end if
+		set OutroCroc focus to [MyCreaturePos] + [0, MyCreatureHeight, 0]
+		wait until get distance from [OutroLion] to [LionPos] < 1 or 10 seconds
+		if not get distance from [OutroLion] to [LionPos] < 2
+			set OutroLion position to [LionPos]
+			set OutroLion focus to [MyCreaturePos]
+		end if
+		set OutroLion focus to [MyCreaturePos] + [0, MyCreatureHeight, 0]
+		wait until get distance from [MyCreature] to [MyCreaturePos] < 1
+		if not get distance from [MyCreature] to [MyCreaturePos] < 2
+			set MyCreature position to [MyCreaturePos]
+			set MyCreature focus to [CaveOfDojo]
+		end if
+		say HELP_TEXT_EVE_MEETING_10 by OutroCroc
+		set MyCreature focus to [OutroCroc]
+		force MyCreature CREATURE_LOOK_FOREVER OutroCroc
+		wait until 0.1 seconds
+		move camera focus to [OutroCroc] + [0, MyCreatureHeight, 0] time 2
+		wait until 0.5 seconds
+		move camera focus to [OutroCroc] + [0, MyCreatureHeight / 3, 0] time 1
+		wait until 1 seconds
+		move camera focus to [OutroCroc] + [0, MyCreatureHeight, 0] time 1.5
+		wait until 1.5 seconds
+		move camera focus to [OutroCroc] + [-20, MyCreatureHeight / 2, 0] time 2
+		wait until read
+		say HELP_TEXT_EVE_MEETING_11 with interaction by OutroCroc
+		wait until read
+		say HELP_TEXT_EVE_MEETING_12 by OutroCroc
+		wait until read
+		say HELP_TEXT_EVE_MEETING_13 by OutroCroc
+		wait until read
+		say HELP_TEXT_EVE_MEETING_14 by OutroCroc
+		wait until read
+		say HELP_TEXT_EVE_MEETING_20 by OutroCroc
+		set MyCreature focus to [OutroLion]
+		force MyCreature CREATURE_LOOK_FOREVER OutroLion
+		move camera focus to [OutroLion] + [20, MyCreatureHeight, 0] time 1
+		wait until 1 seconds
+		set OutroLion focus to [CaveOfDojo]
+		wait until 0.1 seconds
+		OutroLion play ANM_SWALLOW_FLAP loop 1
+		wait until 2 seconds
+		move camera focus to [OutroCroc] + [-140, MyCreatureHeight, 0] time 3
+		wait until read
+		clear dialogue
+		run background script OutroMoveCreatureFromDojoCave(EveActor, CreatureSubType, MoveToPosFromDojo, FinalSizeOfEve)
+		say HELP_TEXT_EVE_MEETING_30 by Eve
+		set MyCreature focus to [CaveOfDojo]
+		force MyCreature CREATURE_LOOK_FOREVER CaveOfDojo
+		wait until 1 seconds
+		move camera focus to [CaveOfDojo] time 1
+		wait until camera ready
+		set camera position to [CloseUpOfAmazedCreature] + [0, MyCreatureHeight + MyCreatureHeight / 3, 0]
+		set camera focus to [MyCreature] + [0, MyCreatureHeight, 0]
+		wait until 0.5 seconds
+		wait until read
+		say HELP_TEXT_EVE_MEETING_40 by Eve
+		MyCreature play ANM_P_MISSIONARY_RIGHT_LEFT_PUNCH loop 1
+		wait until 2 seconds
+		MyCreature play ANM_A_COW_DOWNED_ON_RHS loop 1
+		wait until MyCreature played
+		MyCreature play ANM_A_HORSE_DEADRHS loop 1
+		wait until MyCreature played
+		MyCreature play ANM_A_HORSE_EAT1 loop 1
+		wait until 2 seconds
+		wait until read
+		say HELP_TEXT_EVE_MEETING_50 by Eve
+		EveHeight = HEIGHT of Eve
+		EveHeight = EveHeight * EveMultiplier
+		Eve play ANM_A_HORSE_DEADRHS loop 1
+		set camera focus to [Eve] + [0, EveHeight, 0]
+		move camera position to [CloseUpOfEve] + [0, EveHeight + EveHeight / 2, 0] time 1.5
+		wait until Eve played
+		wait until read
+		say HELP_TEXT_EVE_MEETING_60 by Eve
+		wait until read
+		close dialogue
+		move camera focus to [Waypoint1] time 3
+		move MyCreature position to [Waypoint1] radius 0
+		move Eve position to [Waypoint1] radius 0
+		wait until 3 seconds
+		set fade red 0 green 0 blue 0 time 2
+		wait until fade ready
+		set MyCreature position to [Waypoint2] + ([10, 10])
+		set Eve position to [Waypoint2]
+		move MyCreature position to [MyCreatureKissPos] radius 0
+		move Eve position to [EveKissPos] radius 0
+		set camera position to [ViewOfTimePassingPos]
+		set camera focus follow MyCreature
+		wait until 1 seconds
+		set fade in time 2
+		wait until fade ready
+		wait until get distance from [MyCreature] to [MyCreatureKissPos] < 5 or 30 seconds
+		move camera focus to [ViewOfTimePassingFoc] time 1
+		wait until get distance from [Eve] to [EveKissPos] < 5 or 30 seconds
+		set MyCreature focus to [Eve]
+		set Eve focus to [MyCreature]
+		eject good spirit
+		say HELP_TEXT_EVE_MEETING_70
+		wait until read
+		eject evil spirit
+		say HELP_TEXT_EVE_MEETING_80
+		wait until read
+		force MyCreature CREATURE_KISS_FRIEND Eve
+		wait until 8 seconds
+		send good spirit home
+		send evil spirit home
+		close dialogue
+		set MyCreature focus to [MyCreatureShagPos]
+		set Eve focus to [EveShagPos]
+		move MyCreature position to [MyCreatureShagPos] radius 0
+		wait until 0.5 seconds
+		move Eve position to [EveShagPos] radius 0
+		wait until 6 seconds
+		set fade red 0 green 0 blue 0 time 2
+		wait until fade ready
+		run script CreateTrees(TreeGrowingPos)
+		run background script GrowTree(OutroTree[8])
+		run background script GrowTree(OutroTree[3])
+		run background script GrowTree(OutroTree[9])
+		run background script GrowTree(OutroTree[7])
+		run background script GrowTree(OutroTree[5])
+		run background script GrowTree(OutroTree[6])
+		run background script GrowTree(OutroTree[0])
+		run background script GrowTree(OutroTree[1])
+		run background script GrowTree(OutroTree[2])
+		run background script GrowTree(OutroTree[4])
+		run script LatinCreatures
+		set camera position to [ViewOfTimePassingPos]
+		set camera focus to [ViewOfTimePassingFoc]
+		set MyCreature position to [MyCreatureShagPos]
+		set fade in time 2
+		wait until fade ready
+		run script OutroCreateCreature(TykeActor, CreatureSubType, TykeCreatePos, FinalSizeOfTyke, StrengthOfTyke, 1)
+		set Tyke focus to (camera position)
+		set Eve focus to (camera position)
+		set MyCreature focus to (camera position)
+		DistanceBetweenParents = get distance from [EveKissPos] to [MyCreatureKissPos]
+		TykeFamilyPos = marker at (get target from [EveKissPos] to [MyCreatureKissPos] distance DistanceBetweenParents / 2 angle 135)
+		move MyCreature position to [MyCreatureKissPos] radius 0
+		wait until 0.5 seconds
+		move Eve position to [EveKissPos] radius 0
+		wait until 0.5 seconds
+		move Tyke position to [TykeFamilyPos] radius 0
+		move camera position to (camera position) + [0, 30, 0] time 25
+		move camera focus to [TykeFamilyPos] time 25
+		wait until get distance from [MyCreature] to [MyCreatureKissPos] < 1 or 30 seconds
+		set MyCreature focus to [Tyke]
+		force MyCreature CREATURE_LOOK_FOREVER Eve
+		wait until 0.1 seconds
+		MyCreature play ANM_SWALLOW_FLAP loop 1
+		wait until get distance from [Eve] to [EveKissPos] < 1 or 30 seconds
+		set Eve focus to [Tyke]
+		wait until MyCreature played
+		set MyCreature focus to [Eve]
+		set Eve focus to [MyCreature]
+		wait until get distance from [Tyke] to [TykeFamilyPos] < 1 or 30 seconds
+		set Eve focus to [Tyke]
+		set Tyke focus to [Eve]
+		set MyCreature focus to [Eve]
+		wait until 1 seconds
+		Eve play ANM_PIPER_CAVE_OPENING loop 1
+		wait until 3 seconds
+		Tyke play ANM_A_COW_DIE loop 1
+		wait until 2 seconds
+		set Eve focus to [MyCreature]
+		wait until Tyke played
+		Eve play ANM_A_HORSE_DEADRHS loop 1
+		wait until 1 seconds
+		MyCreature play ANM_A_HORSE_DEADRHS loop 1
+		wait until Eve played
+		set Eve focus to [Tyke]
+		wait until 0.5 seconds
+		set Eve focus to [CaveOfDojo]
+		move Eve position to [Waypoint1] radius 0
+		wait until 2 seconds
+		set Eve focus to [Tyke]
+		Tyke play ANM_A_HORSE_DEADRHS loop 1
+		MyCreature play ANM_A_HORSE_DEADRHS loop 1
+		wait until 1 seconds
+		set Eve focus to [CentreOfDojo]
+		wait until 2 seconds
+		set Tyke focus to [MyCreature]
+		force Tyke CREATURE_LOOK_FOREVER MyCreature
+		wait until 0.1 seconds
+		set MyCreature focus to [Tyke]
+		force MyCreature CREATURE_LOOK_FOREVER Tyke
+		wait until 0.1 seconds
+		eject evil spirit
+		say HELP_TEXT_EVE_MEETING_90
+		MyCreature play ANM_A_COW_DEAD_ON_RHS loop 1
+		Tyke play ANM_A_COW_DEAD_ON_RHS loop 1
+		wait until MyCreature played
+		wait until Tyke played
+		wait until read
+		eject good spirit
+		say HELP_TEXT_EVE_MEETING_100
+		wait until read
+		say HELP_TEXT_EVE_MEETING_110
+		wait until read
+		say HELP_TEXT_EVE_MEETING_120 with interaction
+		wait until read
+		say HELP_TEXT_EVE_MEETING_130
+		wait until read
+		say HELP_TEXT_EVE_MEETING_140
+		wait until read
+		say HELP_TEXT_EVE_MEETING_150 with interaction
+		wait until read
+		send good spirit home
+		send evil spirit home
+		close dialogue
+		set Tyke master MyCreature
+		enable Tyke follow master
+		delete OutroLion
+		delete OutroCroc
+		delete Eve
+		release MyCreature
+		release Tyke
+		OutroFinished = 1
+	end cinema
+end script Outro
+
+begin script OutroCreateCreature(Actor, CreatureType, Pos, Scale, Strength, Alignment)
+	ActorToUse = 0
+	// Original array.
+	// ThisCreature[18]
+	ThisCreature[19]
+start
+	ThisCreature[0] = variable CREATURE_TYPE_COW
+	ThisCreature[1] = variable CREATURE_TYPE_WOLF
+	ThisCreature[2] = variable CREATURE_TYPE_GORILLA
+	ThisCreature[3] = variable CREATURE_TYPE_POLAR_BEAR
+	ThisCreature[4] = variable CREATURE_TYPE_CHICKEN
+	ThisCreature[5] = variable CREATURE_TYPE_LION
+	ThisCreature[6] = variable CREATURE_TYPE_SHEEP
+	ThisCreature[7] = variable CREATURE_TYPE_APE
+	ThisCreature[8] = variable CREATURE_TYPE_TIGER
+	ThisCreature[9] = variable CREATURE_TYPE_TORTOISE
+	ThisCreature[10] = variable CREATURE_TYPE_RHINO
+	ThisCreature[11] = variable CREATURE_TYPE_MANDRILL
+	ThisCreature[12] = variable CREATURE_TYPE_ZEBRA
+	ThisCreature[13] = variable CREATURE_TYPE_CROCODILE
+	ThisCreature[14] = variable CREATURE_TYPE_BEAR
+	ThisCreature[15] = variable CREATURE_TYPE_LEOPARD
+	ThisCreature[16] = variable CREATURE_TYPE_CHIMP
+	ThisCreature[17] = variable CREATURE_TYPE_HORSE
+	ThisCreature[18] = variable CREATURE_TYPE_OGRE // Add Ogre in too.
+	if Actor == EveActor
+		ActorToUse = Eve
+		ActorToUse = create SCRIPT_OBJECT_TYPE_FEMALE_CREATURE CREATURE_TYPE_TIGER at [Pos]
+	elsif Actor == LionActor
+		ActorToUse = OutroLion
+	elsif Actor == CrocActor
+		ActorToUse = OutroCroc
+	elsif Actor == TykeActor
+		ActorToUse = create young creature from MyCreature with OldTyke knowledge at [Pos]
+	end if
+	if Actor != EveActor and Actor != TykeActor
+		if CreatureType == ThisCreature[0]
+			ActorToUse = create creature from creature MyCreature 1 at [Pos] constant ThisCreature[0]
+		elsif CreatureType == ThisCreature[1]
+			ActorToUse = create creature from creature MyCreature 1 at [Pos] constant ThisCreature[1]
+		elsif CreatureType == ThisCreature[2]
+			ActorToUse = create creature from creature MyCreature 1 at [Pos] constant ThisCreature[2]
+		elsif CreatureType == ThisCreature[3]
+			ActorToUse = create creature from creature MyCreature 1 at [Pos] constant ThisCreature[3]
+		elsif CreatureType == ThisCreature[4]
+			ActorToUse = create creature from creature MyCreature 1 at [Pos] constant ThisCreature[4]
+		elsif CreatureType == ThisCreature[5]
+			ActorToUse = create creature from creature MyCreature 1 at [Pos] constant ThisCreature[5]
+		elsif CreatureType == ThisCreature[6]
+			ActorToUse = create creature from creature MyCreature 1 at [Pos] constant ThisCreature[6]
+		elsif CreatureType == ThisCreature[7]
+			ActorToUse = create creature from creature MyCreature 1 at [Pos] constant ThisCreature[7]
+		elsif CreatureType == ThisCreature[8]
+			ActorToUse = create creature from creature MyCreature 1 at [Pos] constant ThisCreature[8]
+		elsif CreatureType == ThisCreature[9]
+			ActorToUse = create creature from creature MyCreature 1 at [Pos] constant ThisCreature[9]
+		elsif CreatureType == ThisCreature[10]
+			ActorToUse = create creature from creature MyCreature 1 at [Pos] constant ThisCreature[10]
+		elsif CreatureType == ThisCreature[11]
+			ActorToUse = create creature from creature MyCreature 1 at [Pos] constant ThisCreature[11]
+		elsif CreatureType == ThisCreature[12]
+			ActorToUse = create creature from creature MyCreature 1 at [Pos] constant ThisCreature[12]
+		elsif CreatureType == ThisCreature[13]
+			ActorToUse = create creature from creature MyCreature 1 at [Pos] constant ThisCreature[13]
+		elsif CreatureType == ThisCreature[14]
+			ActorToUse = create creature from creature MyCreature 1 at [Pos] constant ThisCreature[14]
+		elsif CreatureType == ThisCreature[15]
+			ActorToUse = create creature from creature MyCreature 1 at [Pos] constant ThisCreature[15]
+		elsif CreatureType == ThisCreature[16]
+			ActorToUse = create creature from creature MyCreature 1 at [Pos] constant ThisCreature[16]
+		elsif CreatureType == ThisCreature[17]
+			ActorToUse = create creature from creature MyCreature 1 at [Pos] constant ThisCreature[17]
+		//(Custom) Add Ogre support.
+		elsif CreatureType == ThisCreature[18]
+			ActorToUse = create creature from creature MyCreature 1 at [Pos] constant ThisCreature[18]
+		end if
+	end if
+	set ActorToUse fade in time 2
+	SCALE of ActorToUse = Scale
+	STRENGTH of ActorToUse = Strength
+	ALIGNMENT of ActorToUse = Alignment
+	if Actor == EveActor
+		Eve = ActorToUse
+	elsif Actor == LionActor
+		OutroLion = ActorToUse
+	elsif Actor == CrocActor
+		OutroCroc = ActorToUse
+	elsif Actor == TykeActor
+		Tyke = ActorToUse
+	end if
+end script OutroCreateCreature
+
+begin script OutroMoveCreatureFromDojoCave(Actor, CreatureType, Pos, FinalSize)
+	CreatureAtFinalPos = 0
+	ActorToUse = 0
+	CreatureInCavePos = 0
+	CreatureSubType = 0
+	MyCreatureStrength = 0
+	LookPos = marker at [CentreOfDojo] + [0, 10, 0]
+start
+	CreatureInCavePos = marker at [CentreOfDojo] - [CaveOfDojo]
+	CreatureSubType = variable get MyCreature sub type
+	MyCreatureStrength = STRENGTH of MyCreature
+	if Actor == EveActor
+		run script OutroCreateCreature(EveActor, CreatureType, CreatureInCavePos, 0.2, MyCreatureStrength * EveMultiplier, 0)
+		ActorToUse = Eve
+	elsif Actor == LionActor
+		run script OutroCreateCreature(LionActor, CreatureType, CreatureInCavePos, 0.2, 1, 0)
+		ActorToUse = OutroLion
+	elsif Actor == CrocActor
+		run script OutroCreateCreature(CrocActor, CreatureType, CreatureInCavePos, 0.2, 1, -0.5)
+		ActorToUse = OutroCroc
+	elsif Actor == TykeActor
+		run script OutroCreateCreature(TykeActor, CreatureType, CreatureInCavePos, 0.2, MyCreatureStrength * TykeMultiplier, 1)
+		ActorToUse = Tyke
+	end if
+	if ActorToUse exists
+		disable ActorToUse navigation
+		force ActorToUse CREATURE_IDLE ActorToUse
+		force ActorToUse CREATURE_LOOK_FOREVER LookPos
+		wait until 1 seconds
+		set ActorToUse focus to [LookPos]
+		while CreatureAtFinalPos == 0
+			move ActorToUse position to [Pos] radius 0
+			if SCALE of ActorToUse < FinalSize
+				SCALE of ActorToUse += 0.1
+			end if
+			if get distance from [ActorToUse] to [Pos] < 1
+				CreatureAtFinalPos = 1
+			end if
+		end while
+		enable ActorToUse navigation
+	end if
+end script OutroMoveCreatureFromDojoCave
+
+begin script LookFromInsideCreaturesHead(Height, Pos)
+	FollowCreature = 1
+	CamPos = 0
+	AdjustedHeight = 0
+	AdjustedSway = 0
+	IncreaseHeight = 1
+	DoShake = 0
+	HeightChangeSteps = 0.1
+	TimePerRaise = 0.5
+	PauseTime = 0.5
+	RaiseLowerTimer = create timer for 0 seconds
+	PauseAtHeightTimer = create timer for 0 seconds
+start
+	begin known cinema
+		AdjustedHeight = Height
+		set camera position to [MyCreature] + [0, Height, 0]
+		set camera focus to [OutroCroc] + [0, Height, 0]
+		set fade in time 1
+		while FollowCreature == 1
+			CamPos = marker at (get target from [CentreOfDojo] to [MyCreature] distance Height / 2 angle 180)
+			if get RaiseLowerTimer time remaining <= 0
+				IncreaseHeight = -IncreaseHeight
+				set RaiseLowerTimer time to TimePerRaise seconds
+				if IncreaseHeight > 0
+					DoShake = 1
+				else
+					DoShake = 0
+				end if
+			end if
+			if get PauseAtHeightTimer time remaining <= 0
+				if IncreaseHeight == 1
+					AdjustedHeight += HeightChangeSteps
+				else
+					AdjustedHeight -= HeightChangeSteps
+				end if
+			end if
+			if get PauseAtHeightTimer time remaining > 0
+				set RaiseLowerTimer time to TimePerRaise seconds
+			end if
+			if DoShake == 1
+				set PauseAtHeightTimer time to PauseTime seconds
+				shake camera at (camera position) radius 20 amplitude 0.5 time 0.1
+				DoShake = 0
+			end if
+			move camera position to [CamPos] + [0, AdjustedHeight, 0] time 0.1
+			move camera focus to [OutroCroc] + [0, Height, 0] time 0.1
+			if get distance from [MyCreature] to [Pos] < 1
+				FollowCreature = 0
+			end if
+		end while
+		shake camera at (camera position) radius 20 amplitude 1 time 0.1
+	end known cinema
+end script LookFromInsideCreaturesHead
+
+begin script CreateTrees(Pos)
+	Counter = 0
+	FirstOffsetFromPos = 0
+	SecondOffsetFromPos = 0
+start
+	while Counter < 10
+		FirstOffsetFromPos = number from 1 to 30
+		SecondOffsetFromPos = number from 1 to 30
+		OutroTree[Counter] = create TREE TREE_INFO_CONIFER at [Pos] + ([FirstOffsetFromPos, SecondOffsetFromPos])
+		SCALE of OutroTree[Counter] = 0.001
+		Counter++
+	end while
+end script CreateTrees
+
+begin script GrowTree(Tree)
+	Increment = 0
+	TreeGrown = 0
+start
+	Increment = number from 1 to 5
+	Increment = Increment / 10
+	while TreeGrown == 0
+		if SCALE of Tree >= 1
+			TreeGrown = 1
+		else
+			SCALE of Tree += Increment
+		end if
+	end while
+end script GrowTree
+
+begin script RainStorm(Pos)
+	RainStorm = 0
+	Duration = 0
+start
+	RainStorm = create SCRIPT_OBJECT_TYPE_WEATHER_THING WEATHER_INFO_MONSOON at [Pos]
+	set RainStorm properties degrees 15 rainfall 1 snowfall 0 overcast 0.9 fallspeed 1
+	set RainStorm properties time 2000000 fade 10
+	set RainStorm properties clouds 6 shade 1.7 height 180
+	set RainStorm properties inner 200 outer 400 calm 0
+	disable RainStorm affected by wind
+	wait until 35 seconds
+	enable RainStorm affected by wind
+	set RainStorm properties time 8 fade 12
+	RainStormDone = 1
+	delete RainStorm
+end script RainStorm
+
+begin script SnowStorm(Pos)
+	SnowStorm = 0
+start
+	SnowStorm = create SCRIPT_OBJECT_TYPE_WEATHER_THING WEATHER_INFO_BLIZZARD at [Pos]
+	set SnowStorm properties degrees 15 rainfall 0 snowfall 1 overcast 0.2 fallspeed 1
+	set SnowStorm properties time 2000000 fade 10
+	set SnowStorm properties clouds 6 shade 1.7 height 180
+	set SnowStorm properties sheetmin 0 sheetmax 0 forkmin 0 forkmax 0
+	set SnowStorm properties inner 200 outer 400 calm 0
+	disable SnowStorm affected by wind
+	wait until 35 seconds
+	enable SnowStorm affected by wind
+	set SnowStorm properties time 8 fade 12
+	SnowStormDone = 1
+	delete SnowStorm
+end script SnowStorm
+
+begin script Butterflies(Pos)
+	Butterflies = 0
+	Duration = 0
+start
+	Duration = number from 30 to 90
+	Butterflies = create special effect SPOT_VISUAL_BUTTERFLIES at [Pos] time Duration
+end script Butterflies
+
+begin script CreateForresters(Pos)
+	Count = 0
+	FirstOffsetFromPos = 0
+	SecondOffsetFromPos = 0
+start
+	while Count < 5
+		FirstOffsetFromPos = number from 1 to 5
+		SecondOffsetFromPos = number from 1 to 5
+		Forrester[Count] = create VILLAGER VILLAGER_INFO_EGYPTIAN_FORESTER_MALE at [Pos] + ([FirstOffsetFromPos, SecondOffsetFromPos])
+		set Forrester[Count] carrying CARRIED_OBJECT_AXE
+		Count++
+	end while
+end script CreateForresters
+
+begin script ChopDownTree(Who, Tree)
+	DeadTree = 0
+	TreePos = marker at [Tree]
+	ScaleOfTree = 0
+	WaitTimer = 0
+	ChoppedTree = 0
+	ForresterPos = marker at [1044.835, 126.2139, 1184.1884]
+start
+	WaitTimer = number from 5 to 15
+	while ChoppedTree == 0
+		wait until WaitTimer seconds
+		move Who position to [Tree] - ([1, 1]) radius 0
+		wait until get distance from [Who] to [Tree] < 2
+		set Who focus to [Tree]
+		wait until 0.1 seconds
+		Who play ANM_P_CHOPPING_TREE loop 2
+		ChoppingDownTrees = 1
+		wait until Who played
+		ScaleOfTree = SCALE of Tree
+		delete Tree
+		DeadTree = create SCRIPT_OBJECT_TYPE_DEAD_TREE TREE_INFO_CONIFER at [TreePos]
+		SCALE of DeadTree = ScaleOfTree
+		ChoppedTree = 1
+	end while
+	wait until not DeadTree is FLYING
+	move Who position to [ForresterPos] radius 0
+	wait until get distance from [Who] to [ForresterPos] < 20 or 30 seconds
+	delete Who
+end script ChopDownTree
+
+begin script FlashyBeamStuff
+	Fire = 0
+	BeamPos[18]
+	BeamDist = 75
+	DojoCentreBeam = marker at [130, 61, 100]
+	DojoCaveBeam = marker at [1253.2899, 57.5075, 1021.62]
+	Count = 0
+start
+	BeamPos[0] = marker at (get target from [DojoCentreBeam] to [DojoCaveBeam] distance BeamDist angle 90)
+	BeamPos[1] = marker at (get target from [DojoCentreBeam] to [DojoCaveBeam] distance BeamDist angle 110)
+	BeamPos[2] = marker at (get target from [DojoCentreBeam] to [DojoCaveBeam] distance BeamDist angle 130)
+	BeamPos[3] = marker at (get target from [DojoCentreBeam] to [DojoCaveBeam] distance BeamDist angle 150)
+	BeamPos[4] = marker at (get target from [DojoCentreBeam] to [DojoCaveBeam] distance BeamDist angle 170)
+	BeamPos[5] = marker at (get target from [DojoCentreBeam] to [DojoCaveBeam] distance BeamDist angle 190)
+	BeamPos[6] = marker at (get target from [DojoCentreBeam] to [DojoCaveBeam] distance BeamDist angle 210)
+	BeamPos[7] = marker at (get target from [DojoCentreBeam] to [DojoCaveBeam] distance BeamDist angle 230)
+	BeamPos[8] = marker at (get target from [DojoCentreBeam] to [DojoCaveBeam] distance BeamDist angle 250)
+	BeamPos[9] = marker at (get target from [DojoCentreBeam] to [DojoCaveBeam] distance BeamDist angle 270)
+	BeamPos[10] = marker at (get target from [DojoCentreBeam] to [DojoCaveBeam] distance BeamDist angle 290)
+	BeamPos[11] = marker at (get target from [DojoCentreBeam] to [DojoCaveBeam] distance BeamDist angle 310)
+	BeamPos[12] = marker at (get target from [DojoCentreBeam] to [DojoCaveBeam] distance BeamDist angle 330)
+	BeamPos[13] = marker at (get target from [DojoCentreBeam] to [DojoCaveBeam] distance BeamDist angle 350)
+	BeamPos[14] = marker at (get target from [DojoCentreBeam] to [DojoCaveBeam] distance BeamDist angle 10)
+	BeamPos[15] = marker at (get target from [DojoCentreBeam] to [DojoCaveBeam] distance BeamDist angle 30)
+	BeamPos[16] = marker at (get target from [DojoCentreBeam] to [DojoCaveBeam] distance BeamDist angle 50)
+	BeamPos[17] = marker at (get target from [DojoCentreBeam] to [DojoCaveBeam] distance BeamDist angle 70)
+	begin loop
+		Count = 0
+		while Count < 18
+			Fire = create special effect SPOT_VISUAL_SEE_THIS_BEAM at [BeamPos[Count]] time 0.3
+			Count++
+		end while
+	end loop
+end script FlashyBeamStuff
+
+begin script Outro2
+	Barrel = 0
+	Fireball = 0
+	Bloke1 = 0
+	Bloke2 = 0
+	House = 0
+	Mother = 0
+	Father2 = 0
+	Son = 0
+	Wife = 0
+	Tree1 = create TREE TREE_INFO_CONIFER at [951.489, 115.622, 1079.071]
+	Tree2 = create TREE TREE_INFO_CONIFER at [948.173, 116.002, 1083.223]
+	Tree3 = create TREE TREE_INFO_CONIFER at [949.538, 116.481, 1088.988]
+	Tree4 = create TREE TREE_INFO_CONIFER at [953.733, 115.614, 1079.775]
+	Snow = 0
+	Grave = 0
+	OEve = 0
+	EvePos = marker at [1221.473, 60.97, 970.429]
+	ScaleOEve = 0
+	CreatureSon = 0
+	//ThisCreature[18]	//This is never read
+	Croc = 0
+	Lion = 0
+	Effect = 0
+	Centre = marker at [1437.818, 50.95, 1627.635]
+	EPos = 0
+start
+	begin cinema
+		set fade red 0 green 0 blue 0 time 2
+		wait until fade ready
+		Croc = create dumb creature from creature MyCreature 1 at [1296.392, 60.97, 996.424] CREATURE_TYPE_CROCODILE
+		set Croc focus to [1263.484, 60.97, 1004.471]
+		Lion = create dumb creature from creature MyCreature 1 at [1240.002, 60.742, 1063.421] CREATURE_TYPE_LION
+		SCALE of Croc = 2
+		STRENGTH of Croc = 1
+		ALIGNMENT of Croc = -0.5
+		SCALE of Lion = 2
+		set Lion focus to [1263.484, 60.97, 1004.471]
+		/*ThisCreature[0] = variable UNK1
+		ThisCreature[1] = variable UNK4
+		ThisCreature[2] = variable UNK16
+		ThisCreature[3] = variable UNK10
+		ThisCreature[4] = variable UNK17
+		ThisCreature[5] = variable UNK5
+		ThisCreature[6] = variable UNK11
+		ThisCreature[7] = variable UNK0
+		ThisCreature[8] = variable UNK2
+		ThisCreature[9] = variable UNK7
+		ThisCreature[10] = variable UNK15
+		ThisCreature[11] = variable UNK14
+		ThisCreature[12] = variable UNK8
+		ThisCreature[13] = variable UNK18
+		ThisCreature[14] = variable UNK9
+		ThisCreature[15] = variable UNK3
+		ThisCreature[16] = variable UNK12
+		ThisCreature[17] = variable UNK6*/
+		OEve = create SCRIPT_OBJECT_TYPE_FEMALE_CREATURE CREATURE_TYPE_TIGER at [EvePos]
+		MyCreature = get player 1 creature
+		SCALE of OEve = SCALE of MyCreature
+		HEIGHT of OEve = HEIGHT of MyCreature
+		STRENGTH of OEve = STRENGTH of MyCreature
+		ALIGNMENT of OEve = ALIGNMENT of MyCreature
+		set OEve focus to [1247.496, 60.873, 1021.232]
+		House = create HOUSE ABODE_INFO_CELTIC_SHACK_Y at [944.815, 115.936, 1085.602]
+		ANGLE of House = 120
+		ALTITUDE of House = 0.2
+		SCALE of Tree1 = 0.3
+		SCALE of Tree2 = 0.2
+		SCALE of Tree3 = 0.3
+		SCALE of Tree4 = 0.3
+		Son = create VILLAGER VILLAGER_INFO_GREEK_FORESTER_MALE at [950.413, 116.58, 1091.821]
+		AGE of Son = 6
+		Wife = create VILLAGER VILLAGER_INFO_GREEK_HOUSEWIFE_FEMALE at [100.532, 115.329, 100.643]
+		AGE of Wife = 6
+		Father2 = create VILLAGER NOMADE at [950.76, 116.269, 1085.388]
+		set Father2 focus to [892.751, 110.511, 1004.986]
+		Father2 play ANM_P_AMBIENT1 loop -1
+		Mother = create VILLAGER VILLAGER_INFO_CREATURE_TRAINER at [951.548, 116.227, 1084.748]
+		set Mother focus to [892.751, 110.511, 1004.986]
+		Mother play ANM_P_AMBIENT2 loop -1
+		if TykeFree == 0
+			TykeFree = 4
+		end if
+		set camera position to [1274.835, 68.229, 1002.324]
+		set camera focus to [1337.168, 58.644, 986.272]
+		move camera position to [1275.86, 71.454, 1002.06] time 12
+		move camera focus to [1332.98, 98.947, 987.35] time 12
+		set fade in time 1
+		wait until fade ready
+		wait until 1 seconds
+		say HELP_TEXT_EVE_MEETING_10 by Croc
+		wait until read
+		say HELP_TEXT_EVE_MEETING_11 by Croc
+		wait until read
+		say HELP_TEXT_EVE_MEETING_12 by Croc
+		wait until read
+		say HELP_TEXT_EVE_MEETING_13 by Croc
+		wait until read
+		say HELP_TEXT_EVE_MEETING_14 by Croc
+		wait until read
+		say HELP_TEXT_EVE_MEETING_20 by Croc
+		wait until read
+		clear dialogue
+		start jc special SJC_SWITCH_OFF_INFLUENCE
+		disable MyCreature navigation
+		disable OEve navigation
+		enable Mother high graphics detail
+		enable Father2 high graphics detail
+		enable Son high graphics detail
+		enable Wife high graphics detail
+		set camera lens 80 time 0
+		set camera position to [1205.831, 533.705, 981.341]
+		set camera focus to [1278.439, 61.951, 1040.784]
+		start music MUSIC_TYPE_SCRIPT_CREATURE_END_SEQUENCE
+		wait until 2 seconds
+		run background script FlashyBeamStuff
+		wait until 3 seconds
+		move camera position to [1308.687, 118.202, 1065.55] time 20
+		move camera focus to [1349.907, 50.392, 1003.574] time 20
+		wait until 10 seconds
+		Croc play ANM_PIED_PIPER_DANCE_STAND loop 20
+		ScaleOEve = (HEIGHT of OEve) * 0.6
+		move camera position to [1240.515, 64.983, 1003.905] time 20
+		move camera focus to [OEve] + [0, ScaleOEve, 0] time 20
+		set camera lens 70 time 60
+		wait until camera ready
+		set camera lens 70 time 10
+		say HELP_TEXT_EVE_MEETING_30 by OEve
+		wait until read
+		OEve play ANM_PIED_PIPER_DANCE_STAND loop 1
+		say HELP_TEXT_EVE_MEETING_40 by OEve
+		wait until read
+		say HELP_TEXT_EVE_MEETING_50 by OEve
+		wait until read
+		OEve play ANM_A_COW_LANDED_RIGHT_SIDE loop 1
+		say HELP_TEXT_EVE_MEETING_60 by OEve
+		wait until read
+		clear dialogue
+		set fade red 0 green 0 blue 0 time 2
+		wait until fade ready
+		set game time 13
+		set camera position to [981.279, 124.381, 1094.071]
+		set camera focus to [912.693, 126.046, 1017.443]
+		set fade in time 1
+		set MyCreature position to [989.692, 104.599, 1020.134]
+		set OEve position to [986.978, 108.909, 1039.904]
+		set OEve focus to [947.246, 112.474, 1061.091]
+		move OEve position to [934.006, 113.842, 1063.137] radius 0
+		set MyCreature focus to [934.006, 113.842, 1063.137]
+		move MyCreature position to [947.246, 112.474, 1061.091] radius 0
+		eject good spirit
+		say HELP_TEXT_EVE_MEETING_70
+		wait until read
+		eject evil spirit
+		say HELP_TEXT_EVE_MEETING_80
+		wait until get distance from [OEve] to [934.006, 113.842, 1063.137] == 0
+		set OEve focus to [959.696, 111.916, 1060.205]
+		force MyCreature CREATURE_KISS_FRIEND OEve
+		wait until 6 seconds
+		wait until read
+		send good spirit home
+		send evil spirit home
+		clear dialogue
+		set OEve focus to [722.798, 74.608, 797.487]
+		set MyCreature focus to [722.798, 74.608, 797.487]
+		move OEve position to [568.567, 58.766, 645.837] radius 0
+		wait until 2 seconds
+		move MyCreature position to [722.798, 74.608, 797.487] radius 0
+		start music MUSIC_TYPE_SCRIPT_CREATURE_GUIDE
+		move camera position to [957.412, 117.835, 1089.762] time 10
+		move camera focus to [879.954, 110.455, 1022.498] time 10
+		wait until camera ready
+		wait until 3 seconds
+		set Mother focus to [Father2]
+		set Father2 focus to [Mother]
+		wait until 1 seconds
+		Mother play ANM_P_HUG loop 1
+		Father2 play ANM_P_HUG loop 1
+		set Wife position to [957.532, 115.329, 1079.643]
+		move Son position to [951.219, 116.381, 1087.065] radius 0
+		SPEED of Son = 0.5
+		set Son anim ANM_P_RUN_MAN
+		wait until get distance from [Son] to [951.219, 116.381, 1087.065] == 0
+		Son play ANM_P_JUMP_AT_HAND loop 1
+		wait until Son played
+		move Son position to [954.49, 116.221, 1084.68] radius 0
+		wait until get distance from [Son] to [954.49, 116.221, 1084.68] == 0
+		SPEED of Son = 0.5
+		set Mother focus to [892.751, 110.511, 1004.986]
+		set Father2 focus to [892.751, 110.511, 1004.986]
+		Son play ANM_P_JUMP_AT_HAND loop 1
+		wait until 1 seconds
+		move Wife position to [954.84, 116.138, 1084.113] radius 0
+		SPEED of Wife = 0.4
+		set Wife anim ANM_P_RUN_MAN
+		wait until get distance from [Wife] to [954.84, 116.138, 1084.113] == 0
+		Wife play ANM_P_BLOW_RASPBERRY loop 1
+		wait until Wife played
+		move Wife position to [952.043, 116.58, 1094.937] radius 0
+		SPEED of Wife = 0.4
+		set Wife anim ANM_P_RUN_MAN
+		wait until 1 seconds
+		move Son position to [952.043, 116.58, 1094.937] radius 0
+		SPEED of Son = 0.4
+		set Son anim ANM_P_RUN_MAN
+		set fade red 0 green 0 blue 0 time 2
+		wait until fade ready
+		SCALE of Tree1 = 0.5
+		SCALE of Tree2 = 0.4
+		SCALE of Tree3 = 0.4
+		SCALE of Tree4 = 0.5
+		wait until 1 seconds
+		set clipping window across 0.02 down 0.53 width 0.96 height 0.3 time 0.1
+		set game time 7.3
+		set camera lens 27 time 0
+		set camera position to [2705.25, 1515.495, 3568.394]
+		set camera focus to [2664.092, 1519.153, 3543.977]
+		move camera position to [2705.25, 1515.495, 3568.394] time 40
+		move camera focus to [2682.107, 1519.153, 3525.89] time 40
+		set fade in time 3
+		wait until fade ready
+		wait until 5 seconds
+		set fade red 0 green 0 blue 0 time 2
+		wait until fade ready
+		clear clipping window time 0.5
+		set camera lens 70 time 0
+		set camera position to [957.412, 117.835, 1089.762]
+		set camera focus to [879.954, 110.455, 1022.498]
+		wait until 1 seconds
+		set game time 7.3
+		set Mother position to [950.285, 116.276, 1085.492]
+		set Son position to [952.091, 116.072, 1082.437]
+		set Father2 position to [954.512, 116.507, 1088.92]
+		set Wife position to [951.154, 116.062, 1082.303]
+		Mother play ANM_P_SCRUBBS loop -1
+		Son play ANM_P_INSPECT_OBJECT_2 loop -1
+		Father2 play ANM_P_FARMER_HARVESTING loop 2
+		Wife play ANM_P_INSPECT_OBJECT_1 loop -1
+		set Mother focus to [951.365, 116.407, 1087.427]
+		set Son focus to [950.481, 116.143, 1083.486]
+		set Father2 focus to [959.472, 116.491, 1089.071]
+		set Wife focus to [953.794, 116.263, 1085.311]
+		set fade in time 2
+		wait until Father2 played
+		Father2 play ANM_P_OVERWORKED1 loop 1
+		wait until Father2 played
+		Father2 play ANM_P_FARMER_HARVESTING loop -1
+		set fade red 0 green 0 blue 0 time 2
+		Snow = create SCRIPT_OBJECT_TYPE_WEATHER_THING WEATHER_INFO_BLIZZARD at [House]
+		wait until fade ready
+		set Father2 position to [947.064, 116.399, 1090.29]
+		Grave = create FEATURE TOMBSTONE at [949.302, 116.057, 1082.918]
+		set Mother position to [951.428, 116.08, 1082.543]
+		set Mother focus to [Grave]
+		set Son position to [951.425, 116.132, 1083.345]
+		set Son focus to [Grave]
+		SCALE of Tree1 = 0.6
+		SCALE of Tree2 = 0.5
+		SCALE of Tree3 = 0.4
+		SCALE of Tree4 = 0.5
+		SCALE of Grave = 0.13
+		ANGLE of Grave = 340
+		wait until 1 seconds
+		set clipping window across 0.02 down 0.53 width 0.96 height 0.3 time 0.1
+		set game time 7.3
+		set camera lens 27 time 0
+		set camera position to [2705.25, 1515.495, 3568.394]
+		set camera focus to [2670.488, 1519.153, 3535.952]
+		move camera position to [2705.25, 1515.495, 3568.394] time 30
+		move camera focus to [2682.107, 1519.153, 3525.89] time 30
+		set fade in time 3
+		wait until fade ready
+		wait until 5 seconds
+		set fade red 0 green 0 blue 0 time 2
+		wait until fade ready
+		clear clipping window time 0.5
+		set camera lens 70 time 0
+		set camera position to [957.412, 117.835, 1089.762]
+		set camera focus to [879.954, 110.455, 1022.498]
+		wait until 1 seconds
+		Mother play ANM_P_STAND_DESPAIR_2 loop 2
+		Son play ANM_P_AMBIENT2 loop -1
+		set Wife position to [949.396, 116.135, 1083.995]
+		set Wife focus to [Grave]
+		Wife play ANM_P_MOURNING loop -1
+		set game time 10
+		set fade in time 2
+		wait until Mother played
+		Mother play ANM_P_STAND_DESPAIR_2 loop 2
+		set fade red 0 green 0 blue 0 time 2
+		wait until fade ready
+		delete Snow
+		SCALE of Tree1 = 0.9
+		SCALE of Tree2 = 0.9
+		SCALE of Tree3 = 1
+		SCALE of Tree4 = 1
+		wait until 1 seconds
+		set clipping window across 0.02 down 0.53 width 0.96 height 0.3 time 0.1
+		set game time 7.3
+		set camera lens 27 time 0
+		set camera position to [2705.25, 1515.495, 3568.394]
+		set camera focus to [2675.656, 1519.153, 3531.217]
+		move camera position to [2705.25, 1515.495, 3568.394] time 20
+		move camera focus to [2682.107, 1519.153, 3525.89] time 30
+		set fade in time 3
+		wait until fade ready
+		wait until 5 seconds
+		set fade red 0 green 0 blue 0 time 2
+		wait until fade ready
+		clear clipping window time 0.5
+		set camera lens 70 time 0
+		set camera position to [957.412, 117.835, 1089.762]
+		set camera focus to [879.954, 110.455, 1022.498]
+		wait until 1 seconds
+		set game time 12
+		set Son position to [950.76, 116.269, 1085.388]
+		set Son focus to [892.751, 110.511, 1004.986]
+		AGE of Son = 12
+		Son play ANM_P_AMBIENT1 loop -1
+		set Mother position to [952.139, 116.232, 1084.834]
+		set Mother focus to [892.751, 110.511, 1004.986]
+		Mother play ANM_P_AMBIENT2 loop -1
+		set Wife position to [952.193, 116.198, 1084.319]
+		set Wife focus to [892.751, 110.511, 1004.986]
+		AGE of Wife = 10
+		Wife play ANM_P_TALKING_AND_POINTING loop -1
+		set OEve focus to [981.279, 124.381, 1094.071]
+		set OEve position to [873.165, 112.772, 1025.014]
+		move OEve position to [940.87, 113.68, 1066.737] radius 0
+		set MyCreature focus to [953.41, 112.298, 1063.05]
+		set MyCreature position to [830.906, 109.33, 989.11]
+		move MyCreature position to [958.65, 110.929, 1052.165] radius 0
+		set fade in time 2
+		wait until 5 seconds
+		move camera position to [990.773, 125.695, 1093.495] time 10
+		move camera focus to [937.796, 117.966, 1041.273] time 10
+		MyCreature = get player 1 creature
+		CreatureSon = create young creature from MyCreature with Tyke knowledge at [918.995, 104.813, 1003.117]
+		SCALE of CreatureSon = (SCALE of MyCreature) * 0.3
+		STRENGTH of CreatureSon = (STRENGTH of MyCreature) * 0.3
+		set CreatureSon focus to [830.906, 109.33, 989.11]
+		move CreatureSon position to [953.41, 112.298, 1063.05] radius 0
+		wait until get distance from [CreatureSon] to [953.41, 112.298, 1063.05] == 0
+		MyCreature play ANM_A_COW_DEAD_ON_RHS loop 1
+		set OEve focus to [CreatureSon]
+		wait until OEve played
+		OEve play ANM_SWALLOW_FLAP loop 1
+		eject evil spirit
+		eject good spirit
+		stop music
+		say HELP_TEXT_EVE_MEETING_90
+		wait until read
+		OEve play ANM_A_COW_DEAD_ON_RHS loop 1
+		say HELP_TEXT_EVE_MEETING_100
+		wait until read
+		set CreatureSon focus to [940.87, 113.68, 1066.737]
+		say HELP_TEXT_EVE_MEETING_110
+		wait until read
+		MyCreature play ANM_A_COW_DEAD_ON_RHS loop 1
+		say HELP_TEXT_EVE_MEETING_120
+		wait until read
+		set CreatureSon focus to [958.65, 110.929, 1052.165]
+		say HELP_TEXT_EVE_MEETING_130
+		wait until read
+		OEve play ANM_A_COW_DEAD_ON_RHS loop 1
+		MyCreature play ANM_A_COW_LANDED_RIGHT_SIDE loop 1
+		set CreatureSon focus to [940.87, 113.68, 1066.737]
+		say HELP_TEXT_EVE_MEETING_140
+		wait until read
+		set CreatureSon focus to [958.65, 110.929, 1052.165]
+		say HELP_TEXT_EVE_MEETING_150
+		wait until read
+		send good spirit home
+		send evil spirit home
+		close dialogue
+		set fade red 0 green 0 blue 0 time 2
+		wait until fade ready
+		delete OEve
+		delete Croc
+		delete Lion
+		run script LatinCreatures
+		start jc special SJC_SWITCH_ON_INFLUENCE
+		set camera position to [990.773, 125.695, 1093.495]
+		set camera focus to [937.796, 117.966, 1041.273]
+	end cinema
+	wait until widescreen transition complete
+	OutroFinished = 1
+	set fade in time 2
+	wait until fade ready
+	release MyCreature
+	release CreatureSon
+	release Tyke
+	OldTyke = Tyke
+	Tyke = CreatureSon
+end script Outro2
+
+begin script LatinCreatures
+	CreaturePos = 0
+	EndCreature = 0
+start
+	begin known cinema
+		start music MUSIC_TYPE_OUTRO
+		CreaturePos = marker at [1429.959, 56.955, 1577.732]
+		set draw text colour red 255 green 255 blue 255
+		disable sound effects
+		set clipping window across 0.5 down 0.2 width 0.4 height 0.6 time 0.1
+		EndCreature = create DUMB_CREATURE CREATURE_TYPE_COW at [CreaturePos]
+		SCALE of EndCreature = 2
+		set EndCreature focus to [1404.956, 47.931, 1664.774]
+		set camera position to [1424.095, 83.69, 1588.992]
+		set camera focus to [1504.337, 100.79, 1454.792]
+		move camera position to [1424.911, 83.864, 1587.627] time 15
+		move camera focus to [1504.831, 105.958, 1453.965] time 15
+		wait until 2 seconds
+		set fade in time 1
+		wait until fade ready
+		draw text HELP_TEXT_ENDOFGAME_QUOTES_01 across 0.2 down 0.2 width 0.3 height 0.1 size 0.075 fade in time 2 seconds
+		wait until camera ready
+		fade all draw text time 1 seconds
+		set fade red 0 green 0 blue 0 time 1
+		wait until fade ready
+		delete EndCreature
+		set clipping window across 0.1 down 0.2 width 0.8 height 0.2 time 0.1
+		EndCreature = create DUMB_CREATURE CREATURE_TYPE_WOLF at [CreaturePos]
+		SCALE of EndCreature = 2
+		set EndCreature focus to [1404.956, 47.931, 1664.774]
+		set camera position to [1428.078, 82.676, 1591.815]
+		set camera focus to [1472.676, 85.538, 1441.025]
+		move camera position to [1425.828, 82.676, 1591.149] time 15
+		move camera focus to [1458.455, 79.248, 1437.336] time 15
+		wait until 2 seconds
+		set fade in time 1
+		wait until fade ready
+		draw text HELP_TEXT_ENDOFGAME_QUOTES_03 across 0.65 down 0.4 width 0.3 height 0.1 size 0.075 fade in time 2 seconds
+		wait until camera ready
+		fade all draw text time 1 seconds
+		set fade red 0 green 0 blue 0 time 1
+		wait until fade ready
+		delete EndCreature
+		set clipping window across 0.1 down 0.5 width 0.4 height 0.3 time 0.1
+		EndCreature = create DUMB_CREATURE CREATURE_TYPE_GORILLA at [CreaturePos]
+		SCALE of EndCreature = 2
+		set EndCreature focus to [1404.956, 47.931, 1664.774]
+		set camera position to [1425.638, 80.857, 1592.388]
+		set camera focus to [1432.341, 98.047, 1436.327]
+		move camera position to [1424.286, 80.463, 1595.911] time 15
+		move camera focus to [1430.989, 97.653, 1439.85] time 15
+		wait until 2 seconds
+		set fade in time 1
+		wait until fade ready
+		draw text HELP_TEXT_ENDOFGAME_QUOTES_05 across 0.5 down 0.75 width 0.3 height 0.1 size 0.075 fade in time 2 seconds
+		wait until camera ready
+		fade all draw text time 1 seconds
+		set fade red 0 green 0 blue 0 time 1
+		wait until fade ready
+		delete EndCreature
+		set clipping window across 0.1 down 0.6 width 0.8 height 0.3 time 0.1
+		EndCreature = create DUMB_CREATURE CREATURE_TYPE_POLAR_BEAR at [CreaturePos]
+		SCALE of EndCreature = 2
+		set EndCreature focus to [1404.956, 47.931, 1664.774]
+		set camera position to [1439.649, 79.711, 1593.084]
+		set camera focus to [1295.013, 122.778, 1549.255]
+		move camera position to [1441.49, 79.163, 1593.642] time 15
+		move camera focus to [1298.246, 127.044, 1550.235] time 15
+		wait until 2 seconds
+		set fade in time 1
+		wait until fade ready
+		draw text HELP_TEXT_ENDOFGAME_QUOTES_07 across 0.1 down 0.5 width 0.8 height 0.1 size 0.075 fade in time 2 seconds
+		wait until camera ready
+		fade all draw text time 1 seconds
+		set fade red 0 green 0 blue 0 time 1
+		wait until fade ready
+		delete EndCreature
+		set clipping window across 0.1 down 0.1 width 0.4 height 0.8 time 0.1
+		EndCreature = create DUMB_CREATURE CREATURE_TYPE_LION at [CreaturePos]
+		SCALE of EndCreature = 2
+		set EndCreature focus to [1404.956, 47.931, 1664.774]
+		set camera position to [1418.834, 82.194, 1591.043]
+		set camera focus to [1440.318, 83.613, 1435.384]
+		move camera position to [1418.846, 72.194, 1590.954] time 15
+		move camera focus to [1440.33, 73.614, 1435.295] time 15
+		wait until 2 seconds
+		set fade in time 1
+		wait until fade ready
+		draw text HELP_TEXT_ENDOFGAME_QUOTES_09 across 0.5 down 0.115 width 0.35 height 0.1 size 0.075 fade in time 2 seconds
+		wait until camera ready
+		fade all draw text time 1 seconds
+		set fade red 0 green 0 blue 0 time 1
+		wait until fade ready
+		delete EndCreature
+		set clipping window across 0.5 down 0.2 width 0.4 height 0.6 time 0.1
+		EndCreature = create DUMB_CREATURE CREATURE_TYPE_SHEEP at [CreaturePos]
+		SCALE of EndCreature = 2
+		set EndCreature focus to [1404.956, 47.931, 1664.774]
+		set camera position to [1443.36, 61.042, 1595.236]
+		set camera focus to [1384.909, 57.433, 1449.414]
+		move camera position to [1437.552, 61.042, 1596.714] time 15
+		move camera focus to [1422.105, 57.433, 1440.375] time 15
+		wait until 2 seconds
+		set fade in time 1
+		wait until fade ready
+		draw text HELP_TEXT_ENDOFGAME_QUOTES_13 across 0.12 down 0.745 width 0.4 height 0.1 size 0.075 fade in time 2 seconds
+		wait until camera ready
+		fade all draw text time 1 seconds
+		set fade red 0 green 0 blue 0 time 1
+		wait until fade ready
+		delete EndCreature
+		set clipping window across 0.1 down 0.2 width 0.8 height 0.2 time 0.1
+		EndCreature = create DUMB_CREATURE CREATURE_TYPE_APE at [CreaturePos]
+		SCALE of EndCreature = 2
+		set EndCreature focus to [1404.956, 47.931, 1664.774]
+		set camera position to [1417.304, 81.059, 1587.341]
+		set camera focus to [1569.429, 56.281, 1614.064]
+		move camera position to [1417.65, 81.059, 1585.371] time 15
+		move camera focus to [1569.775, 56.281, 1612.095] time 15
+		wait until 2 seconds
+		set fade in time 1
+		wait until fade ready
+		draw text HELP_TEXT_ENDOFGAME_QUOTES_15 across 0.1 down 0.4 width 0.8 height 0.1 size 0.075 fade in time 2 seconds
+		wait until camera ready
+		fade all draw text time 1 seconds
+		set fade red 0 green 0 blue 0 time 1
+		wait until fade ready
+		delete EndCreature
+		set clipping window across 0.5 down 0.2 width 0.4 height 0.3 time 0.1
+		EndCreature = create DUMB_CREATURE CREATURE_TYPE_TIGER at [CreaturePos]
+		SCALE of EndCreature = 2
+		set EndCreature focus to [1404.956, 47.931, 1664.774]
+		set camera position to [1420.385, 80.763, 1585.716]
+		set camera focus to [1568.88, 72.153, 1634.146]
+		wait until 2 seconds
+		set fade in time 1
+		wait until fade ready
+		draw text HELP_TEXT_ENDOFGAME_QUOTES_17 across 0.1 down 0.3 width 0.5 height 0.1 size 0.075 fade in time 2 seconds
+		wait until 15 seconds
+		fade all draw text time 1 seconds
+		set fade red 0 green 0 blue 0 time 1
+		wait until fade ready
+		delete EndCreature
+		set clipping window across 0.5 down 0.1 width 0.4 height 0.8 time 0.1
+		EndCreature = create DUMB_CREATURE CREATURE_TYPE_TORTOISE at [CreaturePos]
+		SCALE of EndCreature = 2
+		ALIGNMENT of EndCreature = 1
+		set EndCreature focus to [1404.956, 47.931, 1664.774]
+		set camera position to [1448.672, 76.945, 1566.539]
+		set camera focus to [1298.662, 54.641, 1604.88]
+		move camera position to [1444.278, 87.117, 1568.384] time 15
+		move camera focus to [1322.15, 18.362, 1637.868] time 15
+		wait until 2 seconds
+		set fade in time 1
+		wait until fade ready
+		draw text HELP_TEXT_ENDOFGAME_QUOTES_19 across 0.01 down 0.82 width 0.46 height 0.1 size 0.075 fade in time 2 seconds
+		wait until camera ready
+		fade all draw text time 1 seconds
+		set fade red 0 green 0 blue 0 time 1
+		wait until fade ready
+		delete EndCreature
+		set clipping window across 0.1 down 0.5 width 0.8 height 0.4 time 0.1
+		EndCreature = create DUMB_CREATURE CREATURE_TYPE_RHINO at [CreaturePos]
+		SCALE of EndCreature = 2
+		set EndCreature focus to [1404.956, 47.931, 1664.774]
+		set camera position to [1418.775, 85.63, 1583.482]
+		set camera focus to [1569.591, 125.381, 1595.519]
+		move camera position to [1419.014, 85.63, 1580.492] time 15
+		move camera focus to [1569.83, 125.381, 1592.528] time 15
+		wait until 2 seconds
+		set fade in time 1
+		wait until fade ready
+		draw text HELP_TEXT_ENDOFGAME_QUOTES_21 across 0.1 down 0.4 width 0.8 height 0.1 size 0.075 fade in time 2 seconds
+		wait until camera ready
+		fade all draw text time 1 seconds
+		set fade red 0 green 0 blue 0 time 1
+		wait until fade ready
+		delete EndCreature
+		set clipping window across 0.1 down 0.2 width 0.4 height 0.6 time 0.1
+		EndCreature = create DUMB_CREATURE CREATURE_TYPE_MANDRILL at [CreaturePos]
+		SCALE of EndCreature = 2
+		set EndCreature focus to [1404.956, 47.931, 1664.774]
+		set camera position to [1426.084, 80.34, 1593.503]
+		set camera focus to [1453.144, 82.988, 1439.454]
+		move camera position to [1425.392, 80.272, 1597.442] time 15
+		move camera focus to [1452.453, 82.92, 1443.393] time 15
+		wait until 2 seconds
+		set fade in time 1
+		wait until fade ready
+		draw text HELP_TEXT_ENDOFGAME_QUOTES_23 across 0.5 down 0.45 width 0.35 height 0.1 size 0.075 fade in time 2 seconds
+		wait until camera ready
+		fade all draw text time 1 seconds
+		set fade red 0 green 0 blue 0 time 1
+		wait until fade ready
+		delete EndCreature
+		set clipping window across 0.4 down 0.1 width 0.2 height 0.8 time 0.1
+		EndCreature = create DUMB_CREATURE CREATURE_TYPE_ZEBRA at [CreaturePos]
+		SCALE of EndCreature = 2
+		set EndCreature focus to [1404.956, 47.931, 1664.774]
+		set camera position to [1427.793, 69.594, 1590.509]
+		set camera focus to [1462.08, 72.242, 1437.906]
+		move camera position to [1429.204, 74.524, 1588.781] time 15
+		move camera focus to [1439.195, 70.915, 1432.711] time 15
+		wait until 2 seconds
+		set fade in time 1
+		wait until fade ready
+		draw text HELP_TEXT_ENDOFGAME_QUOTES_25 across 0.6 down 0.115 width 0.25 height 0.1 size 0.075 fade in time 2 seconds
+		wait until camera ready
+		fade all draw text time 1 seconds
+		set fade red 0 green 0 blue 0 time 1
+		wait until fade ready
+		delete EndCreature
+		set clipping window across 0.1 down 0.4 width 0.8 height 0.2 time 0.1
+		EndCreature = create DUMB_CREATURE CREATURE_TYPE_BEAR at [CreaturePos]
+		SCALE of EndCreature = 2
+		set EndCreature focus to [1404.956, 47.931, 1664.774]
+		set camera position to [1415.452, 95.613, 1570.161]
+		set camera focus to [1501.555, -25.521, 1564.673]
+		move camera position to [1417.095, 95.613, 1595.907] time 15
+		move camera focus to [1503.197, -25.521, 1590.419] time 15
+		wait until 2 seconds
+		set fade in time 1
+		wait until fade ready
+		draw text HELP_TEXT_ENDOFGAME_QUOTES_27 across 0.1 down 0.6 width 0.8 height 0.1 size 0.075 fade in time 2 seconds
+		wait until camera ready
+		fade all draw text time 1 seconds
+		set fade red 0 green 0 blue 0 time 1
+		wait until fade ready
+		delete EndCreature
+		set clipping window across 0.5 down 0.1 width 0.4 height 0.8 time 0.1
+		EndCreature = create DUMB_CREATURE CREATURE_TYPE_LEOPARD at [CreaturePos]
+		SCALE of EndCreature = 2
+		set EndCreature focus to [1404.956, 47.931, 1664.774]
+		set camera position to [1436.368, 75.164, 1584.037]
+		set camera focus to [1446.793, 220.34, 1553.502]
+		move camera position to [1435.175, 58.569, 1587.528] time 15
+		move camera focus to [1445.6, 203.745, 1556.994] time 15
+		wait until 2 seconds
+		set fade in time 1
+		wait until fade ready
+		draw text HELP_TEXT_ENDOFGAME_QUOTES_29 across 0.1 down 0.115 width 0.46 height 0.1 size 0.075 fade in time 2 seconds
+		wait until camera ready
+		fade all draw text time 1 seconds
+		set fade red 0 green 0 blue 0 time 1
+		wait until fade ready
+		delete EndCreature
+		set clipping window across 0.5 down 0.4 width 0.4 height 0.2 time 0.1
+		EndCreature = create DUMB_CREATURE CREATURE_TYPE_CHIMP at [CreaturePos]
+		SCALE of EndCreature = 2
+		set EndCreature focus to [1404.956, 47.931, 1664.774]
+		set camera position to [1407.66, 87, 1613.115]
+		set camera focus to [1534.206, 57.468, 1540.788]
+		move camera position to [1423.297, 83.512, 1598.524] time 15
+		move camera focus to [1525.509, 61.008, 1492.865] time 15
+		wait until 2 seconds
+		set fade in time 1
+		wait until fade ready
+		draw text HELP_TEXT_ENDOFGAME_QUOTES_31 across 0.5 down 0.3 width 0.4 height 0.1 size 0.075 fade in time 2 seconds
+		wait until camera ready
+		fade all draw text time 1 seconds
+		set fade red 0 green 0 blue 0 time 1
+		wait until fade ready
+		delete EndCreature
+		set clipping window across 0.25 down 0.25 width 0.5 height 0.5 time 0.1
+		EndCreature = create DUMB_CREATURE CREATURE_TYPE_HORSE at [CreaturePos]
+		SCALE of EndCreature = 2
+		set EndCreature focus to [1404.956, 47.931, 1664.774]
+		set camera position to [1415.931, 82.702, 1584.625]
+		set camera focus to [1551.672, 79.011, 1643.233]
+		move camera position to [1417.755, 82.702, 1580.401] time 15
+		move camera focus to [1553.495, 79.011, 1639.009] time 15
+		wait until 2 seconds
+		set fade in time 1
+		wait until fade ready
+		draw text HELP_TEXT_ENDOFGAME_QUOTES_33 across 0.1 down 0.75 width 0.8 height 0.1 size 0.075 fade in time 2 seconds
+		wait until camera ready
+		fade all draw text time 1 seconds
+		set fade red 0 green 0 blue 0 time 1
+		wait until fade ready
+		delete EndCreature
+		set clipping window across 0.1 down 0.1 width 0.15 height 0.8 time 0.1
+		EndCreature = create DUMB_CREATURE CREATURE_TYPE_CHICKEN at [CreaturePos]
+		SCALE of EndCreature = 2
+		set EndCreature focus to [1404.956, 47.931, 1664.774]
+		set camera position to [1444.662, 83.704, 1590.633]
+		set camera focus to [1298.273, 64.684, 1581.545]
+		wait until 2 seconds
+		set fade in time 1
+		wait until fade ready
+		draw text HELP_TEXT_ENDOFGAME_QUOTES_35 across 0.25 down 0.82 width 0.4 height 0.1 size 0.075 fade in time 2 seconds
+		wait until 15 seconds
+		fade all draw text time 1 seconds
+		set fade red 0 green 0 blue 0 time 1
+		wait until fade ready
+		delete EndCreature
+		set clipping window across 0.5 down 0.15 width 0.4 height 0.7 time 0.1
+		EndCreature = create SCRIPT_OBJECT_TYPE_FEMALE_CREATURE CREATURE_TYPE_TIGER at [1477.207, 57.725, 1541.283]
+		SCALE of EndCreature = 2
+		set EndCreature focus to [1574.113, 131.278, 1503.121]
+		set camera position to [1487.274, 61.995, 1558.367]
+		set camera focus to [1478.884, 60.962, 1483.297]
+		move camera position to [1487.132, 82.58, 1557.093] time 15
+		move camera focus to [1478.742, 81.546, 1482.023] time 15
+		wait until 2 seconds
+		set fade in time 1
+		wait until fade ready
+		draw text HELP_TEXT_ENDOFGAME_QUOTES_37 across 0.1 down 0.15 width 0.4 height 0.1 size 0.075 fade in time 2 seconds
+		wait until 15 seconds
+		fade all draw text time 1 seconds
+		set fade red 0 green 0 blue 0 time 1
+		wait until fade ready
+		delete EndCreature
+		set clipping window across 0.1 down 0.3 width 0.8 height 0.4 time 0.1
+		EndCreature = create DUMB_CREATURE CREATURE_TYPE_CROCODILE at [CreaturePos]
+		SCALE of EndCreature = 2
+		set EndCreature focus to [1404.956, 47.931, 1664.774]
+		set camera position to [1435.954, 77.171, 1596.445]
+		set camera focus to [1291.668, 72.297, 1564.319]
+		move camera position to [1438.257, 77.171, 1586.099] time 15
+		move camera focus to [1293.971, 72.297, 1553.973] time 15
+		wait until 2 seconds
+		set fade in time 1
+		wait until fade ready
+		draw text HELP_TEXT_ENDOFGAME_QUOTES_11 across 0.1 down 0.2 width 0.355 height 0.1 size 0.075 fade in time 2 seconds
+		wait until camera ready
+		fade all draw text time 1 seconds
+		set fade red 0 green 0 blue 0 time 4
+		wait until fade ready
+		delete EndCreature
+		clear clipping window time 0.5
+		set camera position to [1231.424, 183.499, 1325.001]
+		set camera focus to [1184.959, 183.764, 1281.588]
+		set MyCreature position to [1208.821, 167.5, 1273.236]
+		set MyCreature focus to [924.754, 112.887, 1053.219]
+		wait until 1 seconds
+		enable sound effects
+		stop music
+	end known cinema
+end script LatinCreatures
+

@@ -1,0 +1,774 @@
+//LHVM Challenge source version 8
+//Decompiled with CHLASM tool by Daniels118
+
+global FSBall
+global FSChilling
+global FootballComplete
+global SkillFailure
+global GateCompleted
+global Gate1Complete
+global Gate2Complete
+global Gate3Complete
+global Gate4Complete
+global Goal
+global QuitRequest
+global CountdownActive
+global MandrillFoc
+global InGoalMouth
+
+begin script DeleteMandrill(Mandrill)
+start
+	wait until 10 seconds
+	delete Mandrill
+end script DeleteMandrill
+
+begin script MandrillFocus(Mandrill)
+start
+	while MandrillFoc == 0
+		set Mandrill focus to (camera position)
+	end while
+end script MandrillFocus
+
+begin script FieryGeyser(Geyser)
+	Lodged = 0
+	Mist = 0
+	BallAim = 0
+	BigSteam = 0
+	SteamTimer = 0
+	FireBall = 0
+start
+	Mist = create special effect SPOT_VISUAL_STEAM at [Geyser] time -1
+	SCALE of Mist = 10
+	begin loop
+		wait until 1 seconds
+		if get distance from [FSBall] to [Geyser] < 15 and not FSBall is FLYING
+			Lodged++
+			if Lodged > 1
+				BigSteam = create special effect SPOT_VISUAL_BANG at [FSBall] time 3
+				BallAim = marker at [FSBall] + [number from -3 to 3, 10, number from -3 to 3]
+				set FSBall velocity heading [BallAim] speed 150 angular x 0 y 0 z 0
+				Lodged = 0
+				wait until 2 seconds
+			end if
+		else
+			Lodged = 0
+			SteamTimer++
+			if SteamTimer > 1
+				BallAim = marker at [Geyser] + [number from -3 to 3, 5, number from -3 to 3]
+				FireBall = cast SPELL_FIREBALL_LEVEL_1 spell at [BallAim] from [Geyser] radius 1 time 5 curl 0 without reaction
+				detach reaction FireBall
+				SteamTimer = 0
+			end if
+		end if
+		until get countdown timer time <= 0 and CountdownActive == 1 or FootballComplete == 1 or SkillFailure == 1 or QuitRequest == 1
+	end loop
+	delete Mist
+end script FieryGeyser
+
+begin script ActiveGeyser(Geyser)
+	Lodged = 0
+	Mist = 0
+	ProtActive = 0
+	BallAim = 0
+	BigSteam = 0
+	SteamTimer = create timer for 0 seconds
+	FireBall = 0
+	RandomNum = 0
+start
+	Mist = create special effect SPOT_VISUAL_STEAM at [Geyser] time -1
+	SCALE of Mist = 10
+	RandomNum = number from 10 to 40
+	RandomNum = RandomNum / 10
+	set SteamTimer time to RandomNum seconds
+	begin loop
+		wait until 1 seconds
+		if get distance from [FSBall] to [Geyser] < 10 and not FSBall is FLYING
+			Lodged++
+			if Lodged > 4
+				BigSteam = create special effect SPOT_VISUAL_BANG at [FSBall] time 3
+				BallAim = marker at [FSBall] + [number from -3 to 3, 10, number from -3 to 3]
+				set FSBall velocity heading [BallAim] speed 75 angular x 0 y 0 z 0
+				Lodged = 0
+				wait until 2 seconds
+			end if
+		else
+			if get SteamTimer time remaining <= 0
+				FireBall = cast SPELL_FIREBALL_LEVEL_1 spell at [Geyser] from [Geyser] radius 1 time 3 curl 0 without reaction
+				detach reaction FireBall
+				RandomNum = number from 30 to 80
+				RandomNum = RandomNum / 10
+				set SteamTimer time to RandomNum seconds
+			end if
+		end if
+		if get distance from [MyCreature] to [Geyser] < 40 and ProtActive == 0
+			disable MyCreature set on fire
+			set MyCreature temperature 20
+			ProtActive = 1
+		elsif ProtActive == 1 and not get distance from [MyCreature] to [Geyser] < 40
+			enable MyCreature set on fire
+			ProtActive = 0
+		end if
+		until get countdown timer time <= 0 and CountdownActive == 1 or FootballComplete == 1 or SkillFailure == 1 or QuitRequest == 1
+	end loop
+	delete Mist
+end script ActiveGeyser
+
+begin script UberNudge(Mandrill)
+	NudgeAim = 0
+	BallStuck = 0
+	Geyser1 = marker at [2740.31, 19.0714, 2620.3]
+	Geyser2 = marker at [2740.55, 26.0489, 2580.05]
+	Geyser3 = marker at [2770.2, 23.4264, 2600.34]
+	Geyser4 = marker at [2789.93, 22.1885, 2540.35]
+	Geyser5 = marker at [2970.25, 12.01359, 2540.17]
+	StuckCheck = 0
+	LastBallPos = marker at [2970.25, 12.01359, 2540.17]
+start
+	run background script ActiveGeyser(Geyser1)
+	run background script ActiveGeyser(Geyser2)
+	run background script ActiveGeyser(Geyser3)
+	run background script ActiveGeyser(Geyser4)
+	run background script FieryGeyser(Geyser5)
+	begin loop
+		wait until 2 seconds
+		if get distance from [FSBall] to [Mandrill] < 10
+			BallStuck = 0
+			NudgeAim = marker at (get target from [MyCreature] to [FSBall] distance 10 angle 180)
+			set FSBall velocity heading [NudgeAim] speed 20 angular x 0 y 0 z 0
+			start sound LH_SAMPLE_REFEREEWHISTLESHORT
+		elsif [FSBall] valid for creature
+			BallStuck = 0
+		elsif get distance from [FSBall] to [Geyser1] < 10 or get distance from [FSBall] to [Geyser2] < 10 or get distance from [FSBall] to [Geyser3] < 10 or get distance from [FSBall] to [Geyser4] < 20
+			BallStuck = 0
+		else
+			BallStuck++
+			if BallStuck > 2
+				BallStuck = 0
+				NudgeAim = marker at (get target from [MyCreature] to [FSBall] distance 10 angle 180)
+				set FSBall velocity heading [NudgeAim] speed 20 angular x 0 y 0 z 0
+				start sound LH_SAMPLE_REFEREEWHISTLESHORT
+			end if
+		end if
+		if get distance from [FSBall] to [LastBallPos] < 2
+			StuckCheck++
+			if StuckCheck > 10
+				NudgeAim = marker at (get target from [MyCreature] to [FSBall] distance 10 angle 180)
+				set FSBall velocity heading [NudgeAim] speed 20 angular x 0 y 0 z 0
+				StuckCheck = 0
+			end if
+		else
+			StuckCheck = 0
+		end if
+		LastBallPos = marker at [FSBall]
+		until get countdown timer time <= 0 and CountdownActive == 1 or FootballComplete == 1 or SkillFailure == 1 or QuitRequest == 1
+	end loop
+end script UberNudge
+
+begin script CowboyNudge
+	NudgeAim = 0
+	CurrentAction = 0
+start
+	begin loop
+		if FSBall clicked and MyCreature leashed
+			wait until 0.5 seconds
+			CurrentAction = variable get MyCreature current action
+			if CurrentAction != variable CREATURE_KICK_BALL_AROUND
+				NudgeAim = marker at (get target from [MyCreature] to [FSBall] distance 5 angle 180)
+				set FSBall velocity heading [NudgeAim] speed 20 angular x 0 y 0 z 0
+				start sound LH_SAMPLE_REFEREEWHISTLESHORT
+			end if
+		end if
+		until get countdown timer time <= 0 and CountdownActive == 1 or FootballComplete == 1 or SkillFailure == 1 or QuitRequest == 1
+	end loop
+end script CowboyNudge
+
+begin script NudgeBall(NudgePos, NudgeRadius, ReactionTime, NudgeVelocity)
+	NudgeAim = 0
+	BallNear = 0
+	Spangle = 0
+start
+	ReactionTime++
+	Spangle = create special effect SPOT_VISUAL_COMMAND_SUCCEED at [NudgePos] time -1
+	begin loop
+		wait until 1 seconds
+		if get distance from [FSBall] to [NudgePos] < NudgeRadius and not FSBall is FLYING
+			BallNear++
+			if BallNear > ReactionTime
+				NudgeAim = marker at (get target from [NudgePos] to [FSBall] distance 10 angle 0)
+				set FSBall velocity heading [NudgeAim] speed NudgeVelocity angular x 0 y 0 z 0
+				start sound LH_SAMPLE_REFEREEWHISTLESHORT
+			end if
+		end if
+		until get countdown timer time <= 0 and CountdownActive == 1 or FootballComplete == 1 or SkillFailure == 1 or QuitRequest == 1
+	end loop
+	delete Spangle
+end script NudgeBall
+
+begin script ShieldPulse(PulsePos, PulseRadius, PulseDelay, PulseDuration)
+	ShieldEffect = 0
+	PulseAim = 0
+	BallNear = 0
+start
+	begin loop
+		ShieldEffect = cast SPELL_PHYSICAL_SHIELD spell at [PulsePos] from [PulsePos] radius PulseRadius time PulseDuration curl 0 without reaction
+		wait until PulseDuration seconds
+		wait until PulseDelay seconds
+		if get distance from [FSBall] to [PulsePos] < PulseRadius + 15 and not FSBall is FLYING
+			BallNear++
+			if BallNear > 1
+				PulseAim = marker at (get target from [PulsePos] to [FSBall] distance 10 angle 0)
+				set FSBall velocity heading [PulseAim] speed 40 angular x 0 y 0 z 0
+				start sound LH_SAMPLE_REFEREEWHISTLESHORT
+			end if
+			BallNear = 0
+		else
+			BallNear = 0
+		end if
+		until get countdown timer time <= 0 and CountdownActive == 1 or FootballComplete == 1 or SkillFailure == 1 or QuitRequest == 1
+	end loop
+end script ShieldPulse
+
+begin script ReduceSize(GateEffect)
+	LoopTotal = 0
+start
+	while LoopTotal < 10
+		wait until 0.3 seconds
+		SCALE of GateEffect -= 0.35
+		LoopTotal++
+	end while
+end script ReduceSize
+
+begin script GoalEffect
+	GoalEffect = 0
+	GoalEffect2 = 0
+	GoalEffect3 = 0
+	Post1Pos = marker at [3010.424, 22.11, 2590.21]
+	Post2Pos = marker at [3010.31, 22.11, 2550.33]
+	Post1HighPos = marker at [3010.424, 22.11, 2590.21]
+	Post2HighPos = marker at [3010.31, 22.11, 2550.33]
+start
+	ALTITUDE of Post1HighPos = 20
+	ALTITUDE of Post2HighPos = 20
+	GoalEffect = create special effect SPOT_VISUAL_LIGHTNING_SINGLE_STRIKE on Post1Pos time -1
+	add GoalEffect target on Post1HighPos
+	GoalEffect2 = create special effect SPOT_VISUAL_LIGHTNING_SINGLE_STRIKE on Post2Pos time -1
+	add GoalEffect2 target on Post2HighPos
+	GoalEffect3 = create special effect SPOT_VISUAL_LIGHTNING_SINGLE_STRIKE on Post1HighPos time -1
+	add GoalEffect3 target on Post2HighPos
+	begin loop
+		if XPOS of FSBall > 3010 and XPOS of FSBall < 3015 and ZPOS of FSBall > 2550 and ZPOS of FSBall < 2590
+			InGoalMouth = 1
+		end if
+		until get countdown timer time <= 0 and CountdownActive == 1 or FootballComplete == 1 or SkillFailure == 1 or QuitRequest == 1
+	end loop
+	delete GoalEffect
+	delete GoalEffect2
+	delete GoalEffect3
+end script GoalEffect
+
+begin script GateEffect(GatePos, GateNumber)
+	GatePost1 = 0
+	GatePost1Marker = 0
+	GatePost2 = 0
+	GatePost2Marker = 0
+	GatePost3 = 0
+	GatePost3Marker = 0
+	Ray1 = 0
+	Ray2 = 0
+	Ray3 = 0
+	Pinacle = 0
+	PinaclePos = 0
+	LoopOver = 0
+	GatePost1Marker2 = 0
+	GatePost2Marker2 = 0
+	GatePost3Marker2 = 0
+start
+	PinaclePos = marker at [GatePos] + [0, 22, 0]
+	GatePost1Marker = marker at (get target from [GatePos] + ([10, 0]) to [GatePos] distance 10 angle 0)
+	GatePost2Marker = marker at (get target from [GatePos] + ([10, 0]) to [GatePos] distance 10 angle 120)
+	GatePost3Marker = marker at (get target from [GatePos] + ([10, 0]) to [GatePos] distance 10 angle 240)
+	GatePost1Marker2 = marker at [GatePost1Marker] + [0, 16, 0]
+	GatePost1 = create special effect SPOT_VISUAL_MAGIC_BEAM on GatePost1Marker time -1
+	add GatePost1 target on GatePost1Marker2
+	GatePost2Marker2 = marker at [GatePost2Marker] + [0, 16, 0]
+	GatePost2 = create special effect SPOT_VISUAL_MAGIC_BEAM on GatePost2Marker time -1
+	add GatePost2 target on GatePost2Marker2
+	GatePost3Marker2 = marker at [GatePost3Marker] + [0, 16, 0]
+	GatePost3 = create special effect SPOT_VISUAL_MAGIC_BEAM on GatePost3Marker time -1
+	add GatePost3 target on GatePost3Marker2
+	Pinacle = create special effect SPOT_VISUAL_LIGHTNING_SINGLE_STRIKE on PinaclePos time -1
+	add Pinacle target on GatePos
+	Ray1 = create special effect SPOT_VISUAL_MAGIC_BEAM on GatePost1Marker2 time -1
+	add Ray1 target on Pinacle
+	Ray2 = create special effect SPOT_VISUAL_MAGIC_BEAM on GatePost2Marker2 time -1
+	add Ray2 target on Pinacle
+	Ray3 = create special effect SPOT_VISUAL_MAGIC_BEAM on GatePost3Marker2 time -1
+	add Ray3 target on Pinacle
+	wait until get countdown timer time > 0
+	begin loop
+		if Gate1Complete == 1 and GateNumber == 1
+			Gate1Complete = 2
+			start sound LH_SAMPLE_GOALDISAPPEAR at [Pinacle]
+			LoopOver = 1
+		end if
+		if Gate2Complete == 1 and GateNumber == 2
+			Gate2Complete = 2
+			start sound LH_SAMPLE_GOALDISAPPEAR at [Pinacle]
+			LoopOver = 1
+		end if
+		if Gate3Complete == 1 and GateNumber == 3
+			Gate3Complete = 2
+			start sound LH_SAMPLE_GOALDISAPPEAR at [Pinacle]
+			LoopOver = 1
+		end if
+		if Gate4Complete == 1 and GateNumber == 4
+			Gate4Complete = 2
+			start sound LH_SAMPLE_GOALDISAPPEAR at [Pinacle]
+			LoopOver = 1
+		end if
+		until get countdown timer time <= 0 or LoopOver == 1 or FootballComplete == 1 or SkillFailure == 1 or QuitRequest == 1
+	end loop
+	delete Ray1
+	delete Ray2
+	delete Ray3
+	delete Pinacle
+	delete GatePost1
+	delete GatePost2
+	delete GatePost3
+	wait until get countdown timer time <= 0 or FootballComplete == 1 or SkillFailure == 1 or QuitRequest == 1
+end script GateEffect
+
+begin script Defender(Defender, Target, DefenderPos, Delay)
+	MoveTimer = create timer for 0 seconds
+	AnimNum = 0
+start
+	wait until Delay seconds
+	begin loop
+		if Defender played and get distance from [Defender] to [DefenderPos] < 50
+			if get distance from [FSBall] to [DefenderPos] < 30
+				force Defender ANM_P_KICK_BALL_PASS_PT1 FSBall at [Target]
+			elsif not get distance from [Defender] to [DefenderPos] < 10 and get MoveTimer time remaining <= 0
+				move Defender position to [DefenderPos] radius 0
+				set MoveTimer time to 5 seconds
+			elsif AnimNum == 0
+				force Defender POINT_AT FSBall
+				AnimNum = 1
+			elsif AnimNum == 1
+				Defender play ANM_A_COW_WALK loop 1
+				AnimNum = 2
+			else
+				Defender play ANM_A_COW_DEAD loop 1
+				AnimNum = 0
+			end if
+		elsif not get distance from [Defender] to [DefenderPos] < 50 and get MoveTimer time remaining <= 0
+			move Defender position to [DefenderPos] radius 0
+			set MoveTimer time to 8 seconds
+		end if
+		until get countdown timer time <= 0 and CountdownActive == 1 or FootballComplete == 1 or SkillFailure == 1 or QuitRequest == 1
+	end loop
+end script Defender
+
+begin script CourseEffects(Mandrill)
+	Defender1Pos = marker at [2785.97, 35.9445, 2615.43]
+	Defender1 = create DUMB_CREATURE CREATURE_TYPE_MANDRILL at [Defender1Pos]
+	Target1 = marker at [2702.68, 33.5, 2663.2]
+	Defender2Pos = marker at [2767.44, 39.53, 2521.24]
+	Defender2 = create DUMB_CREATURE CREATURE_TYPE_MANDRILL at [Defender2Pos]
+	Target2 = marker at [2702.68, 33.5, 2663.2]
+	Defender4Pos = marker at [2977.9, 19.184, 2564.23]
+	Defender4 = create DUMB_CREATURE CREATURE_TYPE_MANDRILL at [Defender4Pos]
+	Target4 = marker at [2702.68, 33.5, 2663.2]
+	DangerPos1 = marker at [2511.18, 0, 2484.92]
+	DangerPos2 = marker at [2937.86, 42.4822, 2724.39]
+	DangerPos3 = marker at [2820.31, 46.7822, 2282.61]
+	DangerPos4 = marker at [2437.48, 16.012, 2799.02]
+	Fireworks = 0
+	Gate1Pos = marker at [2807.12, 52.93, 2672.04]
+	Gate2Pos = marker at [2764.34, 35.7325, 2566.68]
+	Gate3Pos = marker at [2839.4, 39.127, 2437.27]
+	Gate4Pos = marker at [2909.07, 17.42, 2481.36]
+	NudgePos1 = marker at [0, 0, 0]
+	NudgePos2 = marker at [0, 0, 0]
+	NudgePos3 = marker at [0, 0, 0]
+	NudgePos4 = marker at [0, 0, 0]
+	NudgePos5 = marker at [0, 0, 0]
+	NudgePos6 = marker at [0, 0, 0]
+	NudgePos7 = marker at [0, 0, 0]
+	GoForGoal = 0
+start
+	CountdownActive = 0
+	run script SetupCreatureIsleCreature(Defender1)
+	set Defender1 name HELP_TEXT_NAME_MANDRILL_03
+	run script SetupCreatureIsleCreature(Defender2)
+	set Defender2 name HELP_TEXT_NAME_MANDRILL_04
+	run script SetupCreatureIsleCreature(Defender4)
+	set Defender4 name HELP_TEXT_NAME_MANDRILL_06
+	SCALE of Defender1 = 0.5
+	ALIGNMENT of Defender1 = -0.2
+	SCALE of Defender2 = 0.6
+	ALIGNMENT of Defender2 = -0.4
+	SCALE of Defender4 = 0.8
+	ALIGNMENT of Defender4 = -0.8
+	run background script Defender(Defender1, Target1, Defender1Pos, 2)
+	run background script Defender(Defender2, Target2, Defender2Pos, 4)
+	run background script Defender(Defender4, Target4, Defender4Pos, 8)
+	run background script GateEffect(Gate1Pos, 1)
+	run background script GateEffect(Gate2Pos, 2)
+	run background script GateEffect(Gate3Pos, 3)
+	run background script GateEffect(Gate4Pos, 4)
+	run background script GoalEffect
+	run background script UberNudge(Mandrill)
+	wait until get countdown timer time > 0
+	CountdownActive = 1
+	begin loop
+		if Gate1Complete == 0 and get distance from [FSBall] to [Gate1Pos] < 20
+			Gate1Complete = 1
+			Fireworks = create special effect SPOT_VISUAL_TOWN_FIREWORKS at [Gate1Pos] time 5
+			GateCompleted++
+		elsif Gate2Complete == 0 and get distance from [FSBall] to [Gate2Pos] < 20
+			Gate2Complete = 1
+			Fireworks = create special effect SPOT_VISUAL_TOWN_FIREWORKS at [Gate2Pos] time 5
+			GateCompleted++
+		elsif Gate3Complete == 0 and get distance from [FSBall] to [Gate3Pos] < 20
+			Gate3Complete = 1
+			Fireworks = create special effect SPOT_VISUAL_TOWN_FIREWORKS at [Gate3Pos] time 5
+			GateCompleted++
+		elsif Gate4Complete == 0 and get distance from [FSBall] to [Gate4Pos] < 20
+			Gate4Complete = 1
+			Fireworks = create special effect SPOT_VISUAL_TOWN_FIREWORKS at [Gate4Pos] time 5
+			GateCompleted++
+		end if
+		if GateCompleted > 3 and GoForGoal == 0
+			begin dialogue
+				say single line HELP_TEXT_SOCCER_SKILLS_80 by Mandrill
+				wait until read
+				GoForGoal = 1
+			end dialogue
+		end if
+		until get countdown timer time <= 0 or FootballComplete == 1 or SkillFailure == 1 or QuitRequest == 1
+	end loop
+	delete Defender1 with fade
+	delete Defender2 with fade
+	delete Defender4 with fade
+end script CourseEffects
+
+begin script WaitForHighlight(Mandrill, BallPos, Highlight)
+	AnimNum = 0
+start
+	begin loop
+		if Mandrill played
+			if AnimNum == 0
+				Mandrill play ANM_A_COW_IN_HAND loop 1
+				AnimNum = 1
+			elsif AnimNum == 1
+				Mandrill play ANM_A_COW_EAT_1 loop 1
+				AnimNum = 2
+			elsif AnimNum == 2
+				force Mandrill POINT_AT FSBall
+				AnimNum = 0
+			end if
+		end if
+		until FSChilling == 1
+	end loop
+end script WaitForHighlight
+
+begin script FootballSkills
+	MandrillPos = marker at [2695.51, 33.1545, 2680.65]
+	Mandrill = create DUMB_CREATURE CREATURE_TYPE_MANDRILL at [MandrillPos]
+	BallPos = marker at [2691.82, 33.5, 2659.52]
+	BeginPos = 0
+	BeginFoc = 0
+	Highlight = 0
+	SoccerDYKPos = marker at [2705.955, 33.5, 2672.843]
+	SeeStartPos = marker at [2633.71, 73.2678, 2630.02]
+	SeeStartFoc = marker at [2748.62, 33.0837, 2662.95]
+	SeeMandrillPos = marker at [2677.37, 44.4476, 2695.68]
+	SeeMandrillFoc = marker at [2749.39, 34.0069, 2642.77]
+	SeeMandrill2Pos = marker at [2660.38, 47.5808, 2716.99]
+	SeeMandrill2Foc = marker at [2738.08, 34.8749, 2640.9]
+	SeeGatePos = marker at [2895.95, 20.9791, 2529.83]
+	SeeGateFoc = marker at [2913.44, 1.72789, 2461.27]
+	SeeGoalPos = marker at [2958.03, 59.0979, 2524.96]
+	SeeGoalFoc = marker at [3032.79, 22.8345, 2582.57]
+	SeeDefenderPos = marker at [2925.15, 32.0569, 2580.27]
+	SeeDefenderFoc = marker at [3056.55, 26.9445, 2573.45]
+	MyStartPos = marker at [2677.45, 33.5, 2664.02]
+	Restart = 0
+	Fireworks = 0
+	FSCancelScroll = 0
+	CancelComment = 0
+	CancelTimer = create timer for 0 seconds
+	IntroMovePos1 = marker at [2739.67, 50.1645, 2626.11]
+	IntroMoveFoc1 = marker at [2780.67, 39.1524, 2538.22]
+	IntroMovePos2 = marker at [2937.7, 42.1918, 2612.94]
+	IntroMoveFoc2 = marker at [3019.2, 29.6255, 2554.41]
+	IntroMovePos3 = marker at [2812.34, 45.54, 2613.5]
+	IntroMoveFoc3 = marker at [2685.74, 35.078, 2648.61]
+	KensCunningFocusMarker = marker at [2731.47, 54.5605, 2553.18]
+	KensCunningAltitudeMarker = 0
+	AndysLovinItLowPos = marker at [2682.11, 43.5908, 2685.86]
+	AndysLovinItLowFoc = marker at [2762.42, 51.8878, 2646.81]
+	AndysLovinItLowPos2 = marker at [2666.35, 41.9625, 2693.52]
+	Lantern = 0
+	LanternPos = marker at [2699.936, 35.452, 2697.903]
+	FSBallCurrentPos = 0
+	ForceEnd = 0
+start
+	Lantern = create OBJECT MOBILE_STATIC_INFO_STREET_LANTERN at [LanternPos]
+	set Mandrill name HELP_TEXT_NAME_MANDRILL_01
+	run script SetupCreatureIsleCreature(Mandrill)
+	Goal = marker at [3011.4, 20.6627, 2572.78]
+	SCALE of Mandrill = 1
+	FSBall = create with angle 0 and scale 1.5 OBJECT MOBILE_STATIC_INFO_SOFT_BALL at [BallPos]
+	disable FSBall hurt by fire
+	disable FSBall set on fire
+	disable FSBall pickup
+	disable FSBall moveable
+	Highlight = create highlight CHALLENGE_FOOTBALL_SKILLS HIGHLIGHT_TRIAL at [MandrillPos]
+	ALTITUDE of Highlight = 25
+	run background script TrialNotifyWithScriptLockedCreature(Highlight)
+	DojoReminderSoccerSkills = 1
+	run background script WaitForHighlight(Mandrill, MandrillPos, Highlight)
+	begin loop
+		if Highlight clicked and ScriptLockedCreature == 0
+			if get distance from [MyCreature] to [FSBall] < 75
+				FSChilling = 1
+				set fade red 0 green 0 blue 0 time 2
+				wait until fade ready
+			else
+				wait until 0.2 seconds
+				clear clicked object
+				set fade red 0 green 0 blue 0 time 2
+				wait until fade ready
+				FSChilling = 1
+			end if
+		elsif Highlight clicked and ScriptLockedCreature == 1
+			run script ScriptLockedHighlight(Highlight)
+		end if
+		until FSChilling == 1
+	end loop
+	SkillFailure = 0
+	GateCompleted = 0
+	Gate1Complete = 0
+	Gate2Complete = 0
+	Gate3Complete = 0
+	Gate4Complete = 0
+	run background script CourseEffects(Mandrill)
+	begin cinema
+		disable creature sound
+		set MyCreature position to [MyStartPos]
+		if Tyke exists and TykeIsReady == 1 and TykeFree == 1
+			set Tyke position to [MyStartPos] + ([3, 3])
+		end if
+		set camera position to [SeeMandrillPos]
+		set camera focus to [SeeMandrillFoc]
+		set MyCreature position to [MyStartPos]
+		set Mandrill focus to [SeeMandrillPos]
+		set fade in time 2
+		wait until 1 seconds
+		set Mandrill focus to [SeeMandrillPos]
+		wait until 1 seconds
+		move camera position to [SeeMandrill2Pos] time 15
+		move camera focus to [SeeMandrill2Foc] time 15
+		snapshot CHALLENGE_FOOTBALL_SKILLS quest success 0 alignment 0 HELP_TEXT_CREATURE_ISLE_TITLE_07 StandardReminder (variable HELP_TEXT_CI_REMINDER_05)
+		Mandrill play ANM_A_HORSE_DEADRHS loop 1
+		say HELP_TEXT_SOCCER_SKILLS_10 by Mandrill
+		wait until read
+		say HELP_TEXT_SOCCER_SKILLS_20 by Mandrill
+		wait until read
+		move camera position to [IntroMovePos1] time 4
+		move camera focus to [IntroMoveFoc1] time 4
+		say HELP_TEXT_SOCCER_SKILLS_30 by Mandrill
+		wait until read
+		set MyCreature position to [MyStartPos]
+		set MyCreature focus to [Goal]
+		move camera position to [IntroMovePos2] time 4
+		move camera focus to [IntroMoveFoc2] time 4
+		say HELP_TEXT_SOCCER_SKILLS_40 with interaction by Mandrill
+		wait until read
+		wait until 2 seconds
+		move camera focus to [KensCunningFocusMarker] time 5
+		KensCunningAltitudeMarker = marker at [IntroMovePos2] + [0, 50, 0]
+		move camera position to [KensCunningAltitudeMarker] time 5
+		say HELP_TEXT_SOCCER_SKILLS_45 by Mandrill
+		wait until read
+		wait until 1 seconds
+		move camera position to [IntroMovePos3] time 4
+		move camera focus to [IntroMoveFoc3] time 4
+		say HELP_TEXT_SOCCER_SKILLS_50 by Mandrill
+		wait until read
+		say HELP_TEXT_SOCCER_SKILLS_60 with interaction by Mandrill
+		wait until read
+		wait until Mandrill played
+		wait until 1 seconds
+		set camera position to [SeeStartPos]
+		set camera focus to [SeeStartFoc]
+		release MyCreature
+		run background script DidYouKnow(SoccerDYKPos, variable HELP_TEXT_SOCCER_DYK, variable DYK_MISC)
+	end cinema
+	begin loop
+		FootballComplete = 0
+		InGoalMouth = 0
+		if Restart == 1
+			delete FSBall
+			FSBall = create with angle 0 and scale 1.5 OBJECT MOBILE_STATIC_INFO_SOFT_BALL at [BallPos]
+			disable FSBall pickup
+			disable FSBall hurt by fire
+			disable FSBall set on fire
+			disable FSBall moveable
+			FSChilling = 0
+			CountdownActive = 0
+			run background script WaitForHighlight(Mandrill, BallPos, Highlight)
+			begin loop
+				if Highlight clicked and ScriptLockedCreature == 0
+					enable Highlight active
+					clear clicked object
+					FSChilling = 1
+				elsif Highlight clicked and ScriptLockedCreature == 1
+					run script ScriptLockedHighlight(Highlight)
+				end if
+				until FSChilling == 1
+			end loop
+			SkillFailure = 0
+			GateCompleted = 0
+			Gate1Complete = 0
+			Gate2Complete = 0
+			Gate3Complete = 0
+			Gate4Complete = 0
+			run background script CourseEffects(Mandrill)
+			wait until Mandrill played
+			begin cinema
+				disable creature sound
+				move camera position to [SeeMandrillPos] time 3
+				move camera focus to [SeeMandrillFoc] time 3
+				set Mandrill focus to [SeeMandrillPos]
+				wait until camera ready
+				Mandrill play ANM_A_HORSE_DEADRHS loop 1
+				say single line HELP_TEXT_SOCCER_SKILLS_110 with interaction by Mandrill
+				wait until read
+				wait until Mandrill played
+				set fade red 0 green 0 blue 0 time 1.5
+				wait until 2 seconds
+				set MyCreature position to [MyStartPos]
+				set MyCreature focus to [Goal]
+				set camera position to [SeeStartPos]
+				set camera focus to [SeeStartFoc]
+				set fade in time 2
+				release MyCreature
+			end cinema
+			Restart = 0
+		end if
+		enable FSBall moveable
+		set countdown timer draw SCRIPT_COUNTDOWN_DRAW_BOTTOM_LEFT
+		enable countdown timer down with 420 seconds
+		start sound LH_SAMPLE_REFEREEWHISTLELONG
+		FSCancelScroll = create highlight CHALLENGE_FOOTBALL_SKILLS HIGHLIGHT_CANCEL_QUEST at [Goal]
+		ALTITUDE of FSCancelScroll = 25
+		set CancelTimer time to 5 seconds
+		CancelComment = 0
+		FSChilling = 0
+		run background script WaitForHighlight(Mandrill, BallPos, Highlight)
+		begin loop
+			if get CancelTimer time remaining <= 0 and CancelComment == 0 and not in widescreen
+				begin dialogue
+					eject good spirit
+					make good spirit point at [FSCancelScroll]
+					say HELP_TEXT_SOCCER_SKILLS_100
+					wait until read
+					stop good spirit pointing
+					eject evil spirit
+					say HELP_TEXT_SOCCER_SKILLS_160
+					wait until read
+				end dialogue
+				CancelComment = 1
+			end if
+			if InGoalMouth == 1 and GateCompleted > 3
+				Fireworks = create special effect SPOT_VISUAL_TOWN_FIREWORKS at [Goal] time 20
+				start sound LH_SAMPLE_RACEGO_01
+				FootballComplete = 1
+			elsif InGoalMouth == 1
+				InGoalMouth = 0
+			end if
+			if FSCancelScroll clicked or not FSBall exists
+				QuitRequest = 1
+			elsif in widescreen
+				ForceEnd = 1
+				QuitRequest = 1
+			end if
+			until get countdown timer time <= 0 or FootballComplete == 1 or SkillFailure == 1 or QuitRequest == 1
+		end loop
+		delete FSCancelScroll
+		disable Highlight active
+		FSChilling = 1
+		wait until 0.2 seconds
+		disable countdown timer
+		MandrillFoc = 0
+		run background script MandrillFocus(Mandrill)
+		if FootballComplete == 1 and QuitRequest == 0
+			begin cinema
+				enable highlight draw
+				disable creature sound
+				move MyCreature position to [MyCreature] radius 0
+				set fade red 0 green 0 blue 0 time 2
+				wait until 2 seconds
+				set camera position to [AndysLovinItLowPos]
+				set camera focus to [AndysLovinItLowFoc]
+				set MyCreature focus to [SeeMandrill2Pos]
+				set fade in time 2
+				wait until 2 seconds
+				move camera position to [AndysLovinItLowPos2] time 8
+				Mandrill play ANM_A_COW_DEAD_ON_RHS loop 1
+				MyCreature play ANM_A_COW_UPFROM_EAT loop 1
+				say HELP_TEXT_SOCCER_SKILLS_120 by Mandrill
+				wait until 2 seconds
+				wait until read
+				say HELP_TEXT_SOCCER_SKILLS_130 with interaction by Mandrill
+				wait until read
+				release MyCreature
+			end cinema with widescreen
+			FootballComplete = 2
+		elsif ForceEnd == 0
+			begin cinema
+				enable highlight draw
+				disable creature sound
+				move MyCreature position to [MyCreature] radius 0
+				set fade red 0 green 0 blue 0 time 2
+				wait until 2 seconds
+				set camera position to [AndysLovinItLowPos]
+				set camera focus to [AndysLovinItLowFoc]
+				set Mandrill focus to [SeeMandrill2Pos]
+				set fade in time 2
+				wait until 2 seconds
+				move camera position to [AndysLovinItLowPos2] time 8
+				Mandrill play ANM_A_COW_EAT_1 loop 1
+				MyCreature play ANM_A_HORSE_EAT1 loop 1
+				if QuitRequest == 0
+					say single line HELP_TEXT_SOCCER_SKILLS_140 by Mandrill
+					wait until read
+				end if
+				say single line HELP_TEXT_SOCCER_SKILLS_150 with interaction by Mandrill
+				wait until read
+				release MyCreature
+			end cinema
+			Restart = 1
+			QuitRequest = 0
+		else
+			Restart = 1
+			ForceEnd = 0
+			QuitRequest = 0
+		end if
+		MandrillFoc = 1
+		until FootballComplete == 2
+	end loop
+	FSBallCurrentPos = marker at [FSBall]
+	delete FSBall
+	FSBall = create with angle 0 and scale 1.5 OBJECT MOBILE_STATIC_INFO_SOFT_BALL at [FSBallCurrentPos]
+	disable FSBall hurt by fire
+	disable FSBall set on fire
+	run background script DeleteMandrill(Mandrill)
+	run script Dojo(Mandrill)
+	delete Highlight
+	DojoReminderSoccerSkills = 0
+	run background script DeleteDYK(SoccerDYKPos)
+end script FootballSkills
+

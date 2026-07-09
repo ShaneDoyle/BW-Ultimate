@@ -1,0 +1,167 @@
+//LHVM Challenge source version 8
+//Decompiled with CHLASM tool by Daniels118
+
+//challenge LandControlOgre
+// Custom intro cutscene for Creature Isle mod.
+// Town pivot → Creature sleeping in pen → Tyke sleeping in babysitter → Ogre portal reveal.
+begin script SetupLandOgre
+
+	CutsceneOgre       = 0
+	CutsceneTyke       = 0
+	CutsceneVortex     = 0
+	CutsceneOgreH      = 0
+	CutsceneTown       = 0
+	NullFlock          = 0
+
+	// Key positions from SetupCreatureIsle1.txt
+	// TownCentre:   [1120.26, 122.657, 1313.13]
+	// BabyHut:      [1126.945, 145.513, 1233.951]
+	// TykeDenPos:   [1141.812, 144.72, 1228.823]  (from BabySitter.txt)
+	// CreatureSpawn:[597.6545, 48.91, 1279.568]
+
+	TykeDenPos  = 0//marker at [597.6545, 48.91, 1279.568]
+	MyCreaturePos = 0//marker at [1141.812, 144.72, 1228.823]
+	VolcanoSpawnPos    = 0//marker at [4454.62, 0.00, 4084.57]
+	TownCentrePos = 0
+	
+	
+	CutCitadelEntrancePos = 0//marker at player 1 temple entrance position radius 90 height 40
+	
+	
+	StartCam = 0
+	MegaBlast = 0
+
+start
+
+	load map "Scripts/CreatureIsles/Isle01.txt"
+	
+	
+	// Set night time before cinema
+	set game time 22.00
+	enable game time
+	set fade red 0 green 0 blue 0 time 0
+	
+	// Markers
+	wait 1.5 seconds
+	TykeDenPos = marker at [1141.812, 144.72, 1228.823]
+	MyCreaturePos = marker at [1278.55,1280.79]
+	VolcanoSpawnPos = marker at [4450.93, 80, 4078.68]
+	TownCentrePos = marker at [1120.71, 100, 1313.67]
+	CutCitadelEntrancePos = marker at player 1 temple entrance position radius 30 height 30
+
+	// Load the player's creature
+	load my_creature at [MyCreaturePos]
+	wait 0.3 seconds
+	MyCreature = get player 1 creature
+	set Tyke position to [MyCreaturePos]
+	force MyCreature CREATURE_SLEEP MyCreature
+
+	// Get the town for the vortex properties call
+	CutsceneTown = get town with id 0
+
+	// Create Tyke.
+	CutsceneTyke = create CREATURE CREATURE_TYPE_CHICKEN at [TykeDenPos]
+	ALIGNMENT of CutsceneTyke = 1
+	set CutsceneTyke name HELP_TEXT_NAME_CHICKEN_01
+	SCALE of CutsceneTyke = 0.3
+	force CutsceneTyke CREATURE_SLEEP CutsceneTyke
+	
+	// Create Ogre
+
+
+	begin cinema
+
+		
+		// =====================================================================
+		// BEAT 1: Town pivot — elevated shot centred on TownCentre, slow sweep
+		// Camera sits above and to the south, pans 180 degrees north across town
+		// TownCentre = [1120.26, 122.657, 1313.13]
+		// =====================================================================
+		set camera position to [960.70, 160, 1382.57]
+		set camera focus to [TownCentrePos]
+		wait until widescreen transition complete
+		set fade in time 1
+		start music MUSIC_TYPE_SCRIPT_GENERIC_01
+		//wait until fade ready
+
+
+		// Sweep focus ~250 units across town — wide 180-degree pan feel
+		move camera position to [1388.84, 210, 1417.79] time 6
+		move camera focus to [1172.79, 100, 1328.93] time 6
+		wait until camera ready
+		
+		// Fade into Creature at temple.
+		set fade red 0 green 0 blue 0 time 1
+		wait until fade ready
+		set camera position to [CutCitadelEntrancePos] 
+		set camera focus to [MyCreature]
+		set fade in time 1
+		wait until fade ready
+		wait 1 second
+		set fade red 0 green 0 blue 0 time 1
+		wait until fade ready
+		
+		// Fade into Tyke sleeping.
+		set camera position to [1161.55, 150, 1220.96]
+		set camera focus to [CutsceneTyke]
+		set fade in time 1
+		wait until fade ready
+		wait 1 second
+		set fade red 0 green 0 blue 0 time 1
+		wait until fade ready
+		wait 1 seconds
+		
+		
+		// Citadel shot from island.
+		set camera position to [4515.69,90,4116.09] 
+		set camera focus to [CutCitadelEntrancePos]
+		set fade in time 1
+		wait until fade ready
+		
+		eject good spirit
+		eject evil spirit
+		say HELP_TEXT_DEFINITELY_NEWEST_INTRO_13
+		wait until read
+		say HELP_TEXT_SWAP_TO_BROWN_BEAR_04
+		wait until read
+		say HELP_TEXT_NARRATOR_EVIL_SPIRIT
+		wait until read
+		
+		
+		stop music
+		wait 1 second
+		
+		
+		// Open Vortex
+		//move camera position to [VolcanoSpawnPos] time 6
+		start music MUSIC_TYPE_SCRIPT_SLEG
+		move camera focus to [VolcanoSpawnPos] time 3
+		CutsceneVortex = create VORTEX VORTEX_TYPE_IN at [VolcanoSpawnPos]
+		set CutsceneVortex properties town CutsceneTown flock position [VolcanoSpawnPos] distance 5 radius 10 flock NullFlock
+		wait 5 seconds
+		CutsceneOgre = create CREATURE CREATURE_TYPE_OGRE at [VolcanoSpawnPos]
+		SCALE of CutsceneOgre = 2.0
+		wait 5 seconds
+		
+		
+		
+		
+		
+		
+		//
+		
+		
+		
+		wait until fade ready
+		
+	end cinema
+	
+end script SetupLandOgre
+
+
+
+begin script LandControlOgre
+start
+	run script SetupLandOgre
+	
+end script LandControlOgre

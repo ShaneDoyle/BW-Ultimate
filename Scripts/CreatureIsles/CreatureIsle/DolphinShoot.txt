@@ -1,0 +1,481 @@
+//LHVM Challenge source version 8
+//Decompiled with CHLASM tool by Daniels118
+
+global NumOfDolphins = 6
+global Dolphins[6]
+global DolphinStartPos[6]
+global DolphinEndPos[6]
+global CannonPosition
+global DolphinCentrePosition
+global Score
+global HighestScore = 50
+global Scoreboard
+global Highscoreboard
+global Cannon
+global NumOfDispensers = 2
+global PointsNeededForDispenser[2]
+global DispenserRewards[2]
+global GivenDispenser[2]
+global DispenserPositions[2]
+global NumOfOneShotRewards = 5
+global PointsNeededForOneShotRewards[5]
+global OneShotRewards[5]
+global OneShotPosition
+global CompleteSpeech
+global NewHighScoreAcquired
+
+define script SendDolphinAway(dolphin_to_send)
+define script RemoveScoreboardsAndCannon
+define script CreateHighscoreboard(create_position, focus_position)
+define script SetupDolphins
+define script CreateHighlight(highlight_position)
+define script ControlCannon(pos_of_cannon, pos_in_direction_of_fire)
+define script TrackScore(dolphin_to_track)
+define script DolphinGiveReward
+define script CreateScoreboard(create_position, focus_position)
+
+begin script DolphinShoot
+	DolphinShootDYKPos = marker at [891.09, 11.508, 2260.726]
+	pos = marker at (hand position)
+	camera_position = 0
+	camera_focus = 0
+	score_board_position = 0
+	highscore_board_position = 0
+	count = 0
+	score_needed_to_complete = 50
+	smoke_effect = 0
+	StartCamPos = marker at [875.861, 26.7763, 2255.99]
+	StartCamFoc = marker at [838.617, 1.90324, 2272.03]
+	MoveCamPos = marker at [801.154, 42.4103, 2259.32]
+	MoveCamFoc = marker at [806.047, 0.226681, 2440.6]
+	MoveCam2Pos = marker at [806.935, 28.9227, 2288.08]
+	MoveCam2Foc = marker at [849.316, 6.97632, 2324.72]
+	SeeFishTrainerPos = marker at [839.37, 4.1138, 2318.68]
+	SeeFishTrainerFoc = marker at [844.359, 2.641, 2326.252]
+	FishTrainerPos = marker at [841.3, 2.68, 2321.52]
+	FishTrainer = 0
+	IntroPlayed = 0
+	FirstHigh = 0
+	FirstTimeShown = 0
+	SeeHighScorePos = marker at [887.898, 14.7447, 2288.33]
+	SeeHighScoreFoc = marker at [891.912, 13.3795, 2277.22]
+	Dolphin1 = 0
+	Dolphin2 = 0
+	DolphinPos1 = marker at [673.198, 0, 2257.42]
+	DolphinPos2 = marker at [723.472, 0, 2449]
+	DolphinPos3 = marker at [827.707, 0, 2421.91]
+	DolphinPos4 = marker at [485.046, 0, 2383.19]
+	DolphinPos5 = marker at [820.909, 0, 2475.81]
+	NewCamPos = marker at [839.37, 4.1138, 2318.68]
+	NewCamFoc = marker at [844.359, 2.641, 2326.252]
+	PreNewCamPos = marker at [831.999, 11.6699, 2307.58]
+	PreNewCamFoc = marker at [837.031, 8.39089, 2315.18]
+	SeeGunPos = marker at [883.175, 15.6368, 2303.92]
+	SeeGunFoc = marker at [933.392, -0.304541, 2242.88]
+	SeeScoreFoc = marker at [912.074, -0.304533, 2230.35]
+	Temp_smoke_effect = 0
+	TempCannon = 0
+	Lantern = 0
+	LanternPos = marker at [835.838, 2.68, 2324.982]
+start
+	Lantern = create OBJECT MOBILE_STATIC_INFO_STREET_LANTERN at [LanternPos]
+	CannonPosition = marker at [892.5607, 6.4959, 2294.4204]
+	DolphinCentrePosition = marker at [790.1196, 0, 2287.3696]
+	DispenserPositions[0] = marker at [918.239, 7.34645, 2307.88]
+	DispenserPositions[1] = marker at [916.813, 8.71, 2280.02]
+	OneShotPosition = marker at [924.923, 7.37, 2294.76]
+	PointsNeededForDispenser[0] = score_needed_to_complete
+	PointsNeededForDispenser[1] = score_needed_to_complete + 25
+	DispenserRewards[0] = variable CREATURE_SPELL_FREEZE
+	DispenserRewards[1] = variable CREATURE_SPELL_STRONG
+	GivenDispenser[0] = 0
+	GivenDispenser[1] = 0
+	PointsNeededForOneShotRewards[0] = 25
+	PointsNeededForOneShotRewards[1] = 30
+	PointsNeededForOneShotRewards[2] = 35
+	PointsNeededForOneShotRewards[3] = 40
+	PointsNeededForOneShotRewards[4] = 45
+	OneShotRewards[0] = variable SPELL_SEED_TYPE_WATER
+	OneShotRewards[1] = variable SPELL_SEED_TYPE_FOOD
+	OneShotRewards[2] = variable SPELL_SEED_TYPE_NATURE
+	OneShotRewards[3] = variable SPELL_SEED_TYPE_FLOCK_FLYING
+	OneShotRewards[4] = variable SPELL_SEED_TYPE_FLOCK_GROUND
+	camera_position = marker at [922.038, 23.9151, 2298.83]
+	camera_focus = marker at [858.615, 10.6976, 2289.06]
+	score_board_position = marker at (get target from [DolphinCentrePosition] to [CannonPosition] distance 15 angle 270)
+	highscore_board_position = marker at (get target from [DolphinCentrePosition] to [CannonPosition] distance 25 angle 270)
+	CompleteSpeech = 0
+	begin loop
+		run script CreateHighlight(CannonPosition)
+		begin cinema
+			if FirstTimeShown == 0
+				FirstTimeShown = 1
+				set fade red 0 green 0 blue 0 time 2
+				run background script DidYouKnow(DolphinShootDYKPos, variable HELP_TEXT_DOLPHIN_SHOOT_DYK, variable DYK_MISC)
+				wait until 2 seconds
+				set camera position to [StartCamPos]
+				set camera focus to [StartCamFoc]
+				FishTrainer = create VILLAGER VILLAGER_INFO_NORSE_FISHERMAN_MALE at [FishTrainerPos]
+				set FishTrainer carrying CARRIED_OBJECT_FISHING_ROD
+				set FishTrainer focus to [NewCamPos]
+				FishTrainer play ANM_P_FISHERMAN loop -1
+				Dolphin1 = create with angle 0 and scale 0.1 SCRIPT_OBJECT_TYPE_DOLPHIN at [DolphinPos1]
+				move Dolphin1 position to [DolphinPos2] radius 0
+				Dolphin2 = create with angle 0 and scale 0.1 SCRIPT_OBJECT_TYPE_DOLPHIN at [DolphinPos3]
+				move Dolphin2 position to [DolphinPos4] radius 0
+				set fade in time 2
+				move camera position to [MoveCamPos] time 8
+				move camera focus to [MoveCam2Foc] time 8
+				wait until 6 seconds
+				move camera position to [MoveCam2Pos] time 5
+				move Dolphin1 position to [DolphinPos5] radius 0
+				wait until camera ready
+				set FishTrainer carrying CARRIED_OBJECT_NONE
+				set camera position to [PreNewCamPos]
+				set camera focus to [PreNewCamFoc]
+				wait until camera ready
+				delete Dolphin1
+				delete Dolphin2
+			else
+				set fade red 0 green 0 blue 0 time 2
+				wait until 2 seconds
+				set camera position to [NewCamPos]
+				set camera focus to [NewCamFoc]
+				FishTrainer = create VILLAGER VILLAGER_INFO_NORSE_FISHERMAN_MALE at [FishTrainerPos]
+				set FishTrainer focus to [NewCamPos]
+				set fade in time 2
+				wait until 4 seconds
+			end if
+			FishTrainer play ANM_P_TALK1_MALE loop -1
+			if IntroPlayed == 0
+				say HELP_TEXT_DOLPHINSHOOT_10
+				run script CreateHighscoreboard(highscore_board_position, camera_position)
+				wait until read
+				set camera position to [NewCamPos]
+				set camera focus to [NewCamFoc]
+				say HELP_TEXT_DOLPHINSHOOT_20 with interaction
+				wait until read
+				say HELP_TEXT_DOLPHINSHOOT_30
+				wait until read
+				set camera position to [SeeGunPos]
+				set camera focus to [SeeGunFoc]
+				Temp_smoke_effect = create special effect SPOT_VISUAL_OBJECT_APPEAR at [CannonPosition] time 3
+				TempCannon = create SCRIPT_OBJECT_TYPE_CANNON at [CannonPosition]
+				set TempCannon focus to [DolphinCentrePosition]
+				say HELP_TEXT_DOLPHINSHOOT_40 with interaction
+				wait until read
+				say HELP_TEXT_DOLPHINSHOOT_50
+				wait until read
+				move camera focus to [SeeScoreFoc] time 3
+				say HELP_TEXT_DOLPHINSHOOT_60
+				wait until read
+				IntroPlayed = 1
+				set camera position to [NewCamPos]
+				set camera focus to [NewCamFoc]
+			elsif HighestScore >= score_needed_to_complete
+				say HELP_TEXT_DOLPHINSHOOT_80
+				wait until read
+			else
+				say HELP_TEXT_DOLPHINSHOOT_60
+				wait until read
+			end if
+			say HELP_TEXT_DOLPHINSHOOT_70 with interaction
+			wait until read
+			clear dialogue
+			set fade red 0 green 0 blue 0 time 2
+			wait until 2 seconds
+			delete TempCannon
+			set camera position to [camera_position]
+			set camera focus to [camera_focus]
+			run script SetupDolphins
+			run script CreateScoreboard(score_board_position, camera_position)
+			delete FishTrainer with fade
+			run script ControlCannon(CannonPosition, DolphinCentrePosition)
+		end cinema
+		count = 0
+		while count != NumOfDolphins
+			run background script SendDolphinAway(Dolphins[count])
+			count++
+		end while
+		if HighestScore < score_needed_to_complete and Score >= score_needed_to_complete
+			KCDolphinShootComplete = 1
+		end if
+		if Score > HighestScore
+			HighestScore = Score
+			if Highscoreboard == 0
+				run script CreateHighscoreboard(highscore_board_position, camera_position)
+			else
+				smoke_effect = create special effect SPOT_VISUAL_BANG at [Highscoreboard] time 3
+				smoke_effect = create special effect SPOT_VISUAL_OBJECT_APPEAR at [Highscoreboard] time 3
+			end if
+			set Highscoreboard score HighestScore
+			if FirstHigh == 0
+				FirstHigh = 1
+			else
+				begin dialogue
+					eject good spirit
+					say single line HELP_TEXT_DOLPHINSHOOT_90
+					wait until read
+				end dialogue
+				NewHighScoreAcquired = 1
+			end if
+		else
+			begin dialogue
+				eject good spirit
+				say single line HELP_TEXT_DOLPHINSHOOT_100
+				wait until read
+			end dialogue
+		end if
+		run script DolphinGiveReward
+		NewHighScoreAcquired = 0
+		wait until 3 seconds
+		run script RemoveScoreboardsAndCannon
+		Score = 0
+	end loop
+	run background script DeleteDYK(DolphinShootDYKPos)
+end script DolphinShoot
+
+begin script CreateHighlight(highlight_position)
+	Highlight = 0
+start
+	Highlight = create highlight CHALLENGE_DOLPHIN_SHOOT HIGHLIGHT_CHALLENGE at [highlight_position]
+	run script ChallengeHighlightNotifyCI(Highlight, highlight_position, variable HELP_TEXT_GENERAL_CHALLENGE_START_04)
+	delete Highlight
+end script CreateHighlight
+
+begin script SetupDolphins
+	count = 0
+	pos = 0
+	start_at_start = 1
+start
+	while count != NumOfDolphins
+		DolphinStartPos[count] = marker at (get target from [CannonPosition] to [DolphinCentrePosition] distance 180 angle 90 - count * 5)
+		DolphinEndPos[count] = marker at (get target from [CannonPosition] to [DolphinCentrePosition] distance 180 angle (-90) + count * 5)
+		if start_at_start == 1
+			start_at_start = 0
+			pos = DolphinStartPos[count]
+		else
+			start_at_start = 1
+			pos = DolphinEndPos[count]
+		end if
+		Dolphins[count] = create with angle 0 and scale 0.1 SCRIPT_OBJECT_TYPE_DOLPHIN at [pos]
+		set Dolphins[count] dolphin move from [DolphinStartPos[count]] to [DolphinEndPos[count]]
+		run background script TrackScore(Dolphins[count])
+		count++
+	end while
+end script SetupDolphins
+
+begin script ControlCannon(pos_of_cannon, pos_in_direction_of_fire)
+	mouse_down = 0
+	mouse_across = 0
+	smoke_effect = 0
+	GameTimer = create timer for 0 seconds
+start
+	smoke_effect = create special effect SPOT_VISUAL_BANG at [Highscoreboard] time 3
+	smoke_effect = create special effect SPOT_VISUAL_OBJECT_APPEAR at [pos_of_cannon] time 3
+	Cannon = create SCRIPT_OBJECT_TYPE_CANNON at [pos_of_cannon]
+	set Cannon focus to [pos_in_direction_of_fire]
+	set fade in time 2
+	wait until 2 seconds
+	set countdown timer draw SCRIPT_COUNTDOWN_DRAW_BOTTOM_LEFT
+	start sound LH_SAMPLE_DOLPHINLOOP_01
+	start music MUSIC_TYPE_SCRIPT_RACE_MUSIC
+	enable countdown timer down with 60 seconds
+	begin loop
+		mouse_down = mouse percentage down
+		mouse_across = mouse percentage across
+		set gun Cannon angle mouse_across pitch mouse_down
+		if mouse left button down
+			fire gun Cannon
+		end if
+		until key KB_ESC down
+		until get countdown timer time <= 0
+	end loop
+	disable countdown timer
+	stop music
+	stop sound LH_SAMPLE_DOLPHINLOOP_01
+end script ControlCannon
+
+begin script TrackScore(dolphin_to_track)
+start
+	while dolphin_to_track exists
+		if dolphin_to_track hit
+			Score++
+			set Scoreboard score Score
+			start sound constant from LH_SAMPLE_DOLPHINHIT_01 to LH_SAMPLE_DOLPHINHIT_03
+			clear hit object
+		end if
+	end while
+end script TrackScore
+
+begin script CreateScoreboard(create_position, focus_position)
+	smoke_effect = 0
+start
+	smoke_effect = create special effect SPOT_VISUAL_BANG at [create_position] time 3
+	smoke_effect = create special effect SPOT_VISUAL_OBJECT_APPEAR at [create_position] time 3
+	Scoreboard = create highlight CHALLENGE_NONE SCRIPT_HIGHLIGHT_INFO_SCOREBOARD_BIG at [create_position]
+	set Scoreboard focus to [focus_position]
+	enable Scoreboard indestructible
+	set Scoreboard score 0
+end script CreateScoreboard
+
+begin script CreateHighscoreboard(create_position, focus_position)
+	smoke_effect = 0
+start
+	smoke_effect = create special effect SPOT_VISUAL_BANG at [create_position] time 3
+	smoke_effect = create special effect SPOT_VISUAL_OBJECT_APPEAR at [create_position] time 3
+	Highscoreboard = create highlight CHALLENGE_NONE SCRIPT_HIGHLIGHT_INFO_SCOREBOARD_BIG at [create_position]
+	set Highscoreboard focus to [focus_position]
+	enable Highscoreboard indestructible
+	set Highscoreboard score HighestScore
+end script CreateHighscoreboard
+
+begin script RemoveScoreboardsAndCannon
+	smoke_effect = 0
+start
+	smoke_effect = create special effect SPOT_VISUAL_BANG at [Scoreboard] time 3
+	smoke_effect = create special effect SPOT_VISUAL_OBJECT_APPEAR at [Scoreboard] time 3
+	delete Scoreboard
+	smoke_effect = create special effect SPOT_VISUAL_BANG at [Cannon] time 3
+	smoke_effect = create special effect SPOT_VISUAL_OBJECT_APPEAR at [Cannon] time 3
+	delete Cannon
+end script RemoveScoreboardsAndCannon
+
+begin script SendDolphinAway(dolphin_to_send)
+	position_to_go_to = 0
+	count = 0
+	angle_to_go = 0
+start
+	angle_to_go = number from 0 to 90
+	angle_to_go -= 45
+	if angle_to_go < 0
+		angle_to_go = 360 + angle_to_go
+	end if
+	position_to_go_to = marker at (get target from [CannonPosition] to [dolphin_to_send] distance 3000 angle angle_to_go)
+	move dolphin_to_send position to [position_to_go_to] radius 0
+	position_to_go_to = marker at (destination of dolphin_to_send)
+	begin loop
+		until get distance from [dolphin_to_send] to [position_to_go_to] < 1 and not dolphin_to_send viewed
+	end loop
+	delete dolphin_to_send
+end script SendDolphinAway
+
+begin script DolphinGiveReward
+	count = 0
+	the_one_to_give = -1
+	thing_given = 0
+	smoke_effect = 0
+	SeeFishTrainerPos = marker at [820.527, 1.28527, 2332.49]
+	SeeFishTrainerFoc = marker at [823.932, 1.56136, 2333.66]
+	FishTrainerPos = marker at [823.169, 0.847969, 2333.25]
+	FishTrainer = 0
+	SeeRewardPos = marker at [893.869, 28.3699, 2300.53]
+	SeeRewardFoc = marker at [928.328, 7.83908, 2296.11]
+	RewardInfluence = 0
+	DYKPlaced = 0
+	MiracleSeedDYKPos = marker at [923.394, 7.237, 2295.383]
+	AvoidRockPos = marker at [853.051, 28.37, 2268.977]
+	AvoidRockFoc = marker at [854.422, 2.849, 2312.139]
+start
+	while count != NumOfDispensers
+		if PointsNeededForDispenser[count] < Score and GivenDispenser[count] == 0
+			the_one_to_give = count
+			count = NumOfDispensers - 1
+		end if
+		count++
+	end while
+	if the_one_to_give > -1
+		begin cinema
+			move camera position to [AvoidRockPos] time 2
+			move camera focus to [AvoidRockFoc] time 2
+			wait until 2 seconds
+			if KCDolphinShootComplete == 0
+				KCDolphinShootComplete = 1
+			end if
+			move camera position to [SeeFishTrainerPos] time 3
+			move camera focus to [SeeFishTrainerFoc] time 3
+			FishTrainer = create VILLAGER VILLAGER_INFO_NORSE_FISHERMAN_MALE at [FishTrainerPos]
+			set FishTrainer focus to [SeeFishTrainerPos]
+			wait until camera ready
+			FishTrainer play ANM_P_TALK1_MALE loop 2
+			if KCDolphinShootComplete == 1 and CompleteSpeech == 0
+				say HELP_TEXT_DOLPHINSHOOT_110
+				wait until read
+				say HELP_TEXT_DOLPHINSHOOT_120
+				wait until read
+				CompleteSpeech = 1
+			else
+				say HELP_TEXT_DOLPHINSHOOT_130
+				wait until read
+				say HELP_TEXT_DOLPHINSHOOT_140
+				wait until read
+			end if
+			set camera position to [SeeRewardPos]
+			set camera focus to [SeeRewardFoc]
+			smoke_effect = create special effect SPOT_VISUAL_BANG at [Scoreboard] time 3
+			smoke_effect = create special effect SPOT_VISUAL_OBJECT_APPEAR at [Scoreboard] time 3
+			thing_given = create with angle 0 and scale 1 SCRIPT_OBJECT_TYPE_SPELL_DISPENSER ABODE_INFO_NORSE_SPELL_DISPENSER at [DispenserPositions[the_one_to_give]]
+			if DYKPlaced == 0
+				run background script DidYouKnow(MiracleSeedDYKPos, variable HELP_TEXT_DYK_90, variable DYK_MISC)
+				DYKPlaced = 1
+			end if
+			RewardInfluence = create influence on thing_given radius 5
+			release RewardInfluence
+			enable thing_given indestructible
+			set thing_given magic properties constant DispenserRewards[the_one_to_give] time 0
+			enable thing_given active
+			set thing_given time to 60 seconds
+			GivenDispenser[the_one_to_give] = 1
+			eject good spirit
+			make good spirit point at [thing_given]
+			say single line HELP_TEXT_DOLPHINSHOOT_150 with interaction
+			wait until read
+			stop good spirit pointing
+			send good spirit home
+			delete FishTrainer with fade
+		end cinema
+	else
+		count = 0
+		while count != NumOfOneShotRewards
+			if PointsNeededForOneShotRewards[count] <= Score
+				the_one_to_give = count
+			end if
+			count++
+		end while
+		if the_one_to_give > -1
+			begin cinema
+				move camera position to [AvoidRockPos] time 2
+				move camera focus to [AvoidRockFoc] time 2
+				wait until 2 seconds
+				move camera position to [SeeFishTrainerPos] time 3
+				move camera focus to [SeeFishTrainerFoc] time 3
+				FishTrainer = create VILLAGER VILLAGER_INFO_NORSE_FISHERMAN_MALE at [FishTrainerPos]
+				set FishTrainer focus to [SeeFishTrainerPos]
+				wait until camera ready
+				FishTrainer play ANM_P_TALK1_MALE loop 2
+				if NewHighScoreAcquired == 0
+					say HELP_TEXT_DOLPHINSHOOT_160
+					wait until read
+				else
+					say HELP_TEXT_DOLPHINSHOOT_165
+					wait until read
+				end if
+				set camera position to [SeeRewardPos]
+				set camera focus to [SeeRewardFoc]
+				smoke_effect = create special effect SPOT_VISUAL_BANG at [Scoreboard] time 3
+				smoke_effect = create special effect SPOT_VISUAL_OBJECT_APPEAR at [Scoreboard] time 3
+				thing_given = create ONE_SHOT constant OneShotRewards[the_one_to_give] at [OneShotPosition]
+				RewardInfluence = create influence on thing_given radius 5
+				release RewardInfluence
+				eject good spirit
+				make good spirit point at [thing_given]
+				say HELP_TEXT_DOLPHINSHOOT_170 with interaction
+				wait until read
+				stop good spirit pointing
+				send good spirit home
+				delete FishTrainer with fade
+			end cinema
+		end if
+	end if
+end script DolphinGiveReward
+

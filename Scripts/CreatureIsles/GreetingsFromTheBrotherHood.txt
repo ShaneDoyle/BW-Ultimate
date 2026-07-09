@@ -1,0 +1,662 @@
+//LHVM Challenge source version 8
+//Decompiled with CHLASM tool by Daniels118
+
+begin script DoBlackSwipe
+	AcrossValue = 0.8
+start
+	while AcrossValue > 0.5
+		set clipping window across AcrossValue down 0.1 width 1 - AcrossValue height 0.8 time 10
+		clear clipping window time 0.5
+		wait until 0.05 seconds
+		AcrossValue -= 0.0125 / 8
+	end while
+end script DoBlackSwipe
+
+begin script LookAfterLightning(Pos)
+	LighteningStorm = 0
+start
+	LighteningStorm = create SCRIPT_OBJECT_TYPE_WEATHER_THING WEATHER_INFO_DRIZZLE at [Pos]
+	set LighteningStorm properties degrees 15 rainfall 0.2 snowfall 0 overcast 0.9 fallspeed 0
+	set LighteningStorm properties time 2000000 fade 10
+	set LighteningStorm properties clouds 6 shade 1.7 height 180
+	set LighteningStorm properties sheetmin 2 sheetmax 10 forkmin 2 forkmax 5
+	set LighteningStorm properties inner 200 outer 400 calm 0
+	disable LighteningStorm affected by wind
+	wait until 35 seconds
+	set LighteningStorm properties time 8 fade 12
+	delete LighteningStorm
+end script LookAfterLightning
+
+begin script GreetingsFromTheBrotherHood
+	Lion = 0
+	Crocodile = 0
+	Citadel = 0
+	Fireball = 0
+	Bloke1 = 0
+	Bloke2 = 0
+	Mandrill = 0
+	Tortoise = 0
+	Horse = 0
+	Ape = 0
+	PolarBear = 0
+	OriginalPos = 0
+	OriginalFoc = 0
+	GoldScroll = 0
+	StartIntro = 0
+	BeamExplosion = 0
+	OgrePos = marker at [716.695, 0, 2888.663]
+	LittleOgre1 = 0
+	LittleOgre2 = 0
+	CreatureScared1 = 0
+	CreatureScared2 = 0
+	Rhino = 0
+	Basket = 0
+	BasketPos = marker at [1380.256, 0, 2236.861]
+start
+	GoldScroll = create highlight CHALLENGE_GREETINGS_FROM_THE_HOOD HIGHLIGHT_QUEST at [1258.327, 57.521, 1025.167]
+	ALTITUDE of GoldScroll = 2
+	MyCreature = get player 1 creature
+	while StartIntro == 0
+		run script ChallengeHighlightNotifyCI(GoldScroll, marker at [1258.327, 57.521, 1025.167], variable HELP_TEXT_GENERAL_CHALLENGE_START_14)
+		if not get distance from [MyCreature] to [1258.977, 57.285, 1022.924] < 200
+			clear clicked object
+			OriginalPos = marker at (camera position)
+			OriginalFoc = marker at (camera focus)
+			begin cinema
+				move camera position to [1282.839, 83.345, 1056.439] time 5
+				move camera focus to [1161.353, 71.549, 943.283] time 5
+				wait until camera ready
+				move camera position to [1254.516, 80.595, 1030.059] time 30
+				move camera focus to [1133.031, 68.799, 916.903] time 30
+				wait until widescreen transition complete
+				say single line HELP_TEXT_LION_INTRODUCTION_21
+				wait until read
+				say single line HELP_TEXT_LION_INTRODUCTION_22
+				wait until read
+				move camera position to [OriginalPos] time 5
+				move camera focus to [OriginalFoc] time 5
+				wait until fade ready
+			end cinema
+			wait until widescreen transition complete
+		else
+			StartIntro = 1
+		end if
+	end while
+	delete GoldScroll
+	begin cinema
+		start music MUSIC_TYPE_SCRIPT_BROTHERHOOD_INTRO
+		set fade red 0 green 0 blue 0 time 1
+		wait until fade ready
+		Citadel = create player 1 temple at [554.23, 2.68, 1992.46]
+		delete Citadel with temple explosion
+		set draw text colour red 255 green 255 blue 255
+		clear clipping window time 0.5
+		disable game time
+		Lion = create DUMB_CREATURE CREATURE_TYPE_LION at [1448.264, 2.565, 2022.214]
+		SCALE of Lion = 0.5
+		Crocodile = create DUMB_CREATURE CREATURE_TYPE_CROCODILE at [2841.975, 2.68, 1240.914]
+		SCALE of Crocodile = 0.9
+		Mandrill = create DUMB_CREATURE CREATURE_TYPE_MANDRILL at [2686.838, 19.841, 1142.984]
+		SCALE of Mandrill = 0.4
+		Tortoise = create DUMB_CREATURE CREATURE_TYPE_TORTOISE at [1468.731, 56.458, 1568.662]
+		SCALE of Tortoise = 0.3
+		Horse = create DUMB_CREATURE CREATURE_TYPE_ZEBRA at [1457.054, 56.95, 1561.416]
+		SCALE of Horse = 0.2
+		Ape = create DUMB_CREATURE CREATURE_TYPE_APE at [1464.375, 56.691, 1570.491]
+		SCALE of Ape = 0.55
+		PolarBear = create DUMB_CREATURE CREATURE_TYPE_POLAR_BEAR at [1464.375, 56.691, 1570.491]
+		SCALE of PolarBear = 0.6
+		set Lion name HELP_TEXT_NAME_LION_01
+		set Crocodile name HELP_TEXT_NAME_CROCODILE_01
+		set Mandrill name HELP_TEXT_NAME_MANDRILL_01
+		set Tortoise name HELP_TEXT_NAME_TURTLE_01
+		set Horse name HELP_TEXT_NAME_HORSE_01
+		set Ape name HELP_TEXT_NAME_APE_01
+		set PolarBear name HELP_TEXT_NAME_BEAR_01
+		run script SetupCreatureIsleCreature(Lion)
+		set Tortoise position to [1468.731, 56.458, 1568.662]
+		set Tortoise focus to [1518.325, 125.693, 1461.322]
+		set Horse position to [1457.054, 56.95, 1561.416]
+		set Horse focus to [1518.325, 125.693, 1461.322]
+		set Ape position to [1464.375, 56.691, 1570.491]
+		set Ape focus to [1518.325, 125.693, 1461.322]
+		set PolarBear position to [1456.82, 56.95, 1564.885]
+		set PolarBear focus to [1518.325, 125.693, 1461.322]
+		MyCreature = get player 1 creature
+		SCALE of Lion = 2
+		wait until widescreen transition complete
+		set camera position to [1117.839, 83.331, 915.513]
+		set camera focus to [1164.216, 78.347, 947.874]
+		set camera lens 100 time 0
+		set MyCreature position to [1413.268, 73.551, 1154.878]
+		move MyCreature position to [1314.112, 62.402, 1071.393] radius 0
+		move camera position to [1188.276, 80.543, 968.12] time 10
+		move camera focus to [1263.037, 84.603, 1034.915] time 10
+		set fade in time 1
+		set camera lens 70 time 10
+		wait until 2 seconds
+		wait until 1 seconds
+		wait until 1 seconds
+		wait until 1 seconds
+		wait until 1 seconds
+		set Lion position to [1165.058, 56.95, 955.993]
+		set Lion focus to [1310.179, 87.741, 1066.408]
+		move Lion position to [1197.909, 56.646, 977.592] radius 0
+		wait until 1 seconds
+		set camera position to [1179.721, 122.716, 883.874]
+		set camera focus to [1194.323, 76.043, 975.234]
+		wait until 2 seconds
+		Lion play ANM_SWALLOW_FLAP loop 1
+		wait until Lion played
+		set camera focus follow Lion
+		move camera position to [1201.592, 115.443, 914.006] time 12
+		move Lion position to [1296.337, 61.02, 1056.916] radius 0
+		wait until 8 seconds
+		set camera position to [1333.165, 94.173, 1013.806]
+		set camera focus to [1252.192, 40.854, 1147.679]
+		wait until 2 seconds
+		say HELP_TEXT_LION_INTRODUCTION_10 by Lion
+		wait until read
+		say HELP_TEXT_LION_INTRODUCTION_20 with interaction by Lion
+		wait until read
+		set camera position to [1309.965, 83.72, 1062.96]
+		set camera focus to [1162.762, 149.236, 1026.075]
+		say HELP_TEXT_LION_INTRODUCTION_30 by Lion
+		wait until read
+		clear dialogue
+		set fade red 0 green 0 blue 0 time 3
+		wait until fade ready
+		disable sound effects
+		start jc special SJC_SWITCH_OFF_INFLUENCE
+		disable scoreboard draw
+		SCALE of Lion = 0.5
+		run script DisableCreatureIsleCreature(Lion)
+		set camera position to [564.968, 27.522, 1887.281]
+		set camera focus to [557.375, 20.597, 1934.677]
+		set fade in time 3
+		move camera position to [572.805, 15.239, 1777.936] time 16
+		move camera focus to [561.654, 14.11, 1825.151] time 16
+		set game time 16
+		Fireball = cast SPELL_FIREBALL_LEVEL_1 spell at [514.795, 2.68, 1968.624] from [654.605, 44.531, 1901.846] radius 1 time 30 curl 0
+		Fireball = cast SPELL_FIREBALL_LEVEL_1 spell at [547.22, 0.754, 2043.344] from [654.605, 44.531, 1901.846] radius 1 time 30 curl 0
+		Fireball = cast SPELL_FIREBALL_LEVEL_1 spell at [579.365, 2.68, 1958.441] from [654.605, 44.531, 1901.846] radius 1 time 30 curl 0
+		wait until 1 seconds
+		Fireball = cast SPELL_FIREBALL_LEVEL_1 spell at [514.795, 2.68, 1968.624] from [654.605, 44.531, 1901.846] radius 1 time 30 curl 0
+		Fireball = cast SPELL_FIREBALL_LEVEL_1 spell at [547.22, 0.754, 2043.344] from [654.605, 44.531, 1901.846] radius 1 time 30 curl 0
+		Fireball = cast SPELL_FIREBALL_LEVEL_1 spell at [579.365, 2.68, 1958.441] from [654.605, 44.531, 1901.846] radius 1 time 30 curl 0
+		wait until 1 seconds
+		Fireball = cast SPELL_FIREBALL_LEVEL_1 spell at [514.795, 2.68, 1968.624] from [654.605, 44.531, 1901.846] radius 1 time 30 curl 0
+		Fireball = cast SPELL_FIREBALL_LEVEL_1 spell at [547.22, 0.754, 2043.344] from [654.605, 44.531, 1901.846] radius 1 time 30 curl 0
+		Fireball = cast SPELL_FIREBALL_LEVEL_1 spell at [579.365, 2.68, 1958.441] from [654.605, 44.531, 1901.846] radius 1 time 30 curl 0
+		set Lion position to [564.344, 10.72, 1788.342]
+		set Lion focus to [549.427, 2.68, 1991.273]
+		BeamExplosion = cast SPELL_EXPLOSION_LEVEL_1 spell at [555.23, 2.68, 1992.46] from [555.23, 102.68, 1992.46] radius 50 time 15 curl 0
+		say HELP_TEXT_LION_INTRODUCTION_40
+		BeamExplosion = cast SPELL_EXPLOSION_LEVEL_2 spell at [555.23, 2.68, 1992.46] from [555.23, 102.68, 1992.46] radius 50 time 15 curl 0
+		wait until read
+		clear dialogue
+		wait until camera ready
+		set Lion focus to [566.169, 10.72, 1778.882]
+		wait until Lion played
+		Lion play ANM_A_COW_DIE loop 1
+		wait until Lion played
+		move Lion position to [566.919, 10.864, 1742.385] radius 0
+		set fade red 0 green 0 blue 0 time 2
+		wait until fade ready
+		set clipping window across 0.1 down 0.2 width 0.8 height 0.2 time 0.1
+		set fade in time 2
+		set camera position to [899.203, 19.51, 1503.513]
+		set camera focus to [1100.834, -94.586, 1800.845]
+		set Lion position to [892.734, 11.102, 1577.865]
+		set Lion focus to [971.138, 16.41, 1506.211]
+		move Lion position to [971.138, 16.41, 1506.211] radius 0
+		wait until fade ready
+		draw text HELP_TEXT_LION_INTRODUCTION_50 across 0.1 down 0.5 width 0.8 height 0.4 size 0.05 fade in time 3 seconds
+		start say sound HELP_TEXT_LION_INTRODUCTION_50
+		wait until not say sound HELP_TEXT_LION_INTRODUCTION_50 playing
+		wait until 2 seconds
+		fade all draw text time 2 seconds
+		delete Citadel
+		set fade red 0 green 0 blue 0 time 2
+		wait until fade ready
+		clear clipping window time 0.5
+		set clipping window across 0.6 down 0.1 width 0.3 height 0.8 time 0.1
+		set fade in time 2
+		set camera position to [845.659, 6.321, 1802.34]
+		set camera focus to [860.303, 1.424, 1830.513]
+		set Lion position to [857.415, 0, 1812.614]
+		set Lion focus to [857.412, 0, 1825.936]
+		wait until fade ready
+		draw text HELP_TEXT_LION_INTRODUCTION_60 across 0.1 down 0.3 width 0.4 height 0.4 size 0.05 fade in time 3 seconds
+		start say sound HELP_TEXT_LION_INTRODUCTION_60
+		Lion play ANM_A_HORSE_DEADLHS loop 1
+		wait until Lion played
+		Lion play ANM_A_COW_DIE loop 1
+		wait until Lion played
+		wait until not say sound HELP_TEXT_LION_INTRODUCTION_60 playing
+		fade all draw text time 2 seconds
+		set fade red 0 green 0 blue 0 time 2
+		wait until fade ready
+		clear clipping window time 0.5
+		set Lion position to [932.083, 10.335, 1547.826]
+		set Lion focus to [922.639, 9.38, 1565.256]
+		Bloke1 = create VILLAGER NOMADE at [920.41, 9.38, 1562.125]
+		Bloke2 = create VILLAGER AZTEC_HOUSEWIFE at [921.501, 9.38, 1562.885]
+		wait until 1 seconds
+		Lion play ANM_A_COW_LANDED_RIGHT_SIDE loop -1
+		set Bloke1 focus to [Lion]
+		set Bloke2 focus to [Lion]
+		set camera position to [918.572, 10.049, 1565.376]
+		set camera focus to [924.483, 12.922, 1551.89]
+		set clipping window across 0.1 down 0.1 width 0.4 height 0.8 time 0.1
+		set fade in time 2
+		wait until fade ready
+		draw text HELP_TEXT_LION_INTRODUCTION_70 across 0.6 down 0.3 width 0.3 height 0.4 size 0.05 fade in time 3 seconds
+		start say sound HELP_TEXT_LION_INTRODUCTION_70
+		Bloke1 play ANM_P_CROWD_UNIMPRESSED_1 loop 1
+		wait until 1 seconds
+		Bloke2 play ANM_P_CROWD_UNIMPRESSED_2 loop 1
+		wait until Bloke1 played
+		wait until Bloke2 played
+		move Bloke1 position to [904.988, 10.05, 1565.466] radius 0
+		move Bloke2 position to [920.643, 9.38, 1569.132] radius 0
+		wait until 1 seconds
+		Lion play ANM_A_COW_DIE loop 20
+		set camera lens 100 time 10
+		wait until 6 seconds
+		fade all draw text time 4 seconds
+		set fade red 0 green 0 blue 0 time 4
+		wait until fade ready
+		clear clipping window time 0.5
+		set camera lens 70 time 0
+		run background script LookAfterLightning(marker at [992.579, 62.245, 2614.754])
+		run background script LookAfterLightning(marker at [883.273, 60.292, 2738.451])
+		enable sound effects
+		set game time 19.3
+		set Lion position to [890.92, 112.008, 2640.865]
+		set Lion focus to [818.512, 0, 2602.759]
+		set camera position to [1079.441, 156.177, 2755.357]
+		set camera focus to [724.569, 123.238, 2537.627]
+		move camera position to [905.466, 156.369, 2648.72] time 18
+		set fade in time 4
+		wait until fade ready
+		say single line HELP_TEXT_LION_INTRODUCTION_80
+		wait until read
+		clear dialogue
+		wait until 3 seconds
+		set game time 19.3
+		set camera lens 100 time 0
+		set Lion position to [890.92, 112.008, 2640.865]
+		set Lion focus to [818.512, 0, 2602.759]
+		set camera position to [840.136, 3.25, 2607.078]
+		set camera focus to [997.016, 328.016, 2696.681]
+		move camera position to [884.943, 97.49, 2637.687] time 10
+		move camera focus to [1033.708, 426.605, 2732.206] time 10
+		wait until camera ready
+		set camera position to [888.841, 111.571, 2636.381]
+		set camera focus to [772.801, -227.167, 2530.681]
+		wait until 3 seconds
+		move camera position to [849.009, 29.32, 2617.641] time 5
+		move camera focus to [791.347, -337.584, 2579.721] time 5
+		wait until 1 seconds
+		set fade red 0 green 0 blue 0 time 1
+		wait until fade ready
+		disable sound effects
+		set clipping window across 0 down 0 width 0.01 height 0.01 time 0.1
+		set fade in time 2
+		wait until fade ready
+		draw text HELP_TEXT_LION_INTRODUCTION_90 across 0.1 down 0.4 width 0.8 height 0.4 size 0.05 fade in time 3 seconds
+		start say sound HELP_TEXT_LION_INTRODUCTION_90
+		wait until not say sound HELP_TEXT_LION_INTRODUCTION_90 playing
+		wait until 2 seconds
+		clear dialogue
+		stop script "LookAfterLightning"
+		fade all draw text time 4 seconds
+		wait until 5 seconds
+		set fade red 0 green 0 blue 0 time 0.5
+		wait until 1 seconds
+		clear clipping window time 0.5
+		set Crocodile position to [1577.969, 0, 2684.182]
+		set Crocodile focus to [1569.022, 3.157, 2699.858]
+		set camera position to [1569.022, 3.157, 2699.858]
+		set camera focus to [1570.614, 5.731, 2701.326]
+		set camera lens 70 time 0
+		set game time 12
+		set fade in time 1
+		wait until 0.5 seconds
+		wait until fade ready
+		move camera position to [1570.051, 1.728, 2700.806] time 7
+		move camera focus to [1573.189, 2.102, 2701.96] time 7
+		wait until 3 seconds
+		wait until fade ready
+		wait until 1 seconds
+		set Lion position to [1569.887, 0, 2706.487]
+		set Lion focus to [1577.969, 0, 2684.182]
+		wait until 3 seconds
+		move camera focus to [1571.578, 2.418, 2697.917] time 5
+		wait until camera ready
+		Crocodile play ANM_A_HORSE_DEADRHS loop 1
+		wait until Crocodile played
+		move camera position to [1569.959, 3.517, 2700.984] time 3
+		move camera focus to [1571.501, 3.811, 2698.009] time 3
+		wait until camera ready
+		move Lion position to [1577.604, 0, 2697.475] radius 0
+		set camera position to [1595.552, 8.909, 2707.718]
+		set camera focus to [1592.635, 8.135, 2706.231]
+		say HELP_TEXT_LION_INTRODUCTION_100
+		move camera position to [1597.547, 5.465, 2697.704] time 6
+		move camera focus to [1594.391, 5.221, 2696.567] time 6
+		wait until get distance from [Lion] to [1577.604, 0, 2697.475] == 0
+		set Lion focus to [Crocodile]
+		wait until read
+		wait until camera ready
+		set camera position to [1570.484, 5.792, 2690.103]
+		set camera focus to [1573.737, 5.44, 2689.322]
+		move camera position to [1570.81, 8.974, 2690.025] time 8
+		move camera focus to [1574.063, 8.622, 2689.244] time 8
+		say HELP_TEXT_LION_INTRODUCTION_110
+		wait until read
+		set camera position to [1595.345, 24.58, 2669.647]
+		set camera focus to [1592.718, 22.67, 2670.522]
+		set Crocodile focus to [1442.254, 22.395, 2629.545]
+		move Crocodile position to [1442.254, 22.395, 2629.545] radius 0
+		wait until 2 seconds
+		set Lion focus to [1442.254, 22.395, 2629.545]
+		move Lion position to [1442.254, 22.395, 2629.545] radius 0
+		say HELP_TEXT_LION_INTRODUCTION_120
+		wait until read
+		clear dialogue
+		set fade red 0 green 0 blue 0 time 1
+		wait until fade ready
+		set clipping window across 0.1 down 0.2 width 0.8 height 0.2 time 0.1
+		set game time 12
+		set camera position to [1962.037, 11.238, 1151.258]
+		set camera focus to [1977.786, -15.524, 1256.001]
+		wait until 2 seconds
+		set fade in time 1
+		set Lion focus to [2163.153, 2.68, 1221.533]
+		set Crocodile focus to [2163.153, 2.68, 1221.533]
+		set Crocodile position to [1905.147, 10.019, 1206.497]
+		set Lion position to [1886.338, 14.599, 1213.14]
+		set Lion focus to [2686.838, 19.841, 1142.984]
+		set Crocodile focus to [2686.838, 19.841, 1142.984]
+		move Crocodile position to [2695.608, 20.1, 1150.312] radius 0
+		move Lion position to [2696.91, 20.1, 1162.549] radius 0
+		wait until fade ready
+		draw text HELP_TEXT_LION_INTRODUCTION_130 across 0.1 down 0.5 width 0.8 height 0.4 size 0.05 fade in time 3 seconds
+		start say sound HELP_TEXT_LION_INTRODUCTION_130
+		wait until not say sound HELP_TEXT_LION_INTRODUCTION_130 playing
+		wait until 2 seconds
+		fade all draw text time 2 seconds
+		set fade red 0 green 0 blue 0 time 2
+		wait until fade ready
+		clear clipping window time 0.5
+		Mandrill play ANM_A_COW_DIE loop 20
+		set clipping window across 0.1 down 0.1 width 0.4 height 0.8 time 0.1
+		set Lion focus to [2686.838, 19.841, 1142.984]
+		set Crocodile focus to [2686.838, 19.841, 1142.984]
+		set Lion position to [2728.546, 22.11, 1205.765]
+		set Crocodile position to [2727.725, 21.592, 1192.293]
+		move Crocodile position to [2694.742, 20.061, 1149.425] radius 0
+		move Lion position to [2695.972, 20.1, 1162.008] radius 0
+		set camera position to [2683.289, 26.896, 1121.769]
+		set camera focus to [2705.879, 19.83, 1159.944]
+		set fade in time 1
+		wait until fade ready
+		draw text HELP_TEXT_LION_INTRODUCTION_140 across 0.6 down 0.3 width 0.3 height 0.4 size 0.05 fade in time 3 seconds
+		start say sound HELP_TEXT_LION_INTRODUCTION_140
+		wait until get distance from [Crocodile] to [2694.742, 20.061, 1149.425] == 0
+		set Mandrill focus to [Crocodile]
+		wait until Mandrill played
+		Crocodile play ANM_A_HORSE_DEADRHS loop 1
+		wait until 1 seconds
+		Mandrill play ANM_A_HORSE_DEADRHS loop 1
+		wait until Crocodile played
+		fade all draw text time 2 seconds
+		set fade red 0 green 0 blue 0 time 2
+		wait until fade ready
+		clear clipping window time 0.5
+		set Crocodile position to [1382.482, 0, 2212.094]
+		set Lion position to [1385.029, 0, 2209.542]
+		Basket = create MOBILE_OBJECT MOBILE_OBJECT_MOSES_BASKET at [BasketPos]
+		FLYING of Basket = 0
+		wait until 1 seconds
+		ANGLE of Basket = 270
+		set Crocodile focus to [Basket]
+		set Lion focus to [Basket]
+		set clipping window across 0.1 down 0.3 width 0.8 height 0.4 time 0.1
+		set camera position to [1382.352, 6.602, 2221.35]
+		set camera focus to [1368.499, -15.929, 2292.107]
+		move camera position to [1381.252, 4.813, 2226.969] time 30
+		move camera focus to [1367.399, -17.718, 2297.726] time 30
+		set fade in time 2
+		wait until 1 seconds
+		wait until fade ready
+		draw text HELP_TEXT_LION_INTRODUCTION_141 across 0.1 down 0.2 width 0.8 height 0.3 size 0.05 fade in time 3 seconds
+		start say sound HELP_TEXT_LION_INTRODUCTION_141
+		wait until not say sound HELP_TEXT_LION_INTRODUCTION_141 playing
+		wait until 2 seconds
+		enable sound effects
+		fade all draw text time 1 seconds
+		wait until 1 seconds
+		start sound constant 257
+		wait until 1 seconds
+		draw text HELP_TEXT_LION_INTRODUCTION_142 across 0.1 down 0.2 width 0.8 height 0.3 size 0.05 fade in time 3 seconds
+		start say sound HELP_TEXT_LION_INTRODUCTION_142
+		wait until not say sound HELP_TEXT_LION_INTRODUCTION_142 playing
+		disable sound effects
+		wait until 2 seconds
+		fade all draw text time 1 seconds
+		wait until 1 seconds
+		move Crocodile position to [1380.341, 0, 2229.695] radius 0
+		move Lion position to [1376.626, 0, 2224.041] radius 0
+		set camera position to [1383.547, 4.532, 2260.129]
+		set camera focus to [1398.057, 2.804, 2186.017]
+		move camera position to [1358.758, 9.622, 2259.081] time 20
+		move camera focus to [1388.588, -4.116, 2191.053] time 20
+		draw text HELP_TEXT_LION_INTRODUCTION_143 across 0.1 down 0.8 width 0.8 height 0.3 size 0.05 fade in time 3 seconds
+		start say sound HELP_TEXT_LION_INTRODUCTION_143
+		wait until not say sound HELP_TEXT_LION_INTRODUCTION_143 playing
+		wait until 2 seconds
+		fade all draw text time 1 seconds
+		wait until 1 seconds
+		draw text HELP_TEXT_LION_INTRODUCTION_144 across 0.1 down 0.8 width 0.8 height 0.3 size 0.05 fade in time 3 seconds
+		start say sound HELP_TEXT_LION_INTRODUCTION_144
+		wait until not say sound HELP_TEXT_LION_INTRODUCTION_144 playing
+		wait until 2 seconds
+		fade all draw text time 1 seconds
+		wait until 1 seconds
+		clear dialogue
+		set fade red 0 green 0 blue 0 time 4
+		wait until fade ready
+		clear clipping window time 0.5
+		set Crocodile position to [1474.728, 57.62, 1550.978]
+		set Crocodile focus to [1453.663, 56.557, 1579.496]
+		set Lion position to [1472.91, 57.832, 1543.97]
+		set Lion focus to [1453.663, 56.557, 1579.496]
+		set Mandrill position to [1462.317, 56.95, 1564.714]
+		set Mandrill focus to [1518.325, 125.693, 1461.322]
+		set camera position to [1480.834, 61.94, 1543.75]
+		set camera focus to [1466.613, 60.293, 1561.14]
+		wait until Crocodile played
+		set fade in time 2
+		move camera position to [1477.015, 74.837, 1548.419] time 20
+		move camera focus to [1465.192, 62.245, 1562.878] time 20
+		wait until fade ready
+		say HELP_TEXT_LION_INTRODUCTION_150
+		wait until read
+		say HELP_TEXT_LION_INTRODUCTION_160
+		wait until read
+		say HELP_TEXT_LION_INTRODUCTION_170
+		wait until read
+		say HELP_TEXT_LION_INTRODUCTION_180
+		wait until read
+		clear dialogue
+		wait until camera ready
+		enable Mandrill tattoo CREATURE_TATTOO_TYPE_THE_BROTHERHOOD
+		enable Tortoise tattoo CREATURE_TATTOO_TYPE_THE_BROTHERHOOD
+		enable Horse tattoo CREATURE_TATTOO_TYPE_THE_BROTHERHOOD
+		enable Ape tattoo CREATURE_TATTOO_TYPE_THE_BROTHERHOOD
+		enable PolarBear tattoo CREATURE_TATTOO_TYPE_THE_BROTHERHOOD
+		enable Lion tattoo CREATURE_TATTOO_TYPE_THE_BROTHERHOOD
+		enable Crocodile tattoo CREATURE_TATTOO_TYPE_THE_BROTHERHOOD
+		enable sound effects
+		set camera position to [1462.011, 62.252, 1562.363]
+		set camera focus to [1443.664, 57.574, 1574.566]
+		set clipping window across 0 down 0.1 width 0.2 height 0.8 time 0.1
+		start sound LH_SAMPLE_RINGSHOT
+		wait until 0.75 seconds
+		set camera position to [1465.147, 62.839, 1565.206]
+		set camera focus to [1457.612, 52.414, 1583.697]
+		set clipping window across 0.2 down 0.1 width 0.2 height 0.8 time 0.1
+		start sound LH_SAMPLE_RINGSHOT
+		wait until 0.75 seconds
+		set camera position to [1458.521, 66.127, 1563.655]
+		set camera focus to [1468.946, 46.249, 1561.773]
+		set clipping window across 0.4 down 0.1 width 0.2 height 0.8 time 0.1
+		start sound LH_SAMPLE_RINGSHOT
+		wait until 0.75 seconds
+		set camera position to [1472.752, 59.307, 1564.278]
+		set camera focus to [1451.857, 61.798, 1572.313]
+		set clipping window across 0.6 down 0.1 width 0.2 height 0.8 time 0.1
+		start sound LH_SAMPLE_RINGSHOT
+		wait until 0.75 seconds
+		set camera position to [1468.085, 59.133, 1567.264]
+		set camera focus to [1487.366, 64.461, 1556.911]
+		set clipping window across 0.8 down 0.1 width 0.2 height 0.8 time 0.1
+		start sound LH_SAMPLE_RINGSHOT
+		wait until 2 seconds
+		clear clipping window time 2
+		disable sound effects
+		move camera position to [1469.628, 63.366, 1551.554] time 20
+		move camera focus to [1479.27, 67.284, 1531.578] time 20
+		set camera lens 50 time 20
+		wait until 2 seconds
+		say HELP_TEXT_LION_INTRODUCTION_190
+		wait until read
+		say HELP_TEXT_LION_INTRODUCTION_200
+		wait until read
+		clear dialogue
+		wait until camera ready
+		set fade red 255 green 255 blue 255 time 3
+		wait until fade ready
+		set camera lens 70 time 0
+		set Lion position to [1296.337, 61.02, 1056.916]
+		SCALE of Lion = 2
+		start jc special SJC_SWITCH_ON_INFLUENCE
+		enable scoreboard draw
+		run script SetupCreatureIsleCreature(Lion)
+		set Lion focus to [1310.179, 87.741, 1066.408]
+		wait until 1 seconds
+		set camera position to [1308.272, 85.964, 1064.854]
+		set camera focus to [1170.352, 114.833, 978.448]
+		wait until 1 seconds
+		set fade in time 3
+		wait until fade ready
+		say single line HELP_TEXT_LION_INTRODUCTION_210 by Lion
+		wait until read
+		clear dialogue
+		set fade red 0 green 0 blue 0 time 1
+		wait until fade ready
+		set camera position to [1101.175, 125.404, 2623.633]
+		set camera focus to [1143.784, 125.534, 2627.739]
+		LittleOgre1 = create DUMB_CREATURE CREATURE_TYPE_OGRE at [1109.005, 124.853, 2602.496]
+		LittleOgre2 = create DUMB_CREATURE CREATURE_TYPE_OGRE at [1113.499, 124.424, 2604.056]
+		CreatureScared1 = create DUMB_CREATURE CREATURE_TYPE_MANDRILL at [1109.826, 125.154, 2607.809]
+		CreatureScared2 = create DUMB_CREATURE CREATURE_TYPE_TORTOISE at [1107.347, 125.172, 2605.606]
+		set CreatureScared1 focus to [1109.826, 125.154, 2607.809]
+		set CreatureScared2 focus to [1109.826, 125.154, 2607.809]
+		set LittleOgre1 focus to [1110.689, 125.79, 2658.145]
+		set LittleOgre2 focus to [1110.689, 125.79, 2658.145]
+		move CreatureScared1 position to [1109.541, 124.824, 2642.115] radius 0
+		move CreatureScared2 position to [1109.541, 124.824, 2642.115] radius 0
+		SCALE of CreatureScared1 = 0.14
+		SCALE of CreatureScared2 = 0.15
+		SPEED of CreatureScared1 = 0.54
+		SPEED of CreatureScared2 = 0.54
+		SPEED of LittleOgre1 = 0.5
+		SPEED of LittleOgre2 = 0.5
+		set fade in time 1
+		wait until 2 seconds
+		move LittleOgre1 position to [1110.689, 125.79, 2658.145] radius 0
+		move LittleOgre2 position to [1110.689, 125.79, 2658.145] radius 0
+		wait until 7 seconds
+		move camera position to [1090.215, 128.971, 2622.577] time 12
+		move camera focus to [1132.824, 129.101, 2626.683] time 12
+		Rhino = create DUMB_CREATURE CREATURE_TYPE_RHINO at [1103.118, 125.664, 2641.794]
+		SCALE of Rhino = 0.6
+		set Rhino position to [1111.673, 124.528, 2640.297]
+		set LittleOgre1 focus to [1109.005, 124.853, 2602.496]
+		move LittleOgre1 position to [1109.005, 124.853, 2602.496] radius 0
+		move LittleOgre2 position to [1113.499, 124.424, 2604.056] radius 0
+		wait until 4 seconds
+		move Rhino position to [1112.876, 124.788, 2595.922] radius 0
+		move CreatureScared1 position to [1109.005, 124.853, 2602.496] radius 0
+		wait until 1 seconds
+		move CreatureScared2 position to [1113.499, 124.424, 2604.056] radius 0
+		say HELP_TEXT_LION_INTRODUCTION_215 by Lion
+		wait until read
+		say HELP_TEXT_LION_INTRODUCTION_220 by Lion
+		wait until read
+		set camera position to [1400.534, 144.749, 1122.703]
+		set camera focus to [1533.793, 98.999, 1209.132]
+		move camera position to [1423.751, 136.778, 1137.763] time 12
+		move camera focus to [1557.011, 91.028, 1224.193] time 12
+		say HELP_TEXT_LION_INTRODUCTION_230 with interaction by Lion
+		delete LittleOgre1
+		delete LittleOgre2
+		delete CreatureScared1
+		delete CreatureScared2
+		delete Rhino
+		wait until read
+		clear dialogue
+		set camera position to [767.421, 80.99, 1261.794]
+		set camera focus to [608.562, 40.213, 1282.341]
+		move camera position to [772.603, 71.106, 1301.442] time 20
+		move camera focus to [614.724, 30.329, 1274.37] time 20
+		say HELP_TEXT_LION_INTRODUCTION_240 by Lion
+		wait until read
+		set camera position to [1273.024, 158.367, 1040.102]
+		set camera focus to [1163.031, 68.276, 955.802]
+		move camera position to [1285.003, 168.178, 1049.282] time 10
+		move camera focus to [1175.009, 78.086, 964.983] time 10
+		say HELP_TEXT_LION_INTRODUCTION_250 by Lion
+		wait until read
+		set camera position to [1309.965, 83.72, 1062.96]
+		set camera focus to [1162.762, 149.236, 1026.075]
+		say HELP_TEXT_LION_INTRODUCTION_260 with interaction by Lion
+		wait until read
+		clear dialogue
+		set Lion focus to [1155.407, 56.602, 950.196]
+		wait until 1 seconds
+		move Lion position to [1179.55, 56.311, 962.489] radius 0
+		wait until 4 seconds
+		set fade red 0 green 0 blue 0 time 3
+		wait until fade ready
+		set camera position to [1123.329, 229.099, 1219.47]
+		set camera focus to [1293.02, 50.529, 896.403]
+		delete Lion
+		delete Crocodile
+		delete Mandrill
+		delete Tortoise
+		delete Horse
+		delete Ape
+		delete PolarBear
+		delete Basket
+		delete Bloke1
+		delete Bloke2
+		enable sound effects
+	end cinema
+	wait until widescreen transition complete
+	set fade in time 1
+	release MyCreature
+	KCGreetinsCompleted = 1
+	stop music
+	begin dialogue
+		eject evil spirit
+		say single line HELP_TEXT_LION_INTRODUCTION_270
+		wait until read
+	end dialogue
+	enable game time
+end script GreetingsFromTheBrotherHood
+

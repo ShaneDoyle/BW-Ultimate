@@ -1,0 +1,33 @@
+begin script CustomMultiplayerPlayerColour(MyMultiColour)
+	MultiplayerCustomColour = 1
+start
+
+	while MultiplayerCustomColour == 1
+		//Red
+		if MyMultiColour == 0
+			run map script line "SET_GLOBAL_LAND_BALANCE(415871,2.3443261E-38)"
+			run map script line "SET_GLOBAL_LAND_BALANCE(-303798,2.3443261E-38)"
+		end if
+	
+		//Green
+		if MyMultiColour == 1
+			run map script line "SET_GLOBAL_LAND_BALANCE(415871,6.611915E-39)"
+			run map script line "SET_GLOBAL_LAND_BALANCE(-303798,6.611915E-39)"
+		end if
+		
+		//Purple
+		if MyMultiColour == 2
+			run map script line "SET_GLOBAL_LAND_BALANCE(415871,2.0872485E-38)"
+			run map script line "SET_GLOBAL_LAND_BALANCE(-303798,2.0872485E-38)"
+		end if
+
+		//Cyan / Light Blue
+		if MyMultiColour == 3
+			run map script line "SET_GLOBAL_LAND_BALANCE(415871,6.610002E-39)"
+			run map script line "SET_GLOBAL_LAND_BALANCE(-303798,6.610002E-39)"
+		end if
+
+		wait 1 seconds
+	end while
+	
+end script CustomMultiplayerPlayerColour

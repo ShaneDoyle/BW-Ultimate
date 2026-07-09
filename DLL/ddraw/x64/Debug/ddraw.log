@@ -1,63 +1,396 @@
 ﻿  ddraw.cpp
-C:\Games\Black & White\Tools\NewDLL\ddraw\ddraw.cpp(13,12): error C2485: 'naked': unrecognized extended attribute
-C:\Games\Black & White\Tools\NewDLL\ddraw\ddraw.cpp(14,2): error C4235: nonstandard extension used: '__asm' keyword not supported on this architecture
-C:\Games\Black & White\Tools\NewDLL\ddraw\ddraw.cpp(14,7): error C2065: 'jmp': undeclared identifier
-C:\Games\Black & White\Tools\NewDLL\ddraw\ddraw.cpp(17,12): error C2485: 'naked': unrecognized extended attribute
-C:\Games\Black & White\Tools\NewDLL\ddraw\ddraw.cpp(18,2): error C4235: nonstandard extension used: '__asm' keyword not supported on this architecture
-C:\Games\Black & White\Tools\NewDLL\ddraw\ddraw.cpp(18,7): error C2065: 'jmp': undeclared identifier
-C:\Games\Black & White\Tools\NewDLL\ddraw\ddraw.cpp(21,12): error C2485: 'naked': unrecognized extended attribute
-C:\Games\Black & White\Tools\NewDLL\ddraw\ddraw.cpp(22,2): error C4235: nonstandard extension used: '__asm' keyword not supported on this architecture
-C:\Games\Black & White\Tools\NewDLL\ddraw\ddraw.cpp(22,7): error C2065: 'jmp': undeclared identifier
-C:\Games\Black & White\Tools\NewDLL\ddraw\ddraw.cpp(25,12): error C2485: 'naked': unrecognized extended attribute
-C:\Games\Black & White\Tools\NewDLL\ddraw\ddraw.cpp(26,2): error C4235: nonstandard extension used: '__asm' keyword not supported on this architecture
-C:\Games\Black & White\Tools\NewDLL\ddraw\ddraw.cpp(26,7): error C2065: 'jmp': undeclared identifier
-C:\Games\Black & White\Tools\NewDLL\ddraw\ddraw.cpp(29,12): error C2485: 'naked': unrecognized extended attribute
-C:\Games\Black & White\Tools\NewDLL\ddraw\ddraw.cpp(30,2): error C4235: nonstandard extension used: '__asm' keyword not supported on this architecture
-C:\Games\Black & White\Tools\NewDLL\ddraw\ddraw.cpp(30,7): error C2065: 'jmp': undeclared identifier
-C:\Games\Black & White\Tools\NewDLL\ddraw\ddraw.cpp(33,12): error C2485: 'naked': unrecognized extended attribute
-C:\Games\Black & White\Tools\NewDLL\ddraw\ddraw.cpp(34,2): error C4235: nonstandard extension used: '__asm' keyword not supported on this architecture
-C:\Games\Black & White\Tools\NewDLL\ddraw\ddraw.cpp(34,7): error C2065: 'jmp': undeclared identifier
-C:\Games\Black & White\Tools\NewDLL\ddraw\ddraw.cpp(37,12): error C2485: 'naked': unrecognized extended attribute
-C:\Games\Black & White\Tools\NewDLL\ddraw\ddraw.cpp(38,2): error C4235: nonstandard extension used: '__asm' keyword not supported on this architecture
-C:\Games\Black & White\Tools\NewDLL\ddraw\ddraw.cpp(38,7): error C2065: 'jmp': undeclared identifier
-C:\Games\Black & White\Tools\NewDLL\ddraw\ddraw.cpp(41,12): error C2485: 'naked': unrecognized extended attribute
-C:\Games\Black & White\Tools\NewDLL\ddraw\ddraw.cpp(42,2): error C4235: nonstandard extension used: '__asm' keyword not supported on this architecture
-C:\Games\Black & White\Tools\NewDLL\ddraw\ddraw.cpp(42,7): error C2065: 'jmp': undeclared identifier
-C:\Games\Black & White\Tools\NewDLL\ddraw\ddraw.cpp(45,12): error C2485: 'naked': unrecognized extended attribute
-C:\Games\Black & White\Tools\NewDLL\ddraw\ddraw.cpp(46,2): error C4235: nonstandard extension used: '__asm' keyword not supported on this architecture
-C:\Games\Black & White\Tools\NewDLL\ddraw\ddraw.cpp(46,7): error C2065: 'jmp': undeclared identifier
-C:\Games\Black & White\Tools\NewDLL\ddraw\ddraw.cpp(49,12): error C2485: 'naked': unrecognized extended attribute
-C:\Games\Black & White\Tools\NewDLL\ddraw\ddraw.cpp(50,2): error C4235: nonstandard extension used: '__asm' keyword not supported on this architecture
-C:\Games\Black & White\Tools\NewDLL\ddraw\ddraw.cpp(50,7): error C2065: 'jmp': undeclared identifier
-C:\Games\Black & White\Tools\NewDLL\ddraw\ddraw.cpp(53,12): error C2485: 'naked': unrecognized extended attribute
-C:\Games\Black & White\Tools\NewDLL\ddraw\ddraw.cpp(54,2): error C4235: nonstandard extension used: '__asm' keyword not supported on this architecture
-C:\Games\Black & White\Tools\NewDLL\ddraw\ddraw.cpp(54,7): error C2065: 'jmp': undeclared identifier
-C:\Games\Black & White\Tools\NewDLL\ddraw\ddraw.cpp(57,12): error C2485: 'naked': unrecognized extended attribute
-C:\Games\Black & White\Tools\NewDLL\ddraw\ddraw.cpp(58,2): error C4235: nonstandard extension used: '__asm' keyword not supported on this architecture
-C:\Games\Black & White\Tools\NewDLL\ddraw\ddraw.cpp(58,7): error C2065: 'jmp': undeclared identifier
-C:\Games\Black & White\Tools\NewDLL\ddraw\ddraw.cpp(61,12): error C2485: 'naked': unrecognized extended attribute
-C:\Games\Black & White\Tools\NewDLL\ddraw\ddraw.cpp(62,2): error C4235: nonstandard extension used: '__asm' keyword not supported on this architecture
-C:\Games\Black & White\Tools\NewDLL\ddraw\ddraw.cpp(62,7): error C2065: 'jmp': undeclared identifier
-C:\Games\Black & White\Tools\NewDLL\ddraw\ddraw.cpp(65,12): error C2485: 'naked': unrecognized extended attribute
-C:\Games\Black & White\Tools\NewDLL\ddraw\ddraw.cpp(66,2): error C4235: nonstandard extension used: '__asm' keyword not supported on this architecture
-C:\Games\Black & White\Tools\NewDLL\ddraw\ddraw.cpp(66,7): error C2065: 'jmp': undeclared identifier
-C:\Games\Black & White\Tools\NewDLL\ddraw\ddraw.cpp(69,12): error C2485: 'naked': unrecognized extended attribute
-C:\Games\Black & White\Tools\NewDLL\ddraw\ddraw.cpp(70,2): error C4235: nonstandard extension used: '__asm' keyword not supported on this architecture
-C:\Games\Black & White\Tools\NewDLL\ddraw\ddraw.cpp(70,7): error C2065: 'jmp': undeclared identifier
-C:\Games\Black & White\Tools\NewDLL\ddraw\ddraw.cpp(73,12): error C2485: 'naked': unrecognized extended attribute
-C:\Games\Black & White\Tools\NewDLL\ddraw\ddraw.cpp(74,2): error C4235: nonstandard extension used: '__asm' keyword not supported on this architecture
-C:\Games\Black & White\Tools\NewDLL\ddraw\ddraw.cpp(74,7): error C2065: 'jmp': undeclared identifier
-C:\Games\Black & White\Tools\NewDLL\ddraw\ddraw.cpp(77,12): error C2485: 'naked': unrecognized extended attribute
-C:\Games\Black & White\Tools\NewDLL\ddraw\ddraw.cpp(78,2): error C4235: nonstandard extension used: '__asm' keyword not supported on this architecture
-C:\Games\Black & White\Tools\NewDLL\ddraw\ddraw.cpp(78,7): error C2065: 'jmp': undeclared identifier
-C:\Games\Black & White\Tools\NewDLL\ddraw\ddraw.cpp(81,12): error C2485: 'naked': unrecognized extended attribute
-C:\Games\Black & White\Tools\NewDLL\ddraw\ddraw.cpp(82,2): error C4235: nonstandard extension used: '__asm' keyword not supported on this architecture
-C:\Games\Black & White\Tools\NewDLL\ddraw\ddraw.cpp(82,7): error C2065: 'jmp': undeclared identifier
-C:\Games\Black & White\Tools\NewDLL\ddraw\ddraw.cpp(85,12): error C2485: 'naked': unrecognized extended attribute
-C:\Games\Black & White\Tools\NewDLL\ddraw\ddraw.cpp(86,2): error C4235: nonstandard extension used: '__asm' keyword not supported on this architecture
-C:\Games\Black & White\Tools\NewDLL\ddraw\ddraw.cpp(86,7): error C2065: 'jmp': undeclared identifier
-  dllmain.cpp
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\ddraw.cpp(13,12): error C2485: '__declspec(identifier)' is not a recognized extended attribute
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\ddraw.cpp(14,2): error C4235: nonstandard extension used: '__asm' keyword not supported on this architecture
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\ddraw.cpp(14,7): error C2065: 'jmp': undeclared identifier
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\ddraw.cpp(17,12): error C2485: '__declspec(identifier)' is not a recognized extended attribute
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\ddraw.cpp(18,2): error C4235: nonstandard extension used: '__asm' keyword not supported on this architecture
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\ddraw.cpp(18,7): error C2065: 'jmp': undeclared identifier
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\ddraw.cpp(21,12): error C2485: '__declspec(identifier)' is not a recognized extended attribute
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\ddraw.cpp(22,2): error C4235: nonstandard extension used: '__asm' keyword not supported on this architecture
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\ddraw.cpp(22,7): error C2065: 'jmp': undeclared identifier
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\ddraw.cpp(25,12): error C2485: '__declspec(identifier)' is not a recognized extended attribute
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\ddraw.cpp(26,2): error C4235: nonstandard extension used: '__asm' keyword not supported on this architecture
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\ddraw.cpp(26,7): error C2065: 'jmp': undeclared identifier
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\ddraw.cpp(29,12): error C2485: '__declspec(identifier)' is not a recognized extended attribute
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\ddraw.cpp(30,2): error C4235: nonstandard extension used: '__asm' keyword not supported on this architecture
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\ddraw.cpp(30,7): error C2065: 'jmp': undeclared identifier
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\ddraw.cpp(33,12): error C2485: '__declspec(identifier)' is not a recognized extended attribute
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\ddraw.cpp(34,2): error C4235: nonstandard extension used: '__asm' keyword not supported on this architecture
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\ddraw.cpp(34,7): error C2065: 'jmp': undeclared identifier
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\ddraw.cpp(37,12): error C2485: '__declspec(identifier)' is not a recognized extended attribute
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\ddraw.cpp(38,2): error C4235: nonstandard extension used: '__asm' keyword not supported on this architecture
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\ddraw.cpp(38,7): error C2065: 'jmp': undeclared identifier
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\ddraw.cpp(41,12): error C2485: '__declspec(identifier)' is not a recognized extended attribute
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\ddraw.cpp(42,2): error C4235: nonstandard extension used: '__asm' keyword not supported on this architecture
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\ddraw.cpp(42,7): error C2065: 'jmp': undeclared identifier
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\ddraw.cpp(45,12): error C2485: '__declspec(identifier)' is not a recognized extended attribute
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\ddraw.cpp(46,2): error C4235: nonstandard extension used: '__asm' keyword not supported on this architecture
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\ddraw.cpp(46,7): error C2065: 'jmp': undeclared identifier
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\ddraw.cpp(49,12): error C2485: '__declspec(identifier)' is not a recognized extended attribute
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\ddraw.cpp(50,2): error C4235: nonstandard extension used: '__asm' keyword not supported on this architecture
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\ddraw.cpp(50,7): error C2065: 'jmp': undeclared identifier
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\ddraw.cpp(53,12): error C2485: '__declspec(identifier)' is not a recognized extended attribute
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\ddraw.cpp(54,2): error C4235: nonstandard extension used: '__asm' keyword not supported on this architecture
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\ddraw.cpp(54,7): error C2065: 'jmp': undeclared identifier
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\ddraw.cpp(57,12): error C2485: '__declspec(identifier)' is not a recognized extended attribute
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\ddraw.cpp(58,2): error C4235: nonstandard extension used: '__asm' keyword not supported on this architecture
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\ddraw.cpp(58,7): error C2065: 'jmp': undeclared identifier
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\ddraw.cpp(61,12): error C2485: '__declspec(identifier)' is not a recognized extended attribute
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\ddraw.cpp(62,2): error C4235: nonstandard extension used: '__asm' keyword not supported on this architecture
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\ddraw.cpp(62,7): error C2065: 'jmp': undeclared identifier
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\ddraw.cpp(65,12): error C2485: '__declspec(identifier)' is not a recognized extended attribute
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\ddraw.cpp(66,2): error C4235: nonstandard extension used: '__asm' keyword not supported on this architecture
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\ddraw.cpp(66,7): error C2065: 'jmp': undeclared identifier
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\ddraw.cpp(69,12): error C2485: '__declspec(identifier)' is not a recognized extended attribute
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\ddraw.cpp(70,2): error C4235: nonstandard extension used: '__asm' keyword not supported on this architecture
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\ddraw.cpp(70,7): error C2065: 'jmp': undeclared identifier
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\ddraw.cpp(73,12): error C2485: '__declspec(identifier)' is not a recognized extended attribute
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\ddraw.cpp(74,2): error C4235: nonstandard extension used: '__asm' keyword not supported on this architecture
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\ddraw.cpp(74,7): error C2065: 'jmp': undeclared identifier
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\ddraw.cpp(77,12): error C2485: '__declspec(identifier)' is not a recognized extended attribute
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\ddraw.cpp(78,2): error C4235: nonstandard extension used: '__asm' keyword not supported on this architecture
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\ddraw.cpp(78,7): error C2065: 'jmp': undeclared identifier
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\ddraw.cpp(81,12): error C2485: '__declspec(identifier)' is not a recognized extended attribute
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\ddraw.cpp(82,2): error C4235: nonstandard extension used: '__asm' keyword not supported on this architecture
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\ddraw.cpp(82,7): error C2065: 'jmp': undeclared identifier
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\ddraw.cpp(85,12): error C2485: '__declspec(identifier)' is not a recognized extended attribute
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\ddraw.cpp(86,2): error C4235: nonstandard extension used: '__asm' keyword not supported on this architecture
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\ddraw.cpp(86,7): error C2065: 'jmp': undeclared identifier
   mods.cpp
-  The contents of <filesystem> are available only with C++17 or later.
-C:\Games\Black & White\Tools\NewDLL\ddraw\mods.cpp(7,10): fatal error C1083: Cannot open include file: 'detours.h': No such file or directory
+C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.39.33519\include\filesystem(12): warning STL4038: The contents of <filesystem> are available only with C++17 or later.
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\bwfuncs.h(366,2): warning C4091: 'typedef ': ignored on left of 'LHPoint' when no variable is declared
+  (compiling source file 'mods.cpp')
+  
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(110,15): error C2065: 'LregFolder': undeclared identifier
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(128,22): error C2065: 'LkeyName': undeclared identifier
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(108,2): error C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(144,15): error C2065: 'LregFolder': undeclared identifier
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(146,2): error C2664: 'LSTATUS RegQueryValueExW(HKEY,LPCWSTR,LPDWORD,LPDWORD,LPBYTE,LPDWORD)': cannot convert argument 2 from 'CHAR *' to 'LPCWSTR'
+  C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(146,24):
+  Types pointed to are unrelated; conversion requires reinterpret_cast, C-style cast or parenthesized function-style cast
+  C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\winreg.h(958,1):
+  see declaration of 'RegQueryValueExW'
+  C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(146,2):
+  while trying to match the argument list '(HKEY, CHAR *, int, int, LPBYTE, DWORD *)'
+  
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(142,2): error C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(210,10): warning C4312: 'type cast': conversion from 'int' to 'char *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(211,13): warning C4312: 'type cast': conversion from 'int' to 'char *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(212,10): warning C4312: 'type cast': conversion from 'int' to 'char *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(215,10): warning C4312: 'type cast': conversion from 'int' to 'char *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(216,13): warning C4312: 'type cast': conversion from 'int' to 'char *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(217,10): warning C4312: 'type cast': conversion from 'int' to 'char *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(220,10): warning C4312: 'type cast': conversion from 'int' to 'char *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(221,13): warning C4312: 'type cast': conversion from 'int' to 'char *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(222,10): warning C4312: 'type cast': conversion from 'int' to 'char *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(225,10): warning C4312: 'type cast': conversion from 'int' to 'char *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(226,13): warning C4312: 'type cast': conversion from 'int' to 'char *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(227,10): warning C4312: 'type cast': conversion from 'int' to 'char *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(230,10): warning C4312: 'type cast': conversion from 'int' to 'char *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(231,13): warning C4312: 'type cast': conversion from 'int' to 'char *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(232,10): warning C4312: 'type cast': conversion from 'int' to 'char *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(235,10): warning C4312: 'type cast': conversion from 'int' to 'char *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(236,13): warning C4312: 'type cast': conversion from 'int' to 'char *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(237,10): warning C4312: 'type cast': conversion from 'int' to 'char *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(240,10): warning C4312: 'type cast': conversion from 'int' to 'char *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(241,13): warning C4312: 'type cast': conversion from 'int' to 'char *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(242,10): warning C4312: 'type cast': conversion from 'int' to 'char *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(245,10): warning C4312: 'type cast': conversion from 'int' to 'char *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(246,13): warning C4312: 'type cast': conversion from 'int' to 'char *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(247,10): warning C4312: 'type cast': conversion from 'int' to 'char *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(255,3): error C4996: 'strncpy': This function or variable may be unsafe. Consider using strncpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(256,3): error C4996: 'strncpy': This function or variable may be unsafe. Consider using strncpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(257,3): error C4996: 'strncpy': This function or variable may be unsafe. Consider using strncpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(262,17): warning C4312: 'type cast': conversion from 'int' to 'char *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(263,20): warning C4312: 'type cast': conversion from 'int' to 'char *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(264,17): warning C4312: 'type cast': conversion from 'int' to 'char *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(265,20): warning C4312: 'type cast': conversion from 'int' to 'DWORD *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(266,20): warning C4312: 'type cast': conversion from 'unsigned long' to 'DWORD *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(267,20): warning C4312: 'type cast': conversion from 'unsigned long' to 'DWORD *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(285,22): warning C4312: 'type cast': conversion from 'unsigned long' to 'DWORD *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(287,22): warning C4312: 'type cast': conversion from 'unsigned long' to 'DWORD *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(289,22): warning C4312: 'type cast': conversion from 'unsigned long' to 'FLOAT *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(290,15): warning C4312: 'type cast': conversion from 'unsigned long' to 'FLOAT *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(275,3): error C4996: '_ultoa': This function or variable may be unsafe. Consider using _ultoa_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(276,3): error C4996: 'strcat': This function or variable may be unsafe. Consider using strcat_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(277,3): error C4996: 'strncpy': This function or variable may be unsafe. Consider using strncpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(278,3): error C4996: 'strncpy': This function or variable may be unsafe. Consider using strncpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(279,3): error C4996: 'strncpy': This function or variable may be unsafe. Consider using strncpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(302,17): warning C4312: 'type cast': conversion from 'int' to 'char *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(303,20): warning C4312: 'type cast': conversion from 'int' to 'char *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(304,17): warning C4312: 'type cast': conversion from 'int' to 'char *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(305,17): warning C4312: 'type cast': conversion from 'int' to 'char *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(306,20): warning C4312: 'type cast': conversion from 'int' to 'char *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(307,17): warning C4312: 'type cast': conversion from 'int' to 'char *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(308,17): warning C4312: 'type cast': conversion from 'int' to 'char *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(309,20): warning C4312: 'type cast': conversion from 'int' to 'char *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(310,17): warning C4312: 'type cast': conversion from 'int' to 'char *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(311,17): warning C4312: 'type cast': conversion from 'int' to 'char *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(312,20): warning C4312: 'type cast': conversion from 'int' to 'char *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(313,17): warning C4312: 'type cast': conversion from 'int' to 'char *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(314,17): warning C4312: 'type cast': conversion from 'int' to 'char *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(315,20): warning C4312: 'type cast': conversion from 'int' to 'char *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(316,17): warning C4312: 'type cast': conversion from 'int' to 'char *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(317,17): warning C4312: 'type cast': conversion from 'int' to 'char *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(318,20): warning C4312: 'type cast': conversion from 'int' to 'char *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(319,17): warning C4312: 'type cast': conversion from 'int' to 'char *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(320,17): warning C4312: 'type cast': conversion from 'int' to 'char *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(321,20): warning C4312: 'type cast': conversion from 'int' to 'char *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(322,17): warning C4312: 'type cast': conversion from 'int' to 'char *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(323,2): error C4996: 'strncpy': This function or variable may be unsafe. Consider using strncpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(324,2): error C4996: 'strncpy': This function or variable may be unsafe. Consider using strncpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(325,2): error C4996: 'strncpy': This function or variable may be unsafe. Consider using strncpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(326,2): error C4996: 'strncpy': This function or variable may be unsafe. Consider using strncpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(327,2): error C4996: 'strncpy': This function or variable may be unsafe. Consider using strncpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(328,2): error C4996: 'strncpy': This function or variable may be unsafe. Consider using strncpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(329,2): error C4996: 'strncpy': This function or variable may be unsafe. Consider using strncpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(330,2): error C4996: 'strncpy': This function or variable may be unsafe. Consider using strncpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(331,2): error C4996: 'strncpy': This function or variable may be unsafe. Consider using strncpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(332,2): error C4996: 'strncpy': This function or variable may be unsafe. Consider using strncpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(333,2): error C4996: 'strncpy': This function or variable may be unsafe. Consider using strncpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(334,2): error C4996: 'strncpy': This function or variable may be unsafe. Consider using strncpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(335,2): error C4996: 'strncpy': This function or variable may be unsafe. Consider using strncpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(336,2): error C4996: 'strncpy': This function or variable may be unsafe. Consider using strncpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(337,2): error C4996: 'strncpy': This function or variable may be unsafe. Consider using strncpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(338,2): error C4996: 'strncpy': This function or variable may be unsafe. Consider using strncpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(339,2): error C4996: 'strncpy': This function or variable may be unsafe. Consider using strncpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(340,2): error C4996: 'strncpy': This function or variable may be unsafe. Consider using strncpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(341,2): error C4996: 'strncpy': This function or variable may be unsafe. Consider using strncpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(342,2): error C4996: 'strncpy': This function or variable may be unsafe. Consider using strncpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(343,2): error C4996: 'strncpy': This function or variable may be unsafe. Consider using strncpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(417,22): warning C4312: 'type cast': conversion from 'int' to 'BYTE *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(419,22): warning C4312: 'type cast': conversion from 'int' to 'BYTE *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(421,22): warning C4312: 'type cast': conversion from 'int' to 'BYTE *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(423,22): warning C4312: 'type cast': conversion from 'int' to 'BYTE *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(425,23): warning C4312: 'type cast': conversion from 'int' to 'DWORD *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(427,23): warning C4312: 'type cast': conversion from 'int' to 'DWORD *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(429,23): warning C4312: 'type cast': conversion from 'int' to 'DWORD *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(431,20): warning C4312: 'type cast': conversion from 'int' to 'char *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(432,17): warning C4312: 'type cast': conversion from 'int' to 'char *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(433,17): warning C4312: 'type cast': conversion from 'int' to 'char *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(434,20): warning C4312: 'type cast': conversion from 'int' to 'char *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(435,17): warning C4312: 'type cast': conversion from 'int' to 'char *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(436,17): warning C4312: 'type cast': conversion from 'int' to 'char *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(437,20): warning C4312: 'type cast': conversion from 'int' to 'char *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(438,17): warning C4312: 'type cast': conversion from 'int' to 'char *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(439,17): warning C4312: 'type cast': conversion from 'int' to 'char *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(440,20): warning C4312: 'type cast': conversion from 'int' to 'char *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(441,17): warning C4312: 'type cast': conversion from 'int' to 'char *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(442,17): warning C4312: 'type cast': conversion from 'int' to 'char *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(443,20): warning C4312: 'type cast': conversion from 'int' to 'char *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(444,17): warning C4312: 'type cast': conversion from 'int' to 'char *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(445,17): warning C4312: 'type cast': conversion from 'int' to 'char *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(446,20): warning C4312: 'type cast': conversion from 'int' to 'char *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(447,17): warning C4312: 'type cast': conversion from 'int' to 'char *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(448,17): warning C4312: 'type cast': conversion from 'int' to 'char *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(449,20): warning C4312: 'type cast': conversion from 'int' to 'char *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(450,17): warning C4312: 'type cast': conversion from 'int' to 'char *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(451,17): warning C4312: 'type cast': conversion from 'int' to 'char *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(452,20): warning C4312: 'type cast': conversion from 'int' to 'char *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(453,17): warning C4312: 'type cast': conversion from 'int' to 'char *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(494,25): warning C4312: 'type cast': conversion from 'int' to 'BYTE *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(498,23): warning C4312: 'type cast': conversion from 'int' to 'BYTE *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(454,2): error C4996: 'strncpy': This function or variable may be unsafe. Consider using strncpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(455,2): error C4996: 'strncpy': This function or variable may be unsafe. Consider using strncpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(456,2): error C4996: 'strncpy': This function or variable may be unsafe. Consider using strncpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(457,2): error C4996: 'strncpy': This function or variable may be unsafe. Consider using strncpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(458,2): error C4996: 'strncpy': This function or variable may be unsafe. Consider using strncpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(459,2): error C4996: 'strncpy': This function or variable may be unsafe. Consider using strncpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(460,2): error C4996: 'strncpy': This function or variable may be unsafe. Consider using strncpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(461,2): error C4996: 'strncpy': This function or variable may be unsafe. Consider using strncpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(462,2): error C4996: 'strncpy': This function or variable may be unsafe. Consider using strncpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(463,2): error C4996: 'strncpy': This function or variable may be unsafe. Consider using strncpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(464,2): error C4996: 'strncpy': This function or variable may be unsafe. Consider using strncpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(465,2): error C4996: 'strncpy': This function or variable may be unsafe. Consider using strncpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(466,2): error C4996: 'strncpy': This function or variable may be unsafe. Consider using strncpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(467,2): error C4996: 'strncpy': This function or variable may be unsafe. Consider using strncpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(468,2): error C4996: 'strncpy': This function or variable may be unsafe. Consider using strncpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(469,2): error C4996: 'strncpy': This function or variable may be unsafe. Consider using strncpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(470,2): error C4996: 'strncpy': This function or variable may be unsafe. Consider using strncpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(471,2): error C4996: 'strncpy': This function or variable may be unsafe. Consider using strncpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(472,2): error C4996: 'strncpy': This function or variable may be unsafe. Consider using strncpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(473,2): error C4996: 'strncpy': This function or variable may be unsafe. Consider using strncpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(474,2): error C4996: 'strncpy': This function or variable may be unsafe. Consider using strncpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(475,2): error C4996: 'strncpy': This function or variable may be unsafe. Consider using strncpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(476,2): error C4996: 'strncpy': This function or variable may be unsafe. Consider using strncpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(573,28): warning C4312: 'type cast': conversion from 'int' to 'DWORD *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(577,14): warning C4312: 'type cast': conversion from 'unsigned long' to 'wchar_t *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(582,15): warning C4312: 'type cast': conversion from 'unsigned long' to 'wchar_t *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(592,15): warning C4312: 'type cast': conversion from 'unsigned long' to 'wchar_t *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(603,15): warning C4312: 'type cast': conversion from 'unsigned long' to 'wchar_t *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(613,15): warning C4312: 'type cast': conversion from 'unsigned long' to 'wchar_t *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(645,15): error C2065: 'LregFolder': undeclared identifier
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(649,2): error C2664: 'LSTATUS RegQueryValueExW(HKEY,LPCWSTR,LPDWORD,LPDWORD,LPBYTE,LPDWORD)': cannot convert argument 2 from 'CHAR *' to 'LPCWSTR'
+  C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(649,24):
+  Types pointed to are unrelated; conversion requires reinterpret_cast, C-style cast or parenthesized function-style cast
+  C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\winreg.h(958,1):
+  see declaration of 'RegQueryValueExW'
+  C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(649,2):
+  while trying to match the argument list '(HKEY, CHAR *, int, int, LPBYTE, DWORD *)'
+  
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(643,2): error C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(664,2): error C4996: 'strcat': This function or variable may be unsafe. Consider using strcat_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(665,2): error C4996: 'strcat': This function or variable may be unsafe. Consider using strcat_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(668,2): error C4996: 'strcat': This function or variable may be unsafe. Consider using strcat_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(669,2): error C4996: 'strcat': This function or variable may be unsafe. Consider using strcat_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(672,2): error C4996: 'strcat': This function or variable may be unsafe. Consider using strcat_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(673,2): error C4996: 'strcat': This function or variable may be unsafe. Consider using strcat_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(675,2): error C4996: 'strcat': This function or variable may be unsafe. Consider using strcat_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(676,2): error C4996: 'strcat': This function or variable may be unsafe. Consider using strcat_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(699,3): error C2664: 'BOOL CopyFileW(LPCWSTR,LPCWSTR,BOOL)': cannot convert argument 1 from 'char [50]' to 'LPCWSTR'
+  C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(699,12):
+  Types pointed to are unrelated; conversion requires reinterpret_cast, C-style cast or parenthesized function-style cast
+  C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\winbase.h(5634,1):
+  see declaration of 'CopyFileW'
+  C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(699,3):
+  while trying to match the argument list '(char [50], char [50], int)'
+  
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(855,44): warning C4244: '=': conversion from 'int' to 'FLOAT', possible loss of data
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(858,44): warning C4244: '=': conversion from 'double' to 'FLOAT', possible loss of data
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(871,3): error C2664: 'BOOL CopyFileW(LPCWSTR,LPCWSTR,BOOL)': cannot convert argument 1 from 'char [50]' to 'LPCWSTR'
+  C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(871,12):
+  Types pointed to are unrelated; conversion requires reinterpret_cast, C-style cast or parenthesized function-style cast
+  C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\winbase.h(5634,1):
+  see declaration of 'CopyFileW'
+  C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(871,3):
+  while trying to match the argument list '(char [50], char [50], bool)'
+  
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(875,3): error C2664: 'BOOL DeleteFileW(LPCWSTR)': cannot convert argument 1 from 'char [50]' to 'LPCWSTR'
+  C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(875,14):
+  Types pointed to are unrelated; conversion requires reinterpret_cast, C-style cast or parenthesized function-style cast
+  C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\fileapi.h(142,1):
+  see declaration of 'DeleteFileW'
+  C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(875,3):
+  while trying to match the argument list '(char [50])'
+  
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(894,13): warning C4244: 'initializing': conversion from 'std::streamoff' to 'int', possible loss of data
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(967,47): warning C4244: '=': conversion from 'double' to 'FLOAT', possible loss of data
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(978,49): warning C4244: '=': conversion from 'double' to 'FLOAT', possible loss of data
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(987,48): warning C4244: '=': conversion from 'double' to 'FLOAT', possible loss of data
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(996,44): warning C4244: '=': conversion from 'double' to 'FLOAT', possible loss of data
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(1014,29): warning C4312: 'type cast': conversion from 'int' to 'DWORD *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(1015,27): warning C4312: 'type cast': conversion from 'unsigned long' to 'FLOAT *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(1032,31): warning C4312: 'type cast': conversion from 'unsigned long' to 'FLOAT *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(1033,20): warning C4312: 'type cast': conversion from 'unsigned long' to 'FLOAT *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(1034,17): warning C4312: 'type cast': conversion from 'unsigned long' to 'FLOAT *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(1035,19): warning C4312: 'type cast': conversion from 'unsigned long' to 'FLOAT *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(1036,18): warning C4312: 'type cast': conversion from 'unsigned long' to 'FLOAT *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(1038,22): warning C4312: 'type cast': conversion from 'unsigned long' to 'FLOAT *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(1039,22): warning C4312: 'type cast': conversion from 'unsigned long' to 'FLOAT *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(1040,25): warning C4312: 'type cast': conversion from 'unsigned long' to 'FLOAT *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(1041,22): warning C4312: 'type cast': conversion from 'unsigned long' to 'FLOAT *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(1042,29): warning C4312: 'type cast': conversion from 'unsigned long' to 'FLOAT *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(1044,21): warning C4312: 'type cast': conversion from 'unsigned long' to 'FLOAT *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(1045,23): warning C4312: 'type cast': conversion from 'unsigned long' to 'FLOAT *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(1046,22): warning C4312: 'type cast': conversion from 'unsigned long' to 'FLOAT *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(1047,24): warning C4312: 'type cast': conversion from 'unsigned long' to 'FLOAT *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(1049,21): warning C4312: 'type cast': conversion from 'unsigned long' to 'FLOAT *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(1050,23): warning C4312: 'type cast': conversion from 'unsigned long' to 'FLOAT *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(1051,22): warning C4312: 'type cast': conversion from 'unsigned long' to 'FLOAT *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(1052,24): warning C4312: 'type cast': conversion from 'unsigned long' to 'FLOAT *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(1054,21): warning C4312: 'type cast': conversion from 'unsigned long' to 'FLOAT *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(1055,23): warning C4312: 'type cast': conversion from 'unsigned long' to 'FLOAT *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(1056,22): warning C4312: 'type cast': conversion from 'unsigned long' to 'FLOAT *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(1057,24): warning C4312: 'type cast': conversion from 'unsigned long' to 'FLOAT *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(1059,21): warning C4312: 'type cast': conversion from 'unsigned long' to 'FLOAT *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(1060,23): warning C4312: 'type cast': conversion from 'unsigned long' to 'FLOAT *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(1061,22): warning C4312: 'type cast': conversion from 'unsigned long' to 'FLOAT *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(1062,24): warning C4312: 'type cast': conversion from 'unsigned long' to 'FLOAT *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(1064,31): warning C4312: 'type cast': conversion from 'unsigned long' to 'FLOAT *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(1066,28): warning C4312: 'type cast': conversion from 'DWORD' to 'FLOAT *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(1069,32): warning C4312: 'type cast': conversion from 'DWORD' to 'FLOAT *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(1556,18): warning C4312: 'type cast': conversion from 'int' to 'DWORD *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(1563,19): warning C4312: 'type cast': conversion from 'DWORD' to 'DWORD *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(1566,12): warning C4311: 'type cast': pointer truncation from 'DWORD *' to 'int'
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(1566,12): warning C4302: 'type cast': truncation from 'DWORD *' to 'int'
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(1579,34): warning C4312: 'type cast': conversion from 'DWORD' to 'FLOAT *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(1584,20): warning C4244: 'initializing': conversion from 'FLOAT' to 'int', possible loss of data
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(1715,21): warning C4312: 'type cast': conversion from 'DWORD' to 'DWORD *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(1781,9): warning C4477: 'printf' : format string '%d' requires an argument of type 'int', but variadic argument 1 has type 'DWORD *'
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(1781,9): warning C4313: 'printf': '%d' in format string conflicts with argument 1 of type 'DWORD *'
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(1793,26): warning C4312: 'type cast': conversion from 'DWORD' to 'FLOAT *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(1805,22): warning C4312: 'type cast': conversion from 'int' to 'DWORD *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(1805,36): warning C4312: 'type cast': conversion from 'int' to 'DWORD *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(1869,31): warning C4312: 'type cast': conversion from 'unsigned long' to 'FLOAT *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(1870,22): warning C4312: 'type cast': conversion from 'unsigned long' to 'FLOAT *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(1871,22): warning C4312: 'type cast': conversion from 'unsigned long' to 'FLOAT *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(1873,23): warning C4312: 'type cast': conversion from 'int' to 'BYTE *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(1896,9): warning C4477: 'printf' : format string '%c' requires an argument of type 'int', but variadic argument 1 has type 'char *'
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(1896,9): warning C4313: 'printf': '%c' in format string conflicts with argument 1 of type 'char *'
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(1915,19): warning C4312: 'type cast': conversion from 'DWORD' to 'DWORD *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(1917,11): warning C4311: 'type cast': pointer truncation from 'DWORD *' to 'int'
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(1917,11): warning C4302: 'type cast': truncation from 'DWORD *' to 'int'
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(1925,10): warning C4312: 'type cast': conversion from 'int' to 'FLOAT *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(1930,3): warning C4312: 'type cast': conversion from 'DWORD' to 'BYTE *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(1935,3): warning C4312: 'type cast': conversion from 'DWORD' to 'FLOAT *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(1941,10): warning C4312: 'type cast': conversion from 'DWORD' to 'DWORD *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(1946,10): warning C4312: 'type cast': conversion from 'int' to 'DWORD *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(1951,10): warning C4312: 'type cast': conversion from 'int' to 'DWORD *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(1956,10): warning C4312: 'type cast': conversion from 'int' to 'BYTE *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(1962,10): warning C4312: 'type cast': conversion from 'int' to 'DWORD *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(2023,21): warning C4312: 'type cast': conversion from 'DWORD' to 'DWORD *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(2037,26): warning C4312: 'type cast': conversion from 'DWORD' to 'FLOAT *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(2043,28): warning C4312: 'type cast': conversion from 'DWORD' to 'FLOAT *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(2070,14): warning C4312: 'type cast': conversion from 'DWORD' to 'DWORD *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(2188,17): warning C4312: 'type cast': conversion from 'DWORD' to 'DWORD *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(2363,9): warning C4477: 'printf' : format string '%d' requires an argument of type 'int', but variadic argument 1 has type 'int *'
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(2363,9): warning C4313: 'printf': '%d' in format string conflicts with argument 1 of type 'int *'
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(2509,84): warning C4312: 'type cast': conversion from 'DWORD' to 'BYTE *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(2514,84): warning C4312: 'type cast': conversion from 'DWORD' to 'BYTE *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(2517,8): warning C4312: 'type cast': conversion from 'DWORD' to 'BYTE *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(2577,9): warning C4477: 'printf' : format string '%s' requires an argument of type 'char *', but variadic argument 1 has type 'int'
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(2577,9): warning C4313: 'printf': '%s' in format string conflicts with argument 1 of type 'int'
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(2641,45): warning C4311: 'type cast': pointer truncation from 'unsigned char *' to 'int'
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(2641,45): warning C4302: 'type cast': truncation from 'unsigned char *' to 'int'
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(2746,9): warning C4477: 'printf' : format string '%s' requires an argument of type 'char *', but variadic argument 1 has type 'int'
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(2746,9): warning C4313: 'printf': '%s' in format string conflicts with argument 1 of type 'int'
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(2810,31): warning C4312: 'type cast': conversion from 'unsigned long' to 'FLOAT *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(2811,22): warning C4312: 'type cast': conversion from 'unsigned long' to 'FLOAT *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(2817,55): warning C4554: '&': check operator precedence for possible error; use parentheses to clarify precedence
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(3002,26): warning C4312: 'type cast': conversion from 'DWORD' to 'FLOAT *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(3058,6): warning C4311: 'type cast': pointer truncation from 'char *' to 'int'
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(3058,6): warning C4302: 'type cast': truncation from 'char *' to 'int'
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(3094,17): warning C4312: 'type cast': conversion from 'DWORD' to 'DWORD *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(3099,11): warning C4311: 'type cast': pointer truncation from 'DWORD *' to 'int'
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(3099,11): warning C4302: 'type cast': truncation from 'DWORD *' to 'int'
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(3100,7): warning C4312: 'type cast': conversion from 'int' to 'DWORD *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(3102,14): warning C4312: 'type cast': conversion from 'int' to 'DWORD *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(3105,15): warning C4312: 'type cast': conversion from 'int' to 'DWORD *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(3108,60): warning C4312: 'type cast': conversion from 'int' to 'DWORD *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(3108,18): warning C4312: 'type cast': conversion from 'int' to 'DWORD *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(3110,66): warning C4312: 'type cast': conversion from 'int' to 'DWORD *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(3110,51): warning C4312: 'type cast': conversion from 'DWORD' to 'const char *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(3111,31): warning C4312: 'type cast': conversion from 'int' to 'DWORD *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(3110,5): error C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(3125,22): warning C4312: 'type cast': conversion from 'unsigned long' to 'FLOAT *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(3126,26): warning C4312: 'type cast': conversion from 'DWORD' to 'FLOAT *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(3128,21): warning C4312: 'type cast': conversion from 'DWORD' to 'DWORD *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(3251,29): warning C4312: 'type cast': conversion from 'int' to 'void *' of greater size
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(3271,2): error C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(3272,2): error C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(3289,2): error C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(3320,2): error C2664: 'int wvsprintfW(LPWSTR,LPCWSTR,va_list)': cannot convert argument 1 from 'char [1024]' to 'LPWSTR'
+  C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(3320,12):
+  Types pointed to are unrelated; conversion requires reinterpret_cast, C-style cast or parenthesized function-style cast
+  C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\winuser.h(313,1):
+  see declaration of 'wvsprintfW'
+  C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(3320,2):
+  while trying to match the argument list '(char [1024], char *, va_list)'
+  
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(3744,2): error C2664: 'DWORD GetModuleFileNameW(HMODULE,LPWSTR,DWORD)': cannot convert argument 2 from 'char [260]' to 'LPWSTR'
+  C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(3744,23):
+  Types pointed to are unrelated; conversion requires reinterpret_cast, C-style cast or parenthesized function-style cast
+  C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\libloaderapi.h(219,1):
+  see declaration of 'GetModuleFileNameW'
+  C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(3744,2):
+  while trying to match the argument list '(int, char [260], int)'
+  
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(3746,31): error C3083: 'filesystem': the symbol to the left of a '::' must be a type
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(3746,43): error C2039: 'path': is not a member of 'std'
+  C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.39.33519\include\string(23,1):
+  see declaration of 'std'
+  
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(3746,43): error C3861: 'path': identifier not found
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(3753,2): error C4996: 'freopen': This function or variable may be unsafe. Consider using freopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Games\Black & White ( Tools)\NewDLL\ddraw\mods.cpp(3754,2): error C4996: 'freopen': This function or variable may be unsafe. Consider using freopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
   Generating Code...

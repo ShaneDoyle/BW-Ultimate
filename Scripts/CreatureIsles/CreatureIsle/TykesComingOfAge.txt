@@ -1,0 +1,1739 @@
+//LHVM Challenge source version 8
+//Decompiled with CHLASM tool by Daniels118
+
+global TEndLoop
+global AwaitingStore
+global LastLearntTimer
+global LastSpellsLearnt
+global StoreOver
+
+begin script BodginLessons
+	Rock0 = 0
+	Rock1 = 0
+	Rock2 = 0
+	Rock3 = 0
+start
+	Rock0 = create OBJECT ROCK at [1071.06, 132.618, 1207.3]
+	SCALE of Rock0 = 0.2
+	Rock1 = create OBJECT ROCK at [1071.06, 132.618, 1207.3]
+	SCALE of Rock1 = 0.4
+	Rock2 = create OBJECT ROCK at [1067.64, 131.851, 1202.73]
+	SCALE of Rock2 = 0.6
+	Rock3 = create OBJECT ROCK at [1061.5, 130.697, 1198.91]
+	SCALE of Rock3 = 0.8
+	begin loop
+		if Rock0 is HELD
+			wait until not Rock0 is HELD
+			teach Tyke PHYSICAL CREATURE_ACTION_KNOWN_ABOUT_USE_FIELD TRUE percentage 1
+		end if
+		if Rock1 is HELD
+			wait until not Rock1 is HELD
+			teach Tyke PHYSICAL CREATURE_ACTION_KNOWN_ABOUT_USE_STORAGE_PIT TRUE percentage 1
+		end if
+		if Rock2 is HELD
+			wait until not Rock2 is HELD
+			teach Tyke MAGICAL SPELL_LIGHTNING_LEVEL_1 TRUE percentage 1
+			teach Tyke MAGICAL SPELL_FIREBALL_LEVEL_1 TRUE percentage 1
+			teach Tyke MAGICAL SPELL_WOOD TRUE percentage 1
+			teach Tyke MAGICAL SPELL_WATER_LEVEL_1 TRUE percentage 1
+			teach Tyke MAGICAL SPELL_HEAL_LEVEL_1 TRUE percentage 1
+			teach Tyke MAGICAL SPELL_FOOD TRUE percentage 1
+		end if
+		if Rock3 is HELD
+			wait until not Rock3 is HELD
+			CreatureCanBuildFlag = 1
+			teach Tyke PHYSICAL CREATURE_ACTION_KNOWN_ABOUT_BUILD TRUE percentage 1
+		end if
+		until TEndLoop == 1
+	end loop
+end script BodginLessons
+
+begin script AnotherBizarreReminder
+start
+	begin dialogue
+		say HELP_TEXT_TYKE_EDUCATION_190
+		wait until read
+		say HELP_TEXT_TYKE_EDUCATION_200
+		wait until read
+		say HELP_TEXT_TYKE_EDUCATION_210
+		wait until read
+		say HELP_TEXT_TYKE_EDUCATION_220
+		wait until read
+	end dialogue
+end script AnotherBizarreReminder
+
+begin script TownDudeSpeaksComplete(Enum1, Enum2)
+	TownDude = 0
+	TownDudeHutPos = marker at [1071.61, 131.043, 1192.66]
+	TownDudeHut = get HOUSE at [TownDudeHutPos]
+	DudeCreatePos = marker at [1067.81, 130.318, 1189.51]
+	TownDudePos = marker at [1064.93, 129.755, 1186.81]
+	SeeDudePos = marker at [1063.28, 131.299, 1184.33]
+	SeeDudeFoc = marker at [1096.68, 148.31, 1242.04]
+	BeginPos = 0
+	BeginFoc = 0
+start
+	begin cinema
+		start music MUSIC_TYPE_SCRIPT_KHAZAR
+		BeginPos = marker at (camera position)
+		BeginFoc = marker at (camera focus)
+		TownDude = create VILLAGER NOMADE at [DudeCreatePos]
+		move TownDude position to [TownDudePos] radius 0
+		move camera position to [SeeDudePos] time 3
+		move camera focus to [SeeDudeFoc] time 3
+		wait until camera ready
+		wait until get distance from [TownDude] to [TownDudePos] < 1
+		wait until 1 seconds
+		set TownDude focus to (camera position)
+		say constant Enum1
+		TownDude play ANM_P_TALK1_MALE loop 1
+		wait until read
+		say constant Enum2
+		TownDude play ANM_P_TALK2_MALE loop 1
+		wait until read
+		say HELP_TEXT_TYKE_EDUCATION_230
+		TownDude play ANM_P_WELL_DONE__FEMALE loop 1
+		wait until read
+		say HELP_TEXT_TYKE_EDUCATION_240
+		TownDude play ANM_P_TALK1_MALE loop 1
+		wait until read
+		say HELP_TEXT_TYKE_EDUCATION_245 with interaction
+		wait until read
+		close dialogue
+		move TownDude position to [TownDudeHut] radius 0
+		move camera position to [BeginPos] time 2
+		move camera focus to [BeginFoc] time 2
+		wait until camera ready
+		delete TownDude with fade
+		stop music
+	end cinema
+	release MyCreature
+end script TownDudeSpeaksComplete
+
+begin script TownDudeSpeaksBuild(Enum1, Enum2)
+	TownDude = 0
+	TownDudeHutPos = marker at [1071.61, 131.043, 1192.66]
+	TownDudeHut = get HOUSE at [TownDudeHutPos]
+	DudeCreatePos = marker at [1067.81, 130.318, 1189.51]
+	TownDudePos = marker at [1064.93, 129.755, 1186.81]
+	SeeDudePos = marker at [1063.28, 131.299, 1184.33]
+	SeeDudeFoc = marker at [1096.68, 148.31, 1242.04]
+	BeginPos = 0
+	BeginFoc = 0
+start
+	begin cinema
+		start music MUSIC_TYPE_SCRIPT_KHAZAR
+		update snapshot CHALLENGE_TYKES_COMING_OF_AGE success 0.75 alignment 0 HELP_TEXT_CREATURE_ISLE_TITLE_06 AnotherBizarreReminder
+		BeginPos = marker at (camera position)
+		BeginFoc = marker at (camera focus)
+		TownDude = create VILLAGER NOMADE at [DudeCreatePos]
+		move TownDude position to [TownDudePos] radius 0
+		move camera position to [SeeDudePos] time 3
+		move camera focus to [SeeDudeFoc] time 3
+		wait until camera ready
+		wait until get distance from [TownDude] to [TownDudePos] < 1
+		wait until 1 seconds
+		set TownDude focus to (camera position)
+		say constant Enum1
+		TownDude play ANM_P_TALK1_MALE loop 1
+		wait until read
+		say constant Enum2
+		TownDude play ANM_P_TALK2_MALE loop 1
+		wait until read
+		say HELP_TEXT_TYKE_EDUCATION_190
+		TownDude play ANM_P_TALK1_MALE loop 1
+		wait until read
+		say HELP_TEXT_TYKE_EDUCATION_200
+		TownDude play ANM_P_TALK2_MALE loop 1
+		wait until read
+		say HELP_TEXT_TYKE_EDUCATION_210
+		TownDude play ANM_P_TALK1_MALE loop 1
+		wait until read
+		say HELP_TEXT_TYKE_EDUCATION_220 with interaction
+		TownDude play ANM_P_TALK2_MALE loop 1
+		wait until read
+		move TownDude position to [TownDudeHut] radius 0
+		move camera position to [BeginPos] time 2
+		move camera focus to [BeginFoc] time 2
+		wait until camera ready
+		delete TownDude with fade
+		set LastLearntTimer time to 900 seconds
+		stop music
+	end cinema with dialogue
+		eject good spirit
+		say HELP_TEXT_TYKE_EDUCATION_225
+		wait until read
+		say HELP_TEXT_TYKE_EDUCATION_227
+		wait until read
+		send good spirit home
+	end dialogue
+	release MyCreature
+end script TownDudeSpeaksBuild
+
+begin script TownDudeSpeaksSpells(Enum1, Enum2)
+	TownDude = 0
+	TownDudeHutPos = marker at [1071.61, 131.043, 1192.66]
+	TownDudeHut = get HOUSE at [TownDudeHutPos]
+	SeeDudePos = marker at [1063.28, 131.299, 1184.33]
+	SeeDudeFoc = marker at [1096.68, 148.31, 1242.04]
+	DudeCreatePos = marker at [1067.81, 130.318, 1189.51]
+	TownDudePos = marker at [1064.93, 129.755, 1186.81]
+	TotemPos = marker at [1090.92, 146.084, 1301.35]
+	TotemFoc = marker at [1122.9, 126.022, 1315.12]
+	ZoomTotemPos = marker at [1091.62, 143.694, 1301.65]
+	ZoomTotemFoc = marker at [1121.86, 123.772, 1314.67]
+	BeginPos = 0
+	BeginFoc = 0
+	TykesTrainingMiracleDYKPos = marker at [1109.043, 120.469, 1303.244]
+start
+	begin cinema
+		start music MUSIC_TYPE_SCRIPT_KHAZAR
+		run background script DidYouKnow(TykesTrainingMiracleDYKPos, variable HELP_TEXT_TYKES_TRAINING3_DYK, variable DYK_MISC)
+		update snapshot CHALLENGE_TYKES_COMING_OF_AGE success 0.5 alignment 0 HELP_TEXT_CREATURE_ISLE_TITLE_06 StandardReminder (variable HELP_TEXT_CI_REMINDER_17)
+		BeginPos = marker at (camera position)
+		BeginFoc = marker at (camera focus)
+		TownDude = create VILLAGER NOMADE at [DudeCreatePos]
+		move TownDude position to [TownDudePos] radius 0
+		move camera position to [SeeDudePos] time 3
+		move camera focus to [SeeDudeFoc] time 3
+		wait until camera ready
+		wait until get distance from [TownDude] to [TownDudePos] < 1
+		wait until 1 seconds
+		set TownDude focus to (camera position)
+		say constant Enum1
+		TownDude play ANM_P_TALK1_MALE loop 1
+		wait until read
+		say constant Enum2 with interaction
+		TownDude play ANM_P_TALK2_MALE loop 1
+		wait until read
+		say HELP_TEXT_TYKE_EDUCATION_160
+		TownDude play ANM_P_TALK1_MALE loop 1
+		wait until read
+		set camera position to [ZoomTotemPos]
+		set camera focus to [ZoomTotemFoc]
+		move camera position to [TotemPos] time 12
+		move camera focus to [TotemFoc] time 12
+		say HELP_TEXT_TYKE_EDUCATION_175 with interaction
+		wait until read
+		say HELP_TEXT_TYKE_EDUCATION_180
+		wait until read
+		wait until 2 seconds
+		wait until camera ready
+		delete TownDude with fade
+		set LastLearntTimer time to 300 seconds
+		stop music
+	end cinema
+	release MyCreature
+end script TownDudeSpeaksSpells
+
+begin script HolyDelayTimersBatman
+start
+	wait until 10 seconds
+	if Tyke knows action CREATURE_ACTION_KNOWN_ABOUT_USE_STORAGE_PIT
+		begin dialogue
+			eject good spirit
+			say single line HELP_TEXT_TYKESCOMINGOFAGE_TYKELEARNING_280
+			wait until read
+			send good spirit home
+		end dialogue
+	end if
+end script HolyDelayTimersBatman
+
+begin script TownDudeSpeaksStore(TykeHighlight)
+	TownDude = 0
+	TownDudeHutPos = marker at [1071.61, 131.043, 1192.66]
+	TownDudeHut = get HOUSE at [TownDudeHutPos]
+	DudeCreatePos = marker at [1091.181, 135.602, 1205.213]
+	TownDudePos = marker at [1083.973, 133.885, 1200.198]
+	SeeDudePos = marker at [1062.41, 131.78, 1183.37]
+	SeeDudeFoc = marker at [1085.04, 134.325, 1209.07]
+	ZoomSeeDudePos = marker at [1063.28, 131.299, 1184.33]
+	ZoomSeeDudeFoc = marker at [1096.68, 148.31, 1242.04]
+	BeginPos = 0
+	BeginFoc = 0
+	ViewEatingPos = marker at [1001.266, 132.383, 1062.726]
+	ViewEatingFoc = marker at [1026.403, 120.728, 1107.973]
+	MyActingPos = marker at [1026.04, 114.732, 1082.85]
+	TykeActingPos = marker at [1017.316, 121.089, 1116.295]
+	NewField = 0
+	NewFieldPos = marker at [1030.33, 120.987, 1112.92]
+	CloseUpFieldPos = marker at [1014.026, 127, 1099.746]
+	CloseUpFieldFoc = marker at [1042.342, 123.781, 1137.19]
+	TykeEatCamPos = marker at [1020.74, 129.747, 1100.7]
+	TykeEatCamFoc = marker at [1061.79, 95.5479, 1154.35]
+	CmonTimer = create timer for 0 seconds
+	TykeEats = 0
+	SeeStorePos = marker at [1077.83, 147.741, 1398.24]
+	SeeStoreFoc = marker at [1098.6, 123.057, 1353.51]
+	SeeStorePos2 = marker at [1026.12, 135.192, 1344.32]
+	SeeStoreFoc2 = marker at [1136.95, 104.751, 1343.14]
+	MyStorePos = marker at [1095.67, 121.99, 1335.09]
+	TykeStorePos = marker at [1074.27, 120.349, 1347.76]
+	StoragePitPos = marker at [1115.17, 122.935, 1363.99]
+	StoragePit = get HOUSE at [StoragePitPos]
+	TownField = get FIELD at [1085.56, 121.694, 1345.26]
+	Lantern1 = 0
+	Lantern2 = 0
+	Lantern3 = 0
+	Lantern4 = 0
+	LanternPos1 = marker at [1037.16, 119.407, 1105.55]
+	LanternPos2 = marker at [1024.02, 120.443, 1105.84]
+	LanternPos3 = marker at [1038.45, 121.95, 1120.17]
+	LanternPos4 = marker at [1022.64, 121.464, 1120.29]
+	TykesTrainingFoodDYKPos = marker at [1031.1, 122.233, 1124.39]
+	TykesTrainingStoreDYKPos = marker at [1114.635, 123.434, 1337.704]
+	OnwardLoop = 0
+	MayorTimer = create timer for 0 seconds
+start
+	begin cinema
+		start music MUSIC_TYPE_SCRIPT_KHAZAR
+		if TykeFree == 0
+			TykeFree = 3
+		end if
+		run background script DidYouKnow(TykesTrainingFoodDYKPos, variable HELP_TEXT_TYKES_TRAINING1_DYK, variable DYK_MISC)
+		teach Tyke PHYSICAL CREATURE_ACTION_KNOWN_ABOUT_USE_FIELD FALSE percentage 1
+		BeginPos = marker at (camera position)
+		BeginFoc = marker at (camera focus)
+		TownDude = create VILLAGER NOMADE at [DudeCreatePos]
+		ALTITUDE of TownDude = 2.6
+		move TownDude position to [TownDudePos] radius 0
+		move camera position to [1051.705, 141.133, 1178.436] time 3
+		move camera focus to [1089.451, 135.652, 1205.613] time 3
+		wait until 2 seconds
+		move camera position to [1075.93, 138, 1194.786] time 4
+		move camera focus to [1100.661, 138, 1212.625] time 4
+		wait until get distance from [TownDude] to [TownDudePos] < 1
+		wait until 1 seconds
+		set TownDude focus to (camera position)
+		snapshot CHALLENGE_TYKES_COMING_OF_AGE quest success 0 alignment 0 HELP_TEXT_CREATURE_ISLE_TITLE_06 StandardReminder (variable HELP_TEXT_CI_REMINDER_15)
+		say HELP_TEXT_TYKE_EDUCATION_30
+		TownDude play ANM_P_TALK1_MALE loop 1
+		wait until read
+		move camera position to [1080.183, 140.091, 1195.225] time 8
+		move camera focus to [1088.016, 135.686, 1205.892] time 8
+		say HELP_TEXT_TYKE_EDUCATION_31
+		TownDude play ANM_P_TALK2_MALE loop 1
+		wait until read
+		say HELP_TEXT_TYKE_EDUCATION_32
+		TownDude play ANM_P_TALK1_MALE loop 1
+		wait until read
+		say HELP_TEXT_TYKE_EDUCATION_40 with interaction
+		TownDude play ANM_P_TALK2_MALE loop 1
+		wait until read
+		clear dialogue
+		move camera position to [ViewEatingPos] time 5
+		move camera focus to [ViewEatingFoc] time 5
+		set MyCreature position to [MyActingPos]
+		set Tyke position to [TykeActingPos]
+		set MyCreature focus to [Tyke]
+		set Tyke focus to [MyCreature]
+		NewField = create FIELD FIELD_INFO_TYPE_WHEAT at [NewFieldPos]
+		HEIGHT of NewField = 1
+		release NewField
+		Lantern1 = create OBJECT MOBILE_STATIC_INFO_STREET_LANTERN at [LanternPos1]
+		Lantern2 = create OBJECT MOBILE_STATIC_INFO_STREET_LANTERN at [LanternPos2]
+		Lantern3 = create OBJECT MOBILE_STATIC_INFO_STREET_LANTERN at [LanternPos3]
+		Lantern4 = create OBJECT MOBILE_STATIC_INFO_STREET_LANTERN at [LanternPos4]
+		wait until camera ready
+		move camera position to [CloseUpFieldPos] time 15
+		move camera focus to [CloseUpFieldFoc] time 15
+		wait until 2 seconds
+		force MyCreature CREATURE_EAT_FROM_FIELD NewField
+		wait until MyCreature played
+		force Tyke POINT_AT MyCreature
+		say HELP_TEXT_TYKE_EDUCATION_50
+		draw Tyke lightbulb 0.25
+		wait until read
+		say HELP_TEXT_TYKE_EDUCATION_60
+		wait until read
+		wait until Tyke played
+		MyCreature play ANM_A_COW_EAT_1 loop 1
+		wait until MyCreature played
+		force MyCreature CREATURE_EAT_FROM_FIELD NewField
+		wait until MyCreature played
+		force Tyke POINT_AT MyCreature
+		wait until Tyke played
+		force MyCreature POINT_AT Tyke
+		wait until MyCreature played
+		say HELP_TEXT_TYKE_EDUCATION_70 with interaction
+		close dialogue
+		move camera position to [ViewEatingPos] time 5
+		move camera focus to [ViewEatingFoc] time 5
+		wait until read
+		wait until camera ready
+		HEIGHT of NewField = 1
+		teach Tyke PHYSICAL CREATURE_ACTION_KNOWN_ABOUT_USE_FIELD FALSE percentage 1
+		release MyCreature
+		release Tyke
+		delete TownDude with fade
+		stop music
+	end cinema
+	set CmonTimer time to 200 seconds
+	while TykeEats == 0
+		if get CmonTimer time remaining <= 0
+			begin dialogue
+				eject good spirit
+				make good spirit point at [NewField]
+				say single line HELP_TEXT_TYKE_EDUCATION_80
+				wait until read
+				stop good spirit pointing
+			end dialogue
+			set CmonTimer time to 300 seconds
+		end if
+		if Tyke knows action CREATURE_ACTION_KNOWN_ABOUT_USE_FIELD
+			TykeEats = 1
+		end if
+	end while
+	disable TykeHighlight active
+	begin dialogue
+		eject good spirit
+		say single line HELP_TEXT_TYKESCOMINGOFAGE_TYKELEARNING_290
+		wait until read
+		send good spirit home
+	end dialogue
+	OnwardLoop = 0
+	begin loop
+		if TykeHighlight clicked
+			if ScriptLockedCreature == 0
+				enable TykeHighlight active
+				OnwardLoop = 1
+			else
+				run script ScriptLockedHighlight(TykeHighlight)
+			end if
+		elsif get MayorTimer time remaining <= 0 and get distance from (camera position) to [TykeHighlight] < 150
+			begin dialogue
+				eject evil spirit
+				make evil spirit point at [TykeHighlight]
+				say single line HELP_TEXT_TYKESCOMINGOFAGE_140
+				wait until read
+				stop evil spirit pointing
+				send evil spirit home
+			end dialogue
+			set MayorTimer time to 30 seconds
+		end if
+		until OnwardLoop == 1
+	end loop
+	TownDudePos = marker at [1064.93, 129.755, 1186.81]
+	begin cinema
+		start music MUSIC_TYPE_SCRIPT_KHAZAR
+		if TykeFree == 0
+			TykeFree = 3
+		end if
+		run background script DidYouKnow(TykesTrainingStoreDYKPos, variable HELP_TEXT_TYKES_TRAINING2_DYK, variable DYK_MISC)
+		update snapshot CHALLENGE_TYKES_COMING_OF_AGE success 0.25 alignment 0 HELP_TEXT_CREATURE_ISLE_TITLE_06 StandardReminder (variable HELP_TEXT_CI_REMINDER_16)
+		set fade red 0 green 0 blue 0 time 1.5
+		wait until 2 seconds
+		set MyCreature position to [MyActingPos]
+		set Tyke position to [TykeActingPos]
+		set MyCreature focus to [Tyke]
+		set camera position to [CloseUpFieldPos]
+		set camera focus to [CloseUpFieldFoc]
+		set fade in time 2
+		wait until 2 seconds
+		force Tyke POINT_AT NewField
+		wait until Tyke played
+		force Tyke CREATURE_EAT_FROM_FIELD NewField
+		wait until 2 seconds
+		move camera position to [TykeEatCamPos] time 10
+		move camera focus to [TykeEatCamFoc] time 10
+		set MyCreature focus to [NewField]
+		wait until Tyke played
+		set Tyke focus to [MyCreature]
+		wait until 1 seconds
+		Tyke play ANM_A_COW_DEAD_ON_RHS loop 1
+		MyCreature play ANM_A_COW_DEAD_ON_RHS loop 1
+		wait until MyCreature played
+		wait until Tyke played
+		set fade red 0 green 0 blue 0 time 1.5
+		wait until 2 seconds
+		TownDude = create VILLAGER NOMADE at [TownDudePos]
+		set TownDude focus to [SeeDudePos]
+		set camera position to [SeeDudePos]
+		set camera focus to [SeeDudeFoc]
+		set fade in time 2
+		wait until 2 seconds
+		move camera position to [1056.386, 141.218, 1170.613] time 15
+		move camera focus to [1105.396, 121.038, 1317.965] time 15
+		say HELP_TEXT_TYKE_EDUCATION_85
+		wait until read
+		say HELP_TEXT_TYKE_EDUCATION_87 with interaction
+		wait until read
+		say HELP_TEXT_TYKE_EDUCATION_90
+		TownDude play ANM_P_TALK1_MALE loop 1
+		wait until read
+		TownDude play ANM_P_TALK2_MALE loop 2
+		say HELP_TEXT_TYKE_EDUCATION_100 with interaction
+		wait until read
+		set fade red 0 green 0 blue 0 time 1.5
+		wait until 2 seconds
+		delete NewField
+		delete Lantern1
+		delete Lantern2
+		delete Lantern3
+		delete Lantern4
+		run background script DeleteDYK(TykesTrainingFoodDYKPos)
+		set camera position to [SeeStorePos]
+		set camera focus to [SeeStoreFoc]
+		set MyCreature position to [MyStorePos]
+		set MyCreature focus to [StoragePit]
+		set Tyke position to [TykeStorePos]
+		set fade in time 2
+		move camera position to [SeeStorePos2] time 20
+		move camera focus to [SeeStoreFoc2] time 20
+		wait until 5 seconds
+		force MyCreature CREATURE_GIVE_FOOD_FROM_FIELD_TO_STORAGE_PIT StoragePit with TownField
+		wait until 2 seconds
+		Tyke play ANM_A_COW_EAT_1 loop 1
+		wait until Tyke played
+		set Tyke focus to [MyCreature]
+		wait until MyCreature played
+		draw Tyke lightbulb 0.5
+		force MyCreature POINT_AT Tyke
+		wait until MyCreature played
+		Tyke play ANM_A_COW_EAT_1 loop 1
+		wait until Tyke played
+		set MyCreature focus to [Tyke]
+		set Tyke focus to [MyCreature]
+		wait until 1 seconds
+		move camera position to [SeeStorePos] time 5
+		move camera focus to [SeeStoreFoc] time 5
+		say HELP_TEXT_TYKE_EDUCATION_130
+		wait until read
+		say HELP_TEXT_TYKE_EDUCATION_135 with interaction
+		wait until read
+		wait until camera ready
+		delete TownDude with fade
+		set LastLearntTimer time to 300 seconds
+		stop music
+	end cinema
+	release Tyke
+	release MyCreature
+	run background script HolyDelayTimersBatman
+	StoreOver = 1
+	AwaitingStore = 1
+end script TownDudeSpeaksStore
+
+begin script TykesComingOfAge
+	TykeFight = 0
+	BeginPos = 0
+	BeginFoc = 0
+	HurryUp = 0
+	TrainingGuide = 0
+	TykeUsesStoragePit = 0
+	TykeUsesField = 0
+	TykeGoesFishing = 0
+	TykeBuilds = 0
+	TykeUsesTotem = 0
+	TykeImpresses = 0
+	TykeDances = 0
+	TykeCastsFood = 0
+	TykeCastsWood = 0
+	TykeCastsHeal = 0
+	TykeCastsWater = 0
+	TykeCastsLightning = 0
+	TykeCastsFireball = 0
+	TykeCastsFreeze = 0
+	SkillsLearnt = 0
+	SpellsLearnt = 0
+	TykeFullyTrained = 0
+	TykeFleesHome = 0
+	TykeConquersFear = 0
+	TykeLastLearnt = create timer for 900 seconds
+	TykeAction = 0
+	StartedOnSpells = 0
+	ReminderTimer = create timer for 0 seconds
+	GoldScroll = 0
+	ScrollPos = marker at [1258.327, 57.521, 1025.167]
+	MyPos = marker at [1268.19, 60.97, 1052.35]
+	LionPos = marker at [1240.76, 60.97, 1025.86]
+	TykePos = marker at [1443.52, 82.6403, 1191.75]
+	LionDoorway = marker at [1219.12, 60.97, 995.495]
+	TempCamPos = marker at [1205.07, 92.7517, 1048.94]
+	TempCamFoc = marker at [1268.29, 61.3918, 1025.45]
+	Lion = 0
+	ShiftCTimer = create timer for 0 seconds
+	ShiftCComment = 0
+	TykeCastsForest = 0
+	TykeCastsStorm = 0
+	TykeCastsShield = 0
+	TykeCastsPShield = 0
+	TykeCastsGFlock = 0
+	TykeCastsBFlock = 0
+	TykeCastsSmall = 0
+	TykeCastsBig = 0
+	TykeCastsWeak = 0
+	TykeCastsStrong = 0
+	TykeCastsFat = 0
+	TykeCastsThin = 0
+	TykeCastsInvis = 0
+	TykeCastsCompassion = 0
+	TykeCastsAngry = 0
+	TykeCastsHungry = 0
+	TykeCastsFright = 0
+	TykeCastsTired = 0
+	TykeCastsIll = 0
+	TykeCastsThirsty = 0
+	TykeCastsItchy = 0
+	TykeCastsAnti = 0
+	TykeCastsSpeed = 0
+	TykePunished = 0
+	OldPos = 0
+	TykeLastHealth = 0
+	HealthTimer = create timer for 0 seconds
+	WonderPos = marker at [1093.06, 136.151, 1206.5]
+	FoodCinema = 0
+	StoreCinema = 0
+	SpellsCinema = 0
+	BuildCinema = 0
+	TykeHighlight = 0
+	MayorTimer = create timer for 0 seconds
+	TykeCastsFood2 = 0
+	TykeCastsHeal2 = 0
+	TykeCastsWater2 = 0
+	TykeCastsFireball2 = 0
+	TykeCastsFireball3 = 0
+	TykeCastsLightning2 = 0
+	TykeCastsLightning3 = 0
+	TykeCastsStorm2 = 0
+	TykeCastsExplosion = 0
+	TykeCastsExplosion2 = 0
+	TykeCastsExplosion3 = 0
+	CurrentAction = 0
+	HungerTimer = create timer for 0 seconds
+	ThirstTimer = create timer for 0 seconds
+	TiredTimer = create timer for 0 seconds
+	TykeBeHurt = 0
+	TykeBeHungry = 0
+	TykeBeThirsty = 0
+	TykeBeTired = 0
+	Lantern5 = create OBJECT MOBILE_STATIC_INFO_STREET_LANTERN at [1085.58, 133.251, 1191.12]
+	Lantern6 = create OBJECT MOBILE_STATIC_INFO_STREET_LANTERN at [1075.95, 133.215, 1205.24]
+	NuRandomSay = 0
+	TeachBuildTimer = create timer for 0 seconds
+	MyCreatureAction = 0
+	TykeStoreCount = 0
+	SpotterTimer = create timer for 0 seconds
+	BulbTotal = 0
+	WaitASec = create timer for 0 seconds
+	FirstAndOnlyTime = 0
+start
+	run background script BabySitter
+	if not Tyke exists
+		Tyke = create CREATURE CREATURE_TYPE_APE at [MyCreature] + ([15, 15])
+		set Tyke name HELP_TEXT_NAME_CHICKEN_01
+		run script SetupCreatureIsleCreature(Tyke)
+		set Tyke master MyCreature
+		enable Tyke follow master
+		release Tyke
+	end if
+	teach Tyke PHYSICAL CREATURE_ACTION_KNOWN_ABOUT_USE_STORAGE_PIT FALSE percentage 1
+	DojoReminderTykesTraining = 1
+	LastLearntTimer = create timer for 0 seconds
+	LastSpellsLearnt = 0
+	AwaitingStore = 0
+	set ShiftCTimer time to 30 seconds
+	begin loop
+		wait until 0.5 seconds
+		if ShiftCComment == 0 and get ShiftCTimer time remaining <= 0
+			begin dialogue
+				eject good spirit
+				say HELP_TEXT_TYKE_EDUCATION_140
+				wait until read
+				say HELP_TEXT_TYKE_EDUCATION_150
+				wait until read
+				send good spirit home
+			end dialogue
+			ShiftCComment = 1
+		end if
+		if TykePunished == 0
+			CurrentAction = variable get MyCreature current action
+		end if
+		if CurrentAction == variable CREATURE_SHOW_CREATURE_YOU_HATE_HIM and TykePunished == 0
+			begin dialogue
+				eject evil spirit
+				say single line HELP_TEXT_TYKE_EDUCATION_120
+				wait until read
+				send evil spirit home
+			end dialogue
+			TykePunished = 1
+		end if
+		if get TykeLastLearnt time remaining <= 0 and TrainingGuide != 4 and TrainingGuide != 5
+			begin dialogue
+				if HurryUp == 0
+					eject good spirit
+					say HELP_TEXT_TYKESCOMINGOFAGE_TYKENOTLEARNING_10
+					wait until read
+					say HELP_TEXT_TYKESCOMINGOFAGE_TYKENOTLEARNING_20
+					wait until read
+					send good spirit home
+					HurryUp = 1
+				else
+					eject evil spirit
+					say HELP_TEXT_TYKESCOMINGOFAGE_TYKENOTLEARNING_30
+					wait until read
+					say HELP_TEXT_TYKESCOMINGOFAGE_TYKENOTLEARNING_40
+					wait until read
+					send evil spirit home
+					HurryUp = 0
+				end if
+			end dialogue
+			set TykeLastLearnt time to 1800 seconds
+		end if
+		if TEndLoop == 0
+			if TrainingGuide == 0
+				if FoodCinema == 0
+					TykeHighlight = create highlight CHALLENGE_TYKES_COMING_OF_AGE HIGHLIGHT_TRIAL at [WonderPos]
+					FoodCinema = 1
+				else
+					if TykeHighlight clicked
+						if ScriptLockedCreature == 0
+							enable TykeHighlight active
+							StoreOver = 0
+							run background script TownDudeSpeaksStore(TykeHighlight)
+							TrainingGuide = 88
+						else
+							run script ScriptLockedHighlight(TykeHighlight)
+						end if
+					elsif get MayorTimer time remaining <= 0 and get distance from (camera position) to [TykeHighlight] < 100
+						begin dialogue
+							eject evil spirit
+							make evil spirit point at [TykeHighlight]
+							say single line HELP_TEXT_TYKESCOMINGOFAGE_140
+							wait until read
+							stop evil spirit pointing
+							send evil spirit home
+						end dialogue
+						set MayorTimer time to 30 seconds
+					end if
+				end if
+			elsif TrainingGuide == 1
+				MyCreatureAction = variable get MyCreature current action
+				if Tyke knows action CREATURE_ACTION_KNOWN_ABOUT_USE_STORAGE_PIT and TykeStoreCount == 100
+					if StoreCinema == 0
+						draw Tyke lightbulb 1
+						disable TykeHighlight active
+						StoreCinema = 1
+					else
+						if TykeHighlight clicked
+							if ScriptLockedCreature == 0
+								if SpellsLearnt > 3
+									if Tyke knows action CREATURE_ACTION_KNOWN_ABOUT_BUILD and CreatureCanBuildFlag != 0
+										delete TykeHighlight
+										run script TownDudeSpeaksComplete(variable HELP_TEXT_TYKE_EDUCATION_250, variable HELP_TEXT_TYKE_EDUCATION_260)
+										TrainingGuide = 4
+									else
+										enable TykeHighlight active
+										run script TownDudeSpeaksBuild(variable HELP_TEXT_TYKE_EDUCATION_250, variable HELP_TEXT_TYKE_EDUCATION_260)
+										TrainingGuide = 3
+									end if
+								else
+									enable TykeHighlight active
+									run script TownDudeSpeaksSpells(variable HELP_TEXT_TYKE_EDUCATION_250, variable HELP_TEXT_TYKE_EDUCATION_260)
+									LastSpellsLearnt = SpellsLearnt
+									TrainingGuide = 2
+								end if
+							else
+								run script ScriptLockedHighlight(TykeHighlight)
+							end if
+						elsif get MayorTimer time remaining <= 0 and get distance from (camera position) to [TykeHighlight] < 100
+							begin dialogue
+								eject evil spirit
+								make evil spirit point at [TykeHighlight]
+								say single line HELP_TEXT_TYKESCOMINGOFAGE_140
+								wait until read
+								stop evil spirit pointing
+								send evil spirit home
+							end dialogue
+							set MayorTimer time to 30 seconds
+						end if
+					end if
+				elsif (MyCreatureAction == variable CREATURE_GIVE_FISH_TO_STORAGE_PIT or MyCreatureAction == variable CREATURE_GIVE_MAGIC_FOOD_TO_STORAGE_PIT or MyCreatureAction == variable CREATURE_GIVE_WOOD_FROM_TREE_TO_STORAGE_PIT or MyCreatureAction == variable CREATURE_GIVE_FOOD_FROM_FIELD_TO_STORAGE_PIT or MyCreatureAction == variable CREATURE_GIVE_MAGIC_WOOD_TO_STORAGE_PIT or MyCreatureAction == variable CREATURE_STEAL_FOOD_FROM_STORAGE_PIT or MyCreatureAction == variable CREATURE_STEAL_WOOD_FROM_STORAGE_PIT) and get distance from [Tyke] to [MyCreature] < 100 and get SpotterTimer time remaining <= 0
+					if TykeStoreCount < 75
+						TykeStoreCount = 75
+						draw Tyke lightbulb 0.75
+						set SpotterTimer time to 10 seconds
+					elsif get SpotterTimer time remaining <= 0
+						TykeStoreCount = 100
+						teach Tyke PHYSICAL CREATURE_ACTION_KNOWN_ABOUT_USE_STORAGE_PIT TRUE percentage 1
+					end if
+				elsif get LastLearntTimer time remaining <= 0
+					begin dialogue
+						eject good spirit
+						say single line HELP_TEXT_TYKESCOMINGOFAGE_110
+						wait until read
+						send good spirit home
+					end dialogue
+					set LastLearntTimer time to 300 seconds
+				end if
+			elsif TrainingGuide == 2
+				if get LastLearntTimer time remaining <= 0 and SpellsLearnt <= 3
+					begin dialogue
+						eject good spirit
+						say single line HELP_TEXT_TYKESCOMINGOFAGE_120
+						wait until read
+						send good spirit home
+					end dialogue
+					set LastLearntTimer time to 300 seconds
+				end if
+				if SpellsLearnt > 3
+					if SpellsCinema == 0
+						disable TykeHighlight active
+						begin dialogue
+							eject good spirit
+							eject evil spirit
+							say HELP_TEXT_TYKESCOMINGOFAGE_TYKELEARNING_180
+							wait until read
+							say HELP_TEXT_TYKESCOMINGOFAGE_TYKELEARNING_190
+							wait until read
+							say HELP_TEXT_TYKESCOMINGOFAGE_TYKELEARNING_200
+							wait until read
+							say HELP_TEXT_TYKESCOMINGOFAGE_TYKELEARNING_210
+							wait until read
+							make evil spirit point at [TykeHighlight]
+							say HELP_TEXT_TYKESCOMINGOFAGE_140
+							wait until read
+							stop evil spirit pointing
+							send good spirit home
+							send evil spirit home
+						end dialogue
+						SpellsCinema = 1
+					else
+						if TykeHighlight clicked
+							if ScriptLockedCreature == 0
+								if Tyke knows action CREATURE_ACTION_KNOWN_ABOUT_BUILD and CreatureCanBuildFlag != 0
+									delete TykeHighlight
+									run script TownDudeSpeaksComplete(variable HELP_TEXT_TYKE_EDUCATION_270, variable HELP_TEXT_TYKE_EDUCATION_280)
+									TrainingGuide = 4
+								else
+									enable TykeHighlight active
+									run script TownDudeSpeaksBuild(variable HELP_TEXT_TYKE_EDUCATION_270, variable HELP_TEXT_TYKE_EDUCATION_280)
+									TrainingGuide = 3
+								end if
+							else
+								run script ScriptLockedHighlight(TykeHighlight)
+							end if
+						elsif get MayorTimer time remaining <= 0 and get distance from (camera position) to [TykeHighlight] < 100
+							begin dialogue
+								eject evil spirit
+								make evil spirit point at [TykeHighlight]
+								say single line HELP_TEXT_TYKESCOMINGOFAGE_140
+								wait until read
+								stop evil spirit pointing
+								send evil spirit home
+							end dialogue
+							set MayorTimer time to 30 seconds
+						end if
+					end if
+				elsif SpellsLearnt > LastSpellsLearnt
+					if SpellsLearnt == 1
+						begin dialogue
+							update snapshot CHALLENGE_TYKES_COMING_OF_AGE success 0.56 alignment 0 HELP_TEXT_CREATURE_ISLE_TITLE_06 StandardReminder (variable HELP_TEXT_CI_REMINDER_17)
+							eject good spirit
+							say HELP_TEXT_TYKESCOMINGOFAGE_150
+							wait until read
+							say HELP_TEXT_TYKESCOMINGOFAGE_160
+							wait until read
+							send good spirit home
+						end dialogue
+						LastSpellsLearnt = SpellsLearnt
+						set LastLearntTimer time to 300 seconds
+					elsif SpellsLearnt == 2
+						begin dialogue
+							update snapshot CHALLENGE_TYKES_COMING_OF_AGE success 0.62 alignment 0 HELP_TEXT_CREATURE_ISLE_TITLE_06 StandardReminder (variable HELP_TEXT_CI_REMINDER_17)
+							eject good spirit
+							say HELP_TEXT_TYKESCOMINGOFAGE_170
+							wait until read
+							say HELP_TEXT_TYKESCOMINGOFAGE_180
+							wait until read
+							send good spirit home
+						end dialogue
+						LastSpellsLearnt = SpellsLearnt
+						set LastLearntTimer time to 300 seconds
+					elsif SpellsLearnt == 3
+						begin dialogue
+							update snapshot CHALLENGE_TYKES_COMING_OF_AGE success 0.68 alignment 0 HELP_TEXT_CREATURE_ISLE_TITLE_06 StandardReminder (variable HELP_TEXT_CI_REMINDER_17)
+							eject good spirit
+							say HELP_TEXT_TYKESCOMINGOFAGE_190
+							wait until read
+							say HELP_TEXT_TYKESCOMINGOFAGE_200
+							wait until read
+							send good spirit home
+						end dialogue
+						LastSpellsLearnt = SpellsLearnt
+						set LastLearntTimer time to 300 seconds
+					end if
+				end if
+			elsif TrainingGuide == 3
+				if Tyke knows action CREATURE_ACTION_KNOWN_ABOUT_BUILD and CreatureCanBuildFlag != 0
+					if BuildCinema == 0
+						disable TykeHighlight active
+						BuildCinema = 1
+					else
+						if TykeHighlight clicked
+							if ScriptLockedCreature == 0
+								delete TykeHighlight
+								run script TownDudeSpeaksComplete(variable HELP_TEXT_TYKE_EDUCATION_290, variable HELP_TEXT_TYKE_EDUCATION_300)
+								TrainingGuide = 4
+							else
+								run script ScriptLockedHighlight(TykeHighlight)
+							end if
+						elsif get MayorTimer time remaining <= 0 and get distance from (camera position) to [TykeHighlight] < 100
+							FirstAndOnlyTime = 1
+							begin dialogue
+								eject evil spirit
+								make evil spirit point at [TykeHighlight]
+								say single line HELP_TEXT_TYKESCOMINGOFAGE_140
+								wait until read
+								stop evil spirit pointing
+								send evil spirit home
+							end dialogue
+							set MayorTimer time to 30 seconds
+						elsif get MayorTimer time remaining <= 0 and FirstAndOnlyTime == 0
+							FirstAndOnlyTime = 1
+							wait until 5 seconds
+							begin dialogue
+								eject evil spirit
+								make evil spirit point at [TykeHighlight]
+								say single line HELP_TEXT_TYKESCOMINGOFAGE_140
+								wait until read
+								stop evil spirit pointing
+								send evil spirit home
+							end dialogue
+							set MayorTimer time to 30 seconds
+						end if
+					end if
+				elsif get LastLearntTimer time remaining <= 0 and CreatureCanBuildFlag != 0
+					begin dialogue
+						eject good spirit
+						say single line HELP_TEXT_TYKESCOMINGOFAGE_230
+						wait until read
+						send good spirit home
+					end dialogue
+					set LastLearntTimer time to 900 seconds
+				elsif get TeachBuildTimer time remaining <= 0 and CreatureCanBuildFlag != 0
+					begin dialogue
+						eject good spirit
+						NuRandomSay = variable constant from HELP_TEXT_TYKE_BUILDING_01 to HELP_TEXT_TYKE_BUILDING_03
+						say single line constant NuRandomSay
+						wait until read
+					end dialogue
+					set TeachBuildTimer time to 600 seconds
+				end if
+			elsif TrainingGuide == 4
+				run script Dojo(Tyke)
+				EveWatching = 2
+				release Tyke
+				TrainingGuide = 5
+				TEndLoop = 1
+				DojoReminderTykesTraining = 0
+			elsif TrainingGuide == 88
+				if StoreOver == 1
+					TrainingGuide = 1
+				end if
+			end if
+		end if
+		TykeAction = variable get Tyke current action
+		if TykeUsesStoragePit == 0
+			if Tyke knows action CREATURE_ACTION_KNOWN_ABOUT_USE_STORAGE_PIT and get WaitASec time remaining <= 0
+				if TykeStoreCount == 100
+					begin dialogue
+						eject good spirit
+						say single line HELP_TEXT_TYKESCOMINGOFAGE_TYKELEARNING_280
+						wait until read
+						send good spirit home
+					end dialogue
+					TykeUsesStoragePit = 1
+					SkillsLearnt++
+					set TykeLastLearnt time to 900 seconds
+				else
+					TykeStoreCount += 10
+					set WaitASec time to 5 seconds
+					if TykeStoreCount > 100
+						TykeStoreCount = 100
+					else
+						BulbTotal = TykeStoreCount / 100
+						draw Tyke lightbulb BulbTotal
+						teach Tyke PHYSICAL CREATURE_ACTION_KNOWN_ABOUT_USE_STORAGE_PIT FALSE percentage 1
+					end if
+				end if
+			end if
+		end if
+		if TykeUsesField == 0
+			if Tyke knows action CREATURE_ACTION_KNOWN_ABOUT_USE_FIELD
+				TykeUsesField = 1
+				set TykeLastLearnt time to 900 seconds
+				if TykeGoesFishing == 0
+					SkillsLearnt++
+				end if
+			end if
+		end if
+		if TykeGoesFishing == 0
+			if Tyke knows action CREATURE_ACTION_KNOWN_ABOUT_FISH and creature help on
+				begin dialogue
+					eject good spirit
+					say single line HELP_TEXT_TYKESCOMINGOFAGE_TYKELEARNING_300
+					wait until read
+					send good spirit home
+				end dialogue
+				TykeGoesFishing = 1
+				set TykeLastLearnt time to 900 seconds
+				if TykeUsesField == 0
+					SkillsLearnt++
+				end if
+			end if
+		end if
+		if TykeBuilds == 0
+			if Tyke knows action CREATURE_ACTION_KNOWN_ABOUT_BUILD and CreatureCanBuildFlag != 0
+				begin dialogue
+					eject good spirit
+					say single line HELP_TEXT_TYKESCOMINGOFAGE_TYKELEARNING_310
+					wait until read
+					send good spirit home
+				end dialogue
+				TykeBuilds = 1
+				TykeCanBuild = 1
+				set TykeLastLearnt time to 900 seconds
+				SkillsLearnt++
+			end if
+		end if
+		if TykeUsesTotem == 0
+			if Tyke knows action CREATURE_ACTION_KNOWN_ABOUT_USE_TOTEM and creature help on
+				begin dialogue
+					eject good spirit
+					say single line HELP_TEXT_TYKESCOMINGOFAGE_TYKELEARNING_320
+					wait until read
+					send good spirit home
+				end dialogue
+				TykeUsesTotem = 1
+			end if
+		end if
+		if TykeImpresses == 0
+			if TykeAction == variable CREATURE_SHOW_IMPRESSIVE_ANIMATION or TykeAction == variable CREATURE_CAST_IMPRESSIVE_SPELL or TykeAction == variable CREATURE_THROW_TO_IMPRESS and creature help on
+				begin dialogue
+					eject good spirit
+					say single line HELP_TEXT_TYKESCOMINGOFAGE_TYKELEARNING_330
+					wait until read
+					send good spirit home
+				end dialogue
+				TykeImpresses = 1
+				set TykeLastLearnt time to 900 seconds
+				if TykeDances == 0
+					SkillsLearnt++
+				end if
+			end if
+		end if
+		if TykeDances == 0
+			if Tyke knows action CREATURE_ACTION_KNOWN_ABOUT_DANCE and creature help on
+				begin dialogue
+					eject good spirit
+					say single line HELP_TEXT_TYKESCOMINGOFAGE_TYKELEARNING_340
+					wait until read
+					send good spirit home
+				end dialogue
+				TykeDances = 1
+				set TykeLastLearnt time to 900 seconds
+				if TykeImpresses == 0
+					SkillsLearnt++
+				end if
+			end if
+		end if
+		if TykeCastsFood == 0
+			if get Tyke spell SPELL_FOOD skill == 1
+				begin dialogue
+					eject good spirit
+					say single line HELP_TEXT_TYKESCOMINGOFAGE_TYKELEARNING_390
+					wait until read
+					send good spirit home
+				end dialogue
+				TykeCastsFood = 1
+				set TykeLastLearnt time to 900 seconds
+				SpellsLearnt++
+			elsif StartedOnSpells == 0 and get Tyke spell SPELL_FOOD skill > 0.1
+				StartedOnSpells = 1
+			end if
+		end if
+		if TykeCastsFood2 == 0
+			if get Tyke spell MAGIC_TYPE_FOOD_PU_ONE skill == 1
+				begin dialogue
+					eject good spirit
+					say single line HELP_TEXT_TYKE_MAGIC_TYPE_FOOD_PU_ONE
+					wait until read
+					send good spirit home
+				end dialogue
+				TykeCastsFood2 = 1
+				set TykeLastLearnt time to 900 seconds
+			elsif StartedOnSpells == 0 and get Tyke spell MAGIC_TYPE_FOOD_PU_ONE skill > 0.1
+				StartedOnSpells = 1
+			end if
+		end if
+		if TykeCastsWood == 0
+			if get Tyke spell SPELL_WOOD skill == 1
+				begin dialogue
+					eject good spirit
+					say single line HELP_TEXT_TYKESCOMINGOFAGE_TYKELEARNING_400
+					wait until read
+					send good spirit home
+				end dialogue
+				TykeCastsWood = 1
+				set TykeLastLearnt time to 900 seconds
+				SpellsLearnt++
+			elsif StartedOnSpells == 0 and get Tyke spell SPELL_WOOD skill > 0.1
+				StartedOnSpells = 1
+			end if
+		end if
+		if TykeCastsHeal == 0
+			if get Tyke spell SPELL_HEAL_LEVEL_1 skill == 1
+				begin dialogue
+					eject good spirit
+					say single line HELP_TEXT_TYKESCOMINGOFAGE_TYKELEARNING_410
+					wait until read
+					send good spirit home
+				end dialogue
+				TykeCastsHeal = 1
+				set TykeLastLearnt time to 900 seconds
+				SpellsLearnt++
+			elsif StartedOnSpells == 0 and get Tyke spell SPELL_HEAL_LEVEL_1 skill > 0.1
+				StartedOnSpells = 1
+			end if
+		end if
+		if TykeCastsHeal2 == 0
+			if get Tyke spell SPELL_HEAL_LEVEL_2 skill == 1 and creature help on
+				begin dialogue
+					eject good spirit
+					say single line HELP_TEXT_TYKE_MAGIC_TYPE_HEAL_PU_ONE
+					wait until read
+					send good spirit home
+				end dialogue
+				TykeCastsHeal2 = 1
+				set TykeLastLearnt time to 900 seconds
+			elsif StartedOnSpells == 0 and get Tyke spell SPELL_HEAL_LEVEL_2 skill > 0.1
+				StartedOnSpells = 1
+			end if
+		end if
+		if TykeCastsWater == 0
+			if get Tyke spell SPELL_WATER_LEVEL_1 skill == 1
+				begin dialogue
+					eject good spirit
+					say single line HELP_TEXT_TYKESCOMINGOFAGE_TYKELEARNING_420
+					wait until read
+					send good spirit home
+				end dialogue
+				TykeCastsWater = 1
+				set TykeLastLearnt time to 900 seconds
+				SpellsLearnt++
+			elsif StartedOnSpells == 0 and get Tyke spell SPELL_WATER_LEVEL_1 skill > 0.1
+				StartedOnSpells = 1
+			end if
+		end if
+		if TykeCastsWater2 == 0
+			if get Tyke spell SPELL_WATER_LEVEL_2 skill == 1 and creature help on
+				begin dialogue
+					eject good spirit
+					say single line HELP_TEXT_TYKE_MAGIC_TYPE_WATER_PU_ONE
+					wait until read
+					send good spirit home
+				end dialogue
+				TykeCastsWater2 = 1
+				set TykeLastLearnt time to 900 seconds
+			elsif StartedOnSpells == 0 and get Tyke spell SPELL_WATER_LEVEL_2 skill > 0.1
+				StartedOnSpells = 1
+			end if
+		end if
+		if TykeCastsFreeze == 0
+			if get Tyke spell CREATURE_SPELL_FREEZE skill == 1
+				begin dialogue
+					eject good spirit
+					say single line HELP_TEXT_TYKESCOMINGOFAGE_TYKELEARNING_430
+					wait until read
+					send good spirit home
+				end dialogue
+				TykeCastsFreeze = 1
+				set TykeLastLearnt time to 900 seconds
+				SpellsLearnt++
+			elsif StartedOnSpells == 0 and get Tyke spell CREATURE_SPELL_FREEZE skill > 0.1
+				StartedOnSpells = 1
+			end if
+		end if
+		if TykeCastsFireball == 0
+			if get Tyke spell SPELL_FIREBALL_LEVEL_1 skill == 1
+				if TykeCastsLightning == 0
+					begin dialogue
+						eject evil spirit
+						say HELP_TEXT_TYKESCOMINGOFAGE_TYKELEARNING_670
+						wait until read
+						say HELP_TEXT_TYKESCOMINGOFAGE_TYKELEARNING_680
+						wait until read
+						send evil spirit home
+					end dialogue
+					SpellsLearnt++
+				else
+					begin dialogue
+						eject evil spirit
+						say HELP_TEXT_TYKESCOMINGOFAGE_TYKELEARNING_690
+						wait until read
+						say HELP_TEXT_TYKESCOMINGOFAGE_TYKELEARNING_700
+						wait until read
+						send evil spirit home
+					end dialogue
+					SpellsLearnt++
+				end if
+				set TykeLastLearnt time to 900 seconds
+				TykeCastsFireball = 1
+			elsif StartedOnSpells == 0 and get Tyke spell SPELL_FIREBALL_LEVEL_1 skill > 0.1
+				StartedOnSpells = 1
+			end if
+		end if
+		if TykeCastsFireball2 == 0
+			if get Tyke spell SPELL_FIREBALL_LEVEL_2 skill == 1 and creature help on
+				begin dialogue
+					eject good spirit
+					say single line HELP_TEXT_TYKE_MAGIC_TYPE_FIREBALL_PU_ONE
+					wait until read
+					send good spirit home
+				end dialogue
+				TykeCastsFireball2 = 1
+				set TykeLastLearnt time to 900 seconds
+			elsif StartedOnSpells == 0 and get Tyke spell SPELL_FIREBALL_LEVEL_2 skill > 0.1
+				StartedOnSpells = 1
+			end if
+		end if
+		if TykeCastsFireball3 == 0
+			if get Tyke spell SPELL_FIREBALL_LEVEL_3 skill == 1 and creature help on
+				begin dialogue
+					eject good spirit
+					say single line HELP_TEXT_TYKE_MAGIC_TYPE_FIREBALL_PU_TWO
+					wait until read
+					send good spirit home
+				end dialogue
+				TykeCastsFireball3 = 1
+				set TykeLastLearnt time to 900 seconds
+			elsif StartedOnSpells == 0 and get Tyke spell SPELL_FIREBALL_LEVEL_3 skill > 0.1
+				StartedOnSpells = 1
+			end if
+		end if
+		if TykeCastsLightning == 0
+			if get Tyke spell SPELL_LIGHTNING_LEVEL_1 skill == 1
+				if TykeCastsFireball == 0
+					begin dialogue
+						eject evil spirit
+						say HELP_TEXT_TYKESCOMINGOFAGE_TYKELEARNING_710
+						wait until read
+						say HELP_TEXT_TYKESCOMINGOFAGE_TYKELEARNING_720
+						wait until read
+						send evil spirit home
+					end dialogue
+					SpellsLearnt++
+				else
+					begin dialogue
+						eject evil spirit
+						say HELP_TEXT_TYKESCOMINGOFAGE_TYKELEARNING_730
+						wait until read
+						say HELP_TEXT_TYKESCOMINGOFAGE_TYKELEARNING_740
+						wait until read
+						send evil spirit home
+					end dialogue
+					SpellsLearnt++
+				end if
+				set TykeLastLearnt time to 900 seconds
+				TykeCastsLightning = 1
+			elsif StartedOnSpells == 0 and get Tyke spell SPELL_LIGHTNING_LEVEL_1 skill > 0.1
+				StartedOnSpells = 1
+			end if
+		end if
+		if TykeCastsLightning2 == 0
+			if get Tyke spell SPELL_LIGHTNING_LEVEL_2 skill == 1 and creature help on
+				begin dialogue
+					eject good spirit
+					say single line HELP_TEXT_TYKE_MAGIC_TYPE_LIGHTNING_BOLT_PU_ONE
+					wait until read
+					send good spirit home
+				end dialogue
+				TykeCastsLightning2 = 1
+				set TykeLastLearnt time to 900 seconds
+			elsif StartedOnSpells == 0 and get Tyke spell SPELL_LIGHTNING_LEVEL_2 skill > 0.1
+				StartedOnSpells = 1
+			end if
+		end if
+		if TykeCastsLightning3 == 0
+			if get Tyke spell SPELL_LIGHTNING_LEVEL_3 skill == 1 and creature help on
+				begin dialogue
+					eject good spirit
+					say single line HELP_TEXT_TYKE_MAGIC_TYPE_LIGHTNING_BOLT_PU_TWO
+					wait until read
+					send good spirit home
+				end dialogue
+				TykeCastsLightning3 = 1
+				set TykeLastLearnt time to 900 seconds
+			elsif StartedOnSpells == 0 and get Tyke spell SPELL_LIGHTNING_LEVEL_3 skill > 0.1
+				StartedOnSpells = 1
+			end if
+		end if
+		if TykeCastsForest == 0
+			if get Tyke spell SPELL_FOREST skill == 1 and creature help on
+				begin dialogue
+					eject good spirit
+					say single line HELP_TEXT_TYKESCOMINGOFAGE_TYKELEARNING_440
+					wait until read
+					send good spirit home
+				end dialogue
+				TykeCastsForest = 1
+				set TykeLastLearnt time to 900 seconds
+			elsif StartedOnSpells == 0 and get Tyke spell SPELL_FOREST skill > 0.1
+				StartedOnSpells = 1
+			end if
+		end if
+		if TykeCastsStorm == 0
+			if get Tyke spell SPELL_STORM_LEVEL_1 skill == 1 and creature help on
+				begin dialogue
+					eject good spirit
+					say single line HELP_TEXT_TYKESCOMINGOFAGE_TYKELEARNING_450
+					wait until read
+					send good spirit home
+				end dialogue
+				TykeCastsStorm = 1
+				set TykeLastLearnt time to 900 seconds
+			elsif StartedOnSpells == 0 and get Tyke spell SPELL_STORM_LEVEL_1 skill > 0.1
+				StartedOnSpells = 1
+			end if
+		end if
+		if TykeCastsStorm2 == 0
+			if get Tyke spell SPELL_STORM_LEVEL_2 skill == 1 and creature help on
+				begin dialogue
+					eject good spirit
+					say single line HELP_TEXT_TYKE_MAGIC_TYPE_STORM_WIND_RAIN_LIGHTNING
+					wait until read
+					send good spirit home
+				end dialogue
+				TykeCastsStorm2 = 1
+				set TykeLastLearnt time to 900 seconds
+			elsif StartedOnSpells == 0 and get Tyke spell SPELL_STORM_LEVEL_2 skill > 0.1
+				StartedOnSpells = 1
+			end if
+		end if
+		if TykeCastsShield == 0
+			if get Tyke spell SPELL_SHIELD skill == 1 and creature help on
+				begin dialogue
+					eject good spirit
+					say single line HELP_TEXT_TYKESCOMINGOFAGE_TYKELEARNING_460
+					wait until read
+					send good spirit home
+				end dialogue
+				TykeCastsShield = 1
+				set TykeLastLearnt time to 900 seconds
+			elsif StartedOnSpells == 0 and get Tyke spell SPELL_SHIELD skill > 0.1
+				StartedOnSpells = 1
+			end if
+		end if
+		if TykeCastsPShield == 0
+			if get Tyke spell SPELL_PHYSICAL_SHIELD skill == 1 and creature help on
+				begin dialogue
+					eject good spirit
+					say single line HELP_TEXT_TYKESCOMINGOFAGE_TYKELEARNING_470
+					wait until read
+					send good spirit home
+				end dialogue
+				TykeCastsPShield = 1
+				set TykeLastLearnt time to 900 seconds
+			elsif StartedOnSpells == 0 and get Tyke spell SPELL_PHYSICAL_SHIELD skill > 0.1
+				StartedOnSpells = 1
+			end if
+		end if
+		if TykeCastsBFlock == 0
+			if get Tyke spell SPELL_FLOCK_FLYING skill == 1 and creature help on
+				begin dialogue
+					eject good spirit
+					say single line HELP_TEXT_TYKESCOMINGOFAGE_TYKELEARNING_480
+					wait until read
+					send good spirit home
+				end dialogue
+				TykeCastsBFlock = 1
+				set TykeLastLearnt time to 900 seconds
+			elsif StartedOnSpells == 0 and get Tyke spell SPELL_FLOCK_FLYING skill > 0.1
+				StartedOnSpells = 1
+			end if
+		end if
+		if TykeCastsGFlock == 0
+			if get Tyke spell MAGIC_TYPE_FLOCK_GROUND skill == 1 and creature help on
+				begin dialogue
+					eject good spirit
+					say single line HELP_TEXT_TYKESCOMINGOFAGE_TYKELEARNING_490
+					wait until read
+					send good spirit home
+				end dialogue
+				TykeCastsGFlock = 1
+				set TykeLastLearnt time to 900 seconds
+			elsif StartedOnSpells == 0 and get Tyke spell MAGIC_TYPE_FLOCK_GROUND skill > 0.1
+				StartedOnSpells = 1
+			end if
+		end if
+		if TykeCastsSmall == 0
+			if get Tyke spell CREATURE_SPELL_SMALL skill == 1 and creature help on
+				begin dialogue
+					eject good spirit
+					say single line HELP_TEXT_TYKESCOMINGOFAGE_TYKELEARNING_500
+					wait until read
+					send good spirit home
+				end dialogue
+				TykeCastsSmall = 1
+				set TykeLastLearnt time to 900 seconds
+			elsif StartedOnSpells == 0 and get Tyke spell CREATURE_SPELL_SMALL skill > 0.1
+				StartedOnSpells = 1
+			end if
+		end if
+		if TykeCastsBig == 0
+			if get Tyke spell CREATURE_SPELL_BIG skill == 1 and creature help on
+				begin dialogue
+					eject good spirit
+					say single line HELP_TEXT_TYKESCOMINGOFAGE_TYKELEARNING_510
+					wait until read
+					send good spirit home
+				end dialogue
+				TykeCastsBig = 1
+				set TykeLastLearnt time to 900 seconds
+			elsif StartedOnSpells == 0 and get Tyke spell CREATURE_SPELL_BIG skill > 0.1
+				StartedOnSpells = 1
+			end if
+		end if
+		if TykeCastsWeak == 0
+			if get Tyke spell CREATURE_SPELL_WEAK skill == 1 and creature help on
+				begin dialogue
+					eject good spirit
+					say single line HELP_TEXT_TYKESCOMINGOFAGE_TYKELEARNING_520
+					wait until read
+					send good spirit home
+				end dialogue
+				TykeCastsWeak = 1
+				set TykeLastLearnt time to 900 seconds
+			elsif StartedOnSpells == 0 and get Tyke spell CREATURE_SPELL_WEAK skill > 0.1
+				StartedOnSpells = 1
+			end if
+		end if
+		if TykeCastsStrong == 0
+			if get Tyke spell CREATURE_SPELL_STRONG skill == 1 and creature help on
+				begin dialogue
+					eject good spirit
+					say single line HELP_TEXT_TYKESCOMINGOFAGE_TYKELEARNING_530
+					wait until read
+					send good spirit home
+				end dialogue
+				TykeCastsStrong = 1
+				set TykeLastLearnt time to 900 seconds
+			elsif StartedOnSpells == 0 and get Tyke spell CREATURE_SPELL_STRONG skill > 0.1
+				StartedOnSpells = 1
+			end if
+		end if
+		if TykeCastsFat == 0
+			if get Tyke spell MAGIC_TYPE_CREATURE_SPELL_FAT skill == 1 and creature help on
+				begin dialogue
+					eject good spirit
+					say single line HELP_TEXT_TYKESCOMINGOFAGE_TYKELEARNING_540
+					wait until read
+					send good spirit home
+				end dialogue
+				TykeCastsFat = 1
+				set TykeLastLearnt time to 900 seconds
+			elsif StartedOnSpells == 0 and get Tyke spell MAGIC_TYPE_CREATURE_SPELL_FAT skill > 0.1
+				StartedOnSpells = 1
+			end if
+		end if
+		if TykeCastsThin == 0
+			if get Tyke spell MAGIC_TYPE_CREATURE_SPELL_THIN skill == 1 and creature help on
+				begin dialogue
+					eject good spirit
+					say single line HELP_TEXT_TYKESCOMINGOFAGE_TYKELEARNING_550
+					wait until read
+					send good spirit home
+				end dialogue
+				TykeCastsThin = 1
+				set TykeLastLearnt time to 900 seconds
+			elsif StartedOnSpells == 0 and get Tyke spell MAGIC_TYPE_CREATURE_SPELL_THIN skill > 0.1
+				StartedOnSpells = 1
+			end if
+		end if
+		if TykeCastsInvis == 0
+			if get Tyke spell CREATURE_SPELL_INVISIBLE skill == 1 and creature help on
+				begin dialogue
+					eject good spirit
+					say single line HELP_TEXT_TYKESCOMINGOFAGE_TYKELEARNING_560
+					wait until read
+					send good spirit home
+				end dialogue
+				TykeCastsInvis = 1
+				set TykeLastLearnt time to 900 seconds
+			elsif StartedOnSpells == 0 and get Tyke spell CREATURE_SPELL_INVISIBLE skill > 0.1
+				StartedOnSpells = 1
+			end if
+		end if
+		if TykeCastsCompassion == 0
+			if get Tyke spell CREATURE_SPELL_COMPASSION skill == 1 and creature help on
+				begin dialogue
+					eject good spirit
+					say single line HELP_TEXT_TYKESCOMINGOFAGE_TYKELEARNING_570
+					wait until read
+					send good spirit home
+				end dialogue
+				TykeCastsCompassion = 1
+				set TykeLastLearnt time to 900 seconds
+			elsif StartedOnSpells == 0 and get Tyke spell CREATURE_SPELL_COMPASSION skill > 0.1
+				StartedOnSpells = 1
+			end if
+		end if
+		if TykeCastsAngry == 0
+			if get Tyke spell CREATURE_SPELL_ANGRY skill == 1 and creature help on
+				begin dialogue
+					eject good spirit
+					say single line HELP_TEXT_TYKESCOMINGOFAGE_TYKELEARNING_580
+					wait until read
+					send good spirit home
+				end dialogue
+				TykeCastsAngry = 1
+				set TykeLastLearnt time to 900 seconds
+			elsif StartedOnSpells == 0 and get Tyke spell CREATURE_SPELL_ANGRY skill > 0.1
+				StartedOnSpells = 1
+			end if
+		end if
+		if TykeCastsHungry == 0
+			if get Tyke spell MAGIC_TYPE_CREATURE_SPELL_HUNGRY skill == 1 and creature help on
+				begin dialogue
+					eject good spirit
+					say single line HELP_TEXT_TYKESCOMINGOFAGE_TYKELEARNING_590
+					wait until read
+					send good spirit home
+				end dialogue
+				TykeCastsHungry = 1
+				set TykeLastLearnt time to 900 seconds
+			elsif StartedOnSpells == 0 and get Tyke spell MAGIC_TYPE_CREATURE_SPELL_HUNGRY skill > 0.1
+				StartedOnSpells = 1
+			end if
+		end if
+		if TykeCastsFright == 0
+			if get Tyke spell MAGIC_TYPE_CREATURE_SPELL_FRIGHTENE skill == 1 and creature help on
+				begin dialogue
+					eject good spirit
+					say single line HELP_TEXT_TYKESCOMINGOFAGE_TYKELEARNING_600
+					wait until read
+					send good spirit home
+				end dialogue
+				TykeCastsFright = 1
+				set TykeLastLearnt time to 900 seconds
+			elsif StartedOnSpells == 0 and get Tyke spell MAGIC_TYPE_CREATURE_SPELL_FRIGHTENE skill > 0.1
+				StartedOnSpells = 1
+			end if
+		end if
+		if TykeCastsTired == 0
+			if get Tyke spell MAGIC_TYPE_CREATURE_SPELL_TIRED skill == 1 and creature help on
+				begin dialogue
+					eject good spirit
+					say single line HELP_TEXT_TYKESCOMINGOFAGE_TYKELEARNING_610
+					wait until read
+					send good spirit home
+				end dialogue
+				TykeCastsTired = 1
+				set TykeLastLearnt time to 900 seconds
+			elsif StartedOnSpells == 0 and get Tyke spell MAGIC_TYPE_CREATURE_SPELL_TIRED skill > 0.1
+				StartedOnSpells = 1
+			end if
+		end if
+		if TykeCastsIll == 0
+			if get Tyke spell MAGIC_TYPE_CREATURE_SPELL_ILL skill == 1 and creature help on
+				begin dialogue
+					eject good spirit
+					say single line HELP_TEXT_TYKESCOMINGOFAGE_TYKELEARNING_620
+					wait until read
+					send good spirit home
+				end dialogue
+				TykeCastsIll = 1
+				set TykeLastLearnt time to 900 seconds
+			elsif StartedOnSpells == 0 and get Tyke spell MAGIC_TYPE_CREATURE_SPELL_ILL skill > 0.1
+				StartedOnSpells = 1
+			end if
+		end if
+		if TykeCastsThirsty == 0
+			if get Tyke spell MAGIC_TYPE_CREATURE_SPELL_THIRSTY skill == 1 and creature help on
+				begin dialogue
+					eject good spirit
+					say single line HELP_TEXT_TYKESCOMINGOFAGE_TYKELEARNING_630
+					wait until read
+					send good spirit home
+				end dialogue
+				TykeCastsThirsty = 1
+				set TykeLastLearnt time to 900 seconds
+			elsif StartedOnSpells == 0 and get Tyke spell MAGIC_TYPE_CREATURE_SPELL_THIRSTY skill > 0.1
+				StartedOnSpells = 1
+			end if
+		end if
+		if TykeCastsItchy == 0
+			if get Tyke spell CREATURE_SPELL_ITCHY skill == 1 and creature help on
+				begin dialogue
+					eject good spirit
+					say single line HELP_TEXT_TYKESCOMINGOFAGE_TYKELEARNING_640
+					wait until read
+					send good spirit home
+				end dialogue
+				TykeCastsItchy = 1
+				set TykeLastLearnt time to 900 seconds
+			elsif StartedOnSpells == 0 and get Tyke spell CREATURE_SPELL_ITCHY skill > 0.1
+				StartedOnSpells = 1
+			end if
+		end if
+		if TykeCastsExplosion == 0
+			if get Tyke spell SPELL_EXPLOSION_LEVEL_1 skill == 1 and creature help on
+				begin dialogue
+					eject good spirit
+					say single line HELP_TEXT_TYKESCOMINGOFAGE_TYKELEARNING_860
+					wait until read
+					send good spirit home
+				end dialogue
+				TykeCastsExplosion = 1
+				set TykeLastLearnt time to 900 seconds
+			elsif StartedOnSpells == 0 and get Tyke spell SPELL_EXPLOSION_LEVEL_1 skill > 0.1
+				StartedOnSpells = 1
+			end if
+		end if
+		if TykeCastsExplosion2 == 0
+			if get Tyke spell SPELL_EXPLOSION_LEVEL_2 skill == 1 and creature help on
+				begin dialogue
+					eject good spirit
+					say single line HELP_TEXT_TYKE_MAGIC_TYPE_EXPLOSION_ONE_PU_ONE
+					wait until read
+					send good spirit home
+				end dialogue
+				TykeCastsExplosion2 = 1
+				set TykeLastLearnt time to 900 seconds
+			elsif StartedOnSpells == 0 and get Tyke spell SPELL_EXPLOSION_LEVEL_2 skill > 0.1
+				StartedOnSpells = 1
+			end if
+		end if
+		if TykeCastsExplosion3 == 0
+			if get Tyke spell MAGIC_TYPE_EXPLOSION_ONE_PU_TWO skill == 1 and creature help on
+				begin dialogue
+					eject good spirit
+					say single line HELP_TEXT_TYKE_MAGIC_TYPE_EXPLOSION_ONE_PU_TWO
+					wait until read
+					send good spirit home
+				end dialogue
+				TykeCastsExplosion3 = 1
+				set TykeLastLearnt time to 900 seconds
+			elsif StartedOnSpells == 0 and get Tyke spell MAGIC_TYPE_EXPLOSION_ONE_PU_TWO skill > 0.1
+				StartedOnSpells = 1
+			end if
+		end if
+		if TykeCastsAnti == 0
+			if get Tyke spell MAGIC_TYPE_CREATURE_SPELL_ANTI_SPELL skill == 1 and creature help on
+				begin dialogue
+					eject good spirit
+					say single line HELP_TEXT_TYKESCOMINGOFAGE_TYKELEARNING_650
+					wait until read
+					send good spirit home
+				end dialogue
+				TykeCastsAnti = 1
+				set TykeLastLearnt time to 900 seconds
+			elsif StartedOnSpells == 0 and get Tyke spell MAGIC_TYPE_CREATURE_SPELL_ANTI_SPELL skill > 0.1
+				StartedOnSpells = 1
+			end if
+		end if
+		if TykeCastsSpeed == 0
+			if get Tyke spell MAGIC_TYPE_CREATURE_SPELL_FAST skill == 1 and creature help on
+				begin dialogue
+					eject good spirit
+					say single line HELP_TEXT_TYKESCOMINGOFAGE_TYKELEARNING_660
+					wait until read
+					send good spirit home
+				end dialogue
+				TykeCastsSpeed = 1
+				set TykeLastLearnt time to 900 seconds
+			elsif StartedOnSpells == 0 and get Tyke spell MAGIC_TYPE_CREATURE_SPELL_FAST skill > 0.1
+				StartedOnSpells = 1
+			end if
+		end if
+		if StartedOnSpells == 1
+			begin dialogue
+				eject good spirit
+				say HELP_TEXT_TYKESCOMINGOFAGE_TYKELEARNING_750
+				wait until read
+				say HELP_TEXT_TYKESCOMINGOFAGE_TYKELEARNING_760
+				wait until read
+				send good spirit home
+			end dialogue
+			StartedOnSpells = 2
+		end if
+		if Tyke fighting and TykeFight == 0 and creature help on
+			begin dialogue
+				eject evil spirit
+				say single line HELP_TEXT_TYKESCOMINGOFAGE_TYKELEARNING_850
+				wait until read
+				send evil spirit home
+			end dialogue
+			TykeFight = 1
+		elsif TykeFight == 1
+			if Tyke fighting
+			else
+				TykeFight = 0
+			end if
+		end if
+		if TykeFree == 1
+			if HEALTH of Tyke < 0.5 and get HealthTimer time remaining <= 0 and creature help on
+				if EveWatching != 1
+					begin dialogue
+						eject good spirit
+						say single line HELP_TEXT_TYKESCOMINGOFAGE_TYKELEARNING_840
+						wait until read
+						send good spirit home
+					end dialogue
+				else
+					begin dialogue
+						eject good spirit
+						say single line HELP_TEXT_TYKE_BAD_FEEDBACK_30
+						wait until read
+					end dialogue
+				end if
+				set HealthTimer time to 300 seconds
+				TykeBeHurt = 1
+			elsif TykeBeHurt == 1 and HEALTH of Tyke > 0.5
+				TykeBeHurt = 0
+			end if
+			if ZANGLE of Tyke > 0.8 and get HungerTimer time remaining <= 0 and creature help on
+				if EveWatching != 1
+					begin dialogue
+						eject good spirit
+						say single line HELP_TEXT_TYKE_BAD_FEEDBACK_50
+						wait until read
+						send good spirit home
+					end dialogue
+				else
+					begin dialogue
+						eject good spirit
+						say single line HELP_TEXT_TYKE_BAD_FEEDBACK_10
+						wait until read
+					end dialogue
+				end if
+				set HungerTimer time to 300 seconds
+				TykeBeHungry = 1
+			elsif TykeBeHungry == 1 and ZANGLE of Tyke < 0.8
+				TykeBeHungry = 0
+			end if
+			if EXHAUSTION of Tyke > 0.8 and get TiredTimer time remaining <= 0 and creature help on
+				if EveWatching != 1
+					begin dialogue
+						eject good spirit
+						say single line HELP_TEXT_TYKE_BAD_FEEDBACK_70
+						wait until read
+						send good spirit home
+					end dialogue
+				else
+					begin dialogue
+						eject evil spirit
+						say single line HELP_TEXT_TYKE_BAD_FEEDBACK_40
+						wait until read
+					end dialogue
+				end if
+				set TiredTimer time to 300 seconds
+				TykeBeTired = 1
+			elsif TykeBeTired == 1 and EXHAUSTION of Tyke < 0.8
+				TykeBeTired = 0
+			end if
+		end if
+		until KillTykeHelp == 1
+	end loop
+end script TykesComingOfAge
+

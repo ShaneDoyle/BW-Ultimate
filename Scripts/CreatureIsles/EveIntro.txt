@@ -1,0 +1,53 @@
+//LHVM Challenge source version 8
+//Decompiled with CHLASM tool by Daniels118
+
+begin script EveIntro
+	EveLion = 0
+start
+	begin known cinema
+		start music MUSIC_TYPE_SCRIPT_CREATURE_GUIDE
+		set fade red 0 green 0 blue 0 time 1
+		wait until fade ready
+		wait until widescreen transition complete
+		set camera position to [1157.235, 78.764, 944.354]
+		set camera focus to [992.422, 57.461, 810.651]
+		EveLion = create DUMB_CREATURE CREATURE_TYPE_LION at [1189.301, 60.97, 971.323]
+		SCALE of EveLion = 2
+		set EveLion focus to [1437.926, 80.944, 1172.351]
+		set camera position to [1167.822, 150.115, 955.072]
+		set fade in time 1
+		set camera focus to [1142.621, -60.821, 935.979]
+		move camera position to [1209.173, 88.005, 986.399] time 12
+		move camera focus to [1040.046, 66.284, 858.266] time 12
+		wait until camera ready
+		say HELP_TEXT_LION_INTRODUCTION_290 by EveLion
+		wait until read
+		say HELP_TEXT_LION_INTRODUCTION_300 by EveLion
+		wait until read
+		move camera position to [1205.365, 87.545, 983.514] time 20
+		move camera focus to [1035.602, 76.03, 854.9] time 20
+		say HELP_TEXT_LION_INTRODUCTION_310 by EveLion
+		wait until read
+		say HELP_TEXT_LION_INTRODUCTION_320 by EveLion
+		wait until read
+		say HELP_TEXT_LION_INTRODUCTION_330 with interaction by EveLion
+		wait until read
+		say HELP_TEXT_LION_INTRODUCTION_340 by EveLion
+		wait until read
+		say HELP_TEXT_LION_INTRODUCTION_350 by EveLion
+		wait until read
+		say HELP_TEXT_LION_INTRODUCTION_360 with interaction by EveLion
+		wait until read
+		clear dialogue
+		set fade red 0 green 0 blue 0 time 1
+		wait until fade ready
+		set camera position to [1156.633, 184.039, 1151.564]
+		set camera focus to [1211.841, 61.56, 994.034]
+		stop music
+		wait until widescreen transition complete
+		delete EveLion
+		set fade in time 1
+		wait until fade ready
+	end known cinema
+end script EveIntro
+
